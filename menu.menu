@@ -1,0 +1,102 @@
+//Ce fichier contient les éléments à mettre en forme
+//La mise en forme des éléments est basée sur le niveau de chaque élément
+//Le niveau d'un élément est déduit du nombre de délimiteurs "_" avant lui
+//Chaque élément est séparé de sa traduction facultative par un délimiteur
+//La première ligne spécifie le niveau en fonction du nombre de délimiteurs
+//Les lignes vides ou commençant par "//" sont ignorées
+//Note : Le prix possède lui aussi une traduction facultative. Si elle est spécifiée, le prix diffèrera selon la langue...
+
+//Recommandations :
+//menuFr_menuEn
+//__catégorieFr_catégorieEn
+//____produitFr_produitEn_prix__descriptionFr_descriptionEn
+//__________commentaireFr_commentaireEn
+
+//Exemple :
+//menu_en_categorie_en_produit_en_prix_en_description_en_commentaire_en
+//Boissons_Drinks
+//__Jus_Juice
+//__________Rafraichissant !_Refreshing !
+//____Jus d'orange_Orange juice_3.5__Avec deux oranges_With two oranges
+//____Jus de tomate_Tomato juice_2
+//
+//Café_Coffee
+//____Expresso__1.5
+//____Latté_Latte_4
+//__________made with <3
+
+menu_en_categorie_en_produit_en_prix_en_description_en_commentaire_en
+__________Toutes nos recettes sont faites maison, nos produits sont de saison et nos fruits et légumes sont locaux._All our recipes are homemade, our products are seasonal and our fruits and vegetables are local.
+
+Boissons_Drinks
+__Barista
+__________Servis chauds ou glacés_Served hot or iced
+____Expresso__2
+____Cortado__2.5
+____Double Expresso__3
+____Americano__3.5
+____Filtre batch brew_Filter batch brew_3.5
+____Cappuccino__4
+____Expresso tonic__4
+____Flat white__4.5
+____Latte__4.5
+____Latte double_Double latte_5
+____Moka__5
+____Supplément lait d’avoine & lait d’amande_Almond or oat milk extra_0.5
+__Nos tasses_Our cups
+__________Servis chauds ou glacés_Served hot or iced
+____Thé vert/noir_Green/black tea_4.5__De chez « l’autre thé », bio_From « l’autre thé », organic
+____Infusion bio_Organic Infusion_4.5
+____Golden latte__4.5
+____Chocolat chaud maison_Homemade hot chocolate_5
+____Chaï latte maison_Homemade chaï latte_5
+____Blue latte__5__Infusion de fleurs, gingembre, sucre de coco_Flower infusion, ginger, coconut sugar
+____Dirty chaï latte__5__Chaï latte avec un shot de café_Chaï latte with coffee shot
+____Matcha latte__5
+____Supplément lait d’avoine & lait d’amande_Almond or oat milk extra_0.5
+__Boissons fraîches_Fresh drinks
+____Orange pressée_Orange juice_4.5__Pressé minute_Freshly squeezed
+____Citronnade_Lemonade_4.5__Pressé minute_Freshly squeezed
+____Jus pomme-carotte-gingembre_Juice apple-carrot-ginger_5__Pressé minute_Freshly squeezed
+//____L'affogato levantin_Levantine affogato_6__Quenelle de crême d'Isigny, expresso, halva, miel à la fleur d'oranger, pollen_Isigny cream quenelle, espresso, halva, orange blossom honey, pollen
+
+Plats et desserts_Plates and desserts
+__Toute la journée_All day
+__________Non servis sur notre terrasse_Not available on our terrace
+____Les scones sucrés_Sweet scones_6__Deux scones, servis avec du beurre et de la confiture_Two scones, served with butter and jam
+____Les œufs à la coque_Boiled eggs_6.5__Deux oeufs bios à la coque, beurre demi-sel mouillettes de pain de campagne de chez Mama Baker_Two organic eggs, butter, country bread from Mama Baker
+____Granola de saison_Seasonal Granola_7__Yaourt grec, granola maison, fruits de saison, sirop d’érable_Greek yogurt, homemade granola, seasonal fruits, maple syrup
+____Les scones salés_Salty scones_8.5__Deux scones, chèvre frais, ciboulette_Two scones, fresh goat cheese, chive
+____Brioche toastée_Toasted brioche_9__Brioche toastée, quenelle de crème fraiche d'Isigny, prunes rôties au thym, framboises et mûres, verveine fraîche, éclats de pistache, sirop d'érable_Toasted brioche, Isigny crème fraiche quenelle, roasted plums with thyme, raspberries and blackberries, fresh verbena, pistachio slivers, maple syrup
+__Déjeuner_Lunch
+__________À partir de 12H00 jusqu’à 14H30; non servis sur notre terrasse_From 12H00 to 14H30; not available on our terrace
+____Banh mi (vegan)_Banh mi (vegan)_9.5__Sandwich concombre, pommes granny smith, carottes, tofu mariné à la sauce soja hoisin et cacahuète, oignons frits, coriandre, menthe_Sandwich cucumber, granny smith apples, carrots, tofu marinated in hoisin soy sauce and peanuts, fried onions
+____Tartine chèvre-poires_Goat cheese and pear toast_15.5__Toast de pain au levain de chez Mama Baker, chèvre frais, poires pochées au vin rouge, vanille, épices d'automne et sirop d'érable, mache, ciboulette, huile d'olive, fleur de sel et poivre de Kampot_Toast of sourdough bread from Mama Baker, fresh goat cheese, poached pears in red wine, vanilla, autumn spices and maple syrup, mache, chives, olive oil, fleur de sel and Kampot pepper
+____Tartine burratina d'automne_Autumn burratina toast_16__Toast de pain au levain de chez Mama Baker, prunes et figues rôties au thym, burratina des Pouilles, basilic frais, huile d'olive, fleur de Sel et poivre de Kampot_Toast of Mama Baker sourdough bread, thyme-roasted plums and figs, Pugliese burratina, fresh basil, olive oil, fleur de sel and Kampot pepper
+____Brume d'automne__15.5__Yaourt grecque, feta, zaatar, potimarron rôtis, raisins rôtis à la fleur d'oranger, coriandre fraîche, huile d'olive, sirop d'érable et fleur de sel, toast de pain au levain de chez Mama Baker_Greek yogurt, feta, zaatar, roasted pumpkin, roasted orange with blossom raisins, fresh coriander, olive oil, maple syrup and fleur de sel, Mama Baker sourdough toast
+//____Borani banjan_Borani banjan_15__Yaourt grec, aubergines rôties à l'afghane, tomates rôties au cumin et à la cardamone, coriandre et menthe fraiche, toast de pain au levain de chez Mama Baker_Greek yogurt, Afghan roasted eggplant, roasted tomatoes with cumin and cardamom, coriander and fresh mint, toasted sourdough bread from Mama Baker
+__Pâtisseries_Pastries
+__________À découvrir au comptoir…_To discover at the counter…
+//____Tartine chèvre-prunes_Goat cheese and plum toast_15.5__Pain au levain de chez Mama Baker, chèvre frais, prunes et figues rôties, ciboulette, poivre de Kampot, huile d'olive et fleur de sel_Mama Baker's leavened bread, fresh goat's cheese, roasted plums and figs, chives, Kampot pepper, olive oil and fleur de sel
+//____Tartine burratina d'été_Summer burratina toast_15__Toast de pain au levain de chez Mama Baker, burratina fumée, nectarines rôties au sirop d'érable, olives taggiasche, groseilles, basilic, huile d'olive, fleur de sel et poivre de Kampot_Sourdough bread toast from Mama Baker, smoked burratine, maple syrup roasted nectarines, taggiasche olives, currants, basil, olive oil, fleur de sel and Kampot pepper
+//____Tartine burrata d'automne_Autumn burrata toast_16__Pain au levain de chez Mama Baker, burrata des Pouilles, raisins rotis au sirop d'érable et à la fleur d'oranger, basilic frais, huile d'olive, poivre de kampot et fleur de sel_Mama Baker's leavened bread, Pugliese burrata, roasted grapes with maple syrup and orange blossom, fresh basil, olive oil, kampot pepper and fleur de sel
+//____Crumble pêche framboise_Raspberry peach crumble_6
+//____Brioche toastée_Toasted brioche_9__Quenelle de crême fraiche d'Isigny, abricots rôtis au thym, fraises, verveine fraîche, éclats de pistache, sirop d'érable_Isigny fresh cream quenelle, roasted apricots with thyme, strawberries, fresh verbena, pistachio chips, maple syrup
+//____Tartine chèvre-poires_Toast with goat cheese and pear_14__Toast de pain de campagne de chez Mama Baker, chèvre frais, poires pochées au vin et épices d'hiver, mâche ciboulette_Country bread toast from Mama Baker, fresh goat cheese, pears poached in wine and winter spices, chive mache
+//____Tartine chèvre-tomates rôties_Toast with goat cheese and roasted tomatos_15__Toast de pain semi complet au levain de chez Mama Baker, chèvre frais, tomates rôties et confites au four aux graines de cumin et aux herbes de Provence, ciboulette, poivre de Kampot, huile d'olive et fleur de sel_Toast of semi-wholemeal bread with yeast from Mama Baker, fresh goat cheese, roasted tomatoes and confit in the oven with cumin seeds and Provencal herbs, chives, Kampot pepper, olive oil and fleur de sel
+//____Tartine burrata-champignons_Toast with burrata and mushrooms_14__Pain de campagne toasté de chez Mama Baker, poêlée de champignons, mâche, ciboulette, huile d'olive et fleur de sel_Country bread toast from Mama Baker, pan-fried mushrooms, lamb’s lettuce, chives, olive oil and fleur de sel
+//____Tartine burrata de printemps_Spring burrata Toast_15__Toast de pain au levain de chez Mama Baker, burrata des Pouilles, compotée de rhubarbe aux olives taggiasche,fraises de Carpentras, basilic frais, huile d'olive et fleur de sel_Sourdough toast from Mama Baker, burrata from Puglia, rhubarb compote with taggiasche olives, strawberries from Carpentras, fresh basil, olive oil and fleur de sel
+//____La patate douce levantine_Levantine sweet potato_14__Patate douce rôtie au four, yaourt grec, fêta, zaatar, compotée d'agrumes à la fleur d'oranger, coriandre fraîche, toast de pain de campagne de chez Mama Baker_Roasted sweet potato, greek yogurt, feta, zaatar, citrus fruit compote with orange blossom, fresh coriander, country bread toast from Mama Baker
+//____La stracciatella-abricots rôtis_Roasted apricot-stracciatella_14.5__Stracciatella, abricots rôtis au thym, Sirop d'érable et huile d'olives, éclats de pistaches, toast de pain au levain au zaatar de chez Mama Baker, bouquet de mâche et fleur de sel_Stracciatella, roasted Apricots with thyme, maple syrup and olive oil, sourdough bread toast with zaatar from Mama baker, bunch of mache, salt flower
+
+Épicerie_Grocery
+__Sachets de café pour espresso_Coffee bags for espresso
+____kb - Taquaral__15__250g
+____kb - Las Codornices__15__250g
+____kawa - Pérou - Incahuasi__10__200g
+____kawa - Guatemala - Buena Esperanza__10__200g
+__Sachets de café pour filtre_Coffee bags for filter
+____kawa - Papouasie-Nouvelle-Guinée__12__200g
+____kawa - Kenya - Kii Ab__15__200g
+__Boîtes de thé_Tea boxes
+____L'Autre Thé - tous les parfums_L'Autre Thé - All flavors_13__Taille unique_Unique size

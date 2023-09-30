@@ -1,0 +1,374 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap');
+
+default {
+	color: rgb(255, 0, 0);
+}
+
+/*for menuName*/
+menuName {
+	color: rgb(0, 0, 0);
+	font-family: 'Oswald', sans-serif;
+	font-size: 200%;
+	font-weight: 200;
+	margin-top: 0.4em;
+	min-height: 0;
+	padding-right: 5mm;
+	padding-left: 5mm;
+}
+
+/*for categorie*/
+cathegory {
+	text-align: center;
+	color: rgb(0, 0, 0);
+	font-family: 'Yeseva One', cursive;
+	font-size: 250%;
+	font-weight: bolder;
+	margin-top: 0.5em;
+	min-height: 0;
+	padding-right: 5mm;
+	padding-left: 5mm;
+}
+
+/*for nom*/
+name {
+	text-align: left;
+	color: rgb(0, 0, 0);
+	font-family: 'Oswald', sans-serif;
+	font-size: 170%;
+	font-weight: 200;
+	text-transform: uppercase;
+}
+
+/*for prix*/
+price {
+	text-align: right;
+	color: rgb(0, 0, 0);
+	font-family: 'Oswald', sans-serif;
+	font-size: 140%;
+	font-weight: 200;
+	padding-left: 1em;
+}
+
+.invisible {
+	visibility: hidden;
+}
+
+/*for description*/
+description {
+	text-align: left;
+	color: rgb(0, 0, 0);
+	font-family: 'Oswald', sans-serif;
+	font-size: 140%;
+	font-weight: 200;
+	margin-top: 0.4em;
+	padding-right: 5mm;
+	padding-left: 5mm;
+}
+
+/*for commentaire*/
+comment {
+	text-align: center;
+	color: rgb(0, 0, 0);
+	font-family: 'Oswald', sans-serif;
+	font-size: 160%;
+	font-weight: 200;
+	margin-top: 0.5em;
+	min-height: 0;
+	padding-right: 5mm;
+	padding-left: 5mm;
+}
+
+/*for language box*/
+language {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	text-align: center;
+	color: rgb(0, 0, 0);
+	font-family: 'Oswald', sans-serif;
+	font-size: 150%;
+	font-weight: lighter;
+	min-height: 0;
+	margin-left: 0.3em;
+	margin-right: 0.3em;
+}
+
+logoR {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+}
+
+logoC {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.logo {
+	height: 0.6cm;
+	width: auto;
+}
+
+.instaLogo {
+	height: 1cm;
+	width: auto;
+	margin-bottom: 0.3cm;
+	margin-bottom: 0.3cm;
+}
+
+/*contener for name and price*/
+namePriceR {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	min-height: 0;
+	margin-top: 3em;
+	height: fit-content;
+	align-items: center;
+	padding-right: 5mm;
+	padding-left: 5mm;
+}
+
+/*contener for languages rows*/
+languageR {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	padding-top: 1em;
+	padding-bottom: 1em;
+}
+
+/*contener for single menuName*/
+menuC {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+/*column contener for single menuName during print*/
+printC {
+	display: flex;
+	height: 297mm;
+	width: 210mm;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+/* raw contener for single menuName during print*/
+printR {
+	display: flex;
+	flex-direction: raw;
+	width: 210mm;
+	height: 297mm;
+	justify-content: space-between;
+	font-size: 80%;
+	padding: 4mm;
+}
+
+/*contener for buttons*/
+buttonsR {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	flex-wrap: wrap;
+}
+
+/*contener for buttons*/
+buttonsC {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	padding-top: 3em;
+	padding-bottom: 1em;
+}
+
+button {
+	background-color: inherit;
+	border: none;
+	outline: none;
+	cursor: pointer;
+	display: flex;
+	flex-direction: row;
+	justify-content: right;
+	color: rgb(0, 0, 0);
+	font-family: 'Yeseva one', cursive;
+	text-align: right;
+	font-size: 180%;
+	font-weight: bolder;
+	margin-top: 0.2em;
+	padding-top: 0.4em;
+	padding-bottom: 0.4em;
+	margin-bottom: 0.2em;
+	margin-right: 0em;
+	padding-right: 5mm;
+	padding-left: 5mm;
+}
+
+.actualMenuButton {
+	background: black;
+	color: white;
+	mix-blend-mode: multiply;
+}
+
+.actualLanguageButton {
+	font-weight: bold;
+}
+
+@page {
+	size: A4;
+}
+
+body {
+	justify-content: center;
+}
+
+.backgroundImage {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 200vh;
+	image-orientation: from-image;
+	background-image: url('img/brumewallpaper.jpg');
+	background-repeat: no-repeat;
+	background-position: left;
+	background-size: cover;
+	opacity: 100%;
+	z-index: -1;
+}
+
+@media print {
+
+	html,
+	body {
+		width: 210mm;
+		height: 297mm;
+	}
+}
+
+.centerR {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	min-height: 0;
+}
+
+hr {
+	margin-top: 0.8cm;
+	border: none;
+	height: 1px;
+	background-color: #000000;
+	width: 100%;
+}
+
+body {
+	margin: 0;
+}
+
+#body {
+	width: 100%;
+	height: 100%;
+}
+
+/*for brume*/
+brumeR {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+/*for brume*/
+brumeC {
+	display: flex;
+	flex-direction: column;
+	justify-content: right;
+}
+
+brume {
+	text-align: center;
+	font-family: 'Yeseva One', cursive;
+	font-size: 400%;
+	font-weight: bolder;
+	margin-bottom: -0.2em;
+	color: #000000;
+}
+
+brumeSlogan {
+	text-align: right;
+	font-family: 'Oswald', sans-serif;
+	font-size: 80%;
+	font-weight: bolder;
+	text-transform: uppercase;
+}
+
+homePageC {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: 100vh;
+}
+
+a {
+	margin-top: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+	margin-bottom: 0;
+	text-decoration: none;
+}
+
+header {
+	text-align: center;
+	color: rgb(0, 0, 0);
+	font-family: 'Oswald', sans-serif;
+	font-size: 160%;
+	font-weight: 200;
+	margin-left: 1em;
+	margin-top: 1em;
+}
+
+headerR {
+	position: absolute;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+blocC {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+blocR {
+	margin-top: 0.3cm;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+bloc {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin-top: 1cm;
+	padding-right: 5mm;
+	padding-left: 5mm;
+	/* border-top: 1px solid; */
+}
+
+photos {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+img {
+	width: 49%;
+	/* padding-bottom: 2%; */
+	margin-bottom: 2%;
+	position: relative;
+}

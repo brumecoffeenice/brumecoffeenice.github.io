@@ -1,0 +1,47 @@
+body {
+	margin: 0;
+	overflow: hidden;
+}
+
+.code-editor-container {
+	overflow: hidden;
+	width: 100vw;
+	height: 100vh;
+	position: relative;
+}
+
+.code-editor{
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  padding: 10px;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0.8rem;
+  padding: 30px;
+  border: none;
+  outline: none;
+  line-break: anywhere;
+  white-space: pre-wrap;
+  color:white;
+}
+
+.code-editor-background {
+	resize: none;
+	background-color: rgb(44, 44, 44);
+	caret-color: white;
+	color: transparent;
+}
+
+.code-editor-background::selection {
+	color: transparent;
+	background: #757575;
+}
+
+.code-editor-foreground {
+	pointer-events: none;
+	left: 1px;
+	top: 1px
+}

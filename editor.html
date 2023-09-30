@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<title>Menu Editor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="editor.css">
+
+<div class="code-editor-container">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<textarea class="code-editor code-editor-background" id="in" spellcheck="false"></textarea>
+	<div class="code-editor code-editor-foreground" id="out" spellcheck="false"></div>
+</div>
+
+<script>
+	async function initMenu() {
+		let response = await fetch('menu.menu');
+		let menuFile = await response.text();
+		menuFile = menuFile.replace(/(\r\n)/gm, "\n"); //set \n as delimiter by replacing \r\n
+		menuFile = menuFile.replace(/(\r)/gm, "\n"); //set \n as delimiter by replacing \r
+		document.getElementById('in').innerHTML = menuFile;
+		updateScreen(menuFile);
+	}
+</script>
+
+<script>initMenu()</script>
+
+<script>
+	updateScreen($("#in").val());
+	$("#in").on("keydown", function (e) {
+		setTimeout(() => {
+			updateScreen($(this).val());
+		}, 0)
+	})
+	async function updateScreen(text) {
+		var text1 = await colorize(text);
+		var text2 = await text1.replace(/\n/g, "<br>");
+		var text3 = await text2.replace(/\t/g, "&#9;");
+		$("#out").html(text3);
+	}
+	$("#in").on('scroll', function () {
+		// set out to be the same as in
+		$("#out").css({ top: -$(this).scrollTop() + "px" });
+	});
+	function colorize(text) {
+		var res = "";
+		var colors = [
+			`<span style="color:white">`,
+			`<span style="color:white">`,
+			`<span style="color:orange">`,
+			`<span style="color:orange">`,
+			`<span style="color:Khaki">`,
+			`<span style="color:Khaki">`,
+			`<span style="color:green">`,
+			`<span style="color:green">`,
+			`<span style="color:pink">`,
+			`<span style="color:pink">`,
+			`<span style="color:SlateBlue">`,
+			`<span style="color:SlateBlue">`];
+		var lines = text.split(/(\n)/g);
+		for (var i = 0; i < lines.length; i++) {
+			if (lines[i][0] == '/' && lines[i][1] == '/') {
+				res += `<span style="color:grey">` + lines[i] + "</span>";
+			}
+			else {
+				blocks = lines[i].split(/(?<=[_])/g);
+				for (var j = 0; j < blocks.length; j++) {
+					if (j >= colors.length)
+						res += `<span style="color:red">` + blocks[j] + "</span>";
+					else
+						res += colors[j] + blocks[j] + "</span>";
+				}
+			}
+		}
+		return res
+	}
+</script>
+
+
+
+</html>
