@@ -128,11 +128,11 @@
 	//returns formated table as HTML and also some other stuff
 	function showMenu() {
 		var res = "";
-		res += "<languageR>";
+		res += "<languageR id=scrollTarget>";
 		res += showLanguageMenu();
 		res += "</languageR>";
 		res += processBloc(intro, header);
-		res += `<buttonsC id=scrollTarget>`;
+		res += `<buttonsC>`;
 		res += showTabs();
 		res += "</buttonsC>";
 		res += "<menuC>";
