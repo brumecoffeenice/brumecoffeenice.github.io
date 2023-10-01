@@ -3,10 +3,10 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>Brume Coffee Nice</title>
+	<title>Brume Coffee Nice, café cosmopolite</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description"
-		content="Coffeeshop proposant du café de spécialité, des gâteaux généreux et des plats cosmopolites et healthy qui suivent les saisons">
+		content="Coffeeshop dans le vieux Nice proposant du café de spécialité, des gâteaux généreux et des plats healthy qui suivent les saisons">
 </head>
 
 <link rel="stylesheet" href="menu.css">
@@ -26,6 +26,7 @@
 			let limitedValue = clamp(value, endValue, startValue);
 			document.getElementById('backgroundBrume').style.opacity = limitedValue + "%";
 		}
+
 		{	//Scroll
 			let startValue = 0;
 			let endValue = 100;
@@ -64,8 +65,8 @@
 		<blocC>
 			<blocR>
 				<comment>
-					Hello ! Je vous accueille dans mon coffeeshop à l'ambiance détendue avec du café de spécialité, des
-					gâteaux généreux et simples et des plats cosmopolites et healthy qui suivent les saisons.
+					Hello ! Je vous accueille dans mon coffeeshop situé dans le vieux Nice avec du café de spécialité,
+					des gâteaux généreux et simples et des plats cosmopolites et healthy qui suivent les saisons.
 				</comment>
 			</blocR>
 		</blocC>
@@ -74,8 +75,13 @@
 	<bloc>
 		<blocR>
 			<cathegory>
-				Plan
+				Adresse
 			</cathegory>
+		</blocR>
+		<blocR>
+			<comment>
+				34 rue Pairolière, 06300 Nice
+			</comment>
 		</blocR>
 		<blocR>
 			<div style="width: 100%">
@@ -186,6 +192,8 @@
 			</a>
 		</blocR>
 	</bloc>
+	<br>
+	<br>
 	<blocR>
 		<photos>
 			<img src="pics/0.webp" alt="brume">
@@ -208,17 +216,6 @@
 			<img src="pics/17.webp" alt="brume">
 		</photos>
 	</blocR>
-	</bloc>
-
-	<bloc>
-		<blocR>
-			<logoC>
-				<a href="https://github.com/brumecoffeenice/brumecoffeenice.github.io" target="_blank">
-					<img class=logo src="img/github_logo.svg" alt="github" />
-				</a>
-			</logoC>
-		</blocR>
-	</bloc>
 
 	<div id="content"></div>
 	<div class=backgroundImage id="backgroundBrume" alt="background"></div>

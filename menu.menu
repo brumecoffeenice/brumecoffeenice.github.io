@@ -1,4 +1,7 @@
-//Ce fichier contient les éléments à mettre en forme
+//Website and editor made with <3 by Simon for Roxane
+//Go check my GitHub : https://github.com/simon-ameye
+
+//Ce fichier contient les éléments à mettre en forme dans le menu de Brume
 //La mise en forme des éléments est basée sur le niveau de chaque élément
 //Le niveau d'un élément est déduit du nombre de délimiteurs "_" avant lui
 //Chaque élément est séparé de sa traduction facultative par un délimiteur

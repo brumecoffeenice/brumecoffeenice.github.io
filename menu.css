@@ -107,7 +107,7 @@ logoC {
 }
 
 .logo {
-	height: 0.6cm;
+	height: 0.5cm;
 	width: auto;
 }
 
@@ -367,8 +367,8 @@ photos {
 }
 
 img {
-	width: 49%;
+	width: 49.5%;
 	/* padding-bottom: 2%; */
-	margin-bottom: 2%;
+	margin-bottom: 1%;
 	position: relative;
 }
