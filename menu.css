@@ -372,3 +372,12 @@ img {
 	margin-bottom: 1%;
 	position: relative;
 }
+
+credit {
+	text-align: center;
+	color: rgb(139, 139, 139);
+	font-family: 'Oswald', sans-serif;
+	font-size: 100%;
+	font-weight: 100;
+	margin: 0.5em;
+}
