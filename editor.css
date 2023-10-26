@@ -18,7 +18,7 @@ body {
   top: 0;
   padding: 10px;
   margin: 0;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Courier New", Courier, monospace;
   font-size: 0.8rem;
   padding: 30px;
   border: none;
@@ -26,6 +26,7 @@ body {
   line-break: anywhere;
   white-space: pre-wrap;
   color:white;
+  line-height: 2em;
 }
 
 .code-editor-background {

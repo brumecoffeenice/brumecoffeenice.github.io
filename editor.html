@@ -60,20 +60,26 @@
 			`<span style="color:pink">`,
 			`<span style="color:SlateBlue">`,
 			`<span style="color:SlateBlue">`];
-		var lines = text.split(/(\n)/g);
+		var lines = text.split('\n');
 		for (var i = 0; i < lines.length; i++) {
 			if (lines[i][0] == '/' && lines[i][1] == '/') {
 				res += `<span style="color:grey">` + lines[i] + "</span>";
 			}
 			else {
-				blocks = lines[i].split(/(?<=[_])/g);
+				blocks = lines[i].split('_');
 				for (var j = 0; j < blocks.length; j++) {
+					var block = blocks[j];
+					//block = block.padEnd(10, ' ').slice(0, 10);
 					if (j >= colors.length)
-						res += `<span style="color:red">` + blocks[j] + "</span>";
+						res += `<span style="color:red">` + block + "</span>";
 					else
-						res += colors[j] + blocks[j] + "</span>";
+						res += colors[j] + block + "</span>";
+					if (j < blocks.length - 1)
+						res += `<span style="color:grey">` + '_' + "</span>";
 				}
 			}
+			if (i < lines.length - 1)
+				res += '\n';
 		}
 		return res
 	}
