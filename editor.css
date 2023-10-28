@@ -10,24 +10,24 @@ body {
 	position: relative;
 }
 
-.code-editor{
-  box-sizing: border-box;
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  padding: 10px;
-  margin: 0;
-  font-family: "Courier New", Courier, monospace;
-  font-size: 0.8rem;
-  padding: 30px;
-  border: none;
-  outline: none;
-  line-break: anywhere;
-  white-space: pre-wrap;
-  color:white;
-  line-height: 1em;
-  display: block;
+.code-editor {
+	box-sizing: border-box;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	padding: 10px;
+	margin: 0;
+	font-family: "Courier New", Courier, monospace;
+	font-size: 0.8rem;
+	padding: 3%;
+	border: none;
+	outline: none;
+	line-break: anywhere;
+	white-space: pre-wrap;
+	color: white;
+	line-height: 2em;
+	display: block;
 }
 
 .code-editor-background {
