@@ -16,6 +16,23 @@
 </div>
 
 <script>
+	function myFunction() {
+			// Get the text field
+			var copyText = document.getElementById("in");
+
+			// Select the text field
+			copyText.select();
+			copyText.setSelectionRange(0, 99999); // For mobile devices
+
+			// Copy the text inside the text field
+			navigator.clipboard.writeText(copyText.value);
+
+			// Alert the copied text
+			alert("Copied the text: " + copyText.value);
+		}
+</script>
+
+<script>
 	async function initMenu() {
 		let response = await fetch('menu.menu');
 		let menuFile = await response.text();
@@ -48,18 +65,18 @@
 	function colorize(text) {
 		var res = "";
 		var colors = [
-			`<span style="color:white">`,
-			`<span style="color:white">`,
+			`<span style="color:white; font-weight:bold">`,
+			`<span style="color:grey; font-weight:bold">`,
 			`<span style="color:orange">`,
-			`<span style="color:orange">`,
+			`<span style="color:grey">`,
 			`<span style="color:Khaki">`,
-			`<span style="color:Khaki">`,
+			`<span style="color:grey">`,
 			`<span style="color:lightCoral">`,
-			`<span style="color:lightCoral">`,
-			`<span style="color:darkGrey">`,
-			`<span style="color:darkGrey">`,
+			`<span style="color:red; font-weight:bold">`,
+			`<span style="color:LightSlateGray">`,
+			`<span style="color:grey">`,
 			`<span style="color:pink">`,
-			`<span style="color:pink">`];
+			`<span style="color:grey">`];
 		var lines = text.split('\n');
 		for (var i = 0; i < lines.length; i++) {
 			if (lines[i][0] == '/' && lines[i][1] == '/') {
@@ -71,7 +88,7 @@
 					var block = blocks[j];
 					//block = block.padEnd(10, ' ').slice(0, 10);
 					if (j >= colors.length)
-						res += `<span style="color:red">` + block + "</span>";
+						res += `<span style="color:red; font-weight:bold">` + block + "</span>";
 					else
 						res += colors[j] + block + "</span>";
 					if (j < blocks.length - 1)
@@ -85,6 +102,6 @@
 	}
 </script>
 
-
+<button onclick="myFunction()">Copy text</button>
 
 </html>
