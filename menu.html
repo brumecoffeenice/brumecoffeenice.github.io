@@ -31,15 +31,23 @@
 		return (res);
 	}
 
+	function removeHorizontalBarBeforePrint(a) {
+		const elements = a.document.getElementsByClassName('horizontalBar');
+		while (elements.length > 0) {
+			elements[0].parentNode.removeChild(elements[0]);
+		}
+	}
+
 	//creates a new window with only the content of a dif to allow user to print it
 	//print a div
 	function printMenu() {
 		var divContents = document.getElementsByTagName('menuC')[0].innerHTML;
 		var a = window.open('', '', 'height=500, width=500');
 		a.document.write('<link rel="stylesheet" href="menu.css">');
-		a.document.write('<html><body><printR><printC>');
+		a.document.write('<printC>');
 		a.document.write(divContents);
-		a.document.write('</printC></printR></body></html>');
+		a.document.write('</printC>');
+		removeHorizontalBarBeforePrint(a);
 
 		//Degueulasse, please find a better way to wait until page loaded before print
 		setTimeout(function () {
@@ -97,7 +105,7 @@
 							//res += "<menu>" + word + "</menu>"; //shows the menu name
 							break;
 						case "categorie":
-							res += "<hr>";
+							res += "<hr class=horizontalBar>";
 							res += "<cathegory class = centerR>" + word + "</cathegory>";
 							break;
 						case "produit":
