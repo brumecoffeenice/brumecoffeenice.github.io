@@ -17,19 +17,15 @@
 
 <script>
 	function myFunction() {
-			// Get the text field
-			var copyText = document.getElementById("in");
-
-			// Select the text field
-			copyText.select();
-			copyText.setSelectionRange(0, 99999); // For mobile devices
-
-			// Copy the text inside the text field
-			navigator.clipboard.writeText(copyText.value);
-
-			// Alert the copied text
-			alert("Copied the text: " + copyText.value);
-		}
+		var copyText = document.getElementById("in");
+		copyText.select();
+		copyText.setSelectionRange(0, 99999);
+		navigator.clipboard
+			.writeText(copyText.value)
+			.then(() => {
+				alert("copié");
+			})
+	}
 </script>
 
 <script>
@@ -65,18 +61,18 @@
 	function colorize(text) {
 		var res = "";
 		var colors = [
-			`<span style="color:white; font-weight:bold">`,
-			`<span style="color:grey; font-weight:bold; font-style: italic;">`,
-			`<span style="color:orange; font-weight:bold">`,
-			`<span style="color:orange; font-weight:bold; font-style: italic;">`,
+			`<span style="color:lightBlue; font-weight:bold">`,
+			`<span style="color:lightBlue; font-weight:bold; font-style: italic;">`,
+			`<span style="color:peru; font-weight:bold">`,
+			`<span style="color:peru; font-weight:bold; font-style: italic;">`,
 			`<span style="color:Khaki">`,
 			`<span style="color:Khaki; font-style: italic;">`,
 			`<span style="color:lightCoral">`,
 			`<span style="color:red; font-weight:bold">`,
 			`<span style="color:grey">`,
 			`<span style="color:grey; font-style: italic;">`,
-			`<span style="color:pink">`,
-			`<span style="color:grey">`];
+			`<span style="color:darkSeaGreen">`,
+			`<span style="color:darkSeaGreen; font-style: italic;">`];
 		var lines = text.split('\n');
 		for (var i = 0; i < lines.length; i++) {
 			if (lines[i][0] == '/' && lines[i][1] == '/') {
@@ -102,6 +98,6 @@
 	}
 </script>
 
-<button onclick="myFunction()">Copy text</button>
+<button class="btn-wrapper" onclick="myFunction()">Copier</button>
 
 </html>
