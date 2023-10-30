@@ -50,12 +50,17 @@ body {
 
 .btn-wrapper {
 	position: absolute;
-	top: 95%;
-	left: 5%;
-	margin-right: 30px;
+	bottom: 0;
+	right: 0;
+	margin-right: 5%;
+	margin-bottom: 5%;
 	width: 4em;
 	background-color: grey;
 	border: none;
 	text-decoration: none;
 	border-radius: 10px;
+}
+
+.buttonparent {
+	position: relative;
 }
