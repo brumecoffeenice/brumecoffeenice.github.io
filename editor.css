@@ -7,7 +7,7 @@ body {
 	overflow: hidden;
 	width: 100vw;
 	height: 100vh;
-	position: relative;
+	/* position: relative; */
 }
 
 .code-editor {
@@ -48,12 +48,12 @@ body {
 	top: 1px
 }
 
-.btn-wrapper {
+.buttonchild {
 	position: absolute;
 	bottom: 0;
 	right: 0;
 	margin-right: 10px;
-	margin-bottom: 10px;
+	margin-bottom: 40px;
 	width: 4em;
 	background-color: grey;
 	border: none;
