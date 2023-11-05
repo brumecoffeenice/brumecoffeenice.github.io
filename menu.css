@@ -19,7 +19,7 @@ menuName {
 }
 
 /*for categorie*/
-cathegory {
+category {
 	text-align: center;
 	color: rgb(0, 0, 0);
 	font-family: 'Yeseva One', cursive;
@@ -29,7 +29,7 @@ cathegory {
 	min-height: 0;
 	padding-right: 5mm;
 	padding-left: 5mm;
-	flex-shrink: 0;
+	/* flex-shrink: 0; */
 }
 
 /*for nom*/
