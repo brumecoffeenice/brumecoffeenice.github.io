@@ -15,89 +15,153 @@
 	<div class="code-editor code-editor-foreground" id="out" spellcheck="false"></div>
 </div>
 
-<script>
-	function myFunction() {
-		var copyText = document.getElementById("in");
-		copyText.select();
-		copyText.setSelectionRange(0, 99999);
-		navigator.clipboard
-			.writeText(copyText.value)
-			.then(() => {
-				alert("Menu copié :)");
-			})
-	}
-</script>
+<body>
+	<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-<script>
-	async function initMenu() {
-		let response = await fetch('menu.menu');
-		let menuFile = await response.text();
-		menuFile = menuFile.replace(/(\r\n)/gm, "\n"); //set \n as delimiter by replacing \r\n
-		menuFile = menuFile.replace(/(\r)/gm, "\n"); //set \n as delimiter by replacing \r
-		document.getElementById('in').innerHTML = menuFile;
-		updateScreen(menuFile);
-	}
-</script>
+	<script>
 
-<script>initMenu()</script>
+		//Public DB access
+		const SupabaseUrl = "https://cpvxjedlgjhcdqjyecmf.supabase.co"
+		const SupabasePublicAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwdnhqZWRsZ2poY2RxanllY21mIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkyNjMzMzYsImV4cCI6MjAxNDgzOTMzNn0.Rs-bqvUb0Eq7NEKX3tFc8WHJOjzk1Rc4fgRRU6OtVNs"
+		const _supabase = supabase.createClient(SupabaseUrl, SupabasePublicAnonKey)
 
-<script>
-	updateScreen($("#in").val());
-	$("#in").on("keydown", function (e) {
-		setTimeout(() => {
-			updateScreen($(this).val());
-		}, 0)
-	})
-	async function updateScreen(text) {
-		var text1 = await colorize(text);
-		var text2 = await text1.replace(/\n/g, "<br>");
-		var text3 = await text2.replace(/\t/g, "&#9;");
-		$("#out").html(text3);
-	}
-	$("#in").on('scroll', function () {
-		// set out to be the same as in
-		$("#out").css({ top: -$(this).scrollTop() + "px" });
-	});
-	function colorize(text) {
-		var res = "";
-		var colors = [
-			`<span style="color:lightBlue; font-weight:bold">`,
-			`<span style="color:lightBlue; font-weight:bold; font-style: italic;">`,
-			`<span style="color:peru; font-weight:bold">`,
-			`<span style="color:peru; font-weight:bold; font-style: italic;">`,
-			`<span style="color:Khaki">`,
-			`<span style="color:Khaki; font-style: italic;">`,
-			`<span style="color:lightCoral">`,
-			`<span style="color:red; font-weight:bold">`,
-			`<span style="color:grey">`,
-			`<span style="color:grey; font-style: italic;">`,
-			`<span style="color:darkSeaGreen">`,
-			`<span style="color:darkSeaGreen; font-style: italic;">`];
-		var lines = text.split('\n');
-		for (var i = 0; i < lines.length; i++) {
-			if (lines[i][0] == '/' && lines[i][1] == '/') {
-				res += `<span style="color:black">` + lines[i] + "</span>";
+		document.addEventListener("DOMContentLoaded", getLastMenu)
+
+		async function getLastMenu() {
+			let { data, error } = await _supabase
+				.from('menu.menu')
+				.select('content')
+				.limit(1)
+				.order("id", { ascending: false })
+
+			if (error) {
+				console.log("ERROR", error);
+				throw error;
 			}
-			else {
-				blocks = lines[i].split('_');
-				for (var j = 0; j < blocks.length; j++) {
-					var block = blocks[j];
-					//block = block.padEnd(10, ' ').slice(0, 10);
-					if (j >= colors.length)
-						res += `<span style="color:red; font-weight:bold">` + block + "</span>";
-					else
-						res += colors[j] + block + "</span>";
-					if (j < blocks.length - 1)
-						res += `<span style="color:dimGrey">` + '_' + "</span>";
-				}
-			}
-			if (i < lines.length - 1)
-				res += '\n';
+
+			return (data[0].content);
 		}
-		return res
-	}
-</script>
 
-<button class="buttonchild" onclick="myFunction()">Copier</button>
+		async function initMenu() {
+			let menuFile = await getLastMenu();
+			menuFile = menuFile.replace(/(\r\n)/gm, "\n"); //set \n as delimiter by replacing \r\n
+			menuFile = menuFile.replace(/(\r)/gm, "\n"); //set \n as delimiter by replacing \r
+			document.getElementById('in').innerHTML = menuFile;
+			updateScreen(menuFile);
+		}
+
+		function copyMenuToClip() {
+			var copyText = document.getElementById("in");
+			copyText.select();
+			copyText.setSelectionRange(0, 99999);
+			navigator.clipboard
+				.writeText(copyText.value)
+				.then(() => {
+					alert("Menu copié :)");
+				})
+		}
+		function copyMenuToClip2() {
+			var copyText = $("#in").val();
+			navigator.clipboard
+				.writeText(copyText)
+				.then(() => {
+					alert("Menu copié :)");
+				})
+		}
+
+		async function pushMenu() {
+
+			var username = prompt("email?");
+			var password = prompt("mot de passe?");
+			const { data, error0 } = await _supabase.auth.signInWithPassword({
+				email: username,
+				password: password,
+			})
+			if (error0) {
+				console.log("ERROR", error0);
+				throw error0;
+			}
+
+			var pushText = $("#in").val()
+
+			const { error1 } = await _supabase
+				.from('menu.menu')
+				.insert({ content: pushText })
+			if (error1) {
+				console.log("ERROR", error1);
+				throw error1;
+			} else {
+				alert("Menu push :)");
+			}
+		}
+	</script>
+
+	<script>initMenu()</script>
+
+	<script>
+		updateScreen($("#in").val());
+		$("#in").on("keydown", function (e) {
+			setTimeout(() => {
+				updateScreen($(this).val());
+			}, 0)
+		})
+		async function updateScreen(text) {
+			var text1 = await colorize(text);
+			var text2 = await text1.replace(/\n/g, "<br>");
+			var text3 = await text2.replace(/\t/g, "&#9;");
+			$("#out").html(text3);
+		}
+		$("#in").on('scroll', function () {
+			// set out to be the same as in
+			$("#out").css({ top: -$(this).scrollTop() + "px" });
+		});
+		function colorize(text) {
+			var res = "";
+			var colors = [
+				`<span style="color:lightBlue; font-weight:bold">`,
+				`<span style="color:lightBlue; font-weight:bold; font-style: italic;">`,
+				`<span style="color:peru; font-weight:bold">`,
+				`<span style="color:peru; font-weight:bold; font-style: italic;">`,
+				`<span style="color:Khaki">`,
+				`<span style="color:Khaki; font-style: italic;">`,
+				`<span style="color:lightCoral">`,
+				`<span style="color:red; font-weight:bold">`,
+				`<span style="color:grey">`,
+				`<span style="color:grey; font-style: italic;">`,
+				`<span style="color:darkSeaGreen">`,
+				`<span style="color:darkSeaGreen; font-style: italic;">`];
+			var lines = text.split('\n');
+			for (var i = 0; i < lines.length; i++) {
+				if (lines[i][0] == '/' && lines[i][1] == '/') {
+					res += `<span style="color:black">` + lines[i] + "</span>";
+				}
+				else {
+					blocks = lines[i].split('_');
+					for (var j = 0; j < blocks.length; j++) {
+						var block = blocks[j];
+						//block = block.padEnd(10, ' ').slice(0, 10);
+						if (j >= colors.length)
+							res += `<span style="color:red; font-weight:bold">` + block + "</span>";
+						else
+							res += colors[j] + block + "</span>";
+						if (j < blocks.length - 1)
+							res += `<span style="color:dimGrey">` + '_' + "</span>";
+					}
+				}
+				if (i < lines.length - 1)
+					res += '\n';
+			}
+			return res
+		}
+	</script>
+
+	<div class='buttonHolder'>
+		<button class="buttonchild" onclick="initMenu()">Reset</button>
+		<button class="buttonchild" onclick="copyMenuToClip()">Copier</button>
+		<button class="buttonchild" onclick="copyMenuToClip2()">Copier2</button>
+		<button class="buttonchild" onclick="pushMenu()">Push</button>
+	</div>
+
+</body>
 
 </html>

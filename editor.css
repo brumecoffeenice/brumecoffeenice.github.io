@@ -49,14 +49,19 @@ body {
 }
 
 .buttonchild {
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	margin-right: 10px;
-	margin-bottom: 10px;
 	width: 4em;
 	background-color: grey;
 	border: none;
 	text-decoration: none;
 	border-radius: 10px;
+}
+
+.buttonHolder {
+	display: flex;
+	flex-direction: row;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	margin-right: 10px;
+	margin-bottom: 10px;
 }
