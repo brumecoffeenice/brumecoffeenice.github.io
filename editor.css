@@ -65,3 +65,11 @@ body {
 	margin-right: 10px;
 	margin-bottom: 10px;
 }
+
+input {
+	width: 10em;
+	background-color: grey;
+	border: none;
+	text-decoration: none;
+	border-radius: 10px;
+}
