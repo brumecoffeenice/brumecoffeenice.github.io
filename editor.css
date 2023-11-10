@@ -48,28 +48,32 @@ body {
 	top: 1px
 }
 
-.buttonchild {
-	width: 4em;
+.buttonChild {
+	width: 6em;
 	background-color: grey;
 	border: none;
 	text-decoration: none;
 	border-radius: 10px;
+	margin-top: 0.5em;
+}
+
+.buttonPush {
+	background-color: rgb(240, 128, 128);
+	width: 6em;
+	border: none;
+	text-decoration: none;
+	border-radius: 10px;
+	margin-top: 0.5em;
 }
 
 .buttonHolder {
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	position: absolute;
 	bottom: 0;
 	right: 0;
 	margin-right: 10px;
 	margin-bottom: 10px;
-}
+	align-items: end;
 
-input {
-	width: 10em;
-	background-color: grey;
-	border: none;
-	text-decoration: none;
-	border-radius: 10px;
 }
