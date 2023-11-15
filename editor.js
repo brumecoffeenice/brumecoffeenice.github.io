@@ -1,16 +1,15 @@
-//Public DB access
 const SupabaseUrl = "https://cpvxjedlgjhcdqjyecmf.supabase.co"
 const SupabasePublicAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwdnhqZWRsZ2poY2RxanllY21mIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkyNjMzMzYsImV4cCI6MjAxNDgzOTMzNn0.Rs-bqvUb0Eq7NEKX3tFc8WHJOjzk1Rc4fgRRU6OtVNs"
 const _supabase = supabase.createClient(SupabaseUrl, SupabasePublicAnonKey)
-lastMenu = "";
+let storedMenu = "";
 
-document.addEventListener("DOMContentLoaded", getLastMenu)
+// document.addEventListener("DOMContentLoaded", fetchMenu)
 
-pushButton.addEventListener('click', function () {
-	pushMenu(email.value, password.value);
+saveButton.addEventListener('click', function () {
+	pushMenu(emailBox.value, passwordBox.value);
 })
 
-async function getLastMenu() {
+async function fetchMenu() {
 	let { data, error } = await _supabase
 		.from('menu.menu')
 		.select('content')
@@ -24,13 +23,11 @@ async function getLastMenu() {
 	return (data[0].content);
 }
 
-async function initMenu() {
-	let menuFile = await getLastMenu();
+async function getMenu() {
+	let menuFile = await fetchMenu();
 	menuFile = menuFile.replace(/(\r\n)/gm, "\n"); //set \n as delimiter by replacing \r\n
 	menuFile = menuFile.replace(/(\r)/gm, "\n"); //set \n as delimiter by replacing \r
-	document.getElementById('in').innerHTML = menuFile;
-	lastMenu = menuFile;
-	updateScreen(menuFile);
+	return menuFile;
 }
 
 function copyMenuToClip2() {
@@ -60,7 +57,7 @@ async function pushMenu(username, password) {
 	})
 }
 
-async function updateScreen(text) {
+async function updateOut(text) {
 	var text1 = colorize(text);
 	var text2 = text1.replace(/\n/g, "<br>");
 	var text3 = text2.replace(/\t/g, "&#9;");
@@ -109,7 +106,7 @@ function colorize(text) {
 
 function getDiff() {
 
-	const text1 = lastMenu;
+	const text1 = storedMenu;
 	const text2 = $("#in").val();
 
 	res = "";
@@ -141,19 +138,26 @@ function processButtonChild1() {
 }
 
 function processButtonChild2() {
-	initMenu();
+	updateOut($("#in").val());
 	document.getElementById('diffButton').setAttribute('onclick', 'processButtonChild1()');
 }
 
-initMenu()
+async function resetMenu() {
+	storedMenu = await getMenu()
+	document.getElementById('in').innerHTML = storedMenu;
+	updateOut($("#in").val());
+}
 
-updateScreen($("#in").val());
-$("#in").on("keydown", function (e) {
-	setTimeout(() => {
-		updateScreen($(this).val());
-	}, 0)
-})
+resetMenu()
 
 $("#in").on('scroll', function () {
 	$("#out").css({ top: -$(this).scrollTop() + "px" });
 });
+
+// updateOut($("#in").val());
+
+$("#in").on("keydown", function (e) {
+	setTimeout(() => {
+		updateOut($(this).val());
+	}, 0)
+})

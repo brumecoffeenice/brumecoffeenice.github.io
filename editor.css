@@ -48,7 +48,7 @@ body {
 	top: 1px
 }
 
-.buttonChild {
+.buttonStyle1 {
 	width: 6em;
 	background-color: grey;
 	border: none;
@@ -57,7 +57,7 @@ body {
 	margin-top: 0.5em;
 }
 
-.buttonPush {
+.buttonStyle2 {
 	background-color: rgb(240, 128, 128);
 	width: 6em;
 	border: none;

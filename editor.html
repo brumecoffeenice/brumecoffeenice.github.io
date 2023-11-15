@@ -14,7 +14,6 @@
 	<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jsdiff/5.1.0/diff.min.js"></script>
 
-
 	<div class="code-editor-container">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 		<textarea class="code-editor code-editor-background" id="in" spellcheck="false"></textarea>
@@ -22,12 +21,12 @@
 	</div>
 
 	<div class='buttonHolder'>
-		<button class="buttonChild" onclick="initMenu()">Réinitialiser</button>
-		<button class="buttonChild" onclick="copyMenuToClip2()">Copier</button>
-		<button id=diffButton class="buttonChild" onclick="processButtonChild1()">Différences</button>
-		<input id="email" type="email" placeholder="email@email.com" class="buttonPush">
-		<input id="password" type="password" placeholder="mot de passe" class="buttonPush">
-		<button id="pushButton" class="buttonPush">Enregistrer</button>
+		<!-- <button class="buttonStyle1" onclick="resetMenu()">Réinitialiser</button> -->
+		<button class="buttonStyle1" onclick="copyMenuToClip2()">Copier</button>
+		<button class="buttonStyle1" id=diffButton onclick="processButtonChild1()">Différences</button>
+		<input  class="buttonStyle2" id="emailBox"		type="email"	placeholder="email@email.com">
+		<input  class="buttonStyle2" id="passwordBox"	type="password"	placeholder="mot de passe">
+		<button class="buttonStyle2" id="saveButton">Enregistrer</button>
 	</div>
 
 	<script src="editor.js"></script>
