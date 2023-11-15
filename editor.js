@@ -104,40 +104,39 @@ function colorize(text) {
 }
 
 
-function getDiff() {
-
-	const text1 = storedMenu;
-	const text2 = $("#in").val();
-
-	res = "";
-
-	display = document.getElementById('out');
-	display.innerHTML = "";
+function getDiffFragment(text1, text2) {
 	fragment = document.createDocumentFragment();
-
 	const diff = Diff.diffChars(text1, text2);
 
 	diff.forEach((part) => {
-		const color = part.added ? 'green' :
-			part.removed ? 'red' : 'grey';
+		const backgroundColor = part.added ? 'green' :
+			part.removed ? 'red' : 'transparent';
+		const fontColor = part.added ? 'white' :
+			part.removed ? 'white' : 'grey';
 		const font_weight = part.added ? 'bold' :
 			part.removed ? 'bold' : 'normal';
 		span = document.createElement('span');
-		span.style.color = color;
+		span.style.backgroundColor = backgroundColor;
+		span.style.color = fontColor;
 		span.style.fontWeight = font_weight;
+		// span.style.color = color;
+		// span.style.fontWeight = font_weight;
 		span.appendChild(document
 			.createTextNode(part.value));
 		fragment.appendChild(span);
 	});
-	display.appendChild(fragment);
+	return fragment;
 }
 
-function processButtonChild1() {
-	getDiff();
+function processButtonChild1() { //show diff
+	let fragment = getDiffFragment(storedMenu, $("#in").val());
+
+	document.getElementById('out').innerHTML = ""; 
+	document.getElementById('out').appendChild(fragment);
 	document.getElementById('diffButton').setAttribute('onclick', 'processButtonChild2()');
 }
 
-function processButtonChild2() {
+function processButtonChild2() { //show editor
 	updateOut($("#in").val());
 	document.getElementById('diffButton').setAttribute('onclick', 'processButtonChild1()');
 }
@@ -153,8 +152,6 @@ resetMenu()
 $("#in").on('scroll', function () {
 	$("#out").css({ top: -$(this).scrollTop() + "px" });
 });
-
-// updateOut($("#in").val());
 
 $("#in").on("keydown", function (e) {
 	setTimeout(() => {
