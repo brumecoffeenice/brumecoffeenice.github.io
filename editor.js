@@ -2,9 +2,13 @@
 const SupabaseUrl = "https://cpvxjedlgjhcdqjyecmf.supabase.co"
 const SupabasePublicAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwdnhqZWRsZ2poY2RxanllY21mIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkyNjMzMzYsImV4cCI6MjAxNDgzOTMzNn0.Rs-bqvUb0Eq7NEKX3tFc8WHJOjzk1Rc4fgRRU6OtVNs"
 const _supabase = supabase.createClient(SupabaseUrl, SupabasePublicAnonKey)
+lastMenu = "";
 
 document.addEventListener("DOMContentLoaded", getLastMenu)
-lastMenu = "";
+
+pushButton.addEventListener('click', function () {
+	pushMenu(email.value, password.value);
+})
 
 async function getLastMenu() {
 	let { data, error } = await _supabase
@@ -39,42 +43,30 @@ function copyMenuToClip2() {
 }
 
 async function pushMenu(username, password) {
-	const { data, error0 } = await _supabase.auth.signInWithPassword({
-		email: username,
-		password: password,
-	});
-	console.log(error0);
-
 	var pushText = $("#in").val()
 
-	const { error1 } = await _supabase
-		.from('menu.menu')
-		.insert({ content: pushText })
-	console.log(error1);
+	_supabase.auth.signInWithPassword({ email: username, password: password }).then(signRes => {
+		if (signRes.error) {
+			alert(signRes.error);
+		}
+		else {
+			_supabase.from('menu.menu').insert({ content: pushText }).then((insertRes) => {
+				if (insertRes.error)
+					alert(insertRes.error.message);
+				else
+					alert("Menu enregistré :)");
+			})
+		}
+	})
 }
 
-pushButton.addEventListener('click', function () {
-	pushMenu(email.value, password.value);
-})
-
-initMenu()
-
-updateScreen($("#in").val());
-$("#in").on("keydown", function (e) {
-	setTimeout(() => {
-		updateScreen($(this).val());
-	}, 0)
-})
 async function updateScreen(text) {
-	var text1 = await colorize(text);
-	var text2 = await text1.replace(/\n/g, "<br>");
-	var text3 = await text2.replace(/\t/g, "&#9;");
+	var text1 = colorize(text);
+	var text2 = text1.replace(/\n/g, "<br>");
+	var text3 = text2.replace(/\t/g, "&#9;");
 	$("#out").html(text3);
 }
-$("#in").on('scroll', function () {
-	// set out to be the same as in
-	$("#out").css({ top: -$(this).scrollTop() + "px" });
-});
+
 function colorize(text) {
 	var res = "";
 	var colors = [
@@ -142,3 +134,26 @@ function getDiff() {
 	});
 	display.appendChild(fragment);
 }
+
+function processButtonChild1() {
+	getDiff();
+	document.getElementById('diffButton').setAttribute('onclick', 'processButtonChild2()');
+}
+
+function processButtonChild2() {
+	initMenu();
+	document.getElementById('diffButton').setAttribute('onclick', 'processButtonChild1()');
+}
+
+initMenu()
+
+updateScreen($("#in").val());
+$("#in").on("keydown", function (e) {
+	setTimeout(() => {
+		updateScreen($(this).val());
+	}, 0)
+})
+
+$("#in").on('scroll', function () {
+	$("#out").css({ top: -$(this).scrollTop() + "px" });
+});
