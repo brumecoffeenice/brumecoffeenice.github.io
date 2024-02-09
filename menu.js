@@ -222,6 +222,35 @@ function transformBackground(scroll) {
 		let limitedValue = clamp(value, startValue, endValue);
 		document.getElementById('backgroundBrume').style.top = - limitedValue + "%";
 	}
+	{
+		//Reduce text
+		let startValue = 400;
+		let endValue = 0;
+		let maxScroll = 300;
+		let value = startValue + (endValue - startValue) * scroll / maxScroll;
+		let limitedValue = clamp(value, endValue, startValue);
+		document.getElementById('brumeLogo').style.fontSize = limitedValue + "%";
+	}
+	{
+		//Reduce text
+		let startValue = 80;
+		let endValue = 0;
+		let maxScroll = 300;
+		let value = startValue + (endValue - startValue) * scroll / maxScroll;
+		let limitedValue = clamp(value, endValue, startValue);
+		document.getElementById('brumeSlogan').style.fontSize = limitedValue + "%";
+	}
+	{
+		//translate
+		let startValue = 100;
+		let endValue = 0;
+		let maxScroll = 200;
+		let value = startValue + (endValue - startValue) * scroll / maxScroll;
+		let limitedValue = clamp(value, endValue, startValue);
+		document.getElementById('brumeLogo').style.opacity = limitedValue + "%";
+		document.getElementById('brumeSlogan').style.opacity = limitedValue + "%";
+
+	}
 }
 
 window.addEventListener('scroll', () => {
