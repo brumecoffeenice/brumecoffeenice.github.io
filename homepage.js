@@ -45,13 +45,13 @@ function transformBackground(scroll) {
 	}
 	{
 		//Size of circle
-		let startValue = 50;
+		let startValue = 90;
 		let endValue = 100;
 		let maxScroll = 300;
 		let value = startValue + (endValue - startValue) * scroll / maxScroll;
 		let limitedValue = clamp(value, startValue, endValue);
-		document.getElementById('circle').style.width = limitedValue + "vh";
-		document.getElementById('circle').style.height = limitedValue + "vh";
+		document.getElementById('circle').style.width = limitedValue + "vw";
+		document.getElementById('circle').style.height = limitedValue + "vw";
 	}
 }
 
