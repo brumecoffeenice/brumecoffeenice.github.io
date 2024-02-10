@@ -46,7 +46,7 @@ function transformBackground(scroll) {
 	{
 		//Size of circle
 		let startValue = 90;
-		let endValue = 100;
+		let endValue = 200;
 		let maxScroll = 300;
 		let value = startValue + (endValue - startValue) * scroll / maxScroll;
 		let limitedValue = clamp(value, startValue, endValue);
