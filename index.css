@@ -1,0 +1,35 @@
+blocC {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+blocR {
+	margin-top: 0.3cm;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+bloc {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin-top: 1cm;
+	padding-right: 5mm;
+	padding-left: 5mm;
+	/* border-top: 1px solid; */
+}
+
+photos {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+img {
+	width: 49.5%;
+	/* padding-bottom: 2%; */
+	margin-bottom: 1%;
+	position: relative;
+}

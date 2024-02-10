@@ -10,67 +10,13 @@
 </head>
 
 <link rel="stylesheet" href="menu.css">
+<link rel="stylesheet" href="index.css">
+<link rel="stylesheet" href="homepage.css">
+
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 
-<script>
-	function clamp(val, min, max) {
-		return val > max ? max : val < min ? min : val;
-	}
-
-	function transformBackground(scroll) {
-		{	//Brightening
-			let startValue = 90;
-			let endValue = 0;
-			let maxScroll = 800;
-			let value = startValue + (endValue - startValue) * scroll / maxScroll;
-			let limitedValue = clamp(value, endValue, startValue);
-			document.getElementById('backgroundBrume').style.opacity = limitedValue + "%";
-		}
-
-		{	//Scroll
-			let startValue = 0;
-			let endValue = 100;
-			let maxScroll = 1600;
-			let value = startValue + (endValue - startValue) * scroll / maxScroll;
-			let limitedValue = clamp(value, startValue, endValue);
-			document.getElementById('backgroundBrume').style.top = - limitedValue + "%";
-		}
-		{
-			//Reduce text
-			let startValue = 400;
-			let endValue = 0;
-			let maxScroll = 300;
-			let value = startValue + (endValue - startValue) * scroll / maxScroll;
-			let limitedValue = clamp(value, endValue, startValue);
-			document.getElementById('brumeLogo').style.fontSize = limitedValue + "%";
-		}
-		{
-			//Reduce text
-			let startValue = 80;
-			let endValue = 0;
-			let maxScroll = 300;
-			let value = startValue + (endValue - startValue) * scroll / maxScroll;
-			let limitedValue = clamp(value, endValue, startValue);
-			document.getElementById('brumeSlogan').style.fontSize = limitedValue + "%";
-		}
-		{
-			//translate
-			let startValue = 100;
-			let endValue = 0;
-			let maxScroll = 200;
-			let value = startValue + (endValue - startValue) * scroll / maxScroll;
-			let limitedValue = clamp(value, endValue, startValue);
-			document.getElementById('brumeLogo').style.opacity = limitedValue + "%";
-			document.getElementById('brumeSlogan').style.opacity = limitedValue + "%";
-		}
-	}
-
-	window.addEventListener('scroll', () => {
-		transformBackground(window.scrollY);
-	});
-</script>
-
 <body>
+	<!-- Homepage -->
 	<headerR>
 		<a href="index.html">
 			<header style="font-weight: bold; text-decoration: underline">Accueil</header>
@@ -80,14 +26,17 @@
 		</a>
 	</headerR>
 
-	<homePageC>
-		<brumeR>
-			<brumeC>
-				<brume id="brumeLogo">Brume</brume>
-				<brumeSlogan id="brumeSlogan">café cosmopolite</brumeSlogan>
-			</brumeC>
-		</brumeR>
-	</homePageC>
+	<homePageC></homePageC>
+
+	<brumeR id="brumeR">
+		<brumeC>
+			<brume>Brume</brume>
+			<brumeSlogan>café cosmopolite</brumeSlogan>
+		</brumeC>
+	</brumeR>
+
+	<div class="circle" id="circle"></div>
+	<!-- /Homepage -->
 
 	<bloc>
 		<blocC>
@@ -275,7 +224,8 @@
 
 	<div id="content"></div>
 	<div class=backgroundImage id="backgroundBrume" alt="background"></div>
+
+	<script src="homepage.js"></script>
 </body>
-<script>transformBackground(0);</script>
 
 </html>

@@ -262,50 +262,6 @@ body {
 	height: 100%;
 }
 
-/*for brume*/
-brumeR {
-	position: fixed;
-	width: 100%;
-	height: 100%;
-	top: 50%;
-	left: 50%;
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	transform: translate(-50%, -5%);
-}
-
-/*for brume*/
-brumeC {
-	display: flex;
-	flex-direction: column;
-	justify-content: right;
-}
-
-brume {
-	text-align: center;
-	font-family: 'Yeseva One', cursive;
-	font-size: 400%;
-	font-weight: bolder;
-	margin-bottom: -0.2em;
-	color: #000000;
-}
-
-brumeSlogan {
-	text-align: right;
-	font-family: 'Oswald', sans-serif;
-	font-size: 80%;
-	font-weight: bolder;
-	text-transform: uppercase;
-}
-
-homePageC {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	height: 100vh;
-}
-
 a {
 	margin-top: 0;
 	padding-top: 0;
@@ -329,42 +285,6 @@ headerR {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
-}
-
-blocC {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-}
-
-blocR {
-	margin-top: 0.3cm;
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-}
-
-bloc {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	margin-top: 1cm;
-	padding-right: 5mm;
-	padding-left: 5mm;
-	/* border-top: 1px solid; */
-}
-
-photos {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
-}
-
-img {
-	width: 49.5%;
-	/* padding-bottom: 2%; */
-	margin-bottom: 1%;
-	position: relative;
 }
 
 credit {

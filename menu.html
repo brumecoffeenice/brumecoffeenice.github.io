@@ -9,10 +9,13 @@
 </head>
 
 <link rel="stylesheet" href="menu.css">
+<link rel="stylesheet" href="homepage.css">
+
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 
 <body>
 	<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+	<!-- Homepage -->
 	<headerR>
 		<a href="index.html">
 			<header>Accueil</header>
@@ -22,14 +25,18 @@
 		</a>
 	</headerR>
 
-	<brumeR>
+	<homePageC></homePageC>
+
+	<brumeR id="brumeR">
 		<brumeC>
-			<brume id="brumeLogo">Brume</brume>
-			<brumeSlogan id="brumeSlogan">café cosmopolite</brumeSlogan>
+			<brume>Brume</brume>
+			<brumeSlogan>café cosmopolite</brumeSlogan>
 		</brumeC>
 	</brumeR>
-	<homePageC>
-	</homePageC>
+
+	<div class="circle" id="circle"></div>
+	<!-- /Homepage -->
+
 	<logoR>
 		<logoC>
 			<a href="https://www.instagram.com/brume.coffee.nice/" target="_blank">
@@ -57,5 +64,7 @@
 	<div class=backgroundImage id="backgroundBrume"></div>
 
 	<script src="menu.js"></script>
+	<script src="homepage.js"></script>
 </body>
+
 </html>

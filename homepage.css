@@ -1,0 +1,54 @@
+/*for brume*/
+brumeR {
+	position: fixed;
+	width: 100%;
+	top: 45%;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	pointer-events: none;
+}
+
+/*for brume*/
+brumeC {
+	display: flex;
+	flex-direction: column;
+	justify-content: right;
+}
+
+brume {
+	text-align: center;
+	font-family: 'Yeseva One', cursive;
+	font-size: 400%;
+	font-weight: bolder;
+	margin-bottom: -0.2em;
+	color: #000000;
+}
+
+brumeSlogan {
+	text-align: right;
+	font-family: 'Oswald', sans-serif;
+	font-size: 80%;
+	font-weight: bolder;
+	text-transform: uppercase;
+}
+
+homePageC {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	height: 100vh;
+}
+
+.circle {
+	position: fixed;
+	width: 100%;
+	top: 52%;
+	left: 50%;
+	border-radius: 50%;
+	/* height: 50vh;
+	width: 50vh; */
+	border: 2px solid;
+	transform: translate(-50%, -50%);
+	pointer-events: none;
+}
