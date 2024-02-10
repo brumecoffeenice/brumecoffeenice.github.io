@@ -45,8 +45,6 @@ homePageC {
 	top: 51%;
 	left: 50%;
 	border-radius: 50%;
-	/* height: 50vh;
-	width: 50vh; */
 	border: 2px solid;
 	transform: translate(-50%, -50%);
 	pointer-events: none;
