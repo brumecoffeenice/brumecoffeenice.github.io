@@ -41,17 +41,17 @@ function transformBackground(scroll) {
 		let value = startValue + (endValue - startValue) * scroll / maxScroll;
 		let limitedValue = clamp(value, endValue, startValue);
 		document.getElementById('brumeR').style.opacity = limitedValue + "%";
-		document.getElementById('circle').style.opacity = limitedValue + "%";
+		// document.getElementById('circle').style.opacity = limitedValue + "%";
 	}
 	{
 		//Size of circle
-		let startValue = 90;
-		let endValue = 200;
+		let startValue = 70;
+		let endValue = 1000;
 		let maxScroll = 300;
 		let value = startValue + (endValue - startValue) * scroll / maxScroll;
 		let limitedValue = clamp(value, startValue, endValue);
 		document.getElementById('circle').style.width = limitedValue + "vw";
-		document.getElementById('circle').style.height = limitedValue + "vw";
+		// document.getElementById('circle').style.height = document.getElementById('circle').clientWidth + "px";
 	}
 }
 
