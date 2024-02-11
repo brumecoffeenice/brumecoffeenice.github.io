@@ -2,11 +2,12 @@
 brumeR {
 	position: fixed;
 	width: 100%;
-	bottom: 45vh;
+	bottom: 50vh;
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	pointer-events: none;
+	transform: translate(0, 50%);
 }
 
 /*for brume*/
