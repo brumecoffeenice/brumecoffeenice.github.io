@@ -43,7 +43,7 @@ homePageC {
 .circle {
 	position: fixed;
 	aspect-ratio: 1 / 1;
-	bottom: 50%;
+	bottom: 50vh;
 	left: 50%;
 	border-radius: 50%;
 	border: 2px solid;
