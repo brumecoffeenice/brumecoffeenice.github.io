@@ -51,3 +51,18 @@ homePageC {
 	transform: translate(-50%, 50%);
 	pointer-events: none;
 }
+
+.backgroundImage {
+	position: sticky;
+	left: 0;
+	width: 100vw;
+	height: 200vh;
+	bottom: 0vh;
+	image-orientation: from-image;
+	background-image: url('img/brumewallpaper.jpg');
+	background-repeat: no-repeat;
+	background-position: left;
+	background-size: cover;
+	opacity: 100%;
+	z-index: -1;
+}

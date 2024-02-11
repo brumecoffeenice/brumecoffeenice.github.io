@@ -220,21 +220,6 @@ body {
 	justify-content: center;
 }
 
-.backgroundImage {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100vw;
-	height: 200vh;
-	image-orientation: from-image;
-	background-image: url('img/brumewallpaper.jpg');
-	background-repeat: no-repeat;
-	background-position: left;
-	background-size: cover;
-	opacity: 100%;
-	z-index: -1;
-}
-
 .centerR {
 	display: flex;
 	flex-direction: row;
