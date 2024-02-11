@@ -2,7 +2,7 @@
 brumeR {
 	position: fixed;
 	width: 100%;
-	bottom: 50vh;
+	bottom: 45vh;
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
@@ -44,7 +44,7 @@ homePageC {
 .circle {
 	position: fixed;
 	aspect-ratio: 1 / 1;
-	bottom: 50vh;
+	bottom: 45vh;
 	left: 50%;
 	border-radius: 50%;
 	border: 2px solid;
