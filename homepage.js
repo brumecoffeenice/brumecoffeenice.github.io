@@ -45,12 +45,12 @@ function transformBackground(scroll) {
 	}
 	{
 		//Size of circle
-		let startValue = 70;
-		let endValue = 1000;
+		let startValue = 1.4;
+		let endValue = 30;
 		let maxScroll = 300;
 		let value = startValue + (endValue - startValue) * scroll / maxScroll;
 		let limitedValue = clamp(value, startValue, endValue);
-		document.getElementById('circle').style.width = limitedValue + "vw";
+		document.getElementById('circle').style.width = limitedValue * document.getElementById('brumeC').clientWidth + "px";
 		// document.getElementById('circle').style.height = document.getElementById('circle').clientWidth + "px";
 	}
 }
