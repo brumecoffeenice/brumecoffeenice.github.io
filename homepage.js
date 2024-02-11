@@ -13,19 +13,19 @@ function getValueFromScroll(scroll, maxScroll, startValue, endValue) {
 
 function scrollTransform(scroll) {
 	{	//Brightening of wallpaper
-		let startValue = 90;
-		let endValue = 0;
-		let maxScroll = 800;
+		let startValue = 100;
+		let endValue = 70;
+		let maxScroll = 500;
 		let value = getValueFromScroll(scroll, maxScroll, startValue, endValue);
 		document.getElementById('backgroundBrume').style.opacity = value + "%";
 	}
-	// {	//Translation of wallpaper
-	// 	let startValue = 0;
-	// 	let endValue = 100;
-	// 	let maxScroll = 1600;
-	// 	let value = getValueFromScroll(scroll, maxScroll, startValue, endValue);
-	// 	// document.getElementById('backgroundBrume').style.bottom = value + "vh";
-	// }
+	{	//Translation of wallpaper
+		let startValue = -100;
+		let endValue = 0;
+		let maxScroll = 5000;
+		let value = getValueFromScroll(scroll, maxScroll, startValue, endValue);
+		document.getElementById('backgroundBrume').style.bottom = value + "vh";
+	}
 	{
 		//Reduce logo
 		let startValue = 100;

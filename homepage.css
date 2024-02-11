@@ -53,11 +53,11 @@ homePageC {
 }
 
 .backgroundImage {
-	position: sticky;
+	position: fixed;
 	left: 0;
 	width: 100vw;
 	height: 200vh;
-	bottom: 0vh;
+	/* bottom: 0vh; */
 	image-orientation: from-image;
 	background-image: url('img/brumewallpaper.jpg');
 	background-repeat: no-repeat;
