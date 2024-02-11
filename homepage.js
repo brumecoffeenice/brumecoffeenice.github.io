@@ -41,12 +41,12 @@ function transformBackground(scroll) {
 		let value = startValue + (endValue - startValue) * scroll / maxScroll;
 		let limitedValue = clamp(value, endValue, startValue);
 		document.getElementById('brumeR').style.opacity = limitedValue + "%";
-		// document.getElementById('circle').style.opacity = limitedValue + "%";
+		document.getElementById('circle').style.opacity = limitedValue + "%";
 	}
 	{
 		//Size of circle
 		let startValue = 1.4;
-		let endValue = 30;
+		let endValue = 5;
 		let maxScroll = 300;
 		let value = startValue + (endValue - startValue) * scroll / maxScroll;
 		let limitedValue = clamp(value, startValue, endValue);
