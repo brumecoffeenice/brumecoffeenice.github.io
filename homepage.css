@@ -2,7 +2,7 @@
 brumeR {
 	position: fixed;
 	width: 100%;
-	bottom: 45vh;
+	bottom: 50vh;
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
@@ -44,7 +44,7 @@ homePageC {
 .circle {
 	position: fixed;
 	aspect-ratio: 1 / 1;
-	bottom: 45vh;
+	bottom: 50vh;
 	left: 50%;
 	border-radius: 50%;
 	border: 2px solid;
@@ -53,8 +53,8 @@ homePageC {
 }
 
 .backgroundImage {
-	position: fixed;
-	left: 0;
+	position: sticky;
+	/* left: 0; */
 	width: 100vw;
 	height: 200vh;
 	/* bottom: 0vh; */
@@ -62,6 +62,7 @@ homePageC {
 	background-image: url('img/brumewallpaper.jpg');
 	background-repeat: no-repeat;
 	background-position: left;
+	/* -webkit-overflow-scrolling: touch; */
 	background-size: cover;
 	opacity: 100%;
 	z-index: -1;
