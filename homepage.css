@@ -53,7 +53,7 @@ homePageC {
 }
 
 .backgroundImage {
-	position: sticky;
+	position: fixed;
 	/* left: 0; */
 	width: 100vw;
 	height: 200vh;
