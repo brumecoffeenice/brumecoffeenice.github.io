@@ -16,6 +16,9 @@
 <body>
 	<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 	<!-- Homepage -->
+	<div class=backgroundImage id="backgroundBrume"></div>
+	<div class=brumeHalo id="halo"></div>
+	<homePageC></homePageC>
 	<headerR>
 		<a href="index.html">
 			<header>Accueil</header>
@@ -25,15 +28,13 @@
 		</a>
 	</headerR>
 
-	<homePageC></homePageC>
-
+	<circle id="circle"></circle>
 	<brumeR id="brumeR">
 		<brumeC id="brumeC">
 			<brume>Brume</brume>
 			<brumeSlogan>café cosmopolite</brumeSlogan>
 		</brumeC>
 	</brumeR>
-	<div class="circle" id="circle"></div>
 
 	<!-- /Homepage -->
 
@@ -61,7 +62,6 @@
 			</a>
 		</logoC>
 	</logoR>
-	<div class=backgroundImage id="backgroundBrume"></div>
 
 	<script src="menu.js"></script>
 	<script src="homepage.js"></script>

@@ -12,28 +12,37 @@ function getValueFromScroll(scroll, maxScroll, startValue, endValue) {
 }
 
 function scrollTransform(scroll) {
-	{	//Brightening of wallpaper
-		let startValue = 100;
-		let endValue = 70;
-		let maxScroll = 500;
-		let value = getValueFromScroll(scroll, maxScroll, startValue, endValue);
-		document.getElementById('backgroundBrume').style.opacity = value + "%";
-	}
+	// {	//Brightening of wallpaper
+	// 	let startValue = 100;
+	// 	let endValue = 70;
+	// 	let maxScroll = 500;
+	// 	let value = getValueFromScroll(scroll, maxScroll, startValue, endValue);
+	// 	document.getElementById('backgroundBrume').style.opacity = value + "%";
+	// }
 	{	//Translation of wallpaper
-		let startValue = -100;
-		let endValue = 0;
+		let startValue = 0;
+		let endValue = 100;
 		let maxScroll = 5000;
 		let value = getValueFromScroll(scroll, maxScroll, startValue, endValue);
 		document.getElementById('backgroundBrume').style.bottom = value + "vh";
 	}
-	{
-		//Reduce logo
-		let startValue = 100;
-		let endValue = 0;
-		let maxScroll = 300;
-		let value = getValueFromScroll(scroll, maxScroll, startValue, endValue);
-		document.getElementById('brumeR').style.scale = value + "%";
-	}
+	// {
+	// 	//Reduce logo
+	// 	let startValue = 100;
+	// 	let endValue = 0;
+	// 	let maxScroll = 300;
+	// 	let value = getValueFromScroll(scroll, maxScroll, startValue, endValue);
+	// 	document.getElementById('brumeR').style.scale = value + "%";
+	// }
+	// {
+	// 	//Reduce logo
+	// 	let startValue = 300;
+	// 	let endValue = 0;
+	// 	let maxScroll = 300;
+	// 	let value = getValueFromScroll(scroll, maxScroll, startValue, endValue);
+	// 	document.getElementById('brumeLogo').style.height = value + "px";
+	// 	document.getElementById('brumeLogo').style.width = value + "px";
+	// }
 	{
 		//Opacity of logo and circle
 		let startValue = 100;
@@ -50,6 +59,14 @@ function scrollTransform(scroll) {
 		let maxScroll = 300;
 		let value = getValueFromScroll(scroll, maxScroll, startValue, endValue);
 		document.getElementById('circle').style.width = value + "px";
+	}
+	{
+		//Size of halo
+		let startValue = 40;
+		let endValue = 0;
+		let maxScroll = 300;
+		let value = getValueFromScroll(scroll, maxScroll, startValue, endValue);
+		document.getElementById('halo').style.backgroundImage = 'radial-gradient(circle, #ffffff00, #ffffffd3 ' + value + '%, #ffffffc1 60%, #8adaffd8 90%)';
 	}
 }
 

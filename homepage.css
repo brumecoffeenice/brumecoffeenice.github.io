@@ -1,5 +1,25 @@
+header {
+	text-align: center;
+	color: rgb(0, 0, 0);
+	font-family: 'Oswald', sans-serif;
+	font-size: 160%;
+	font-weight: 200;
+	margin-left: 1em;
+	margin-top: 1em;
+}
+
+headerR {
+	position: absolute;
+	top: 0vh;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
 /*for brume*/
+
 brumeR {
+	display: inline-block;
 	position: fixed;
 	width: 100%;
 	bottom: 50vh;
@@ -12,12 +32,14 @@ brumeR {
 
 /*for brume*/
 brumeC {
+	display: inline-block;
 	display: flex;
 	flex-direction: column;
 	justify-content: right;
 }
 
 brume {
+	display: inline-block;
 	text-align: center;
 	font-family: 'Yeseva One', cursive;
 	font-size: 400%;
@@ -41,7 +63,7 @@ homePageC {
 	height: 100vh;
 }
 
-.circle {
+circle {
 	position: fixed;
 	aspect-ratio: 1 / 1;
 	bottom: 50vh;
@@ -54,9 +76,9 @@ homePageC {
 
 .backgroundImage {
 	position: fixed;
-	/* left: 0; */
-	width: 100vw;
+	left: 50%;
 	height: 200vh;
+	width: 100vw;
 	/* bottom: 0vh; */
 	image-orientation: from-image;
 	background-image: url('img/brumewallpaper.jpg');
@@ -65,5 +87,26 @@ homePageC {
 	/* -webkit-overflow-scrolling: touch; */
 	background-size: cover;
 	opacity: 100%;
+	z-index: -2;
+	transform: translate(-50%, 50%);
+}
+
+.brumeHalo {
+	position: fixed;
+	pointer-events: none;
+	background-image: radial-gradient(circle, #ffffff63, #ffffffd4 30%, #ffffffc1 60%, #8adaffd8 90%);
+	height: 100vh;
+	width: 100vh;
+	bottom: 50vh;
+	left: 50%;
+	transform: translate(-50%, 50%);
 	z-index: -1;
+	/* background-position: left; */
+	animation: colorChange 1s infinite alternate;
+}
+
+@keyframes colorChange {
+	to {
+		background-position: top left;
+	}
 }
