@@ -94,7 +94,7 @@ circle {
 .brumeHalo {
 	position: fixed;
 	pointer-events: none;
-	background-image: radial-gradient(circle, #ffffff60 30%, #ffffffdb 100%);
+	background-image: radial-gradient(circle, #ffe2c5a1 40%, #d2feff 90%);
 	height: 100vmax;
 	width: 100vmax;
 	bottom: 50vh;
