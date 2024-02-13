@@ -58,7 +58,8 @@ function scrollTransform(scroll) {
 		let endValue = 100;
 		let maxScroll = 300;
 		let value = getValueFromScroll(scroll, maxScroll, startValue, endValue);
-		document.getElementById('brumeHalo').style.opacity = value + "%";
+		document.getElementById('halo1').style.opacity = 100 - value + "%";
+		document.getElementById('halo2').style.opacity = value + "%";
 	}
 	{
 		//Size of circle
