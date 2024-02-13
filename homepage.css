@@ -102,7 +102,6 @@ circle {
 	transform: translate(-50%, 50%);
 	z-index: -1;
 	/* background-position: left; */
-	animation: colorChange 1s infinite alternate;
 }
 
 @keyframes colorChange {
