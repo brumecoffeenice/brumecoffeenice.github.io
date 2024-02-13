@@ -53,6 +53,14 @@ function scrollTransform(scroll) {
 		document.getElementById('circle').style.opacity = value + "%";
 	}
 	{
+		//Opacity of halo
+		let startValue = 0;
+		let endValue = 100;
+		let maxScroll = 300;
+		let value = getValueFromScroll(scroll, maxScroll, startValue, endValue);
+		document.getElementById('brumeHalo').style.opacity = value + "%";
+	}
+	{
 		//Size of circle
 		let startValue = 300;
 		let endValue = 800;
@@ -60,14 +68,14 @@ function scrollTransform(scroll) {
 		let value = getValueFromScroll(scroll, maxScroll, startValue, endValue);
 		document.getElementById('circle').style.width = value + "px";
 	}
-	{
-		//Size of halo
-		let startValue = 40;
-		let endValue = 0;
-		let maxScroll = 300;
-		let value = getValueFromScroll(scroll, maxScroll, startValue, endValue);
-		document.getElementById('halo').style.backgroundImage = 'radial-gradient(circle, #ffffff00, #ffffffd3 ' + value + '%, #ffffffc1 60%, #8adaffd8 90%)';
-	}
+	// {
+	// 	//Size of halo
+	// 	let startValue = 40;
+	// 	let endValue = 40;
+	// 	let maxScroll = 300;
+	// 	let value = getValueFromScroll(scroll, maxScroll, startValue, endValue);
+	// 	document.getElementById('brumeHalo').style.backgroundImage = 'radial-gradient(circle, #ffffff00, #ffffffd3 ' + value + '%, #ffffffc1 60%, #8adaffd8 90%)';
+	// }
 }
 
 window.addEventListener('scroll', () => {
