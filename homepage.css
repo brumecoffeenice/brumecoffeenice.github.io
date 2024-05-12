@@ -16,8 +16,6 @@ headerR {
 	justify-content: center;
 }
 
-/*for brume*/
-
 brumeR {
 	display: inline-block;
 	position: fixed;
@@ -61,6 +59,7 @@ homePageC {
 	flex-direction: column;
 	justify-content: center;
 	height: 100vh;
+	pointer-events: none;
 }
 
 circle {
@@ -72,6 +71,7 @@ circle {
 	border: 2px solid;
 	transform: translate(-50%, 50%);
 	pointer-events: none;
+	width: 270px;
 }
 
 .backgroundImage {
@@ -79,16 +79,26 @@ circle {
 	left: 50%;
 	height: 200vh;
 	width: 100vw;
-	/* bottom: 0vh; */
 	image-orientation: from-image;
 	background-image: url('img/brumewallpaper.jpg');
 	background-repeat: no-repeat;
 	background-position: left;
-	/* -webkit-overflow-scrolling: touch; */
 	background-size: cover;
 	opacity: 100%;
-	z-index: -2;
-	transform: translate(-50%, 50%);
+	transform: translate(-50%, 0%);
+	pointer-events: none;
+}
+
+.clouds {
+	position: fixed;
+	opacity: 80%;
+	pointer-events: none;
+}
+
+.birds {
+	position: fixed;
+	opacity: 100%;
+	pointer-events: none;
 }
 
 .brumeHalo {
@@ -99,19 +109,120 @@ circle {
 	bottom: 50vh;
 	left: 50%;
 	transform: translate(-50%, 50%);
-	z-index: -1;
 }
 
 .halo1 {
-	background-image: radial-gradient(circle, #ffffff00 40%, #9bfdff 100%);
+	background-image: radial-gradient(circle, #ffffff00 40%, #29b0ff 100%);
+	opacity: 100;
 }
 
 .halo2 {
 	background-image: radial-gradient(circle, #ffffff37 40%, #9bfdff 110%);
+	opacity: 0;
 }
 
-@keyframes colorChange {
-	to {
-		background-position: top left;
+.parallax {
+	height: 100vh;
+	overflow-x: hidden;
+	perspective: 0px;
+}
+
+.parallax-layer {
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+/*content*/
+.layer1 {
+	transform: translateZ(-0px) scale(1);
+}
+
+/*background*/
+.layer2 {
+	transform: translateZ(-3px) scale(7);
+}
+
+/*CLOUDS*/
+.layer3 {
+	transform: translateZ(-0px) scale(1) translateY(40%);
+}
+
+/*CLOUDS*/
+.layer4 {
+	transform: translateZ(-1px) scale(2) translateY(-20%) translateX(60%) scaleX(-1);
+}
+
+/*CLOUDS*/
+.layer5 {
+	transform: translateZ(-2px) scale(3) translateY(10%) translateX(-100%);
+}
+
+/*BIRDS*/
+.layer6 {
+	transform: translateZ(-2px) scale(1.5) translateY(-90%) translateX(-100%);
+}
+
+.fadeout {
+	animation-name: fadeoutkeyframe;
+	animation-duration: 1s;
+	animation-fill-mode: forwards;
+}
+
+/* .pointerEventsNone {
+	pointer-events: none;
+}
+
+.pointerEventsAll {
+	pointer-events: all;
+} */
+
+@keyframes fadeoutkeyframe {
+	from {
+		opacity: 100;
 	}
+
+	to {
+		opacity: 0;
+	}
+}
+
+.fadein {
+	animation-name: fadeinkeyframe;
+	animation-duration: 1s;
+	animation-fill-mode: forwards;
+}
+
+@keyframes fadeinkeyframe {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 100;
+	}
+}
+
+.scaleup {
+	animation-name: scaleupkeyframe;
+	animation-duration: 1s;
+	animation-fill-mode: forwards;
+}
+
+@keyframes scaleupkeyframe {
+	from {
+		width: 270px;
+		opacity: 100%;
+	}
+
+	to {
+		width: 1000px;
+		opacity: 0%;
+	}
+}
+
+.contentClass {
+	background-color: #ffffff8e;
 }

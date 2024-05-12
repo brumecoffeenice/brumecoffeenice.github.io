@@ -15,54 +15,70 @@
 
 <body>
 	<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-	<!-- Homepage -->
-	<div class=backgroundImage id="backgroundBrume"></div>
-	<div class="brumeHalo halo1" id="halo1"></div>
-	<div class="brumeHalo halo2" id="halo2"></div>
-	<homePageC></homePageC>
-	<headerR>
-		<a href="index.html">
-			<header>Accueil</header>
-		</a>
-		<a href="menu.html">
-			<header style="font-weight: bold; text-decoration: underline">Menu</header>
-		</a>
-	</headerR>
 
-	<circle id="circle"></circle>
-	<brumeR id="brumeR">
+	<div class="parallax">
+		<div class="parallax-layer layer2">
+			<div class=backgroundImage></div>
+		</div>
+		<div class="parallax-layer layer5">
+			<img class="clouds" src="img/clouds.png" alt="clouds">
+		</div>
+		<div class="parallax-layer layer6">
+			<img class="birds" src="img/birds.png" alt="birds">
+		</div>
+		<div class="parallax-layer layer4">
+			<img class="clouds" src="img/clouds.png" alt="clouds">
+		</div>
+		<div class="parallax-layer layer3">
+			<img class="clouds" src="img/clouds.png" alt="clouds">
+		</div>
+
+		<div class="parallax-layer layer1">
+			<headerR>
+				<a href="index.html">
+					<header>Accueil</header>
+				</a>
+				<a href="menu.html">
+					<header style="font-weight: bold; text-decoration: underline">Menu</header>
+				</a>
+			</headerR>
+			<homePageC></homePageC>
+			<div class="contentClass">
+				<br>
+				<br>
+				<logoR>
+					<logoC>
+						<a href="https://www.instagram.com/brume.coffee.nice/" target="_blank">
+							<img class=instaLogo src="img/instagram_logo.svg" alt="Brume Instagram" />
+						</a>
+					</logoC>
+				</logoR>
+				<div id="content"></div>
+				<logoR>
+					<logoC>
+						<img class=logo onclick="printMenu()" src="img/print_logo.svg" alt="print" />
+					</logoC>
+					<a href="https://github.com/simon-ameye">
+						<credit>Made with ♡ by Simon for Roxane</credit>
+					</a>
+					<logoC>
+						<a href="https://brumecoffeenice.fr/editor.html" target="_blank">
+							<img class=logo src="img/pen_logo.svg" alt="edit" />
+						</a>
+					</logoC>
+				</logoR>
+			</div>
+		</div>
+	</div>
+
+	<circle class="scaleupplz" id="circle"></circle>
+	<brumeR class="fadeoutplz" id="brumeR">
 		<brumeC id="brumeC">
 			<brume>Brume</brume>
 			<brumeSlogan>café cosmopolite</brumeSlogan>
 		</brumeC>
 	</brumeR>
 
-	<!-- /Homepage -->
-
-	<logoR>
-		<logoC>
-			<a href="https://www.instagram.com/brume.coffee.nice/" target="_blank">
-				<img class=instaLogo src="img/instagram_logo.svg" alt="Brume Instagram" />
-			</a>
-		</logoC>
-	</logoR>
-	<div id="content"></div>
-	<br>
-	<br>
-	<br>
-	<logoR>
-		<logoC>
-			<img class=logo onclick="printMenu()" src="img/print_logo.svg" alt="print" />
-		</logoC>
-		<a href="https://github.com/simon-ameye">
-			<credit>Made with ♡ by Simon for Roxane</credit>
-		</a>
-		<logoC>
-			<a href="https://brumecoffeenice.fr/editor.html" target="_blank">
-				<img class=logo src="img/pen_logo.svg" alt="edit" />
-			</a>
-		</logoC>
-	</logoR>
 
 	<script src="menu.js"></script>
 	<script src="homepage.js"></script>
