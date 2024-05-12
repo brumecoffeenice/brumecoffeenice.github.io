@@ -79,12 +79,9 @@ circle {
 	left: 50%;
 	height: 200vh;
 	width: 100vw;
-	image-orientation: from-image;
 	background-image: url('img/brumewallpaper.jpg');
-	background-repeat: no-repeat;
 	background-position: left;
 	background-size: cover;
-	opacity: 100%;
 	transform: translate(-50%, 0%);
 	pointer-events: none;
 }
@@ -142,7 +139,7 @@ circle {
 
 /*background*/
 .layer2 {
-	transform: translateZ(-3px) scale(8);
+	transform: translateZ(-3px) scale(9);
 }
 
 /*CLOUDS*/
