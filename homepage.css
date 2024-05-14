@@ -74,22 +74,16 @@ circle {
 	width: 270px;
 }
 
-.backgroundImage {
+.wallimage {
 	position: fixed;
+	top: 50%;
 	left: 50%;
-	height: 200vh;
-	width: 100vw;
-	background-image: url('img/brumewallpaper.jpg');
-	background-position: left;
-	background-size: cover;
-	transform: translate(-50%, 0%);
+	height: 270px;
+	width: 270px;
+	transform: translate(-50%, -50%);
 	pointer-events: none;
-}
-
-.clouds {
-	position: fixed;
-	opacity: 80%;
-	pointer-events: none;
+	/* background-size: 100%; */
+	border-radius: 50%;
 }
 
 .birds {
@@ -98,30 +92,18 @@ circle {
 	pointer-events: none;
 }
 
-.brumeHalo {
+.seapic {
 	position: fixed;
 	pointer-events: none;
-	height: 100vmax;
-	width: 100vmax;
-	bottom: 50vh;
+	height: 100vh;
 	left: 50%;
-	transform: translate(-50%, 50%);
-}
-
-.halo1 {
-	background-image: radial-gradient(circle, #ffffff00 40%, #29b0ff 100%);
-	opacity: 100;
-}
-
-.halo2 {
-	background-image: radial-gradient(circle, #ffffff37 40%, #9bfdff 110%);
-	opacity: 0;
+	transform: translate(-40%, 0%);
 }
 
 .parallax {
 	height: 100vh;
 	overflow-x: hidden;
-	perspective: 0px;
+	perspective: 1px;
 }
 
 .parallax-layer {
@@ -132,94 +114,27 @@ circle {
 	left: 0;
 }
 
+/* seapic */
+.layer0 {
+	transform: translateZ(-2px) scale(5);
+}
+
 /*content*/
 .layer1 {
-	transform: translateZ(-0px) scale(1);
-}
-
-/*background*/
-.layer2 {
-	transform: translateZ(-3px) scale(9);
-}
-
-/*CLOUDS*/
-.layer3 {
-	transform: translateZ(-0px) scale(1) translateY(40%);
-}
-
-/*CLOUDS*/
-.layer4 {
-	transform: translateZ(-1px) scale(2) translateY(-20%) translateX(60%) scaleX(-1);
-}
-
-/*CLOUDS*/
-.layer5 {
-	transform: translateZ(-2px) scale(3) translateY(10%) translateX(-100%);
+	transform: translateZ(0px) scale(1);
 }
 
 /*BIRDS*/
 .layer6 {
-	transform: translateZ(-2px) scale(1.5) translateY(-90%) translateX(-100%);
+	transform: translateZ(-3px) scale(1.5) translateY(-70%) translateX(-100%);
 }
 
-.fadeout {
-	animation-name: fadeoutkeyframe;
-	animation-duration: 1s;
-	animation-fill-mode: forwards;
-}
-
-/* .pointerEventsNone {
-	pointer-events: none;
-}
-
-.pointerEventsAll {
-	pointer-events: all;
-} */
-
-@keyframes fadeoutkeyframe {
-	from {
-		opacity: 100;
-	}
-
-	to {
-		opacity: 0;
-	}
-}
-
-.fadein {
-	animation-name: fadeinkeyframe;
-	animation-duration: 1s;
-	animation-fill-mode: forwards;
-}
-
-@keyframes fadeinkeyframe {
-	from {
-		opacity: 0;
-	}
-
-	to {
-		opacity: 100;
-	}
-}
-
-.scaleup {
-	animation-name: scaleupkeyframe;
-	animation-duration: 1s;
-	animation-fill-mode: forwards;
-}
-
-@keyframes scaleupkeyframe {
-	from {
-		width: 270px;
-		opacity: 100%;
-	}
-
-	to {
-		width: 1000px;
-		opacity: 0%;
-	}
+/*LOGO*/
+.layer7 {
+	transform: translateZ(-1px) scale(2);
 }
 
 .contentClass {
-	background-color: #ffffff8e;
+	/* background-color: #ffffff; */
+	background-image: linear-gradient(rgb(255, 235, 213), rgb(235, 254, 255));
 }

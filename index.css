@@ -27,7 +27,7 @@ photos {
 	justify-content: space-between;
 }
 
-img {
+.tabloidphoto {
 	width: 49.5%;
 	/* padding-bottom: 2%; */
 	margin-bottom: 1%;
