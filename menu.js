@@ -211,10 +211,10 @@ function showPopup() {
 	document.querySelector('.parallax').addEventListener('scroll', function () {
 		if (this.scrollTop > 0 && popup_shown == 0) {
 			if (actualLanguage == 0) {
-				alert("Bonjour cher client, \nJe vous prie d'attendre d'être placés avant de vous asseoir,\nainsi que de réaliser vos commandes au comptoir\n❤️");
+				alert("Bonjour cher client, \nJe vous prie d'attendre d'être placés avant de vous asseoir,\nainsi que de réaliser vos commandes au comptoir.\n❤️");
 			}
 			else {
-				alert("Hello dear customer,\nPlease wait to be seated and place your order at the counter\n❤️");
+				alert("Hello dear customer,\nPlease wait to be seated and place your order at the counter.\n❤️");
 			}
 			popup_shown = 1;
 		}
