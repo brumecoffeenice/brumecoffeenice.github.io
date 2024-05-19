@@ -197,3 +197,11 @@ async function initMenu() {
 }
 
 initMenu();
+
+let popup_shown = 0
+document.querySelector('.parallax').addEventListener('scroll', function () {
+	if (this.scrollTop > 0 && popup_shown == 0) {
+		alert("Hello dear Brume customer,\nPlease wait to be seated and place your order at the counter.\n\nBonjour cher client de Brume, \nNous vous prions d'attendre d'être placés avant de vous asseoir.\n\nWifi : brume_public, password : ilovecoffee.");
+		popup_shown = 1;
+	}
+});
