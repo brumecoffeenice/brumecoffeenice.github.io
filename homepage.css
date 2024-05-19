@@ -78,26 +78,10 @@ circle {
 	position: fixed;
 	top: 50%;
 	left: 50%;
-	height: 270px;
-	width: 270px;
+	height: 100vh;
+	width: 100vw;
 	transform: translate(-50%, -50%);
 	pointer-events: none;
-	/* background-size: 100%; */
-	border-radius: 50%;
-}
-
-.birds {
-	position: fixed;
-	opacity: 100%;
-	pointer-events: none;
-}
-
-.seapic {
-	position: fixed;
-	pointer-events: none;
-	height: 100vh;
-	left: 50%;
-	transform: translate(-40%, 0%);
 }
 
 .parallax {
@@ -114,9 +98,9 @@ circle {
 	left: 0;
 }
 
-/* seapic */
+/* wallpaper */
 .layer0 {
-	transform: translateZ(-2px) scale(5);
+	transform: translateZ(-5px) scale(6);
 }
 
 /*content*/
@@ -124,17 +108,11 @@ circle {
 	transform: translateZ(0px) scale(1);
 }
 
-/*BIRDS*/
-.layer6 {
-	transform: translateZ(-3px) scale(1.5) translateY(-70%) translateX(-100%);
-}
-
 /*LOGO*/
-.layer7 {
+.layer3 {
 	transform: translateZ(-1px) scale(2);
 }
 
 .contentClass {
-	/* background-color: #ffffff; */
 	background-image: linear-gradient(rgb(255, 235, 213), rgb(235, 254, 255));
 }
