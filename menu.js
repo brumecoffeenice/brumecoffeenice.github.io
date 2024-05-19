@@ -3,7 +3,8 @@ const SupabasePublicAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJz
 const _supabase = supabase.createClient(SupabaseUrl, SupabasePublicAnonKey)
 
 var tableDelimiter = '_';
-var actualLanguage = 0;
+var actualLanguage = 0; //0=fr, 1=en
+var popup_shown = 0
 var actualMenu = 0;
 var header;
 var corpus;
@@ -196,12 +197,30 @@ async function initMenu() {
 	showMenu();
 }
 
-initMenu();
-
-let popup_shown = 0
-document.querySelector('.parallax').addEventListener('scroll', function () {
-	if (this.scrollTop > 0 && popup_shown == 0) {
-		alert("Hello dear Brume customer,\nPlease wait to be seated and place your order at the counter.\n\nBonjour cher client de Brume, \nNous vous prions d'attendre d'être placés avant de vous asseoir.");
-		popup_shown = 1;
+function detectLanguage() {
+	let lang = navigator.language
+	if (lang.startsWith("fr")) {
+		actualLanguage = 0;
 	}
-});
+	else {
+		actualLanguage = 1;
+	}
+}
+
+function showPopup() {
+	document.querySelector('.parallax').addEventListener('scroll', function () {
+		if (this.scrollTop > 0 && popup_shown == 0) {
+			if (actualLanguage == 0) {
+				alert("Bonjour cher client de Brume, \nNous vous prions d'attendre d'être placés avant de vous asseoir.");
+			}
+			else {
+				alert("Hello dear Brume customer,\nPlease wait to be seated and place your order at the counter.");
+			}
+			popup_shown = 1;
+		}
+	});
+}
+
+detectLanguage();
+showPopup();
+initMenu();
