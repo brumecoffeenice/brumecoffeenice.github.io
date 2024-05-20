@@ -93,7 +93,7 @@ circle {
 	width: 100vw;
 	top: 0;
 	left: 0;
-	background-image: radial-gradient(circle, #ffffff00 25%, #ffffff4d 40%, #ffffff00 80%);
+	background-image: radial-gradient(circle, #ffffff00 25%, #ffffff3b 40%, #ffffff00 80%);
 }
 
 .parallax {
@@ -126,5 +126,5 @@ circle {
 }
 
 .contentClass {
-	background-image: linear-gradient(rgba(255, 255, 255, 0), rgb(255, 198, 123) 3%, rgb(235, 254, 255));
+	background-image: linear-gradient(rgba(255, 255, 255, 0), rgb(255, 228, 193) 3%, rgb(231, 231, 231));
 }
