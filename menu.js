@@ -4,7 +4,6 @@ const _supabase = supabase.createClient(SupabaseUrl, SupabasePublicAnonKey)
 
 var tableDelimiter = '_';
 var actualLanguage = 0; //0=fr, 1=en
-var popup_shown = 0
 var actualMenu = 0;
 var header;
 var corpus;
@@ -174,14 +173,6 @@ function loadElements(menuFile) {
 	menuContents = getOtherLines(menus); //rest is the content
 }
 
-//fetches the table from server
-// async function initMenu() {
-// 	let response = await fetch('menu.menu');
-// 	let menuFile = await response.text();
-// 	loadElements(menuFile);
-// 	showMenu();
-// }
-
 async function initMenu() {
 	let { data, error } = await _supabase
 		.from('menu.menu')
@@ -207,20 +198,5 @@ function detectLanguage() {
 	}
 }
 
-function showPopup() {
-	document.querySelector('.parallax').addEventListener('scroll', function () {
-		if (this.scrollTop > 0 && popup_shown == 0) {
-			if (actualLanguage == 0) {
-				alert("Bonjour cher client, \nJe vous prie d'attendre d'être placés avant de vous asseoir,\nainsi que de réaliser vos commandes au comptoir.\n❤️");
-			}
-			else {
-				alert("Hello dear customer,\nPlease wait to be seated and place your order at the counter.\n❤️");
-			}
-			popup_shown = 1;
-		}
-	});
-}
-
 detectLanguage();
-showPopup();
 initMenu();
