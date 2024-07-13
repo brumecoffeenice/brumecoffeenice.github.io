@@ -68,27 +68,20 @@ function colorize(text) {
 	var res = "";
 	var colors = [
 		`<span style="color:lightBlue; font-weight:bold">`,
-		`<span style="color:lightBlue; font-weight:bold; font-style: italic;">`,
 		`<span style="color:peru; font-weight:bold">`,
-		`<span style="color:peru; font-weight:bold; font-style: italic;">`,
 		`<span style="color:Khaki">`,
-		`<span style="color:Khaki; font-style: italic;">`,
 		`<span style="color:lightCoral">`,
-		`<span style="color:red; font-weight:bold">`,
 		`<span style="color:grey">`,
-		`<span style="color:grey; font-style: italic;">`,
-		`<span style="color:darkSeaGreen">`,
-		`<span style="color:darkSeaGreen; font-style: italic;">`];
+		`<span style="color:darkSeaGreen">`];
 	var lines = text.split('\n');
 	for (var i = 0; i < lines.length; i++) {
-		if (lines[i][0] == '/' && lines[i][1] == '/') {
+		if (lines[i][0] == '#') {
 			res += `<span style="color:black">` + lines[i] + "</span>";
 		}
 		else {
 			blocks = lines[i].split('_');
 			for (var j = 0; j < blocks.length; j++) {
 				var block = blocks[j];
-				//block = block.padEnd(10, ' ').slice(0, 10);
 				if (j >= colors.length)
 					res += `<span style="color:red; font-weight:bold">` + block + "</span>";
 				else

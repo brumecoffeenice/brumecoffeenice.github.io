@@ -1,103 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap');
 
-default {
-	color: rgb(255, 0, 0);
-}
-
-/*for menuName*/
-menuName {
-	color: rgb(0, 0, 0);
-	font-family: 'Oswald', sans-serif;
-	font-size: 200%;
-	font-weight: 200;
-	margin-top: 0.4em;
-	min-height: 0;
-	padding-right: 5mm;
-	padding-left: 5mm;
-	flex-shrink: 1;
-}
-
-/*for categorie*/
-category {
-	text-align: center;
-	color: rgb(0, 0, 0);
-	font-family: 'Yeseva One', cursive;
-	font-size: 250%;
-	font-weight: bolder;
-	margin-top: 0.5em;
-	min-height: 0;
-	padding-right: 5mm;
-	padding-left: 5mm;
-	/* flex-shrink: 0; */
-}
-
-/*for nom*/
-name {
-	text-align: left;
-	color: rgb(0, 0, 0);
-	font-family: 'Oswald', sans-serif;
-	font-size: 170%;
-	font-weight: 200;
-	text-transform: uppercase;
-	flex-shrink: 1;
-}
-
-/*for prix*/
-price {
-	text-align: right;
-	color: rgb(0, 0, 0);
-	font-family: 'Oswald', sans-serif;
-	font-size: 140%;
-	font-weight: 200;
-	padding-left: 1em;
-	flex-shrink: 1;
-}
-
-.invisible {
-	visibility: hidden;
-}
-
-/*for description*/
-description {
-	text-align: left;
-	color: rgb(0, 0, 0);
-	font-family: 'Oswald', sans-serif;
-	font-size: 140%;
-	font-weight: 200;
-	margin-top: 0.4em;
-	padding-right: 5mm;
-	padding-left: 5mm;
-	flex-shrink: 1;
-}
-
-/*for commentaire*/
-comment {
-	text-align: center;
-	color: rgb(0, 0, 0);
-	font-family: 'Oswald', sans-serif;
-	font-size: 160%;
-	font-weight: 200;
-	margin-top: 0.5em;
-	min-height: 0;
-	padding-right: 5mm;
-	padding-left: 5mm;
-	flex-shrink: 1;
-}
-
-/*for language box*/
-language {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	text-align: center;
-	color: rgb(0, 0, 0);
-	font-family: 'Oswald', sans-serif;
-	font-size: 150%;
-	font-weight: lighter;
-	min-height: 0;
-	margin-left: 0.3em;
-	margin-right: 0.3em;
+body {
+	margin: 0;
 }
 
 logoR {
@@ -124,73 +29,102 @@ logoC {
 	margin-bottom: 0.3cm;
 }
 
-/*contener for name and price*/
-namePriceR {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
+menuStyle {
+	position: sticky;
+	top: 0;
+	color: rgb(255, 255, 255);
+	font-family: 'Yeseva one', cursive;
+	font-size: 160%;
+	font-weight: bolder;
+	writing-mode: vertical-lr;
+	text-orientation: upright;
+	word-spacing: 0.5rem;
+	white-space: nowrap;
+	flex-shrink: 0;
+	background-color: rgb(0, 0, 0);
+	/* text-shadow: 0 0 10px #000000; */
+	mix-blend-mode: multiply;
+
+}
+
+categorieStyle {
+	text-align: center;
+	color: rgb(0, 0, 0);
+	font-family: 'Yeseva One', cursive;
+	font-size: 250%;
+	font-weight: bolder;
+	margin-top: 0.7em;
 	min-height: 0;
-	margin-top: 3em;
-	height: fit-content;
-	align-items: center;
+	padding-right: 5mm;
+	padding-left: 5mm;
+}
+
+produitStyle {
+	text-align: left;
+	color: rgb(0, 0, 0);
+	font-family: 'Oswald', sans-serif;
+	font-size: 170%;
+	font-weight: 200;
+	text-transform: uppercase;
+	flex-shrink: 1;
+}
+
+prixStyle {
+	text-align: right;
+	color: rgb(0, 0, 0);
+	font-family: 'Oswald', sans-serif;
+	font-size: 140%;
+	font-weight: 200;
+	padding-left: 1em;
+	flex-shrink: 1;
+}
+
+descriptionStyle {
+	text-align: left;
+	color: rgb(0, 0, 0);
+	font-family: 'Oswald', sans-serif;
+	font-size: 140%;
+	font-weight: 200;
+	margin-top: 0.4em;
 	padding-right: 5mm;
 	padding-left: 5mm;
 	flex-shrink: 1;
 }
 
-/*contener for languages rows*/
-languageR {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	padding-top: 1em;
-	padding-bottom: 1em;
-}
-
-/*contener for single menuName*/
-menuC {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
+commentaireStyle {
+	text-align: center;
+	color: rgb(0, 0, 0);
+	font-family: 'Oswald', sans-serif;
+	font-size: 160%;
+	font-weight: 200;
+	margin-top: 0.5em;
+	min-height: 0;
+	padding-right: 5mm;
+	padding-left: 5mm;
 	flex-shrink: 1;
 }
 
-/*column contener for single menuName during print*/
-printC {
-	display: flex;
-	height: 297mm;
-	width: 210mm;
-	flex-direction: column;
-	justify-content: space-between;
-	font-size: 60%;
-	flex-grow: 0;
-	flex-shrink: 1;
+creditStyle {
+	text-align: center;
+	color: rgb(139, 139, 139);
+	font-family: 'Oswald', sans-serif;
+	font-size: 100%;
+	font-weight: 100;
+	margin: 0.5em;
 }
 
-/*contener for buttons*/
-buttonsR {
+defautStyle {
+	color: rgb(255, 0, 0);
+}
+
+menuButton {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-around;
-	flex-wrap: wrap;
-}
-
-/*contener for buttons*/
-buttonsC {
-	display: flex;
-	flex-direction: column;
-	justify-content: space-between;
-	padding-top: 3em;
-	padding-bottom: 1em;
-}
-
-button {
-	background-color: inherit;
+	flex-grow: 1;
+	/* background-color: black; */
 	border: none;
 	outline: none;
 	cursor: pointer;
-	display: flex;
-	flex-direction: row;
 	justify-content: right;
 	color: rgb(0, 0, 0);
 	font-family: 'Yeseva one', cursive;
@@ -206,21 +140,7 @@ button {
 	padding-left: 5mm;
 }
 
-.actualMenuButton {
-	background: black;
-	color: white;
-	mix-blend-mode: multiply;
-}
-
-.actualLanguageButton {
-	font-weight: bold;
-}
-
-body {
-	justify-content: center;
-}
-
-.centerR {
+centerR {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
@@ -229,22 +149,90 @@ body {
 	min-height: 0;
 }
 
-.horizontalBar {
-	margin-top: 0.8cm;
-	border: none;
-	height: 1px;
-	background-color: #000000;
-	width: 100%;
+leftR {
+	display: flex;
+	flex-direction: row;
+	justify-content: left;
+	align-items: center;
+	flex-wrap: wrap;
+	min-height: 0;
+}
+
+buttonsC {
+	margin-top: 5vh;
+	margin-bottom: 0vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	flex-wrap: wrap;
+	min-height: 0;
+}
+
+buttonsR {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	flex-wrap: wrap;
+	min-height: 0;
+	margin-top: 5vh;
+	margin-bottom: 5vh;
+}
+
+/*contener for name and price*/
+produitPrixR {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	min-height: 0;
+	margin-top: 3em;
+	height: fit-content;
+	align-items: center;
+	padding-right: 5mm;
+	padding-left: 5mm;
 	flex-shrink: 1;
 }
 
-body {
-	margin: 0;
+mainR {
+	margin-top: 10vh;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
 }
 
-#body {
-	height: 100vh;
-	width: 100vw;
+leftMainC {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	background-color: rgba(255, 255, 255, 0);
+	flex-grow: 0;
+}
+
+rightMainC {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	background-color: rgba(255, 255, 255, 0);
+	border-left: 1px solid black;
+	flex-grow: 1;
+}
+
+/*for language box*/
+language {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	text-align: center;
+	color: rgb(0, 0, 0);
+	font-family: 'Oswald', sans-serif;
+	font-size: 150%;
+	font-weight: lighter;
+	min-height: 0;
+	margin-left: 0.3em;
+	margin-right: 0.3em;
+}
+
+.actualLanguage {
+	font-weight: bold;
 }
 
 a {
@@ -253,20 +241,4 @@ a {
 	padding-bottom: 0;
 	margin-bottom: 0;
 	text-decoration: none;
-}
-
-credit {
-	text-align: center;
-	color: rgb(139, 139, 139);
-	font-family: 'Oswald', sans-serif;
-	font-size: 100%;
-	font-weight: 100;
-	margin: 0.5em;
-}
-
-@media print {
-	@page {
-		size: 210mm 297mm;
-		margin: 0;
-	}
 }

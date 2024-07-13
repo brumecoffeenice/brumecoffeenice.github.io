@@ -2,178 +2,14 @@ const SupabaseUrl = "https://cpvxjedlgjhcdqjyecmf.supabase.co"
 const SupabasePublicAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwdnhqZWRsZ2poY2RxanllY21mIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkyNjMzMzYsImV4cCI6MjAxNDgzOTMzNn0.Rs-bqvUb0Eq7NEKX3tFc8WHJOjzk1Rc4fgRRU6OtVNs"
 const _supabase = supabase.createClient(SupabaseUrl, SupabasePublicAnonKey)
 
-var tableDelimiter = '_';
 var actualLanguage = 0; //0=fr, 1=en
-var actualMenu = 0;
-var header;
-var corpus;
-var blocs;
-var intro;
-var menuNames;
-var menuContents;
+var text = ""; // text stored in supabase
+var header0 = [];
+var header1 = [];
+var tokens = []; // element, translation (mandatory), level
 
-//show language selection tabs
-function showLanguageMenu() {
-	var res = "";
-
-	res += "<language " + (actualLanguage == 0 ? "class = actualLanguageButton" : "") + ` onclick="actualLanguage=0;showMenu()">Français</language>`;
-	res += "<language " + (actualLanguage == 1 ? "class = actualLanguageButton" : "") + ` onclick = "actualLanguage=1;showMenu()" > English</language > `;
-	return (res);
-}
-
-function removeHorizontalBarBeforePrint(a) {
-	const elements = a.document.getElementsByClassName('horizontalBar');
-	while (elements.length > 0) {
-		elements[0].parentNode.removeChild(elements[0]);
-	}
-}
-
-//creates a new window with only the content of a dif to allow user to print it
-//print a div
-function printMenu() {
-	var divContents = document.getElementsByTagName('menuC')[0].innerHTML;
-	var a = window.open('', '', 'height=500, width=500');
-	a.document.write('<link rel="stylesheet" href="menu.css">');
-	a.document.write('<printC>');
-	a.document.write(divContents);
-	a.document.write('</printC>');
-	removeHorizontalBarBeforePrint(a);
-
-	//Degueulasse, please find a better way to wait until page loaded before print
-	setTimeout(function () {
-		a.print();
-	}, 2000);
-}
-
-//show menu tabs
-function showTabs() {
-	var res = "";
-	var menuName = "";
-	var menuNameRaw = "";
-
-	for (i = 0; i < menuNames.length; i++) {
-		menuNameRaw = menuNames[i].split(tableDelimiter); //select actual menu name
-		menuName = menuNameRaw[0]; //select right language
-		if (actualLanguage == 1 && menuNameRaw[1])
-			menuName = menuNameRaw[1];
-		if (i == actualMenu) {
-			res += '<button class = actualMenuButton onclick="actualMenu= ' + i + ';scrollShowMenu()">' + menuName + '</button>';
-		}
-		else {
-			res += '<button onclick="actualMenu= ' + i + ';scrollShowMenu()">' + menuName + '</button>';
-		}
-	}
-	return (res);
-}
-
-//returns formatted HTML of only one bloc
-function processBloc(bloc, header) {
-	var res = "";
-	var lines = bloc.split('\n');
-	var words = "";
-	var word = "";
-	var name = "";
-	var price = "";
-
-	var i;
-	var j;
-
-	for (i = 0; i < lines.length; i++) {
-		words = lines[i].split(tableDelimiter);
-		for (j = 0; j < words.length; j += 2) {
-			word = words[j];
-			if (word) {
-				//select the translation (if any) which is right after current word
-				if (actualLanguage == 1 && words[j + 1])
-					word = words[j + 1];
-
-				//select word style according to title
-				//title is deduced from header string
-				//unknown title will get default style
-				switch (header[j]) {
-					case "menu":
-						//res += "<menu>" + word + "</menu>"; //shows the menu name
-						break;
-					case "categorie":
-						res += "<hr class=horizontalBar>";
-						res += "<category class = centerR>" + word + "</category>";
-						break;
-					case "produit":
-						name = word; //A name MUST be followed by a price
-						break;
-					case "prix":
-						price = parseFloat(word) + "€";
-						res += "<namePriceR>"
-						res += "<name>" + name + "</name>";
-						res += "<price>" + price + "</price>";
-						res += "</namePriceR>"
-						break;
-					case "description":
-						res += "<description>" + word + "</description>";
-						break;
-					case "commentaire":
-						res += "<comment class = centerR>" + word + "</comment>";
-						break;
-					default:
-						res += "<default class = centerR>" + word + "</default>";
-				}
-			}
-		}
-	}
-	return (res);
-}
-
-//returns formated table as HTML and also some other stuff
-function showMenu() {
-	var res = "";
-	res += "<languageR id=scrollTarget>";
-	res += showLanguageMenu();
-	res += "</languageR>";
-	res += processBloc(intro, header);
-	res += "<buttonsC>";
-	res += showTabs();
-	res += "</buttonsC>";
-	res += "<menuC>";
-	res += processBloc(menuContents[actualMenu], header);
-	res += "</menuC>";
-	document.getElementById('content').innerHTML = res;
-}
-
-//get first lines of each string of an array of string
-function getFirstLines(array) {
-	return array.map(str => {
-		const lines = str.split('\n'); //split the string into lines
-		return lines[0]; //return the first line
-	});
-}
-
-//get all lines except first of each string of an array of string
-function getOtherLines(array) {
-	return array.map(str => {
-		const lines = str.split('\n'); //split the string into lines
-		lines.shift(); //remove the first line
-		return lines.join('\n'); //join the remaining lines back into a string
-	});
-}
-
-//processes the menu.menu and feeds the HTML text to content
-function loadElements(menuFile) {
-	var cleanInput = menuFile;
-	cleanInput = cleanInput.replace(/(\r\n)/gm, "\n"); //set \n as delimiter by replacing \r\n
-	cleanInput = cleanInput.replace(/(\r)/gm, "\n"); //set \n as delimiter by replacing \r
-	cleanInput = cleanInput.replace(/^\/\/.*\n*/gm, ""); //remove comments : lines starting with //
-	cleanInput = cleanInput.replace(/^\n/gm, ""); //remove empty lines
-
-	header = cleanInput.split('\n')[0].split(tableDelimiter); //header is the first row
-	corpus = cleanInput.split('\n').slice(1).join('\n'); //corpus is the rest
-	blocs = corpus.split(RegExp("\n(?=[^" + tableDelimiter + "])")); //each new row starting with (not a delimiter) is the begining of a new bloc
-	intro = blocs[0]; //first bloc is the intro
-	menus = blocs.slice(1); //other blocs are menus. Includes menu names
-	menuNames = getFirstLines(menus); //first line of each menu is the name
-	menuContents = getOtherLines(menus); //rest is the content
-}
-
-async function initMenu() {
+// fetched from database
+async function fetcher() {
 	let { data, error } = await _supabase
 		.from('menu.menu')
 		.select('content')
@@ -184,9 +20,161 @@ async function initMenu() {
 		console.log("ERROR", error);
 		throw error;
 	}
-	loadElements(data[0].content);
-	showMenu();
+	text = data[0].content;
+	lexer(text);
 }
+
+// lexes tokens
+function lexer(text) {
+	var cleanInput = text;
+	tokens = [];
+	cleanInput = cleanInput.replace(/(\r\n)/gm, "\n"); //set \n as delimiter by replacing \r\n
+	cleanInput = cleanInput.replace(/(\r)/gm, "\n"); //set \n as delimiter by replacing \r
+	cleanInput = cleanInput.replace(/^#.*\n*/gm, ""); //remove comments : lines starting with commentator 
+	cleanInput = cleanInput.replace(/^\n/gm, ""); //remove empty lines
+
+	header0 = cleanInput.split('\n')[0].replace(/\s/g, "").split('_'); // header0 is the first row, remove whitespaces and split
+	header1 = cleanInput.split('\n')[1].replace(/\s/g, "").split('/'); //header1 is the second row
+	lines = cleanInput.split('\n').slice(2); //corpus is the rest
+
+	for (line of lines) {
+		var slices = line.split('_'); // all slices in the line including blanks, translations...
+		for (i in slices) {
+			var slice = slices[i];
+			var sslices = slice.split('/');
+			var element = sslices[0];
+			var translation = sslices[1];
+
+			if (element)
+				element = element.replace(/^\s+|\s+$/g, ""); // remove whistaces ar beginning and end
+			if (translation)
+				translation = translation.replace(/^\s+|\s+$/g, "");
+			if (element) {
+				if (!translation)
+					translation = element; // if an element has no translation, translation is element
+				level = header0[i]; // set the according level from header
+				if (!level)
+					level = 'undefined';
+				tokens.push([element, translation, level]);
+			}
+		}
+	}
+	elementCreator();
+}
+
+function createElementInContainer(text, type, containerType) {
+	var container = document.createElement(containerType);
+	var newElement = document.createElement(type);
+	container.appendChild(newElement);
+	newElement.textContent = text;
+	return container;
+}
+
+function appendToLastMenuContainer(newElement) {
+	var menuContainers = document.getElementsByClassName('menuContainer');
+	var lastMenuContainer = menuContainers[menuContainers.length - 1];
+	if (lastMenuContainer) {  //if it exists, append to lastMenuContainer
+		lastMenuContainer.appendChild(newElement);
+	} else {  // thus, this is the intro
+		var content = document.getElementById('introBox');
+		content.appendChild(newElement);
+	}
+}
+
+function elementCreator() {
+	var content = document.getElementById('content');
+	var menuScroller = document.getElementById('menuScroller');
+	var introBox = document.getElementById('introBox');
+	content.innerHTML = '';
+	// menuScroller.innerHTML = '';
+	introBox.innerHTML = '';
+
+	var i = 0;
+	while (i < tokens.length) {
+		switch (tokens[i][2]) {
+			case 'menu':
+				var mainContainer = document.createElement('mainR');
+				var leftContainer = document.createElement('leftMainC');
+				var rightContainer = document.createElement('rightMainC');
+				rightContainer.classList.add('menuContainer');
+				content.appendChild(mainContainer);
+				mainContainer.appendChild(leftContainer);
+				mainContainer.appendChild(rightContainer);
+				var newElement = document.createElement('menuStyle');
+				newElement.classList.add('menuName');
+				leftContainer.appendChild(newElement);
+				newElement.textContent = tokens[i][actualLanguage];
+				break;
+			case 'description':
+				var container = createElementInContainer(tokens[i][actualLanguage], 'descriptionStyle', 'leftR')
+				appendToLastMenuContainer(container);
+				break;
+			case 'categorie':
+				var container = createElementInContainer(tokens[i][actualLanguage], 'categorieStyle', 'centerR')
+				appendToLastMenuContainer(container);
+				break;
+			case 'commentaire':
+				var container = createElementInContainer(tokens[i][actualLanguage], 'commentaireStyle', 'centerR')
+				appendToLastMenuContainer(container);
+				break;
+			case 'produit':
+				var produitPrixContainer = document.createElement('produitPrixR');
+				var produit = document.createElement('produitStyle');
+				var prix = document.createElement('prixStyle');
+				produitPrixContainer.appendChild(produit);
+				produitPrixContainer.appendChild(prix);
+				produit.textContent = tokens[i][0];
+				prix.textContent = parseFloat(tokens[++i][0]) + "€";
+				appendToLastMenuContainer(produitPrixContainer)
+				break;
+			default:
+				var container = createElementInContainer(tokens[i][actualLanguage], 'defautStyle', 'centerR')
+				appendToLastMenuContainer(container);
+				break;
+		}
+		i++;
+	}
+		showLanguageMenu();
+	// fillMenuScroller();
+}
+
+// function scrollToMenu() {
+// 	var menuNames = document.getElementsByClassName('menuName');
+// 	for (menuName of menuNames) {
+// 		if (menuName.textContent == this.textContent)
+// 			menuName.parentNode.scrollIntoView({ behavior: "smooth" });
+// 	}
+// }
+
+// function fillMenuScroller() {
+// 	var menuNames = document.getElementsByClassName('menuName');
+// 	var menuScroller = document.getElementById('menuScroller');
+
+// 	for (menuName of menuNames) {
+// 		var newButton = document.createElement('menuButton');
+// 		menuScroller.appendChild(newButton);
+// 		newButton.textContent = menuName.textContent;
+// 		newButton.addEventListener("click", scrollToMenu);
+// 	}
+// 	showLanguageMenu();
+// }
+
+function showLanguageMenu() {
+	languageBox0 = document.getElementById('languageBox0');
+	languageBox1 = document.getElementById('languageBox1');
+	languageBox0.textContent = header1[0];
+	languageBox1.textContent = header1[1];
+
+	if (actualLanguage == 0) {
+		languageBox0.classList.add('actualLanguage');
+		languageBox1.classList.remove('actualLanguage');
+	}
+	else {
+		languageBox1.classList.add('actualLanguage');
+		languageBox0.classList.remove('actualLanguage');
+	}
+}
+
 
 function detectLanguage() {
 	let lang = navigator.language
@@ -199,4 +187,7 @@ function detectLanguage() {
 }
 
 detectLanguage();
-initMenu();
+fetcher();
+
+languageBox0.addEventListener("click", function () { actualLanguage = 0; elementCreator(); });
+languageBox1.addEventListener("click", function () { actualLanguage = 1; elementCreator(); });

@@ -18,7 +18,7 @@ headerR {
 
 brumeR {
 	display: inline-block;
-	position: fixed;
+	position: absolute;
 	width: 100%;
 	bottom: 50vh;
 	display: flex;
@@ -63,10 +63,10 @@ homePageC {
 }
 
 circle {
-	position: fixed;
+	position: absolute;
 	aspect-ratio: 1 / 1;
 	bottom: 50vh;
-	left: 50%;
+	left: 50vw;
 	border-radius: 50%;
 	border: 2px solid;
 	transform: translate(-50%, 50%);
@@ -75,11 +75,12 @@ circle {
 }
 
 .wallimage {
+	z-index: -1;
 	position: fixed;
-	height: 120vh;
+	height: 100vh;
 	width: 100vw;
+	bottom: 0;
 	top: 0;
-	left: 0;
 	pointer-events: none;
 	background-repeat: no-repeat;
 	background-position: left;
@@ -87,44 +88,11 @@ circle {
 }
 
 .halo {
-	position: fixed;
+	position: absolute;
 	pointer-events: none;
 	height: 100vh;
 	width: 100vw;
-	top: 0;
+	bottom: 0vh;
 	left: 0;
 	background-image: radial-gradient(circle, #ffffff00 25%, #ffffff3b 40%, #ffffff00 80%);
-}
-
-.parallax {
-	height: 100vh;
-	overflow-x: hidden;
-	perspective: 1px;
-}
-
-.parallax-layer {
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-}
-
-/* wallpaper */
-.layer0 {
-	transform: translateZ(-5px) scale(6);
-}
-
-/*content*/
-.layer1 {
-	transform: translateZ(0px) scale(1);
-}
-
-/*LOGO*/
-.layer3 {
-	transform: translateZ(-1px) scale(2);
-}
-
-.contentClass {
-	background-image: linear-gradient(rgba(255, 255, 255, 0), rgb(255, 228, 193) 3%, rgb(231, 231, 231));
 }
