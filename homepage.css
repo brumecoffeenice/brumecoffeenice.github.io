@@ -1,3 +1,8 @@
+body {
+	margin: 0;
+	display: block;
+}
+
 header {
 	text-align: center;
 	color: rgb(0, 0, 0);
@@ -40,7 +45,7 @@ brume {
 	display: inline-block;
 	text-align: center;
 	font-family: 'Yeseva One', cursive;
-	font-size: 400%;
+	font-size: 300%;
 	font-weight: bolder;
 	margin-bottom: -0.2em;
 	color: #000000;
@@ -49,7 +54,7 @@ brume {
 brumeSlogan {
 	text-align: right;
 	font-family: 'Oswald', sans-serif;
-	font-size: 80%;
+	font-size: 70%;
 	font-weight: bolder;
 	text-transform: uppercase;
 }
@@ -71,16 +76,16 @@ circle {
 	border: 2px solid;
 	transform: translate(-50%, 50%);
 	pointer-events: none;
-	width: 270px;
+	width: 200px;
 }
 
 .wallimage {
-	z-index: -1;
-	position: fixed;
+	z-index: -2;
+	position: sticky;
 	height: 100vh;
-	width: 100vw;
-	bottom: 0;
+	width: 100%;
 	top: 0;
+	left: 0;
 	pointer-events: none;
 	background-repeat: no-repeat;
 	background-position: left;
@@ -94,5 +99,37 @@ circle {
 	width: 100vw;
 	bottom: 0vh;
 	left: 0;
-	background-image: radial-gradient(circle, #ffffff00 25%, #ffffff3b 40%, #ffffff00 80%);
+	background-image: radial-gradient(circle, #ffffff00 20%, #ffffff5a 35%, #ffffff00 80%);
+}
+
+logoR {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+}
+
+logoC {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.logo {
+	height: 0.5cm;
+	width: auto;
+}
+
+.instaLogo {
+	height: 1cm;
+	width: auto;
+	margin-bottom: 0.3cm;
+	margin-bottom: 0.3cm;
+}
+
+.wallpaper {
+	background-color: #ffffff00;
+	opacity: 1;
+	background-image: linear-gradient(to right, #ffffff1d, #ffffff1d 10px, #ffffff00 10px, #ffffff00);
+	background-size: 20px 100%;
+	z-index: -1;
 }

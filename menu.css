@@ -1,34 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap');
 
-body {
-	margin: 0;
-}
-
-logoR {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-around;
-}
-
-logoC {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-}
-
-.logo {
-	height: 0.5cm;
-	width: auto;
-}
-
-.instaLogo {
-	height: 1cm;
-	width: auto;
-	margin-bottom: 0.3cm;
-	margin-bottom: 0.3cm;
-}
-
 menuStyle {
 	position: sticky;
 	top: 0;
@@ -44,6 +16,7 @@ menuStyle {
 	background-color: rgb(0, 0, 0);
 	/* text-shadow: 0 0 10px #000000; */
 	mix-blend-mode: multiply;
+	height: 100vh;
 
 }
 
