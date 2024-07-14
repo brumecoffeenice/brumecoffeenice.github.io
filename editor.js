@@ -69,14 +69,14 @@ function colorize(text) {
 	var colors = [
 		`<span style="color:lightBlue; font-weight:bold">`,
 		`<span style="color:peru; font-weight:bold">`,
-		`<span style="color:Khaki">`,
+		`<span style="color:lightKhaki">`,
 		`<span style="color:lightCoral">`,
 		`<span style="color:grey">`,
 		`<span style="color:darkSeaGreen">`];
 	var lines = text.split('\n');
 	for (var i = 0; i < lines.length; i++) {
 		if (lines[i][0] == '#') {
-			res += `<span style="color:black">` + lines[i] + "</span>";
+			res += `<span style="color:cornflowerblue">` + lines[i] + "</span>";
 		}
 		else {
 			blocks = lines[i].split('_');
@@ -87,7 +87,7 @@ function colorize(text) {
 				else
 					res += colors[j] + block + "</span>";
 				if (j < blocks.length - 1)
-					res += `<span style="color:dimGrey">` + '_' + "</span>";
+					res += `<span style="color:Red">` + '_' + "</span>";
 			}
 		}
 		if (i < lines.length - 1)
