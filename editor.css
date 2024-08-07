@@ -32,9 +32,9 @@ body {
 }
 
 .code-editor-background {
-	/* resize: none; */
+	resize: none;
 	background-color: rgb(44, 44, 44);
-	caret-color: white;
+	/* caret-color: white; */
 	color: transparent;
 }
 
@@ -45,8 +45,8 @@ body {
 
 .code-editor-foreground {
 	pointer-events: none;
-	left: 1px;
-	top: 1px
+	/* left: 1px; */
+	/* top: 1px */
 }
 
 .buttonStyle1 {
