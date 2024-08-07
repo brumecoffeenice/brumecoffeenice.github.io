@@ -26,7 +26,7 @@ body {
 	line-break: anywhere;
 	white-space: pre-wrap;
 	color: white;
-	line-height: 2em;
+	/* line-height: 2em; */
 	display: block;
 }
 
@@ -120,9 +120,9 @@ body {
 /* Ligne commentée désactivée */
 .styleCommented {
 	color: rgb(166, 166, 166);
-	font-style: italic;
+	/* font-style: italic; */
 	text-decoration: line-through;
-	text-decoration-color: rgb(48, 48, 48);
+	text-decoration-color: rgb(0, 0, 0);
 	text-decoration-line: line-through;
 }
 
