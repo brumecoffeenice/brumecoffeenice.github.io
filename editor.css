@@ -77,3 +77,62 @@ body {
 	align-items: end;
 
 }
+
+/* Menu */
+.style0 {
+	color: rgb(158, 197, 210);
+	font-style: italic;
+	font-weight: bold;
+	border-top: solid;
+	border-bottom: solid;
+
+}
+
+/* Categorie */
+.style1 {
+	color: rgb(158, 197, 210);
+	font-style: italic;
+	font-weight: bold;
+	/* text-decoration-line: underline; */
+}
+
+/* Nom */
+.style2 {
+	color: rgb(255, 231, 124);
+}
+
+/* Prix */
+.style3 {
+	color: rgb(226, 191, 255);
+}
+
+/* Description */
+.style4 {
+	color: rgb(155, 255, 200);
+}
+
+/* Commentaire */
+.style5 {
+	color: rgb(158, 197, 210);
+	font-style: italic;
+}
+
+/* Ligne commentée désactivée */
+.styleCommented {
+	color: rgb(166, 166, 166);
+	font-style: italic;
+	text-decoration: line-through;
+	text-decoration-color: rgb(48, 48, 48);
+	text-decoration-line: line-through;
+}
+
+/* Error */
+.styleError {
+	color: rgb(255, 255, 255);
+	font-weight: bold;
+	background-color: rgb(255, 0, 0);
+}
+
+.styleDelimiter {
+	color: rgb(255, 255, 255);
+}

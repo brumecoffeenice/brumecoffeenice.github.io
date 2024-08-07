@@ -35,7 +35,7 @@ function lexer(text) {
 
 	header0 = cleanInput.split('\n')[0].replace(/\s/g, "").split('_'); // header0 is the first row, remove whitespaces and split
 	header1 = cleanInput.split('\n')[1].replace(/\s/g, "").split('/'); //header1 is the second row
-	lines = cleanInput.split('\n').slice(2); //corpus is the rest
+	var lines = cleanInput.split('\n').slice(2); //corpus is the rest
 
 	for (line of lines) {
 		var slices = line.split('_'); // all slices in the line including blanks, translations...

@@ -13,13 +13,12 @@ menuStyle {
 	word-spacing: 0.5rem;
 	white-space: nowrap;
 	flex-shrink: 0;
-	background-color: #1b5021;
+	background-color: #000000;
 	/* text-shadow: 0 0 10px #000000; */
 	mix-blend-mode: multiply;
 	height: 100vh;
 	padding-top: 0.2em;
 	padding-bottom: 0.2em;
-
 }
 
 categorieStyle {

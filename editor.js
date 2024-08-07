@@ -66,28 +66,21 @@ async function updateOut(text) {
 
 function colorize(text) {
 	var res = "";
-	var colors = [
-		`<span style="color:lightBlue; font-weight:bold">`,
-		`<span style="color:peru; font-weight:bold">`,
-		`<span style="color:lightKhaki">`,
-		`<span style="color:lightCoral">`,
-		`<span style="color:grey">`,
-		`<span style="color:darkSeaGreen">`];
 	var lines = text.split('\n');
 	for (var i = 0; i < lines.length; i++) {
 		if (lines[i][0] == '#') {
-			res += `<span style="color:cornflowerblue">` + lines[i] + "</span>";
+			res += '<span class="styleCommented">' + lines[i] + "</span>";
 		}
 		else {
-			blocks = lines[i].split('_');
+			var blocks = lines[i].split('_');
 			for (var j = 0; j < blocks.length; j++) {
 				var block = blocks[j];
-				if (j >= colors.length)
-					res += `<span style="color:red; font-weight:bold">` + block + "</span>";
+				if (j > 5)  // There are 6 styles : from 0 to 5
+					res += '<span class="styleError">' + block + "</span>";
 				else
-					res += colors[j] + block + "</span>";
+					res += '<span class="style' + j + '">' + block + "</span>";
 				if (j < blocks.length - 1)
-					res += `<span style="color:Red">` + '_' + "</span>";
+					res += '<span class="styleDelimiter">' + '_' + "</span>";
 			}
 		}
 		if (i < lines.length - 1)
