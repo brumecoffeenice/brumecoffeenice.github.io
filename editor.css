@@ -34,7 +34,7 @@ body {
 .code-editor-background {
 	resize: none;
 	background-color: rgb(44, 44, 44);
-	/* caret-color: white; */
+	caret-color: white;
 	color: transparent;
 }
 
