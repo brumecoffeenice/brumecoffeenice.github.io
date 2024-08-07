@@ -120,11 +120,10 @@ body {
 
 /* Ligne commentée désactivée */
 .styleCommented {
-	color: rgb(166, 166, 166);
+	color: rgb(182, 182, 182);
 	/* font-style: italic; */
-	text-decoration: line-through;
-	text-decoration-color: rgb(0, 0, 0);
-	text-decoration-line: line-through;
+	/* text-decoration:underline; */
+	/* text-decoration-color: rgb(60, 60, 60); */
 }
 
 /* Error */
