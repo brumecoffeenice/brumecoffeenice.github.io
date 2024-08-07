@@ -91,7 +91,7 @@ body {
 
 /* Categorie */
 .style1 {
-	color: rgb(158, 197, 210);
+	color: rgb(219, 123, 198);
 	font-style: italic;
 	font-weight: bold;
 	/* text-decoration-line: underline; */
@@ -99,7 +99,8 @@ body {
 
 /* Nom */
 .style2 {
-	color: rgb(255, 231, 124);
+	color: rgb(224, 206, 129);
+	font-weight: bold;
 }
 
 /* Prix */
@@ -109,12 +110,12 @@ body {
 
 /* Description */
 .style4 {
-	color: rgb(155, 255, 200);
+	color: rgb(140, 218, 175);
 }
 
 /* Commentaire */
 .style5 {
-	color: rgb(158, 197, 210);
+	color: rgb(138, 142, 254);
 	font-style: italic;
 }
 
