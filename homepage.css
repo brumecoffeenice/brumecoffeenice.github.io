@@ -133,3 +133,12 @@ logoC {
 	background-size: 20px 100%;
 	z-index: -1;
 }
+
+creditStyle {
+	text-align: center;
+	color: rgb(0, 0, 0);
+	font-family: 'Oswald', sans-serif;
+	font-size: 100%;
+	font-weight: 100;
+	margin: 0.5em;
+}

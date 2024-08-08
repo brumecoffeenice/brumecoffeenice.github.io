@@ -93,17 +93,32 @@ function elementCreator() {
 	while (i < tokens.length) {
 		switch (tokens[i][2]) {
 			case 'menu':
-				var mainContainer = document.createElement('mainR');
-				var leftContainer = document.createElement('leftMainC');
-				var rightContainer = document.createElement('rightMainC');
-				rightContainer.classList.add('menuContainer');
+				var mainContainer = document.createElement('mainR');		// contains our hole new menu
+				var leftContainer = document.createElement('leftMainC');	// for the vertical menu name
+				var rightContainer = document.createElement('rightMainC');	// for the content of the menu
+				var newElement = document.createElement('menuStyle');		// for the sliding menu name
+
 				content.appendChild(mainContainer);
 				mainContainer.appendChild(leftContainer);
 				mainContainer.appendChild(rightContainer);
-				var newElement = document.createElement('menuStyle');
-				newElement.classList.add('menuName');
 				leftContainer.appendChild(newElement);
+
+				rightContainer.classList.add('menuContainer');
+				newElement.classList.add('menuName');
 				newElement.textContent = tokens[i][actualLanguage];
+				// leftContainer.setAttribute('onclick', "scrollToMenuScroller()");
+				break;
+			case 'produit':
+				var produitPrixContainer = document.createElement('produitPrixR');
+				var produit = document.createElement('produitStyle');
+				var prix = document.createElement('prixStyle');
+
+				produitPrixContainer.appendChild(produit);
+				produitPrixContainer.appendChild(prix);
+
+				produit.textContent = tokens[i][0];
+				prix.textContent = parseFloat(tokens[++i][0]) + "€";
+				appendToLastMenuContainer(produitPrixContainer)
 				break;
 			case 'description':
 				var container = createElementInContainer(tokens[i][actualLanguage], 'descriptionStyle', 'leftR')
@@ -117,16 +132,6 @@ function elementCreator() {
 				var container = createElementInContainer(tokens[i][actualLanguage], 'commentaireStyle', 'centerR')
 				appendToLastMenuContainer(container);
 				break;
-			case 'produit':
-				var produitPrixContainer = document.createElement('produitPrixR');
-				var produit = document.createElement('produitStyle');
-				var prix = document.createElement('prixStyle');
-				produitPrixContainer.appendChild(produit);
-				produitPrixContainer.appendChild(prix);
-				produit.textContent = tokens[i][0];
-				prix.textContent = parseFloat(tokens[++i][0]) + "€";
-				appendToLastMenuContainer(produitPrixContainer)
-				break;
 			default:
 				var container = createElementInContainer(tokens[i][actualLanguage], 'defautStyle', 'centerR')
 				appendToLastMenuContainer(container);
@@ -134,7 +139,7 @@ function elementCreator() {
 		}
 		i++;
 	}
-		showLanguageMenu();
+	showLanguageMenu();
 	// fillMenuScroller();
 }
 
@@ -146,9 +151,15 @@ function elementCreator() {
 // 	}
 // }
 
+// function scrollToMenuScroller() {
+// 	var menuScroller = document.getElementById('menuScroller');
+// 	menuScroller.scrollIntoView({ behavior: "smooth" });
+// }
+
 // function fillMenuScroller() {
 // 	var menuNames = document.getElementsByClassName('menuName');
 // 	var menuScroller = document.getElementById('menuScroller');
+// 	menuScroller.innerHTML = "";
 
 // 	for (menuName of menuNames) {
 // 		var newButton = document.createElement('menuButton');
