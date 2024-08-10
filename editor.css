@@ -4,9 +4,9 @@ body {
 }
 
 .code-editor-container {
-	overflow: hidden;
-	width: 100vw;
-	height: 100vh;
+	/* overflow: hidden; */
+	width: 1000ch;
+	height: 1000ch;
 	position: relative;
 }
 
@@ -16,6 +16,7 @@ body {
 	width: 100%;
 	position: absolute;
 	top: 0;
+	left: 0;
 	padding: 10px;
 	margin: 0;
 	font-family: "Courier New", Courier, monospace;
@@ -31,52 +32,51 @@ body {
 	letter-spacing: 0px;
 }
 
+/* the background input text area */
 .code-editor-background {
 	resize: none;
 	background-color: rgb(44, 44, 44);
 	caret-color: white;
 	color: transparent;
+	border: 1px;
+	/* border: solid; */
+	/* border-color:brown; */
 }
 
 .code-editor-background::selection {
 	color: transparent;
-	background: #757575;
+	background: #372809;
 }
 
+/* the front text displayed in color (no pointer event) */
 .code-editor-foreground {
 	pointer-events: none;
+	/* border: dashed; */
+	/* border-color: aqua; */
 	/* left: 1px; */
 	/* top: 1px */
 }
 
-.buttonStyle1 {
-	width: 6em;
+.buttonStyle {
+	width: 100%;
 	background-color: grey;
 	border: none;
 	text-decoration: none;
 	border-radius: 10px;
 	margin-top: 0.5em;
-}
-
-.buttonStyle2 {
-	background-color: rgb(240, 128, 128);
-	width: 6em;
-	border: none;
-	text-decoration: none;
-	border-radius: 10px;
-	margin-top: 0.5em;
+	padding: 0;
 }
 
 .buttonHolder {
 	display: flex;
 	flex-direction: column;
-	position: absolute;
+	position: fixed;
 	bottom: 0;
 	right: 0;
 	margin-right: 10px;
 	margin-bottom: 10px;
 	align-items: end;
-
+	width: 10ch;
 }
 
 /* Menu */

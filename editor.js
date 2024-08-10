@@ -133,11 +133,19 @@ async function resetMenu() {
 	updateOut($("#in").val());
 }
 
+function resetScroll() {
+	window.scrollTo({
+		top: 0,
+		left: 0,
+		behavior: "smooth",
+	});
+}
+
 resetMenu()
 
-$("#in").on('scroll', function () {
-	$("#out").css({ top: -$(this).scrollTop() + "px" });
-});
+// $("#in").on('scroll', function () {
+// 	$("#out").css({ top: -$(this).scrollTop() + "px" });
+// });
 
 $("#in").on("keydown", function (e) {
 	setTimeout(() => {
