@@ -5,7 +5,7 @@
 	<META NAME=”robots” CONTENT=”noindex”>
 	<meta charset="utf-8">
 	<title>Menu Editor</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="editor.css">
 </head>
 
@@ -13,23 +13,24 @@
 <body>
 	<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jsdiff/5.1.0/diff.min.js"></script>
+	
+	<div id="whole-thing">
+		<div class='buttonHolder'>
+			<!-- <button class="buttonStyle1" onclick="resetMenu()">Réinitialiser</button> -->
+			<button class="buttonStyle" onclick="copyMenuToClip2()">Copier</button>
+			<button class="buttonStyle" id="diffButton" onclick="processButtonChild1()">Différences</button>
+			<button class="buttonStyle" id="scrollButton" onclick="resetScroll()">Reset view</button>
+			<input class="buttonStyle" id="emailBox" type="email" placeholder="email@email.com">
+			<input class="buttonStyle" id="passwordBox" type="password" placeholder="mot de passe">
+			<button class="buttonStyle" id="saveButton">Enregistrer</button>
+		</div>
 
-	<div class="code-editor-container">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-		<textarea class="code-editor code-editor-background" id="in" spellcheck="false"></textarea>
-		<div class="code-editor code-editor-foreground" id="out" spellcheck="false"></div>
+		<div class="code-editor-container">
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+			<textarea class="code-editor code-editor-background" id="in" spellcheck="false"></textarea>
+			<div class="code-editor code-editor-foreground" id="out" spellcheck="false"></div>
+		</div>
 	</div>
-
-	<div class='buttonHolder'>
-		<!-- <button class="buttonStyle1" onclick="resetMenu()">Réinitialiser</button> -->
-		<button class="buttonStyle" onclick="copyMenuToClip2()">Copier</button>
-		<button class="buttonStyle" id="diffButton" onclick="processButtonChild1()">Différences</button>
-		<input  class="buttonStyle" id="emailBox"		type="email"	placeholder="email@email.com">
-		<input  class="buttonStyle" id="passwordBox"	type="password"	placeholder="mot de passe">
-		<button class="buttonStyle" id="saveButton">Enregistrer</button>
-		<button class="buttonStyle" id="scrollButton" onclick="resetScroll()">Reset view</button>
-	</div>
-
 	<script src="editor.js"></script>
 </body>
 
