@@ -5,7 +5,6 @@
 	<META NAME=”robots” CONTENT=”noindex”>
 	<meta charset="utf-8">
 	<title>Menu Editor</title>
-	<!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
 	<meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
 	<link rel="stylesheet" href="editor.css">
 </head>
@@ -17,12 +16,11 @@
 	
 	<div id="whole-thing">
 		<div class='buttonHolder'>
-			<!-- <button class="buttonStyle1" onclick="resetMenu()">Réinitialiser</button> -->
 			<button class="buttonStyle" onclick="copyMenuToClip2()">Copier</button>
 			<button class="buttonStyle" id="diffButton" onclick="processButtonChild1()">Diff</button>
 			<button class="buttonStyle" id="scrollButton" onclick="resetScroll()">Vue</button>
-			<input class="buttonStyle" id="emailBox" type="email" placeholder="email@email.com">
-			<input class="buttonStyle" id="passwordBox" type="password" placeholder="mot de passe">
+			<input class="buttonStyle" id="emailBox" type="email" placeholder="email@email.com" autocomplete="on">
+			<input class="buttonStyle" id="passwordBox" type="password" placeholder="mot de passe" autocomplete="on">
 			<button class="buttonStyle" id="saveButton">Push</button>
 		</div>
 

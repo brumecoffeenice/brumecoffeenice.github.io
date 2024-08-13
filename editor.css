@@ -65,8 +65,12 @@ body {
 	/* width: 100%; */
 	/* background-color: rgb(59, 72, 69); */
 	background-color: rgba(58, 90, 82, 0.444);
-	border: solid;
-	border-color: #ffb7b7;
+	border-bottom: solid;
+	border-right: solid;
+	border-top: none;
+	border-left: none;
+	/* border-color: #ffb7b7; */
+	/* outline: 1px solid; */
 	text-decoration: none;
 	/* border-radius: 10px; */
 	/* margin-top: 0.5em; */
@@ -78,7 +82,7 @@ body {
 	flex-grow: 1;
 	font-family: "Courier New", Courier, monospace;
 	font-weight: bold;
-	font-size: 0.8rem;
+	font-size: 1rem;
 	color: rgb(255, 184, 90);
 }
 
