@@ -5,7 +5,8 @@
 	<META NAME=”robots” CONTENT=”noindex”>
 	<meta charset="utf-8">
 	<title>Menu Editor</title>
-	<meta name="viewport" content="width=device-width, height=device-height, minimum-scale=1.0, initial-scale=1.0, maximum-scale=1.0">
+	<meta name="viewport"
+		content="width=device-width, height=device-height, minimum-scale=1.0, initial-scale=1.0, maximum-scale=1.0">
 
 	<link rel="stylesheet" href="editor.css">
 	<link rel="stylesheet" href="homepage.css">
@@ -21,15 +22,15 @@
 			<textarea class="code-editor code-editor-background" id="in" spellcheck="false"></textarea>
 			<div class="code-editor code-editor-foreground" id="out" spellcheck="false"></div>
 		</div>
-		<div class='buttonHolder'>
-			<button class="buttonStyle" onclick="copyMenuToClip2()">Copier</button>
-			<button class="buttonStyle" id="diffButton" onclick="processButtonChild1()">Diff</button>
-			<button class="buttonStyle" id="scrollButton" onclick="resetScroll()">Vue</button>
-			<button class="buttonStyle" id="scrollButton" onclick="location.href='menu.html'">Menu</button>
-			<input class="buttonStyle" id="emailBox" type="email" placeholder="email@email.com" autocomplete="on">
-			<input class="buttonStyle" id="passwordBox" type="password" placeholder="mot de passe" autocomplete="on">
-			<button class="buttonStyle" id="saveButton">Push</button>
-		</div>
+	</div>
+	<div class='buttonHolder'>
+		<button class="buttonStyle" onclick="copyMenuToClip2()">Copier</button>
+		<button class="buttonStyle" id="diffButton" onclick="processButtonChild1()">Diff</button>
+		<button class="buttonStyle" id="scrollButton" onclick="resetScroll()">Vue</button>
+		<button class="buttonStyle" id="scrollButton" onclick="location.href='menu.html'">Menu</button>
+		<input class="buttonStyle" id="emailBox" type="email" placeholder="email@email.com" autocomplete="on">
+		<input class="buttonStyle" id="passwordBox" type="password" placeholder="mot de passe" autocomplete="on">
+		<button class="buttonStyle" id="saveButton">Push</button>
 	</div>
 	<script src="editor.js"></script>
 </body>
