@@ -69,7 +69,7 @@ body {
 	border-right: dotted;
 	border-top: none;
 	border-left: none;
-	border-color: #c55c00;
+	/* border-color: #c55c00; */
 	/* outline: 1px solid; */
 	text-decoration: none;
 	/* border-radius: 10px; */
@@ -83,7 +83,7 @@ body {
 	font-family: "Courier New", Courier, monospace;
 	font-weight: bold;
 	font-size: 1rem;
-	color: rgb(201, 146, 166);
+	color: rgb(255, 164, 27);
 }
 
 .buttonStyle:hover {
