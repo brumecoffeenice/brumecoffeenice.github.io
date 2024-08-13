@@ -64,12 +64,12 @@ body {
 .buttonStyle {
 	/* width: 100%; */
 	/* background-color: rgb(59, 72, 69); */
-	background-color: rgba(58, 90, 82, 0.444);
-	border-bottom: solid;
-	border-right: solid;
+	background-color: rgba(46, 68, 62, 0.444);
+	border-bottom: dotted;
+	border-right: dotted;
 	border-top: none;
 	border-left: none;
-	/* border-color: #ffb7b7; */
+	border-color: #c55c00;
 	/* outline: 1px solid; */
 	text-decoration: none;
 	/* border-radius: 10px; */
@@ -83,7 +83,7 @@ body {
 	font-family: "Courier New", Courier, monospace;
 	font-weight: bold;
 	font-size: 1rem;
-	color: rgb(255, 184, 90);
+	color: rgb(201, 146, 166);
 }
 
 .buttonStyle:hover {
