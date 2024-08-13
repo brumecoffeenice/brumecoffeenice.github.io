@@ -46,6 +46,7 @@ body {
 	border: 1px;
 	/* border: solid; */
 	/* border-color:brown; */
+		background-color: rgba(44, 44, 44, 0.927);
 }
 
 .code-editor-background::selection {
@@ -65,7 +66,7 @@ body {
 .buttonStyle {
 	/* width: 100%; */
 	/* background-color: rgb(59, 72, 69); */
-	background-color: rgba(46, 68, 62, 0.444);
+	background-color: rgb(46, 68, 62);
 	border-bottom: dotted;
 	border-right: dotted;
 	border-top: none;
@@ -96,10 +97,10 @@ body {
 	display: flex;
 	flex-direction: row;
 	position: sticky;
-	top: 0;
+	bottom: 0;
 	left: 0;
 	width: 100vw;
-	height: 2ch;
+	/* height: 2ch; */
 	z-index: 2;
 	/* margin-right: 10px;
 	margin-bottom: 10px;
@@ -109,7 +110,7 @@ body {
 	margin: 0;
 	flex-wrap: wrap;
 	border: 0;
-	margin-bottom: 6ch;
+	/* margin-bottom: 6ch; */
 }
 
 /* Menu */

@@ -7,14 +7,30 @@
 	<title>Menu Editor</title>
 	<meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
 	<link rel="stylesheet" href="editor.css">
+	<link rel="stylesheet" href="homepage.css">
 </head>
 
 
 <body>
 	<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jsdiff/5.1.0/diff.min.js"></script>
-	
+	<circle id="circle"></circle>
+	<brumeR id="brumeR">
+		<brumeC id="brumeC">
+			<brume>Brume</brume>
+			<brumeSlogan>café cosmopolite</brumeSlogan>
+		</brumeC>
+	</brumeR>
 	<div id="whole-thing">
+	<img class=wallimage src="img/brumewallpaper.jpg" alt="wallpaper">
+
+
+
+		<div class="code-editor-container">
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+			<textarea class="code-editor code-editor-background" id="in" spellcheck="false"></textarea>
+			<div class="code-editor code-editor-foreground" id="out" spellcheck="false"></div>
+		</div>
 		<div class='buttonHolder'>
 			<button class="buttonStyle" onclick="copyMenuToClip2()">Copier</button>
 			<button class="buttonStyle" id="diffButton" onclick="processButtonChild1()">Diff</button>
@@ -22,12 +38,6 @@
 			<input class="buttonStyle" id="emailBox" type="email" placeholder="email@email.com" autocomplete="on">
 			<input class="buttonStyle" id="passwordBox" type="password" placeholder="mot de passe" autocomplete="on">
 			<button class="buttonStyle" id="saveButton">Push</button>
-		</div>
-
-		<div class="code-editor-container">
-			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-			<textarea class="code-editor code-editor-background" id="in" spellcheck="false"></textarea>
-			<div class="code-editor code-editor-foreground" id="out" spellcheck="false"></div>
 		</div>
 	</div>
 	<script src="editor.js"></script>
