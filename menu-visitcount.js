@@ -27,9 +27,5 @@ function getVisitCount() {
 
 	// Save the updated visit dates
 	saveVisitDates(visitDates);
-
-	console.log("your visite count", visitDates.length);
-	console.log("your visit dates", visitDates);
-
 	return (visitDates.length)
 }

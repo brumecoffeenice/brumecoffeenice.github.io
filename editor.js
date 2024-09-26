@@ -17,7 +17,7 @@ async function fetchMenu() {
 		.order("id", { ascending: false })
 
 	if (error) {
-		console.log("ERROR", error);
+		console.error("fetch error", error);
 		throw error;
 	}
 	return (data[0].content);

@@ -2,21 +2,21 @@
 // fetched from database
 async function fetcher() {
 	// ************** from supabase **************
-	// let { data, error } = await _supabase
-	// 	.from('menu.menu')
-	// 	.select('content')
-	// 	.limit(1)
-	// 	.order("id", { ascending: false })
+	let { data, error } = await _supabase
+		.from('menu.menu')
+		.select('content')
+		.limit(1)
+		.order("id", { ascending: false })
 
-	// if (error) {
-	// 	console.log("ERROR", error);
-	// 	throw error;
-	// }
-	// text = data[0].content;
+	if (error) {
+		console.error("fetch error", error);
+		throw error;
+	}
+	text = data[0].content;
 
 	// ************** from text file **************
-	let response = await fetch('menu.menu');
-	let text = await response.text();
+	// let response = await fetch('menu.menu');
+	// let text = await response.text();
 
 	// **************                 **************
 	return text;
@@ -116,8 +116,6 @@ function getTree(tokens) {
 		// Add the new node to the stack
 		stack.push(newNode);
 	}
-
-	console.log(tree);
 	return tree;
 }
 
