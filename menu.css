@@ -1,7 +1,7 @@
 menuStyle {
 	position: sticky;
 	top: 0;
-	color: rgb(255, 255, 255);
+	color: rgb(0, 0, 0);
 	font-family: 'Yeseva one', cursive;
 	font-size: 160%;
 	font-weight: bolder;
@@ -10,10 +10,10 @@ menuStyle {
 	word-spacing: 0.5rem;
 	white-space: nowrap;
 	flex-shrink: 0;
-	background-color: #000000;
+	background-color: rgba(245, 222, 179, 0);
 	/* text-shadow: 0 0 10px #000000; */
-	mix-blend-mode: multiply;
-	height: 100vh;
+	/* mix-blend-mode: multiply; */
+	/* height: 100%; */
 	padding-top: 0.2em;
 	padding-bottom: 0.2em;
 }
@@ -160,6 +160,8 @@ mainR {
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-start;
+	background-color: rgba(245, 222, 179, 0.477);
+	border-radius: 10px;
 }
 
 leftMainC {
@@ -168,6 +170,7 @@ leftMainC {
 	justify-content: space-between;
 	background-color: rgba(255, 255, 255, 0);
 	flex-grow: 0;
+	/* border-right: 1px black; */
 }
 
 rightMainC {
@@ -175,8 +178,9 @@ rightMainC {
 	flex-direction: column;
 	justify-content: space-between;
 	background-color: rgba(255, 255, 255, 0);
-	/* border-left: 1px solid black; */
+	border-left: 1px solid rgb(0, 0, 0);
 	flex-grow: 1;
+	/* background-color: rgba(245, 222, 179, 0.641); */
 }
 
 /*for language box*/
@@ -196,6 +200,8 @@ language {
 
 .actualLanguage {
 	font-weight: bold;
+	background-color: rgba(245, 222, 179, 0.641);
+	border-radius: 10px;
 }
 
 a {
@@ -204,4 +210,11 @@ a {
 	padding-bottom: 0;
 	margin-bottom: 0;
 	text-decoration: none;
+}
+
+.linkStyle {
+	/* text-decoration: underline;
+	text-decoration-color: rgb(0, 0, 0); */
+	background-color: rgba(245, 222, 179, 0.641);
+	border-radius: 10px;
 }
