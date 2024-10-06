@@ -22,8 +22,6 @@ categorieStyle {
 	font-family: 'Yeseva One', cursive;
 	font-size: 250%;
 	min-height: 0;
-	padding-right: 5mm;
-	padding-left: 5mm;
 }
 
 produitStyle {
@@ -41,8 +39,6 @@ descriptionStyle {
 	font-family: 'courier new';
 	font-size: 120%;
 	margin-top: 0.4em;
-	padding-right: 5mm;
-	padding-left: 5mm;
 	flex-shrink: 1;
 }
 
@@ -53,8 +49,6 @@ commentaireStyle {
 	font-size: 120%;
 	margin-top: 0.5em;
 	min-height: 0;
-	padding-right: 5mm;
-	padding-left: 5mm;
 	flex-shrink: 1;
 }
 

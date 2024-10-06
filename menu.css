@@ -26,8 +26,6 @@ produitPrixR {
 	margin-top: 3em;
 	height: fit-content;
 	align-items: center;
-	padding-right: 5mm;
-	padding-left: 5mm;
 	flex-shrink: 1;
 }
 
@@ -63,8 +61,9 @@ rightMainC {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	/* background-color: rgba(255, 255, 255, 0); */
 	flex-grow: 1;
+	padding-right: 1em;
+	padding-left: 0.5em;
 }
 
 .categoriecanterr {
