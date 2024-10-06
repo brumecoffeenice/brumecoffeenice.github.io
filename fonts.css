@@ -7,15 +7,13 @@ menuStyle {
 	top: 0;
 	color: rgb(0, 0, 0);
 	font-family: 'Yeseva one', cursive;
-	font-size: 160%;
+	font-size: 180%;
 	writing-mode: vertical-lr;
 	text-orientation: upright;
 	word-spacing: 0.5rem;
 	white-space: nowrap;
 	flex-shrink: 0;
 	background-color: rgba(245, 222, 179, 0);
-	padding-top: 0.2em;
-	padding-bottom: 0.2em;
 }
 
 categorieStyle {
@@ -23,7 +21,6 @@ categorieStyle {
 	color: rgb(0, 0, 0);
 	font-family: 'Yeseva One', cursive;
 	font-size: 250%;
-	margin-top: 0.7em;
 	min-height: 0;
 	padding-right: 5mm;
 	padding-left: 5mm;
@@ -33,7 +30,7 @@ produitStyle {
 	text-align: left;
 	color: rgb(0, 0, 0);
 	font-family: 'Courier Prime';
-	font-size: 150%;
+	font-size: 140%;
 	text-transform: uppercase;
 	flex-shrink: 1;
 }
@@ -53,7 +50,7 @@ commentaireStyle {
 	text-align: center;
 	color: rgb(0, 0, 0);
 	font-family: 'courier prime';
-	font-size: 140%;
+	font-size: 120%;
 	margin-top: 0.5em;
 	min-height: 0;
 	padding-right: 5mm;
@@ -69,7 +66,7 @@ prixStyle {
 	text-align: right;
 	color: rgb(0, 0, 0);
 	font-family: 'Courier Prime';
-	font-size: 140%;
+	font-size: 120%;
 	padding-left: 1em;
 	flex-shrink: 1;
 }

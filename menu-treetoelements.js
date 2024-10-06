@@ -62,7 +62,9 @@ function treeToElements(tree) {
 		for (var element of bloc.children) {
 			switch (element.type) {
 				case '1':
-					blocContainer.appendChild(createCustomElement(element, 'categorieStyle', 'centerR'));
+					var newelement = createCustomElement(element, 'categorieStyle', 'centerR');
+					newelement.classList.add("categoriecanterr");
+					blocContainer.appendChild(newelement);
 					break;
 				case '2':
 					var produitPrixContainer = document.createElement('produitPrixR');
