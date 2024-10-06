@@ -30,6 +30,8 @@ externalLogoR {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
+	padding-top: 1em;
+	padding-bottom: 1em;
 }
 
 externalLogoC {
@@ -47,15 +49,12 @@ externalLogoC {
 
 .stripes {
 	/* position:sticky; */
-	clear: both;
-	grid-row: 1;
 	top: 0;
 	background-color: #ffffff00;
 	opacity: 1;
 	background-image: linear-gradient(to right, #ffffff28, #ffffff28 10px, #ffffff00 10px, #ffffff00);
 	background-size: 20px 100%;
 	z-index: -1;
-	padding-bottom: 1em;
 }
 
 .tshirt {
@@ -74,10 +73,10 @@ externalLogoC {
 }
 
 a {
-	margin-top: 0;
+	/* margin-top: 0;
 	padding-top: 0;
 	padding-bottom: 0;
-	margin-bottom: 0;
+	margin-bottom: 0; */
 	text-decoration: none;
 }
 
