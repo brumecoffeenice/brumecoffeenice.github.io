@@ -31,6 +31,7 @@ produitPrixR {
 
 mainR {
 	margin-top: 10vh;
+	margin-bottom: 15vh;
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-start;
