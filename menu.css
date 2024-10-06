@@ -45,7 +45,7 @@ mainR {
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-start;
-	background-color: rgb(255, 236, 200);
+	background-color: #ffecc8;
 	border-radius: 10px;
 }
 
@@ -53,7 +53,7 @@ leftMainC {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	background-color: rgba(255, 255, 255, 0);
+	/* background-color: rgba(255, 255, 255, 0); */
 	flex-grow: 0;
 
 }
@@ -62,6 +62,6 @@ rightMainC {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	background-color: rgba(255, 255, 255, 0);
+	/* background-color: rgba(255, 255, 255, 0); */
 	flex-grow: 1;
 }
