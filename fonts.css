@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+menuStyle {
+	position: sticky;
+	top: 0;
+	color: rgb(0, 0, 0);
+	font-family: 'Yeseva one', cursive;
+	font-size: 160%;
+	writing-mode: vertical-lr;
+	text-orientation: upright;
+	word-spacing: 0.5rem;
+	white-space: nowrap;
+	flex-shrink: 0;
+	background-color: rgba(245, 222, 179, 0);
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+}
+
+categorieStyle {
+	text-align: center;
+	color: rgb(0, 0, 0);
+	font-family: 'Yeseva One', cursive;
+	font-size: 250%;
+	margin-top: 0.7em;
+	min-height: 0;
+	padding-right: 5mm;
+	padding-left: 5mm;
+}
+
+produitStyle {
+	text-align: left;
+	color: rgb(0, 0, 0);
+	font-family: 'Courier Prime';
+	font-size: 150%;
+	text-transform: uppercase;
+	flex-shrink: 1;
+}
+
+descriptionStyle {
+	text-align: justify;
+	color: rgb(0, 0, 0);
+	font-family: 'courier new';
+	font-size: 120%;
+	margin-top: 0.4em;
+	padding-right: 5mm;
+	padding-left: 5mm;
+	flex-shrink: 1;
+}
+
+commentaireStyle {
+	text-align: center;
+	color: rgb(0, 0, 0);
+	font-family: 'courier prime';
+	font-size: 140%;
+	margin-top: 0.5em;
+	min-height: 0;
+	padding-right: 5mm;
+	padding-left: 5mm;
+	flex-shrink: 1;
+}
+
+defautStyle {
+	color: rgb(255, 0, 0);
+}
+
+prixStyle {
+	text-align: right;
+	color: rgb(0, 0, 0);
+	font-family: 'Courier Prime';
+	font-size: 140%;
+	padding-left: 1em;
+	flex-shrink: 1;
+}
+
+creditStyle {
+	text-align: center;
+	color: rgb(0, 0, 0);
+	font-family: 'Oswald', sans-serif;
+	font-size: 100%;
+	font-weight: 100;
+	margin: 0.5em;
+}
+
+/*for language box*/
+language {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	text-align: center;
+	color: rgb(0, 0, 0);
+	font-family: 'Courier Prime';
+	font-size: 150%;
+	min-height: 0;
+	margin-left: 0.3em;
+	margin-right: 0.3em;
+}

@@ -1,90 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap');
-
 body {
 	margin: 0;
-	display: block;
-}
-
-header {
-	text-align: center;
-	color: rgb(0, 0, 0);
-	font-family: 'Oswald', sans-serif;
-	font-size: 160%;
-	font-weight: 200;
-	margin-left: 1em;
-	margin-top: 1em;
 }
 
 headerR {
-	position: absolute;
-	top: 0vh;
+	/* position: absolute; */
+	/* top: 0vh; */
 	display: flex;
 	flex-direction: row;
-	justify-content: center;
+	justify-content: left;
+	padding-bottom: 6em;
+	padding-top: 1em;
 }
 
-brumeR {
-	display: inline-block;
-	position: absolute;
-	width: 100%;
-	bottom: 50vh;
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	pointer-events: none;
-	transform: translate(0, 50%);
-}
-
-/*for brume*/
-brumeC {
-	display: inline-block;
-	display: flex;
-	flex-direction: column;
-	justify-content: right;
-}
-
-brume {
-	display: inline-block;
-	text-align: center;
-	font-family: 'Yeseva One', cursive;
-	font-size: 300%;
-	font-weight: bolder;
-	margin-bottom: -0.2em;
-	color: #000000;
-}
-
-brumeSlogan {
-	text-align: right;
-	font-family: 'Oswald', sans-serif;
-	font-size: 70%;
-	font-weight: bolder;
-	text-transform: uppercase;
-}
-
-homePageC {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	height: 100vh;
-	pointer-events: none;
-}
-
-circle {
-	position: absolute;
-	aspect-ratio: 1 / 1;
-	bottom: 50vh;
-	left: 50vw;
-	border-radius: 50%;
-	border: 2px solid;
-	transform: translate(-50%, 50%);
-	pointer-events: none;
-	width: 200px;
-}
-
-.wallimage {
+.background {
 	z-index: -2;
-	position: sticky;
+	position: fixed;
 	height: 100vh;
 	width: 100vw;
 	top: 0;
@@ -95,31 +25,16 @@ circle {
 	background-size: cover;
 }
 
-.halo {
-	position: absolute;
-	pointer-events: none;
-	height: 100vh;
-	width: 100vw;
-	bottom: 0vh;
-	left: 0;
-	background-image: radial-gradient(circle, #ffffff00 20%, #ffffff5a 35%, #ffffff00 80%);
-}
-
-logoR {
+externalLogoR {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
 }
 
-logoC {
+externalLogoC {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
-}
-
-.logo {
-	height: 0.5cm;
-	width: auto;
 }
 
 .instaLogo {
@@ -129,19 +44,43 @@ logoC {
 	margin-bottom: 0.3cm;
 }
 
-.wallpaper {
+.stripes {
+	/* position:sticky; */
+	clear: both;
+	grid-row: 1;
+	top: 0;
 	background-color: #ffffff00;
 	opacity: 1;
-	background-image: linear-gradient(to right, #ffffff1d, #ffffff1d 10px, #ffffff00 10px, #ffffff00);
+	background-image: linear-gradient(to right, #ffffff28, #ffffff28 10px, #ffffff00 10px, #ffffff00);
 	background-size: 20px 100%;
 	z-index: -1;
 }
 
-creditStyle {
-	text-align: center;
-	color: rgb(0, 0, 0);
-	font-family: 'Oswald', sans-serif;
-	font-size: 100%;
-	font-weight: 100;
-	margin: 0.5em;
+.tshirt {
+	/* position: absolute; */
+	width: 100vw;
+	/* z-index: 0; */
+	/* bottom: 50vh; */
+	/* transform: translate(-100vw, 50%); */
+	pointer-events: none;
+
+}
+
+.linkStyle {
+	background-color: rgb(255, 236, 200);
+	border-radius: 10px;
+}
+
+a {
+	margin-top: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+	margin-bottom: 0;
+	text-decoration: none;
+}
+
+.actualLanguage {
+	font-weight: bold;
+	background-color: rgb(255, 236, 200);
+	border-radius: 10px;
 }

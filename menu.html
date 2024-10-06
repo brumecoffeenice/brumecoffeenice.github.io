@@ -5,10 +5,13 @@
 	<meta charset="utf-8">
 	<title>Menu</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+
 	<meta name="description" content="Le menu de Brume">
 </head>
 
 <link rel="stylesheet" href="menu.css">
+<link rel="stylesheet" href="fonts.css">
 <link rel="stylesheet" href="homepage.css">
 
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
@@ -16,36 +19,28 @@
 <body>
 	<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-	<div class="wallpaper">
-		<img class=wallimage src="img/brumewallpaper.jpg" alt="wallpaper">
-		<div class="halo"></div>
-		<circle id="circle"></circle>
-		<brumeR id="brumeR">
-			<brumeC id="brumeC">
-				<brume>Brume</brume>
-				<brumeSlogan>café cosmopolite</brumeSlogan>
-			</brumeC>
-		</brumeR>
-
+	<img class="background" src="img/brumewallpaper.jpg" alt="stripes">
+	<div class="stripes">
 		<headerR>
 			<a href="index.html">
-				<header>Accueil</header>
+				<language>Accueil</language>
 			</a>
 			<a href="menu.html">
-				<header style="font-weight: bold; text-decoration: underline">Menu</header>
+				<language class="actualLanguage">Menu</language>
 			</a>
 		</headerR>
-		<!-- <homePageC></homePageC> -->
+		<img class="tshirt" src="img/tshirt.svg" alt="logo" />
+
 		<div>
 			<br>
 			<br>
-			<logoR>
-				<logoC>
+			<externalLogoR>
+				<externalLogoC>
 					<a href="https://www.instagram.com/brume.coffee.nice/" target="_blank">
 						<img class="instaLogo" src="img/instagram_logo.svg" alt="Brume Instagram" />
 					</a>
-				</logoC>
-			</logoR>
+				</externalLogoC>
+			</externalLogoR>
 			<buttonsR>
 				<language id="languageBox0"></language>
 				<language id="languageBox1"></language>
@@ -55,14 +50,14 @@
 			<div id="menuBox"></div>
 			<br>
 			<br>
-			<logoR>
+			<externalLogoR>
 				<a href="https://github.com/simon-ameye">
-					<creditStyle>Made with ♡ by Simon for Roxane</creditStyle>
+					<creditStyle class="linkStyle">Made with ♡ by Simon for Roxane</creditStyle>
 				</a>
 				<a href="editor.html">
-					<creditStyle>Editor</creditStyle>
+					<creditStyle class="linkStyle">Editor</creditStyle>
 				</a>
-			</logoR>
+			</externalLogoR>
 		</div>
 		<script src="menu-fetchtotree.js"></script>
 		<script src="menu-treetoelements.js"></script>
