@@ -45,7 +45,7 @@ mainR {
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-start;
-	background-color: #ffecc8;
+	background-color: #ffe6c8;
 	border-radius: 10px;
 }
 

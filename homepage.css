@@ -1,6 +1,6 @@
 body {
 	margin: 0;
-	background-color: #ffecc8;
+	background-color: #ffe6c8;
 }
 
 headerR {
@@ -68,7 +68,7 @@ externalLogoC {
 }
 
 .linkStyle {
-	background-color: #ffecc8;
+	background-color: #ffe6c8;
 	border-radius: 10px;
 }
 
@@ -82,6 +82,6 @@ a {
 
 .actualLanguage {
 	font-weight: bold;
-	background-color: #ffecc8;
+	background-color: #ffe6c8;
 	border-radius: 10px;
 }
