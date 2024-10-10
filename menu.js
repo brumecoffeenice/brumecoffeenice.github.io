@@ -33,7 +33,7 @@ function detectLanguage() {
 
 function displayReviewBox() {
 	visitcount = getVisitCount();
-	if (visitcount >= 3) {
+	if (visitcount >= 2) {
 		introBox = document.getElementById("introBox");
 		introBox.style.display = 'none';
 	} else {
