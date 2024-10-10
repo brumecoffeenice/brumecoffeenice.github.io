@@ -78,3 +78,22 @@ rightMainC {
 .categoriecanterr:first-child {
 	margin-top: 0em;
 }
+
+.reviewBoxContainer {
+	position: relative;
+	z-index: 0;
+}
+
+.reviewbox {
+	position: relative;
+}
+
+.heart {
+	position: absolute;
+	z-index: -1;
+	height: 50%;
+	top: 50%;
+	right: 50%;
+	transform: translate(50%, -50%);
+	opacity: 50%;
+}

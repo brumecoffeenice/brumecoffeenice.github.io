@@ -37,8 +37,8 @@ function displayReviewBox() {
 		introBox = document.getElementById("introBox");
 		introBox.style.display = 'none';
 	} else {
-		reviewBox = document.getElementById("reviewBox");
-		reviewBox.style.display = 'none';
+		reviewBoxContainer = document.getElementById("reviewBoxContainer");
+		reviewBoxContainer.style.display = 'none';
 	}
 }
 
