@@ -59,3 +59,7 @@ main();
 
 languageBox0.addEventListener("click", function () { actualLanguage = 0; refresh(); });
 languageBox1.addEventListener("click", function () { actualLanguage = 1; refresh(); });
+
+window.onscroll = function () {
+	heartAnimation();
+};
