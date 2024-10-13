@@ -1,38 +1,36 @@
+.heartContainerR {
+	display: flex;
+	justify-content: center;
+	flex-direction: row;
+}
+
 .heart {
 	position: absolute;
 	z-index: -1;
-	height: 100%;
-	top: 50%;
-	right: 50%;
-	transform: translate(50%, -50%);
 	opacity: 60%;
+	height: 0%;
+	pointer-events: none;
 }
 
 .animate {
-	animation: zoomIn 1s forwards, zoomInOut 2s infinite 1s;
+	animation: zoomIn 1s forwards;
 }
 
 @keyframes zoomIn {
 	0% {
-		height: 100%;
+		height: 0%;
+		opacity: 0%;
+		transform: rotate(0turn);
 	}
+
 	50% {
-		height: 300%;
+		height: 100%;
 		opacity: 100%;
 	}
-	100% {
-		height: 100%;
-	}
-}
 
-@keyframes zoomInOut {
-	0% {
-		height: 100%;
-	}
-	50% {
-		height: 120%;
-	}
 	100% {
-		height: 100%;
+		height: 80%;
+		opacity: 40%;
+		transform: rotate(1turn);
 	}
 }
