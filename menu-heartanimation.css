@@ -22,15 +22,15 @@
 		opacity: 0%;
 		filter: brightness(300%);
 	}
-	
+
 	50% {
 		height: 100%;
-		opacity: 100%;
+		opacity: 80%;
 	}
 
 	100% {
 		height: 80%;
 		opacity: 40%;
-		/* transform: rotate(1turn); */
+		transform: rotate(1turn);
 	}
 }
