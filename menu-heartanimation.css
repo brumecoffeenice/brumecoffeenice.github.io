@@ -1,7 +1,7 @@
 .heart {
 	position: absolute;
 	z-index: -1;
-	height: 0%;
+	height: 100%;
 	top: 50%;
 	right: 50%;
 	transform: translate(50%, -50%);
@@ -9,19 +9,29 @@
 }
 
 .animate {
-	animation: zoom-in 1s forwards;
+	animation: zoomIn 1s forwards, zoomInOut 2s infinite 1s;
 }
 
-@keyframes zoom-in {
+@keyframes zoomIn {
 	0% {
-		height: 0%;
+		height: 100%;
 	}
-
 	50% {
-		height: 200%;
+		height: 300%;
 		opacity: 100%;
 	}
+	100% {
+		height: 100%;
+	}
+}
 
+@keyframes zoomInOut {
+	0% {
+		height: 100%;
+	}
+	50% {
+		height: 120%;
+	}
 	100% {
 		height: 100%;
 	}
