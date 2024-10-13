@@ -20,9 +20,9 @@
 	0% {
 		height: 0%;
 		opacity: 0%;
-		/* transform: rotate(0turn); */
+		filter: brightness(300%);
 	}
-
+	
 	50% {
 		height: 100%;
 		opacity: 100%;
