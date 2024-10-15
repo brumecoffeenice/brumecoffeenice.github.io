@@ -1,0 +1,46 @@
+.cloudContainer {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	z-index: -1;
+	/* bottom: 0; */
+	pointer-events: none;
+}
+
+.cloud {
+	position: absolute;
+	width: 300%;
+	height: 100%;
+	opacity: 30%;
+	filter: brightness(200%);
+}
+
+.cloud1 {
+	animation: 26s linear infinite forwards move_cloud1;
+}
+
+.cloud2 {
+	animation: 20s linear infinite forwards move_cloud2;
+	animation-delay: -10s;
+	transform: translateX(-200vw);
+}
+
+@keyframes move_cloud1 {
+	0% {
+		transform: translateX(-300vw);
+	}
+
+	100% {
+		transform: translateX(100vw);
+	}
+}
+
+@keyframes move_cloud2 {
+	0% {
+		transform: rotate(0.5turn) translateX(300vw);
+	}
+
+	100% {
+		transform: rotate(0.5turn) translateX(-100vw);
+	}
+}
