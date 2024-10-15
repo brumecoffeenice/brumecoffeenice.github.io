@@ -11,17 +11,20 @@
 	position: absolute;
 	width: 300%;
 	height: 100%;
-	opacity: 80%;
 }
 
 .cloud1 {
 	animation: 26s linear infinite forwards move_cloud1;
+	opacity: 80%;
+	z-index: -2;
 }
 
 .cloud2 {
-	animation: 20s linear infinite forwards move_cloud2;
+	animation: 17s linear infinite forwards move_cloud2;
 	animation-delay: -10s;
 	transform: translateX(-200vw);
+	opacity: 60%;
+	z-index: -1;
 }
 
 @keyframes move_cloud1 {
