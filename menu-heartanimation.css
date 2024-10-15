@@ -1,15 +1,12 @@
-.heartContainerR {
-	display: flex;
-	justify-content: center;
-	flex-direction: row;
-}
-
 .heart {
 	position: absolute;
 	z-index: -1;
 	opacity: 60%;
 	height: 0%;
 	pointer-events: none;
+	transform: translate(-50%, -50%);
+	top: 50%;
+	left: 50%;
 }
 
 .animate {
@@ -26,14 +23,17 @@
 		height: 100%;
 		opacity: 100%;
 	}
+
 	50% {
-		height: 80%;
+		height: 60%;
 		opacity: 40%;
 	}
+
 	75% {
 		height: 100%;
 		opacity: 100%;
 	}
+
 	100% {
 		height: 80%;
 		opacity: 40%;
