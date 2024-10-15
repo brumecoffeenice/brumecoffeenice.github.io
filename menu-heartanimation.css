@@ -13,24 +13,29 @@
 }
 
 .animate {
-	animation: zoomIn 1s forwards;
+	animation: zoomIn 0.7s forwards;
 }
 
 @keyframes zoomIn {
 	0% {
 		height: 0%;
 		opacity: 0%;
-		filter: brightness(300%);
 	}
 
-	50% {
+	40% {
 		height: 100%;
 		opacity: 100%;
 	}
-
+	60% {
+		height: 80%;
+		opacity: 40%;
+	}
+	80% {
+		height: 100%;
+		opacity: 100%;
+	}
 	100% {
 		height: 80%;
 		opacity: 40%;
-		transform: rotate(1turn);
 	}
 }
