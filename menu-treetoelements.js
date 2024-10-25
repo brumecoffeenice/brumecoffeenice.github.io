@@ -69,9 +69,11 @@ function treeToElements(tree) {
 				case '2':
 					var produitPrixContainer = document.createElement('produitPrixR');
 					var produit = document.createElement('produitStyle');
+					var dots = document.createElement('dots');
 					var prix = document.createElement('prixStyle');
 
 					produitPrixContainer.appendChild(produit);
+					produitPrixContainer.appendChild(dots);
 					produitPrixContainer.appendChild(prix);
 
 					produit.textContent = element.texts[actualLanguage];
