@@ -33,12 +33,10 @@ function detectLanguage() {
 
 function displayReviewBox() {
 	visitcount = getVisitCount();
+	const dialog = document.querySelector("dialog");
+
 	if (visitcount >= 2) {
-		introBox = document.getElementById("introBox");
-		introBox.style.display = 'none';
-	} else {
-		reviewBoxContainer = document.getElementById("reviewBoxContainer");
-		reviewBoxContainer.style.display = 'none';
+		dialog.showModal();
 	}
 }
 
@@ -59,7 +57,3 @@ main();
 
 languageBox0.addEventListener("click", function () { actualLanguage = 0; refresh(); });
 languageBox1.addEventListener("click", function () { actualLanguage = 1; refresh(); });
-
-window.onscroll = function () {
-	heartAnimation();
-};
