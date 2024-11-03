@@ -34,7 +34,7 @@ mainR {
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-start;
-	background-color: #ffe6c8;
+	background-color: #ffede3;
 	border-radius: 10px;
 	padding-top: 1em;
 	padding-bottom: 1em;
@@ -80,7 +80,7 @@ rightMainC {
 }
 
 dialog {
-	background-color: #fff7ed;
+	background-color: #ffffff;
 	z-index: 3;
 	width: 60vw;
 }
