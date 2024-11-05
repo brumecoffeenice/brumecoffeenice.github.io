@@ -1,12 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caprasimo&display=swap');
 
 menuStyle {
 	position: sticky;
 	top: 0;
-	color: rgb(0, 0, 0);
-	font-family: 'Yeseva one', cursive;
+	color: #c98c42;
+	font-family: 'Caprasimo', cursive;
 	font-size: 180%;
 	writing-mode: vertical-lr;
 	text-orientation: upright;
@@ -18,15 +17,15 @@ menuStyle {
 
 categorieStyle {
 	text-align: center;
-	color: rgb(0, 0, 0);
-	font-family: 'Yeseva One', cursive;
+	color: #c98c42;
+	font-family: 'Caprasimo', cursive;
 	font-size: 250%;
 	min-height: 0;
 }
 
 produitStyle {
 	text-align: left;
-	color: rgb(0, 0, 0);
+	color: rgb(76, 76, 76);
 	font-family: 'Courier Prime';
 	font-size: 140%;
 	text-transform: uppercase;
@@ -36,7 +35,7 @@ produitStyle {
 
 prixStyle {
 	text-align: right;
-	color: rgb(0, 0, 0);
+	color: rgb(76, 76, 76);
 	font-family: 'Courier Prime';
 	font-size: 140%;
 	padding-left: 1em;
