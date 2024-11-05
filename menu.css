@@ -80,13 +80,15 @@ rightMainC {
 }
 
 dialog {
+	position: fixed;
 	background-color: #ffffff;
-	z-index: 3;
 	width: 60vw;
+	top: 0;
 }
 
 dialog::backdrop {
 	background-color: rgba(255, 255, 255, 0.492);
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
+	height: 140vh;
 }

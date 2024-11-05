@@ -24,6 +24,7 @@ headerR {
 	background-repeat: no-repeat;
 	background-position: left;
 	background-size: cover;
+	transform: translate3d(0px, 0px, 0px);
 }
 
 externalLogoR {
@@ -53,7 +54,7 @@ externalLogoC {
 	background-color: #ffffff00;
 	opacity: 1;
 	/* background-image: linear-gradient(to right, #ffffff28, #ffffff28 10px, #ffffff00 10px, #ffffff00); */
-	background-image: linear-gradient(to right, #ffffff51, #ffffff51 10px, #ffffff28 10px, #ffffff28);
+	background-image: linear-gradient(to right, #ffffff7b, #ffffff7b 10px, #ffffff49 10px, #ffffff49);
 	background-size: 20px 100%;
 	z-index: -1;
 }
