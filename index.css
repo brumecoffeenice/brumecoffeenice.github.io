@@ -18,6 +18,8 @@ bloc {
 	margin-top: 1cm;
 	padding-right: 5mm;
 	padding-left: 5mm;
+	background-color: #ffede3;
+	border-radius: 10px;
 	/* border-top: 1px solid; */
 }
 

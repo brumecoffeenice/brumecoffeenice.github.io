@@ -4,7 +4,7 @@
 menuStyle {
 	position: sticky;
 	top: 0;
-	color: #c98c42;
+	color: rgb(170, 132, 60);
 	font-family: 'Caprasimo', cursive;
 	font-size: 180%;
 	writing-mode: vertical-lr;
@@ -17,7 +17,7 @@ menuStyle {
 
 categorieStyle {
 	text-align: center;
-	color: #c98c42;
+	color: rgb(170, 132, 60);
 	font-family: 'Caprasimo', cursive;
 	font-size: 250%;
 	min-height: 0;
