@@ -50,7 +50,8 @@ externalLogoC {
 	top: 0;
 	background-color: #ffffff00;
 	opacity: 1;
-	background-image: linear-gradient(to right, #ffffff7b, #ffffff7b 10px, #ffffff49 10px, #ffffff49);
+	/* background-image: linear-gradient(to right, #ffffff7b, #ffffff7b 10px, #ffffff49 10px, #ffffff49); */
+	background-image: linear-gradient(to right, #ffffff49, #ffffff49 10px, #ffffff7b 10px, #ffffff7b);
 	background-size: 20px 100%;
 	z-index: -1;
 }
