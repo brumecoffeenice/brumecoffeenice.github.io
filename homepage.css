@@ -70,7 +70,7 @@ a {
 	text-decoration: none;
 }
 
-.boldStyle {
+.selectedLinkStyle {
 	/* font-weight: bold; */
 	text-decoration: underline;
 	/* font-family: 'Caprasimo', cursive; */

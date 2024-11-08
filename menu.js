@@ -14,12 +14,12 @@ function showLanguageMenu() {
 	languageBox1.textContent = 'english';
 
 	if (actualLanguage == 0) {
-		languageBox0.classList.add('boldStyle');
-		languageBox1.classList.remove('boldStyle');
+		languageBox0.classList.add('selectedLinkStyle');
+		languageBox1.classList.remove('selectedLinkStyle');
 	}
 	else {
-		languageBox1.classList.add('boldStyle');
-		languageBox0.classList.remove('boldStyle');
+		languageBox1.classList.add('selectedLinkStyle');
+		languageBox0.classList.remove('selectedLinkStyle');
 	}
 }
 
