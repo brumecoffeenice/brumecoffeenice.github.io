@@ -41,7 +41,7 @@ mainR {
 	padding-bottom: 1em;
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
-	border: 1px solid black;
+	border: 1px solid rgb(255, 255, 255);
 	background-image: linear-gradient(to right, #ffffff4d, #ffffff4d 10px, #ffffff00 10px, #ffffff00);
 	background-size: 20px 100%;
 }

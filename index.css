@@ -18,9 +18,14 @@ bloc {
 	margin-top: 1cm;
 	padding-right: 5mm;
 	padding-left: 5mm;
-	background-color: #ffede3;
+	background-color: #ffffff6e;
 	border-radius: 10px;
 	/* border-top: 1px solid; */
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	border: 1px solid rgb(255, 255, 255);
+	background-image: linear-gradient(to right, #ffffff4d, #ffffff4d 10px, #ffffff00 10px, #ffffff00);
+	background-size: 20px 100%;
 }
 
 photos {
