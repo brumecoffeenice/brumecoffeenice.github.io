@@ -8,16 +8,18 @@ var tree = [];
 function showLanguageMenu() {
 	languageBox0 = document.getElementById('languageBox0');
 	languageBox1 = document.getElementById('languageBox1');
+	languageBox0.classList.add('linkStyle');
+	languageBox1.classList.add('linkStyle');
 	languageBox0.textContent = 'français';
 	languageBox1.textContent = 'english';
 
 	if (actualLanguage == 0) {
-		languageBox0.classList.add('actualLanguage');
-		languageBox1.classList.remove('actualLanguage');
+		languageBox0.classList.add('boldStyle');
+		languageBox1.classList.remove('boldStyle');
 	}
 	else {
-		languageBox1.classList.add('actualLanguage');
-		languageBox0.classList.remove('actualLanguage');
+		languageBox1.classList.add('boldStyle');
+		languageBox0.classList.remove('boldStyle');
 	}
 }
 

@@ -4,8 +4,6 @@ body {
 }
 
 headerR {
-	/* position: absolute; */
-	/* top: 0vh; */
 	display: flex;
 	flex-direction: row;
 	justify-content: left;
@@ -49,22 +47,16 @@ externalLogoC {
 }
 
 .stripes {
-	/* position:sticky; */
 	top: 0;
 	background-color: #ffffff00;
 	opacity: 1;
-	/* background-image: linear-gradient(to right, #ffffff28, #ffffff28 10px, #ffffff00 10px, #ffffff00); */
 	background-image: linear-gradient(to right, #ffffff7b, #ffffff7b 10px, #ffffff49 10px, #ffffff49);
 	background-size: 20px 100%;
 	z-index: -1;
 }
 
 .tshirt {
-	/* position: absolute; */
 	width: 100vw;
-	/* z-index: 0; */
-	/* bottom: 50vh; */
-	/* transform: translate(-100vw, 50%); */
 	pointer-events: none;
 
 }
@@ -72,20 +64,15 @@ externalLogoC {
 .linkStyle {
 	background-color: #ffede3;
 	border-radius: 10px;
-	border: 2px solid #aa843c;
 }
 
 a {
-	/* margin-top: 0;
-	padding-top: 0;
-	padding-bottom: 0;
-	margin-bottom: 0; */
 	text-decoration: none;
 }
 
-.actualLanguage {
-	font-weight: bold;
-	background-color: #ffede3;
-	border-radius: 10px;
-	border: 2px solid rgb(170, 132, 60);
+.boldStyle {
+	/* font-weight: bold; */
+	text-decoration: underline;
+	/* font-family: 'Caprasimo', cursive; */
+	/* text-transform: uppercase; */
 }

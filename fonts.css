@@ -4,7 +4,7 @@
 menuStyle {
 	position: sticky;
 	top: 0;
-	color: rgb(170, 132, 60);
+	color: #585858;
 	font-family: 'Caprasimo', cursive;
 	font-size: 180%;
 	writing-mode: vertical-lr;
@@ -12,12 +12,12 @@ menuStyle {
 	word-spacing: 0.5rem;
 	white-space: nowrap;
 	flex-shrink: 0;
-	background-color: rgba(245, 222, 179, 0);
+	background-color: #d0972d00;
 }
 
 categorieStyle {
 	text-align: center;
-	color: rgb(170, 132, 60);
+	color: #f28a2eff;
 	font-family: 'Caprasimo', cursive;
 	font-size: 250%;
 	min-height: 0;
@@ -83,14 +83,15 @@ creditStyle {
 }
 
 /*for language box*/
-language {
+buttonStyle {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	text-align: center;
 	color: rgb(75, 75, 75);
-	font-family: 'Courier Prime';
-	font-size: 150%;
+	/* font-family: 'Courier Prime'; */
+	font-family: 'Caprasimo';
+	font-size: 130%;
 	min-height: 0;
 	margin-left: 0.3em;
 	margin-right: 0.3em;
