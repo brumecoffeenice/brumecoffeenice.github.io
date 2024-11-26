@@ -139,11 +139,11 @@ function printContent() {
 	printWindow.document.getElementById('printTable').innerHTML = document.getElementById('mainTable').innerHTML;
 	printWindow.document.close();
 
-	function myprint() {
+	// function myprint() {
 		printWindow.print();
-		printWindow.onafterprint = () => printWindow.close();
-	}
-	setTimeout(myprint, 1000)
+		// printWindow.onafterprint = () => printWindow.close();
+	// }
+	// setTimeout(myprint, 100)
 }
 
 function allowFreezer() {
