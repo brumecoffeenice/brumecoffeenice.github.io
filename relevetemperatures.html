@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+	<META NAME=”robots” CONTENT=”noindex”>
+	<meta charset="utf-8">
+	<title>Menu Editor</title>
+	<meta name="viewport"
+		content="width=device-width, height=device-height, minimum-scale=1.0, initial-scale=1.0, maximum-scale=1.0">
+
+	<link rel="stylesheet" href="relevetemperatures.css">
+</head>
+
+
+<body>
+	<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
+	<table id="data">
+		<th>
+			Vous devez entrer un email et un mot de passe pour pouvoir ajouter un relevé ou consulter l'historique.
+		</th>
+	</table>
+	</div>
+	<div class='buttonHolder'>
+		<input class="buttonStyle" id="frigo1Box" type="number" placeholder="frigo1" autocomplete="off">
+		<input class="buttonStyle" id="frigo2Box" type="number" placeholder="frigo2" autocomplete="off">
+		<input class="buttonStyle" id="congelBox" type="number" placeholder="congel" autocomplete="off">
+
+		<input class="buttonStyle" list="matinOuSoirList" id="hourBox" value="matin">
+		<datalist id="matinOuSoirList">
+			<option value="matin">
+			<option value="soir">
+		</datalist>
+
+		<input class="buttonStyle" id="dateBox" type="date" value="" autocomplete="off">
+		<input class="buttonStyle" id="operatorBox" type="text" value="roxane" autocomplete="off">
+		<input class="buttonStyle" id="emailBox" type="email" placeholder="email@email.com" autocomplete="on">
+		<input class="buttonStyle" id="passwordBox" type="password" placeholder="mot de passe" autocomplete="on">
+		<button class="buttonStyle" id="pushButton">Ajouter relevé</button>
+		<button class="buttonStyle" id="loadButton">Historique</button>
+		<button class="buttonStyle" id="printButton" onclick='printContent()'>Imprimer</button>
+	</div>
+	<script src="relevetemperatures.js"></script>
+</body>
