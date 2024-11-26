@@ -150,7 +150,7 @@ function allowFreezer() {
 	g_allowFreezer = !g_allowFreezer;
 
 	if (g_allowFreezer) {
-		document.getElementById("congelContainer").style.display = "inline";
+		document.getElementById("congelContainer").style.display = "";
 	} else {
 		document.getElementById("congelContainer").style.display = "none";
 	}
