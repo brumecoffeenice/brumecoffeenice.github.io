@@ -29,7 +29,6 @@ function showTemperatures(datas) {
 			<th>frigo 2 (°C)</th>
 			<th>matin / soir</th>
 			<th>operateur</th>
-			}
 	`}
 
 	for (let data of datas) {

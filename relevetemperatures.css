@@ -24,6 +24,7 @@ tr {
 
 .buttonStyle {
 	width: 8em;
+	/* height: 4vh; */
 	/* background-color: rgb(224, 224, 224); */
 	/* border-bottom: none;
 	border-right: dotted;
@@ -43,11 +44,13 @@ tr {
 	font-weight: bold;
 	font-size: 1rem;
 
-	color: rgb(138, 83, 0);
+	/* color: rgb(138, 83, 0); */
 	border: 2px solid;
 	border-radius: 2px;
-	background-color: transparent;
+	/* background-color: transparent; */
 	text-align: center;
+	/* margin-top: -10px; */
+	border-color: black;
 }
 
 .buttonStyle:hover {
@@ -68,7 +71,7 @@ tr {
 	width: 100%;
 	/* border: 2px solid black; */
 	/* border-radius: 2px; */
-	border-bottom: 2px solid;
+	border-bottom: 2px dotted;
 
 }
 
@@ -96,8 +99,10 @@ p {
 	font-family: "Courier New", Courier, monospace;
 	font-size: 0.8rem;
 	font-weight: bold;
-	padding: 0;
-	margin: 0;
+	/* padding: -1em; */
+	/* margin: -0.1rem; */
+	background-color: white;
+
 }
 
 h1 {
@@ -114,8 +119,27 @@ doubleContainer {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	justify-content: space-around;
+	justify-content: space-between;
 	/* background-color: #00623e; */
-	margin: 0em;
-	padding: 0em;
+	margin: 0.2rem;
+}
+
+label {
+	font-family: "Courier New", Courier, monospace;
+	font-size: 0.8rem;
+	font-weight: bold;
+	/* padding: -1em; */
+	/* margin: -0.1rem; */
+	/* background-color: white; */
+	z-index: 0;
+}
+
+input {
+	color: grey;
+	background-color: transparent;
+}
+
+button {
+	color: black;
+	background-color: #ffd5aa;
 }
