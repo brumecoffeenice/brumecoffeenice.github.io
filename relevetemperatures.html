@@ -18,44 +18,51 @@
 	<div class='parentButtonHolder'>
 		<div class='buttonHolder'>
 			<h1>Se connecter</h1>
-			<input id="emailBox" type="email" placeholder="email@email.com" autocomplete="on">
-			<input id="passwordBox" type="password" placeholder="mot de passe" autocomplete="on">
-			<button id="loadButton">Actualiser</button>
+			<input class="buttonStyle" id="emailBox" type="email" placeholder="email@email.com" autocomplete="on">
+			<input class="buttonStyle" id="passwordBox" type="password" placeholder="mot de passe" autocomplete="on">
+			<button class="buttonStyle" id="loadButton">Actualiser</button>
 		</div>
 
 		<div class='buttonHolder'>
 			<h1>Faire un relevé</h1>
-			<div>
-				<p> Frigo 1 : </p>
-				<input id="frigo1Box" type="number" placeholder="frigo1" value="3" autocomplete="off">
-			</div>
-			<div>
-				<p>Frigo 2 : </p>
-				<input id="frigo2Box" type="number" placeholder="frigo2" value="3" autocomplete="off">
-			</div>
-			<div id="congelContainer" style="display: none;">
-				<p>Congel : </p>
-				<input id="congelBox" type="number" placeholder="congel" value="-19" autocomplete="off">
-			</div>
-			<div>
-				<p>Soir / Matin : </p>
-				<input id="hourBox" value="matin">
-			</div>
-			<div>
-				<p>Date : </p>
-				<input id="dateBox" type="date" value="" autocomplete="off">
-			</div>
-			<div>
-				<p>Opérateur : </p>
-				<input id="operatorBox" type="text" value="roxane" autocomplete="off">
-			</div>
-			<button id="pushButton">Ajouter relevé</button>
+			<doubleContainer>
+				<p>Frigo 1 (°C)</p>
+				<input class="buttonStyle" id="frigo1Box" type="number" placeholder="frigo1" value="3"
+					autocomplete="off">
+			</doubleContainer>
+			<doubleContainer>
+				<p>Frigo 2 (°C)</p>
+				<input class="buttonStyle" id="frigo2Box" type="number" placeholder="frigo2" value="3"
+					autocomplete="off">
+			</doubleContainer>
+			<doubleContainer id="congelContainer" style="display: none;">
+				<p>Congel (°C)</p>
+				<input class="buttonStyle" id="congelBox" type="number" placeholder="congel" value="-19"
+					autocomplete="off">
+			</doubleContainer>
+			<doubleContainer>
+				<p>Soir / Matin</p>
+				<input class="buttonStyle" id="hourBox" value="matin">
+			</doubleContainer>
+			<doubleContainer>
+				<p>Date</p>
+				<input class="buttonStyle" id="dateBox" type="date" value="" autocomplete="off">
+			</doubleContainer>
+			<doubleContainer>
+				<p>Opérateur</p>
+				<input class="buttonStyle" id="operatorBox" type="text" value="roxane" autocomplete="off">
+			</doubleContainer>
+			<doubleContainer>
+				<p>Enregistrer</p>
+				<button class="buttonStyle" id="pushButton">Relever</button>
+			</doubleContainer>
+
 		</div>
 
 		<div class='buttonHolder'>
 			<h1>Options</h1>
-			<button id="printButton" onclick='printContent()'>Imprimer</button>
-			<button id="allowFreezer" onclick='allowFreezer()'>Mode congel</button>
+			<button class="buttonStyle" id="printButton" onclick='printContent()'>Imprimer</button>
+			<button class="buttonStyle" id="allowFreezer" onclick='allowFreezer()'>Option 1</button>
 		</div>
 	</div>
 
