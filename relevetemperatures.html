@@ -15,12 +15,6 @@
 <body>
 	<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-	<table id="data">
-		<th>
-			Vous devez entrer un email et un mot de passe pour pouvoir ajouter un relevé ou consulter l'historique.
-		</th>
-	</table>
-
 	<div class='parentButtonHolder'>
 		<div class='buttonHolder'>
 			<input class="buttonStyle" id="frigo1Box" type="number" placeholder="frigo1" autocomplete="off">
@@ -46,5 +40,12 @@
 			<button class="buttonStyle" id="printButton" onclick='printContent()'>Imprimer</button>
 		</div>
 	</div>
+
+	<table id="mainTable">
+		<th>
+			Vous devez entrer un email et un mot de passe pour pouvoir ajouter un relevé ou consulter l'historique.
+		</th>
+	</table>
+
 	<script src="relevetemperatures.js"></script>
 </body>

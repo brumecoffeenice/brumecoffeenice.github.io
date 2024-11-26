@@ -4,7 +4,7 @@ const _supabase = supabase.createClient(SupabaseUrl, SupabasePublicAnonKey)
 
 
 function showTemperatures(datas) {
-	var container = document.getElementById('data');
+	var container = document.getElementById('mainTable');
 	container.innerHTML = "";
 
 	var header = document.createElement('tr');
@@ -16,7 +16,7 @@ function showTemperatures(datas) {
 	<th>frigo 2 (°C)</th>
 	<th>congel (°C)</th>
 	<th>matin / soir</th>
-	<th>operator</th>
+	<th>operateur</th>
 	`
 
 	for (let data of datas) {
@@ -65,7 +65,6 @@ async function fetchTemperatures(username, password) {
 						if (res.error) {
 							alert(res.error.message);
 						} else {
-							console.log("temperatures chargées avec succès :)");
 							showTemperatures(res.data);
 						}
 					})
@@ -112,36 +111,24 @@ pushButton.addEventListener('click', function () {
 })
 
 function printContent() {
-	var printContents = document.getElementById('data').innerHTML;
-
-	// Create a new window for printing
 	const printWindow = window.open('', '', 'width=800,height=600');
-
-	// Write the content to the new window
 	printWindow.document.write(`
-        <html>
-        <head>
-            <title>imprimer le relevé de températures</title>
-            <link rel="stylesheet" href="relevetemperatures.css">
-        </head>
-        <body>
-            ${printContents}
-        </body>
-        </html>
-    `);
-
-	// Close the document to signal it's ready for printing
+    <html>
+    <head>
+        <title>relevé de températures</title>
+        <link id="printStylesheet" rel="stylesheet" href="relevetemperatures.css">
+    </head>
+    <body>
+        <table id='printTable'>
+    </body>
+    </html>
+`);
+	printWindow.document.getElementById('printTable').innerHTML = document.getElementById('mainTable').innerHTML;
 	printWindow.document.close();
 
 	function myprint() {
-
-		// Trigger the print dialog
 		printWindow.print();
-
-		// Optionally close the print window after printing
 		printWindow.onafterprint = () => printWindow.close();
 	}
 	setTimeout(myprint, 1000)
-
-
 }
