@@ -140,8 +140,8 @@ function printContent() {
 	printWindow.document.close();
 
 	// function myprint() {
-		printWindow.print();
-		// printWindow.onafterprint = () => printWindow.close();
+	printWindow.print();
+	printWindow.onafterprint = () => printWindow.close();
 	// }
 	// setTimeout(myprint, 100)
 }
