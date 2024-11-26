@@ -2,6 +2,8 @@ const SupabaseUrl = "https://cpvxjedlgjhcdqjyecmf.supabase.co"
 const SupabasePublicAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwdnhqZWRsZ2poY2RxanllY21mIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkyNjMzMzYsImV4cCI6MjAxNDgzOTMzNn0.Rs-bqvUb0Eq7NEKX3tFc8WHJOjzk1Rc4fgRRU6OtVNs"
 const _supabase = supabase.createClient(SupabaseUrl, SupabasePublicAnonKey)
 
+var g_allowFreezer = false;
+
 
 function showTemperatures(datas) {
 	var container = document.getElementById('mainTable');
@@ -10,14 +12,25 @@ function showTemperatures(datas) {
 	var header = document.createElement('tr');
 	container.appendChild(header);
 
-	header.innerHTML = `
-	<th>date</th>
-	<th>frigo 1 (°C)</th>
-	<th>frigo 2 (°C)</th>
-	<th>congel (°C)</th>
-	<th>matin / soir</th>
-	<th>operateur</th>
-	`
+	if (g_allowFreezer) {
+
+		header.innerHTML = `
+		<th>date</th>
+		<th>frigo 1 (°C)</th>
+		<th>frigo 2 (°C)</th>
+		<th>congel (°C)</th>
+		<th>matin / soir</th>
+		<th>operateur</th>
+		`
+	} else {
+		header.innerHTML = `
+			<th>date</th>
+			<th>frigo 1 (°C)</th>
+			<th>frigo 2 (°C)</th>
+			<th>matin / soir</th>
+			<th>operateur</th>
+			}
+	`}
 
 	for (let data of datas) {
 		var row = document.createElement('tr');
@@ -44,7 +57,8 @@ function showTemperatures(datas) {
 		row.appendChild(date);
 		row.appendChild(frigo1);
 		row.appendChild(frigo2);
-		row.appendChild(congel);
+		if (g_allowFreezer)
+			row.appendChild(congel);
 		row.appendChild(hour);
 		row.appendChild(operator);
 	}
@@ -131,4 +145,16 @@ function printContent() {
 		printWindow.onafterprint = () => printWindow.close();
 	}
 	setTimeout(myprint, 1000)
+}
+
+function allowFreezer() {
+	g_allowFreezer = !g_allowFreezer;
+
+	if (g_allowFreezer) {
+		document.getElementById("congelBox").style.display = "inline";
+	} else {
+		document.getElementById("congelBox").style.display = "none";
+	}
+
+	fetchTemperatures(emailBox.value, passwordBox.value);
 }

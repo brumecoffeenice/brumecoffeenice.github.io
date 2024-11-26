@@ -17,9 +17,10 @@
 
 	<div class='parentButtonHolder'>
 		<div class='buttonHolder'>
-			<input class="buttonStyle" id="frigo1Box" type="number" placeholder="frigo1" autocomplete="off">
-			<input class="buttonStyle" id="frigo2Box" type="number" placeholder="frigo2" autocomplete="off">
-			<input class="buttonStyle" id="congelBox" type="number" placeholder="congel" autocomplete="off">
+			<input class="buttonStyle" id="frigo1Box" type="number" placeholder="frigo1" value="3" autocomplete="off">
+			<input class="buttonStyle" id="frigo2Box" type="number" placeholder="frigo2" value="3" autocomplete="off">
+			<input class="buttonStyle" id="congelBox" type="number" placeholder="congel" value="-19" autocomplete="off"
+				style="display: none;">
 		</div>
 		<div class='buttonHolder'>
 			<input class="buttonStyle" list="matinOuSoirList" id="hourBox" value="matin">
@@ -37,6 +38,7 @@
 		<div class='buttonHolder'>
 			<button class="buttonStyle" id="pushButton">Ajouter relevé</button>
 			<button class="buttonStyle" id="loadButton">Historique</button>
+			<button class="buttonStyle" id="allowFreezer" onclick='allowFreezer()'>Ajouter un freezer</button>
 			<button class="buttonStyle" id="printButton" onclick='printContent()'>Imprimer</button>
 		</div>
 	</div>
