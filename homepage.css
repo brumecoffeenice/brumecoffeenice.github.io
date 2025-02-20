@@ -12,7 +12,7 @@ headerR {
 }
 
 .background {
-	z-index: -2;
+	z-index: -6;
 	position: fixed;
 	height: 100vh;
 	width: 100vw;
@@ -23,6 +23,7 @@ headerR {
 	background-position: left;
 	background-size: cover;
 	transform: translate3d(0px, 0px, 0px);
+	filter: brightness(1.3) saturate(0.6);
 }
 
 externalLogoR {
@@ -41,9 +42,9 @@ externalLogoC {
 
 .instaLogo {
 	height: 1cm;
-	width: auto;
+	/* width: auto;
 	margin-bottom: 0.3cm;
-	margin-bottom: 0.3cm;
+	margin-bottom: 0.3cm; */
 }
 
 .stripes {
@@ -51,9 +52,9 @@ externalLogoC {
 	background-color: #ffffff00;
 	opacity: 1;
 	/* background-image: linear-gradient(to right, #ffffff7b, #ffffff7b 10px, #ffffff49 10px, #ffffff49); */
-	background-image: linear-gradient(to right, #ffffff49, #ffffff49 10px, #ffffff7b 10px, #ffffff7b);
+	background-image: linear-gradient(to right, #ffffff00, #ffffff00 10px, #ffffff45 10px, #ffffff45);
 	background-size: 20px 100%;
-	z-index: -1;
+	z-index: -5;
 }
 
 .tshirt {
@@ -63,9 +64,12 @@ externalLogoC {
 }
 
 .linkStyle {
-	background-color: #ffede3;
+	/* background-color: #ffede3; */
 	border-radius: 10px;
 	border: 1px solid white;
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	background-color: #ffffff64;
 }
 
 a {
