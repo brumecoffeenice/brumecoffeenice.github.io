@@ -14,8 +14,8 @@ headerR {
 .background {
 	z-index: -6;
 	position: fixed;
-	height: 100vh;
-	width: 100vw;
+	height: 200vh;
+	width: 200vw;
 	top: 0;
 	left: 0;
 	pointer-events: none;
@@ -23,7 +23,7 @@ headerR {
 	background-position: left;
 	background-size: cover;
 	transform: translate3d(0px, 0px, 0px);
-	filter: brightness(1.3) saturate(0.6);
+	/* filter: brightness(1.3) saturate(0.6); */
 }
 
 externalLogoR {
@@ -66,7 +66,7 @@ externalLogoC {
 .linkStyle {
 	/* background-color: #ffede3; */
 	border-radius: 10px;
-	border: 1px solid white;
+	/* border: 1px solid white; */
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
 	background-color: #ffffff64;
