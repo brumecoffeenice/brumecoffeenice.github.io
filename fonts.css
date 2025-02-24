@@ -113,8 +113,9 @@ titlecenterR {
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
 	background-color: #ffffff64;
-	border-radius: 10px;
-	clip-path: circle(50%);
+	border-radius: 50%;
+	/* border: 1px solid black; */
+	/* clip-path: circle(50%); */
 	width: 100vw;
 	height: 100vw;
 }
@@ -133,7 +134,6 @@ logoStyle {
 	flex-shrink: 0;
 	/* padding-top: 5vh;
 	padding-bottom: 10vh; */
-	z-index: 0;
 	/* backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
 	background-color: #ffffff64;
