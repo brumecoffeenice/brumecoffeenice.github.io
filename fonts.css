@@ -91,7 +91,7 @@ buttonStyle {
 	flex-direction: column;
 	justify-content: center;
 	text-align: center;
-	color: rgb(75, 75, 75);
+	color: #4b4b4b;
 	/* font-family: 'Courier Prime'; */
 	font-family: 'Yeseva One';
 	font-weight: bolder;
@@ -119,7 +119,7 @@ titlecenterR {
 	/* -webkit-mask-image: radial-gradient(circle, black 30%, rgba(0, 0, 0, 0) 100%);
 	mask-image: radial-gradient(circle, black 30%, rgba(0, 0, 0, 0) 100%); */
 
-	background-color: #ffffff45;
+	background-color: #ffffff64;
 	border-radius: 50%;
 	/* border: 1px solid black; */
 	/* clip-path: circle(50%); */
