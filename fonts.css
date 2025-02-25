@@ -112,12 +112,21 @@ titlecenterR {
 	min-height: 0;
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
-	background-color: #ffffff64;
+
+	-webkit-mask-image: linear-gradient(black 50%, #00000000 100%);
+	mask-image: linear-gradient(black 50%, #00000000 100%);
+
+	/* -webkit-mask-image: radial-gradient(circle, black 30%, rgba(0, 0, 0, 0) 100%);
+	mask-image: radial-gradient(circle, black 30%, rgba(0, 0, 0, 0) 100%); */
+
+	background-color: #ffffff45;
 	border-radius: 50%;
 	/* border: 1px solid black; */
 	/* clip-path: circle(50%); */
 	width: 100vw;
 	height: 100vw;
+
+	/* background-image: linear-gradient(to bottom, #ffffff49 70%, #ff2200ad 100%); */
 }
 
 logoStyle {
@@ -139,4 +148,18 @@ logoStyle {
 	background-color: #ffffff64;
 	border-radius: 10px;
 	clip-path: circle(50%); */
+	z-index: -1;
+}
+
+.rectangle {
+	margin-top: -10em;
+	width: 100vw;
+	height: 30vh;
+	/* background-image: linear-gradient(to bottom, #93b2ff84 60%, #84abff00 100%); */
+	z-index: -2;
+	background-color: #8dadff7c;
+	-webkit-mask-image: linear-gradient(black 50%, #00000000 90%);
+	mask-image: linear-gradient(black 50%, #00000000 90%);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
 }
