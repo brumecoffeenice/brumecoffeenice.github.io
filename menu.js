@@ -1,6 +1,6 @@
-const SupabaseUrl = "https://cpvxjedlgjhcdqjyecmf.supabase.co"
-const SupabasePublicAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwdnhqZWRsZ2poY2RxanllY21mIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkyNjMzMzYsImV4cCI6MjAxNDgzOTMzNn0.Rs-bqvUb0Eq7NEKX3tFc8WHJOjzk1Rc4fgRRU6OtVNs"
-const _supabase = supabase.createClient(SupabaseUrl, SupabasePublicAnonKey)
+// const SupabaseUrl = "https://cpvxjedlgjhcdqjyecmf.supabase.co"
+// const SupabasePublicAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwdnhqZWRsZ2poY2RxanllY21mIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkyNjMzMzYsImV4cCI6MjAxNDgzOTMzNn0.Rs-bqvUb0Eq7NEKX3tFc8WHJOjzk1Rc4fgRRU6OtVNs"
+// const _supabase = supabase.createClient(SupabaseUrl, SupabasePublicAnonKey)
 
 var actualLanguage = 0; //0=fr, 1=en
 var tree = [];
