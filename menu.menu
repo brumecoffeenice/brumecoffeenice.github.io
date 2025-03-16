@@ -25,14 +25,11 @@
 #Ce fichier contient les éléments à mettre en forme dans le menu de Brume
 #La mise en forme des éléments est basée sur le niveau de chaque élément
 #Le niveau d'un élément est déduit du nombre de délimiteurs "_" avant lui. (appelé 'delimiter0')
-#Chaque élément est séparé de sa traduction facultative et d'un hyperlien par des délimiteurs "@" facultatif lui aussi. (appelé 'delimiter1')
+#Chaque élément est séparé de sa traduction facultative par un délimiteur "@" facultatif lui aussi. (appelé 'delimiter1')
 #Les espaces directement avant et après un délimiteur sont éliminés. Donc : "bonjour monde @ hello world" est équivalent à "bonjour monde@hello world"
 #La première ligne spécifie le niveau en fonction du nombre de delimiter0. Elle est appelée 'header0' (spécifie les niveaux)
 #La deuxième ligne spécifie le niveau en fonction du nombre de delimiter1. Elle est appelée 'header1' (spécifie les langues)
 #Les lignes vides ou commençant par "#" sont ignorées
-#Vous pouvez créer des blocs spéciaux dont les noms commencent par "!" ou >
-#"!" crée un bloc dont le nom ne sera pas afiché
-#">" spécifie l'ID HTML de l'élément dans lequel ajouter le contenu mis en forme
 #Note : Le prix possède lui aussi une traduction facultative. Si elle est spécifiée, le prix diffèrera selon la langue...
 
 #This is a menuFile. It has been specially designed to simplify the storage of restaurant menus for automatic layout.
@@ -73,30 +70,24 @@
 #bloc _ categorie _ produit _ prix _ description _ commentaire
 
 ########## header1 ##########
-#français @ english @ hyperlien
+#français @ english
 
-
-
-#bloc spécial à destination d'un div. Le nom n'est pas affiché
+#bloc spécial dont le nom n'est pas affiché
 >introBox
 _____ Merci de faire votre commande au comptoir. @ Please place order at the counter.
-_____ 🧡
+_____ ♡
 _____ Toutes nos recettes sont faites maison sur place, nos produits sont de saison et nos fruits et légumes sont locaux. @ All our recipes are homemade, our products are seasonal and our fruits and vegetables are local.
 
-
-
+#bloc spécial à destination d'un div. Le nom n'est pas affiché
 >reviewBox
-_____ Cher(e) client(e) @ Dear customer
-_____ Si tu aimes notre petit café, n'hésite pas à nous laisser un @ If you like our little café, do not hesitate to leave us a
-_____ 🔗 avis Google 🔗 @ 🔗 review on Google 🔗 @ https://g.page/r/CWCRh8LAA1GOEAE/review
-_____ Cela nous aide beaucoup !@ It helps us a lot !
-_____ Roxane & Emilia
-_____ 🧡
+#_____ ♡♡♡♡♡♡♡♡
+_____ Cher client, si tu aimes notre cuisines, est ce qu'il serait possible que tu laisses un avis google à notre café ? Cela nous aide beaucoup. Roxane & Emilia @ Dear customer, if you like our cuisine, would it be possible for you to leave a google review at our café? It helps us a lot. Roxane & Emilia
+_____ ♡ Laisser un avis ♡ @ ♡ Leave a review ♡ @ https://g.page/r/CWCRh8LAA1GOEAE/review
+#_____ ♡♡♡♡♡♡♡♡
 
 
-
+#bloc classique créé avec un nom
 Boissons @ Drinks
-
 
 _ Barista
 
@@ -127,7 +118,7 @@ __ Supplément lait d’avoine & lait d’amande @ Almond or oat milk extra _ 0.
 
 _ Nos tasses @ Our cups
 
-_____ Servis chaudes ou glacées @ Served hot or iced
+_____ Servis chauds ou glacés @ Served hot or iced
 
 __ Thé vert ou noir @ Green or black tea _ 4.5 _ De chez « l’autre thé », bio @ From « l’autre thé », organic
 
@@ -162,7 +153,6 @@ __ Jus pomme-carotte-gingembre @ Juice apple-carrot-ginger _ 5.5 _ Pressé minut
 
 Plats et desserts @ Dishes and desserts
 
-
 _ Toute la journée @ All day
 
 _____ Non servis sur notre terrasse @ Not available on our terrace
@@ -171,11 +161,14 @@ __ Les scones sucrés @ Sweet scones _ 6 _ Deux scones, servis avec de la crème
 
 __ Les œufs à la coque @ Boiled eggs _ 7.5 _ Deux oeufs bios à la coque, beurre demi-sel mouillettes de pain de campagne de chez Mama Baker @ Two organic eggs, butter, country bread from Mama Baker
 
-__ Granola de saison @ Seasonal Granola _ 8.5 _ Yaourt grec, granola maison, fruits de saison, sirop d’érable @ Greek yogurt, homemade granola, seasonal fruits, maple syrup
+__ Granola de saison @ Seasonal Granola _ 7.5 _ Yaourt grec, granola maison, fruits de saison, sirop d’érable @ Greek yogurt, homemade granola, seasonal fruits, maple syrup
 
 __ Les scones salés @ Salty scones _ 8.5 _ Deux scones, chèvre frais, ciboulette, bouquet de mâche @ Two scones, fresh goat cheese, chive, lamb's lettuce
 
-__ Brioche toastée @ Toasted brioche _ 10.5 _ Brioche Nanterre toastée, crème de châtaigne, poires rôties à la vanille, quenelle de crème d'isigny, oranges, éclats de pistaches, sirop d'érable @ Toasted Nanterre brioche, chestnut cream, roasted pears with vanilla, isigny cream quenelle, oranges, pistachio slivers, maple syrup
+#__ Brioche toastée @ Toasted brioche _ 10.5 _ Brioche Nanterre toastée, crème de châtaigne, quenelle de crème s'Isigny, abricots rôtis, fraises, éclats de pistache @ Toasted Nanterre brioche, chestnut cream, Isigny cream quenelle, roasted apricots, strawberries, pistachio slivers.
+
+__ Brioche toastée @ Toasted brioche _ 10.5 _ Brioche Nanterre toastée, crème de châtaignes, crème d'isigny, prunes et figues rôties éclats de pistache @ Toasted Nanterre brioche, chestnut cream, isigny cream, roasted plums and figs, pistachio slivers
+
 
 _ Déjeuner @ Lunch
 
@@ -185,24 +178,15 @@ _____ À partir de 12H00 jusqu’à 14H30; non servis sur notre terrasse @ From 
 
 #__ Tartine d'août _ 16 _ Toast de pain au levain, burrata des Pouilles, prunes et figues rôties, basilic frais, pistaches @ Toast of sourdough bread, Pugliese burrata, roasted plums and figs, fresh basil, pistachios
 
-#__ Borani banjan @ Borani banjan _ 15.5 _ Yaourt grec, aubergines rôties à l'afghane, tomates rôties au cumin et à la cardamone, coriandre et menthe fraiche, toast de pain au levain de chez Mama Baker @ Greek yogurt, Afghan roasted eggplant, roasted tomatoes with cumin and cardamom, coriander and fresh mint, toasted sourdough bread from Mama Baker
+__ Borani banjan @ Borani banjan _ 15.5 _ Yaourt grec, aubergines rôties à l'afghane, tomates rôties au cumin et à la cardamone, coriandre et menthe fraiche, toast de pain au levain de chez Mama Baker @ Greek yogurt, Afghan roasted eggplant, roasted tomatoes with cumin and cardamom, coriander and fresh mint, toasted sourdough bread from Mama Baker
 
 #__ La tartine chèvre-tomates @ Goat's cheese and tomato tartine _ 15.5 _ Toast de pain au levain de chez Mama Baker, chèvre frais, tomates cocktails rôties aux graines de cumin, zaatar, ciboulette, huile d'olive et fleur de sel @ Toast of Mama Baker sourdough bread, fresh goat cheese, roasted cocktail tomatoes with cumin seeds, zaatar, chives, olive oil and fleur de sel
 
 #__ La tartine melon d'automne @ Autumn melon tartine _ 15.5_ Toast de pain au levain by mama Baker, brousse de brebis, basilic et verveine fraîche, melon, raisin rôtis, olives taggiasche, bouquet de mâche, sirop de prunes, sésame, huile d'olive, poivre et fleur de sel @ Toast of sourdough bread by mama Baker, ewe's milk cheese, basil and fresh verbena, melon, roasted grapes, taggiasche olives, bouquet of lamb's lettuce, plum syrup, sesame, olive oil, pepper and fleur de sel
 
-# __ La tartine d'octobre @ october tartine _ 16 _ Toast de pain au levain, burrata des Pouilles, prunes et figues rôties, basilic frais, pistaches @ Toast of sourdough bread, Pugliese burrata, roasted plums and figs, fresh basil, pistachios
+__ La tartine de septembre @ september tartine _ 16 _ Toast de pain au levain, burrata des Pouilles, prunes et figues rôties, basilic frais, pistaches @ Toast of sourdough bread, Pugliese burrata, roasted plums and figs, fresh basil, pistachios
 
-__ Tartine d'hiver @ Winter tartine _ 16 _ Toast de pain au levain by Mama Baker, poêlée de champignons, burrata des Pouilles, bouquet de mâche, ciboulette, poivre 5 baies, huile d'Olive et fleur de sel @ Toast of sourdough bread by Mama Baker, pan-fried mushrooms, Apulian burrata, bouquet of lamb's lettuce, chives, 5-berry pepper, olive oil and fleur de sel
-
-# __ Pumpkin tartine _ 16 _ Toast de pain au levain de chez mama Baker, potimarrons rôtis, burratina fumée, raisins rôtis, olives taggiasche, bouquet de mâche, huile d'olive, sirop d'érable, basilic et fleur de sel @ Toast of sourdough bread from mama Baker's, roasted pumpkin, smoked burratina, roasted grapes, taggiasche olives, lamb's lettuce, olive oil, maple syrup, basil and fleur de sel.
-
-__ Brume d'hiver _ 15.5 _ Yaourt grecque à l'aneth, potimarron rôtis à l'orange, fines tranches de betteraves, pistaches concassées, olives taggiasche, gorgonzola, huile d'olive, tranche de pain norvégien @ Greek yoghurt with dill, roasted pumpkin with orange, thin slices of beetroot, crushed pistachios, taggiasche olives, gorgonzola, olive oil, slice of Norwegian bread
-
-__ Jacket sweet potatoe _15.5_Patate douce rôtie dans sa peau, yaourt grecque aux herbes, coriandre, menthe fraîche et aneth, fêta, bouquet de mâche, olives taggiasche, zaatar, huile d'olive citronnée @ Sweet potato roasted in its skin, Greek yogurt with herbs, coriander, fresh mint and dill, feta, lamb's lettuce, taggiasche olives, zaatar, lemon olive oil
-
-__ Brume's pot _ 16 _ Ragoût tomaté lié au parmesan, pâtes fregola, mogettes de Vendée, butternut, stracciatella, éclats de pistache, olives taggiasche, toast de pain norvégien by Mama Baker @ Tomato ragout with parmesan, fregola pasta, Vendée mogettes, butternut, stracciatella, pistachio slivers, taggiasche olives, Norwegian bread toast by Mama Baker
-
+__ Pumpkin tartine @ Pumpkin tartine _ 16 _ Toast de pain au levain de chez mama Baker, potimarron rôtis, burratina fumée, raisins rôtis, olives taggiasche, bouquet de mâche, huile d'olive, sirop d'érable, basilic et fleur de sel @ Toast of sourdough bread from mama Baker's, roasted pumpkin, smoked burratina, roasted grapes, taggiasche olives, lamb's lettuce, olive oil, maple syrup, basil and fleur de sel.
 
 _ Pâtisseries @ Pastries
 
@@ -211,7 +195,6 @@ _____ À découvrir au comptoir… @ To discover at the counter…
 
 
 Épicerie @ Grocery
-
 
 _ Sachets de café pour espresso @ Coffee bags for espresso
 
@@ -242,4 +225,3 @@ _____ À découvrir sur l'étagère @ To discover on the shelf
 _ Livres @ Books
 
 __ Monocle _ 48
-____ 🔗 Monocle.com @ @ https://monocle.com/
