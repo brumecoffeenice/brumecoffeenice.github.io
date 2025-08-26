@@ -99,7 +99,9 @@ buttonStyle {
 	min-height: 0;
 	margin-left: 0.3em;
 	margin-right: 0.3em;
-	padding: 0.1em;
+	padding: 0.3em;
+	border-radius: 1000px;
+	border: 2px solid rgb(84, 84, 84);
 }
 
 titleCirclecontainer {

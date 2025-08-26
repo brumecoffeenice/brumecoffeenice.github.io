@@ -3,14 +3,15 @@ function createCustomElement(element, type, containerType) {
 	var newElement = document.createElement(type);
 	var container = document.createElement(containerType);
 	var aBox;
+	var newElement = document.createElement(type);
 	if (element.link) {
 		aBox = document.createElement('a');
 		aBox.href = element.link;
 		container.appendChild(aBox);
 		// container.appendChild(newElement);
 		aBox.appendChild(newElement);
+		aBox.classList.add('linkStyle');
 		newElement.textContent = element.texts[actualLanguage];
-		newElement.classList.add('linkStyle');
 	} else {
 		aBox = document.createElement('a');
 		aBox.href = element.link;

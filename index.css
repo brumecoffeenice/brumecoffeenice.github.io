@@ -11,6 +11,14 @@ blocR {
 	justify-content: center;
 }
 
+blocVrac {
+	margin-top: 0.3cm;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	flex-wrap: wrap;
+}
+
 bloc {
 	display: flex;
 	flex-direction: column;

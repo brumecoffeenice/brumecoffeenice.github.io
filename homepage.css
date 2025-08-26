@@ -65,15 +65,26 @@ externalLogoC {
 
 .linkStyle {
 	/* background-color: #ffede3; */
-	border-radius: 10px;
-	/* border: 1px solid white; */
+	border: 2px solid rgb(155, 155, 155);
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
 	background-color: #ffffff64;
+	/* padding: 0.2em; */
+	align-items: center;
+	text-align: center;
+	vertical-align: auto;
+	/* height: 20px; */
+	text-decoration: underline;
+	text-decoration-color: rgb(108, 108, 108);
+	border-radius: 1000px;
+	padding: 0.3em;
 }
 
 a {
 	text-decoration: none;
+	display: block;
+	margin-top: 1em;
+	margin-bottom: 1em;
 }
 
 .selectedLinkStyle {
@@ -81,4 +92,25 @@ a {
 	text-decoration: underline;
 	/* font-family: 'Caprasimo', cursive; */
 	/* text-transform: uppercase; */
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	background-color: #ffffff64;
+
+}
+
+button {
+	border: 2px solid rgb(155, 155, 155);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	background-color: #ffffff64;
+	/* padding: 0.2em; */
+	align-items: center;
+	text-align: center;
+	vertical-align: auto;
+	/* height: 20px; */
+	text-decoration: underline;
+	text-decoration-color: rgb(108, 108, 108);
+	border-radius: 1000px;
+	border-color: rgb(108, 108, 108);
+	padding: 0.3em;
 }
