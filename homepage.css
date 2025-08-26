@@ -52,7 +52,7 @@ externalLogoC {
 	background-color: #ffffff00;
 	opacity: 1;
 	/* background-image: linear-gradient(to right, #ffffff7b, #ffffff7b 10px, #ffffff49 10px, #ffffff49); */
-	background-image: linear-gradient(to right, #ffffff00, #ffffff00 10px, #ffffff2a 10px, #ffffff2a);
+	background-image: linear-gradient(to right, #ffffff4b, #ffffff4b 10px, #ffffff7b 10px, #ffffff7b);
 	background-size: 20px 100%;
 	z-index: -5;
 }
