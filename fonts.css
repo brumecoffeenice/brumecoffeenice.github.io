@@ -161,8 +161,8 @@ titlecenterR2 {
 logoStyle1 {
 	font-size: 100%;
 	margin-bottom: -0.1em;
-	text-decoration: underline overline wavy #4d4d4d 2px;
-	text-underline-offset: 0.5em;
+	/* text-decoration: underline overline wavy #4d4d4d 2px;
+	text-underline-offset: 0.5em; */
 }
 
 logoStyle2 {
