@@ -7,7 +7,7 @@ headerR {
 	display: flex;
 	flex-direction: row;
 	justify-content: left;
-	padding-bottom: 10vh;
+	padding-bottom: 2vh;
 	padding-top: 1em;
 }
 
