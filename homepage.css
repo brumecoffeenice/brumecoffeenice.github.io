@@ -121,3 +121,13 @@ button {
 	border-color: rgb(108, 108, 108);
 	padding: 0.3em;
 }
+
+train {
+	font: 'courier prime';
+	font-size: 100%;
+	width: 50em;
+	white-space: pre;
+	font-family: "Courier New", Courier, monospace;
+	font-size: 1rem;
+	letter-spacing: 0px;
+}

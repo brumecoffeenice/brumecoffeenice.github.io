@@ -30,6 +30,16 @@
 			</a>
 		</headerR>
 
+		<!-- <train id="train"></train> -->
+		<blocC>
+			<train id="train0"></train>
+			<train id="train1"></train>
+			<train id="train2"></train>
+			<train id="train3"></train>
+			<train id="train4"></train>
+			<train id="train5"></train>
+		</blocC>
+
 		<bloc>
 			<blocC>
 				<blocR>
@@ -49,10 +59,57 @@
 						avec le server qui stocke le menu</buttonStyle>
 				</a>
 				<a href="https://github.com/simon-ameye">
-					<buttonStyle class="linkStyle">Lien vers le GitHub du gars qui a fait ce site, contacte le si tu veux le même pour ton resto</buttonStyle>
+					<buttonStyle>Lien vers le GitHub du gars qui a fait ce site, contacte le si tu veux le même pour ton
+						resto</buttonStyle>
 				</a>
 			</blocC>
 		</bloc>
 	</div>
+	<script>
+		async function startTrain() {
+			// Load ASCII art train from txt file
+			const response = await fetch("train.txt");
+			const text = await response.text();
+
+			// Ensure no trailing empty lines
+			const lines = text.split("\n");
+
+			const width = 70; // visible window width (same as CSS width)
+			let offset = 0;
+
+			function render() {
+				padded0 = " ".repeat(width) + lines[0] + " ".repeat(width)
+				padded1 = " ".repeat(width) + lines[1] + " ".repeat(width)
+				padded2 = " ".repeat(width) + lines[2] + " ".repeat(width)
+				padded3 = " ".repeat(width) + lines[3] + " ".repeat(width)
+				padded4 = " ".repeat(width) + lines[4] + " ".repeat(width)
+				padded5 = " ".repeat(width) + lines[5] + " ".repeat(width)
+				frame0 = padded0.substring(offset, offset + width);
+				frame1 = padded1.substring(offset, offset + width);
+				frame2 = padded2.substring(offset, offset + width);
+				frame3 = padded3.substring(offset, offset + width);
+				frame4 = padded4.substring(offset, offset + width);
+				frame5 = padded5.substring(offset, offset + width);
+
+				document.getElementById("train0").textContent = frame0;
+				document.getElementById("train1").textContent = frame1;
+				document.getElementById("train2").textContent = frame2;
+				document.getElementById("train3").textContent = frame3;
+				document.getElementById("train4").textContent = frame4;
+				document.getElementById("train5").textContent = frame5;
+
+				offset++;
+				// Reset when end of train reached
+				if (offset > padded0.length) {
+					offset = 0;
+				}
+			}
+
+			// Refresh every 100ms
+			setInterval(render, 200);
+		}
+
+		startTrain();
+	</script>
 
 </body>
