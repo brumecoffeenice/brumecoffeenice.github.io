@@ -1,25 +1,26 @@
 
 // fetched from database
-async function fetcher() {
-	// ************** from supabase **************
-	let { data, error } = await _supabase
-		.from('menu.menu')
-		.select('content')
-		.limit(1)
-		.order("id", { ascending: false })
+async function fetcher(menulocal) {
+	if (menulocal == 1) {
+		// ************** from text file **************
+		let response = await fetch('menu.menu');
+		let text = await response.text();
+		return text;
+	} else {
+		// ************** from supabase **************
+		let { data, error } = await _supabase
+			.from('menu.menu')
+			.select('content')
+			.limit(1)
+			.order("id", { ascending: false })
 
-	if (error) {
-		console.error("fetch error", error);
-		throw error;
+		if (error) {
+			console.error("fetch error", error);
+			throw error;
+		}
+		text = data[0].content;
+		return text;
 	}
-	text = data[0].content;
-
-	// ************** from text file **************
-	// let response = await fetch('menu.menu');
-	// let text = await response.text();
-
-	// **************                 **************
-	return text;
 }
 
 // lexes tokens
@@ -119,8 +120,8 @@ function getTree(tokens) {
 	return tree;
 }
 
-async function fetchToTree() {
-	var text = await fetcher();
+async function fetchToTree(menulocal) {
+	var text = await fetcher(menulocal);
 
 	var tokens = getTokens(text);
 	tokens = setTreeLevels(tokens);

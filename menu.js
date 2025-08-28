@@ -41,7 +41,14 @@ function displayReviewBox() {
 }
 
 async function main() {
-	tree = await fetchToTree();
+	hash = window.location.hash.replace("#", "");
+	var menulocal = 0;  // If 1, local menu will be used instead of online database
+	if (hash === "menulocal") {
+		menulocal = 1;
+		alert("Attention, vous utilisez le menu local. Il risque de ne pas être à jour.");
+	}
+
+	tree = await fetchToTree(menulocal);
 	treeToElements(tree);
 	showLanguageMenu();
 }

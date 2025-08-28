@@ -55,6 +55,7 @@ externalLogoC {
 	background-image: linear-gradient(to right, #ffffff7e, #ffffff7e 10px, #ffffff9d 10px, #ffffff9d);
 	background-size: 20px 100%;
 	z-index: -5;
+	min-height: 100vh;
 }
 
 .tshirt {
