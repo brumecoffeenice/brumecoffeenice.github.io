@@ -1,0 +1,21 @@
+:root {
+	/* Global color palette */
+	--color-bg: #ffede3;
+	--color-stripe1: #ffffff7e;
+	--color-stripe2: #ffffff9d;
+	--color-border1: #545454; /*linkStyle and button border*/
+	--color-border2: #545454; /*buttonStyle border*/
+	--color-bg0: #fff3e4; /*menu bloc bg*/
+	--color-bg1: #ffe9ce; /*linkStyle and button bg*/
+	--color-bg2: #ffd6a3; /*selected linkStyle lighter bg*/
+	--color-underline1: #ffe9ce;
+	--color-font1: #585858; /*menu font*/
+	--color-font2: #f1b061; /*categorie font*/
+	--color-font3: #dca057; /*produit font*/
+	--color-font4: #2e2e2e; /*prix font*/
+	--color-font5: #2e2e2e; /*description font*/
+	--color-font6: #575757; /*commentaires*/
+	--color-font7: #ff0000; /*error font*/
+	--color-font8: #494949; /*button font*/
+	--color-logo1: #f1b061; /*logo font*/
+}

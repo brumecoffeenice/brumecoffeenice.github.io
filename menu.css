@@ -35,7 +35,7 @@ mainR {
 	flex-direction: row;
 	justify-content: flex-start;
 	/* background-color: #ffede3; */
-	background-color: #ffffff6d;
+	background-color: var(--color-bg0);
 	border-radius: 10px;
 	padding-top: 1em;
 	padding-bottom: 1em;
