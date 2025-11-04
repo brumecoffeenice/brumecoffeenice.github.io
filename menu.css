@@ -41,6 +41,7 @@ mainR {
 	padding-bottom: 1em;
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
+	border : solid var(--color-mainr-border);
 }
 
 mainr:first-child {
@@ -94,4 +95,8 @@ dialog::backdrop {
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
 	height: 140vh;
+}
+
+.reviewBox{
+	background-color: var(--color-review-box-bg);
 }

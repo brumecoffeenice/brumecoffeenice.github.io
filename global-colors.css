@@ -3,19 +3,81 @@
 	--color-bg: #ffede3;
 	--color-stripe1: #ffffff7e;
 	--color-stripe2: #ffffff9d;
-	--color-border1: #545454; /*linkStyle and button border*/
-	--color-border2: #545454; /*buttonStyle border*/
-	--color-bg0: #fff3e4; /*menu bloc bg*/
-	--color-bg1: #ffe9ce; /*linkStyle and button bg*/
-	--color-bg2: #ffd6a3; /*selected linkStyle lighter bg*/
+	--color-border1: #545454;
+	/*linkStyle and button border*/
+	--color-border2: #545454;
+	/*buttonStyle border*/
+	--color-bg0: #fff3e4;
+	/*menu bloc bg*/
+	--color-bg1: #ffe9ce;
+	/*linkStyle and button bg*/
+	--color-bg2: #ffd6a3;
+	/*selected linkStyle lighter bg*/
 	--color-underline1: #ffe9ce;
-	--color-font1: #585858; /*menu font*/
-	--color-font2: #f1b061; /*categorie font*/
-	--color-font3: #dca057; /*produit font*/
-	--color-font4: #575757; /*prix font*/
-	--color-font5: #2e2e2e; /*description font*/
-	--color-font6: #575757; /*commentaires*/
-	--color-font7: #ff0000; /*error font*/
-	--color-font8: #494949; /*button font*/
-	--color-logo1: #f1b061; /*logo font*/
+	--color-font1: #585858;
+	/*menu font*/
+	--color-font2: #f1b061;
+	/*categorie font*/
+	--color-font3: #dca057;
+	/*produit font*/
+	--color-font4: #575757;
+	/*prix font*/
+	--color-font5: #2e2e2e;
+	/*description font*/
+	--color-font6: #575757;
+	/*commentaires*/
+	--color-font7: #ff0000;
+	/*error font*/
+	--color-font8: #494949;
+	/*button font*/
+	--color-logo1: #f1b061;
+	/*logo font*/
+	--color-mainr-border: #ffffff00;
+	/*main r border*/
+	--color-brume-circle-fade1: rgb(0, 0, 0);
+	--color-brume-circle-fade2: rgba(0, 0, 0, 0);
+	--color-brume-circle-bg: #ffffff71;
+	--color-review-box-bg: rgb(255, 255, 255);
+}
+
+:root[data-theme="black"] {
+	/* Global color palette */
+	--color-bg: #000000;
+	--color-stripe1: #000000;
+	--color-stripe2: #000000;
+	--color-border1: #ffffff;
+	/*linkStyle and button border*/
+	--color-border2: #ffffff;
+	/*buttonStyle border*/
+	--color-bg0: #000000;
+	/*menu bloc bg*/
+	--color-bg1: #000000;
+	/*linkStyle and button bg*/
+	--color-bg2: #000000;
+	/*selected linkStyle lighter bg*/
+	--color-underline1: #ffffff;
+	--color-font1: #ffffff;
+	/*menu font*/
+	--color-font2: #ffffff;
+	/*categorie font*/
+	--color-font3: #ffffff;
+	/*produit font*/
+	--color-font4: #ffffff;
+	/*prix font*/
+	--color-font5: #ffffff;
+	/*description font*/
+	--color-font6: #ffffff;
+	/*commentaires*/
+	--color-font7: #ff0000;
+	/*error font*/
+	--color-font8: #ffffff;
+	/*button font*/
+	--color-logo1: #ffffff;
+	/*logo font*/
+	--color-mainr-border: #ffffff;
+	/*main r border*/
+	--color-brume-circle-fade1: rgb(0, 0, 0);
+	--color-brume-circle-fade2: rgba(0, 0, 0, 0);
+	--color-brume-circle-bg: rgb(0, 0, 0);
+	--color-review-box-bg: rgb(0, 0, 0);
 }

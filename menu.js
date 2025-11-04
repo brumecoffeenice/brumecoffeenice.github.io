@@ -48,6 +48,11 @@ async function main() {
 		alert("Attention, vous utilisez le menu local. Il risque de ne pas être à jour.");
 	}
 
+	if (hash === "black") {
+		document.documentElement.setAttribute("data-theme", "black");
+	}
+
+
 	tree = await fetchToTree(menulocal);
 	treeToElements(tree);
 	showLanguageMenu();

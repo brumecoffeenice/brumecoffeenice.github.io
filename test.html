@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Best-of-Best Procedural Rust (CSS + SVG)</title>
+	<style>
+		/* -------- knobs you can tweak -------- */
+		:root {
+			--rust-dark: #342017;
+			--rust-mid: #864621;
+			--rust-light: #c96a2e;
+			--hotspot: rgba(255, 215, 140, .16);
+			--vignette: rgba(0, 0, 0, .55);
+
+			/* pixel noise size on screen (≈1–2px specks) */
+			--px-tile: 7px;
+
+			/* de-sync the repeated layers so seams never line up */
+			--pitsA-size: 287px 197px;
+			--pitsA-pos: 113px 71px;
+			--pitsB-size: 331px 223px;
+			--pitsB-pos: 41px -29px;
+			--pitsC-size: 403px 263px;
+			--pitsC-pos: -57px 19px;
+
+			--meso-size: 611px 467px;
+			--meso-pos: 83px 19px;
+			/* islands */
+			--macro-size: 983px 887px;
+			/* giant blotches */
+		}
+
+		/* ---------- demo frame (remove in production) ---------- */
+		html,
+		body {
+			height: 100%;
+			margin: 0;
+			background: #0f1011;
+			display: grid;
+			place-items: center;
+			font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Arial, sans-serif;
+			color: #ddd
+		}
+
+		.panel {
+			width: min(92vw, 1120px);
+			aspect-ratio: 16/9;
+			border-radius: 18px;
+			overflow: hidden;
+			box-shadow: inset 0 22px 60px rgba(0, 0, 0, .45), inset 0 -22px 60px rgba(0, 0, 0, .45), 0 16px 48px rgba(0, 0, 0, .55);
+		}
+
+		/* ===================== R U S T ===================== */
+		.panel {
+			/* TOP → BOTTOM layers */
+			background-image:
+
+				/* 1) SUB-PIXEL film noise (faints, breaks banding) */
+				url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cfilter id='film' x='-0.2' y='-0.2' width='1.4' height='1.4' filterUnits='objectBoundingBox' color-interpolation-filters='sRGB' filterRes='640 640'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='4.6' numOctaves='2' seed='97' stitchTiles='stitch'/%3E%3CfeColorMatrix type='luminanceToAlpha'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 0 .05 .10 .18'/%3E%3C/feComponentTransfer%3E%3CfeFlood flood-color='%23ffffff' flood-opacity='.07'/%3E%3CfeComposite operator='in' in2='SourceGraphic'/%3E%3C/filter%3E%3Crect width='64' height='64' fill='%23000' fill-opacity='0' filter='url(%23film)' shape-rendering='crispEdges'/%3E%3C/svg%3E"),
+
+				/* 2) PIXEL-SCALE micrograin (true 1–2px specks) */
+				url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cfilter id='px' x='-0.2' y='-0.2' width='1.4' height='1.4' filterUnits='objectBoundingBox' color-interpolation-filters='sRGB' filterRes='512 512'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='3.0' numOctaves='1' seed='13' stitchTiles='stitch' result='n'/%3E%3CfeColorMatrix in='n' type='luminanceToAlpha' result='a'/%3E%3CfeComponentTransfer in='a'%3E%3CfeFuncA type='discrete' tableValues='0 0 0 0 0 1'/%3E%3C/feComponentTransfer%3E%3CfeMorphology operator='dilate' radius='.30' result='d'/%3E%3CfeFlood flood-color='%23884a26' flood-opacity='.30'/%3E%3CfeComposite operator='in' in2='d'/%3E%3C/filter%3E%3Crect width='64' height='64' fill='%23000' fill-opacity='0' filter='url(%23px)' shape-rendering='crispEdges'/%3E%3C/svg%3E"),
+
+				/* 3) PITS A — medium dots + soft halos (seed 7) */
+				url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='220'%3E%3Cfilter id='p' x='-0.18' y='-0.18' width='1.36' height='1.36' filterUnits='objectBoundingBox' color-interpolation-filters='sRGB' filterRes='1440 880'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.22' numOctaves='1' seed='7' stitchTiles='stitch' result='n'/%3E%3CfeColorMatrix in='n' type='luminanceToAlpha' result='a'/%3E%3CfeComponentTransfer in='a' result='m'%3E%3CfeFuncA type='table' tableValues='0 0 0 0 0 0 0 1 1 1'/%3E%3C/feComponentTransfer%3E%3CfeMorphology operator='dilate' radius='.65' result='dots'/%3E%3CfeFlood flood-color='%23241108' result='c1'/%3E%3CfeComposite in='c1' in2='dots' operator='in' result='pits'/%3E%3CfeGaussianBlur in='dots' stdDeviation='.9' result='blur'/%3E%3CfeFlood flood-color='%23b65a28' flood-opacity='.42' result='c2'/%3E%3CfeComposite in='c2' in2='blur' operator='in' result='halo'/%3E%3CfeMerge%3E%3CfeMergeNode in='halo'/%3E%3CfeMergeNode in='pits'/%3E%3C/feMerge%3E%3C/filter%3E%3Cg transform='rotate(-8 180 110)'%3E%3Crect width=' 100%25' height=' 100%25' fill=' %23000' fill-opacity=' 0' filter=' url(%23p)'/%3E%3C/g%3E%3C/svg%3E"),
+
+				/* 4) PITS B — denser, different seed (breaks pattern) */
+				url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='340' height='210'%3E%3Cfilter id='p' x='-0.18' y='-0.18' width='1.36' height='1.36' filterUnits='objectBoundingBox' color-interpolation-filters='sRGB' filterRes='1360 840'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.25' numOctaves='1' seed='29' stitchTiles='stitch' result='n'/%3E%3CfeColorMatrix in='n' type='luminanceToAlpha' result='a'/%3E%3CfeComponentTransfer in='a'%3E%3CfeFuncA type='table' tableValues='0 0 0 0 0 0 0 1 1 1'/%3E%3C/feComponentTransfer%3E%3CfeMorphology operator='dilate' radius='.50' result='dots'/%3E%3CfeFlood flood-color='%23241108'/%3E%3CfeComposite operator='in' in2='dots'/%3E%3C/filter%3E%3Cg transform='rotate(9 170 105)'%3E%3Crect width=' 100%25' height=' 100%25' fill=' %23000' fill-opacity=' 0' filter=' url(%23p)'/%3E%3C/g%3E%3C/svg%3E"),
+
+				/* 5) PITS C — rare big pits (macro craters) */
+				url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='260'%3E%3Cfilter id='p' x='-0.20' y='-0.20' width='1.40' height='1.40' filterUnits='objectBoundingBox' color-interpolation-filters='sRGB' filterRes='1260 780'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.13' numOctaves='1' seed='51' stitchTiles='stitch' result='n'/%3E%3CfeColorMatrix in='n' type='luminanceToAlpha' result='a'/%3E%3CfeComponentTransfer in='a'%3E%3CfeFuncA type='table' tableValues='0 0 0 0 0 0 0 0 1 1'/%3E%3C/feComponentTransfer%3E%3CfeMorphology operator='dilate' radius='1.15' result='dots'/%3E%3CfeFlood flood-color='%23241108'/%3E%3CfeComposite operator='in' in2='dots'/%3E%3C/filter%3E%3Cg transform='rotate(13 210 130)'%3E%3Crect width=' 100%25' height=' 100%25' fill=' %23000' fill-opacity=' 0' filter=' url(%23p)'/%3E%3C/g%3E%3C/svg%3E"),
+
+				/* 6) MESO islands (soft corrosion fields) */
+				url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='460'%3E%3Cfilter id='m' x='-0.14' y='-0.14' width='1.28' height='1.28' filterUnits='objectBoundingBox' color-interpolation-filters='sRGB' filterRes='1920 1380'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.30' numOctaves='2' seed='19' stitchTiles='stitch' result='n'/%3E%3CfeColorMatrix in='n' type='luminanceToAlpha' result='a'/%3E%3CfeComponentTransfer in='a'%3E%3CfeFuncA type='table' tableValues='0 0 .12 .42 .80 1'/%3E%3C/feComponentTransfer%3E%3CfeFlood flood-color='%23a95528' flood-opacity='.86'/%3E%3CfeComposite operator='in' in2='SourceGraphic'/%3E%3C/filter%3E%3Crect width='640' height='460' fill='%23000' fill-opacity='0' filter='url(%23m)'/%3E%3C/svg%3E"),
+
+				/* 7) MACRO blotches (huge shapes; very faint) */
+				url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='B' x='-0.12' y='-0.12' width='1.24' height='1.24' filterUnits='objectBoundingBox' color-interpolation-filters='sRGB' filterRes='1800 1800'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.18' numOctaves='3' seed='8' stitchTiles='stitch' result='n'/%3E%3CfeColorMatrix in='n' type='luminanceToAlpha' result='a'/%3E%3CfeComponentTransfer in='a'%3E%3CfeFuncA type='table' tableValues='0 0 .08 .28 .60 1'/%3E%3C/feComponentTransfer%3E%3CfeFlood flood-color='%23a95528' flood-opacity='.70'/%3E%3CfeComposite operator='in' in2='SourceGraphic'/%3E%3C/filter%3E%3Crect width='900' height='900' fill='%23000' fill-opacity='0' filter='url(%23B)'/%3E%3C/svg%3E"),
+
+				/* 8) lighting: hotspot + vignette */
+				radial-gradient(120% 120% at 78% 70%, var(--hotspot), rgba(0, 0, 0, 0) 45%),
+				radial-gradient(120% 120% at 50% 40%, rgba(0, 0, 0, .45), rgba(0, 0, 0, .05) 55%, var(--vignette) 100%),
+
+				/* 9) base rust gradient */
+				linear-gradient(135deg, var(--rust-dark) 0%, var(--rust-mid) 40%, var(--rust-light) 84%, var(--rust-dark) 100%);
+
+			/* sizes/positions per layer */
+			background-size:
+				64px 64px,
+				/* film */
+				var(--px-tile) var(--px-tile),
+				/* pixel grain */
+				var(--pitsA-size),
+				var(--pitsB-size),
+				var(--pitsC-size),
+				var(--meso-size),
+				var(--macro-size),
+				100% 100%, 100% 100%, cover;
+
+			background-position:
+				0 0,
+				0 0,
+				var(--pitsA-pos),
+				var(--pitsB-pos),
+				var(--pitsC-pos),
+				var(--meso-pos),
+				0 0,
+				0 0, 0 0, 0 0;
+
+			background-repeat:
+				repeat, repeat, repeat, repeat, repeat, repeat, repeat, no-repeat, no-repeat, no-repeat;
+
+			/* blending: keep color alive, add texture */
+			background-blend-mode:
+				soft-light,
+				/* film */
+				soft-light,
+				/* pixel grain */
+				overlay,
+				/* pits A */
+				overlay,
+				/* pits B */
+				overlay,
+				/* pits C */
+				color-burn,
+				/* meso islands */
+				color-burn,
+				/* macro shapes */
+				screen,
+				/* hotspot */
+				multiply,
+				/* vignette */
+				normal;
+
+			/* keep it crisp */
+			image-rendering: crisp-edges;
+			filter: contrast(1.06) saturate(1.04);
+		}
+
+		@media (max-width:820px) {
+			.panel {
+				--px-tile: 6px;
+				--pitsA-size: 233px 171px;
+				--pitsA-pos: 91px 57px;
+				--pitsB-size: 283px 189px;
+				--pitsB-pos: 29px -21px;
+				--pitsC-size: 341px 221px;
+				--pitsC-pos: -43px 11px;
+				--meso-size: 503px 391px;
+				--meso-pos: 61px 13px;
+				--macro-size: 787px 731px;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div class="panel"></div>
+</body>
+
+</html>

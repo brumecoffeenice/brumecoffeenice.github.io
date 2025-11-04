@@ -121,15 +121,15 @@ titleCircle {
 	justify-content: center;
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
-	-webkit-mask-image: linear-gradient(black 50%, #00000000 100%);
-	mask-image: linear-gradient(black 60%, #00000000 90%);
+	-webkit-mask-image: linear-gradient(var(--color-brume-circle-fade1) 50%, var(--color-brume-circle-fade2) 100%);
+	mask-image: linear-gradient(var(--color-brume-circle-fade1) 60%, var(--color-brume-circle-fade2) 90%);
 	/* background-color: #ffffff64; */
 	border-radius: 50%;
 	width: 5em;
 	height: 5em;
 	min-width: 5em;
 	/* border: 2px solid rgb(96, 96, 96); */
-	background-color: #ffffff71;
+	background-color: var(--color-brume-circle-bg);
 }
 
 titleContainerfit {
