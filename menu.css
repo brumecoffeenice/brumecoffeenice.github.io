@@ -31,6 +31,7 @@ produitPrixR {
 
 mainR {
 	margin-top: 15vh;
+	margin-top: 2em;
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-start;
@@ -41,12 +42,13 @@ mainR {
 	padding-bottom: 1em;
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
-	border : solid var(--color-mainr-border);
+	border: solid var(--color-mainr-border);
+	max-width: 25em;
 }
 
-mainr:first-child {
+/* mainr:first-child {
 	margin-top: 5vh;
-}
+} */
 
 leftMainC {
 	display: flex;
@@ -97,6 +99,14 @@ dialog::backdrop {
 	height: 140vh;
 }
 
-.reviewBox{
+.reviewBox {
 	background-color: var(--color-review-box-bg);
+}
+
+.menuBox {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: space-evenly;
 }
