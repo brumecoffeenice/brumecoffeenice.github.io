@@ -110,3 +110,7 @@ dialog::backdrop {
 	align-items: flex-start;
 	justify-content: space-evenly;
 }
+
+.introBox {
+	max-width: 30em;
+}
