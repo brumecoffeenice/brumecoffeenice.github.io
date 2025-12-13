@@ -72,14 +72,14 @@ async function fetcher(menulocal) {
 	if (typeof _supabase === "undefined" || !_supabase) {
 		// Si pas de client, on tombe direct sur local avec warning
 		const text = await fetchLocalMenuText();
-		setMenuWarning("Menu local utilisé, peut être pas à jour ! client Supabase non initialisé.");
+		setMenuWarning("Menu local utilisé, peut ne pas être à jour ! client Supabase non initialisé.");
 		return text;
 	}
 
 	// 1) Forcer local (#local)
 	if (menulocal == 1) {
 		const text = await fetchLocalMenuText();
-		setMenuWarning("Menu local utilisé, peut être pas à jour ! mode #local activé.");
+		setMenuWarning("Menu local utilisé, peut ne pas être à jour ! mode #local activé.");
 		return text;
 	}
 
@@ -94,7 +94,7 @@ async function fetcher(menulocal) {
 		// Supabase répond mais vide => fallback local
 		if (isBlank(text)) {
 			const localText = await fetchLocalMenuText();
-			setMenuWarning("Menu local utilisé, peut être pas à jour ! menu Supabase vide.");
+			setMenuWarning("Menu local utilisé, peut ne pas être à jour ! menu Supabase vide.");
 			return localText;
 		}
 
@@ -102,7 +102,7 @@ async function fetcher(menulocal) {
 	} catch (err) {
 		// Timeout / erreur supabase => fallback local
 		const localText = await fetchLocalMenuText();
-		setMenuWarning("Menu local utilisé, peut être pas à jour ! Supabase indisponible (timeout/erreur).");
+		setMenuWarning("Menu local utilisé, peut ne pas être à jour ! Supabase indisponible (timeout/erreur).");
 		return localText;
 	}
 }
