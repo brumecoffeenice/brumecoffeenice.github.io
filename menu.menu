@@ -83,8 +83,6 @@
 
 #bloc spécial à destination d'un div. Le nom n'est pas affiché
 >introBox
-_____ Attention, vous utilisez le menu local. Il risque de ne pas être à jour.
-_____ 🧡
 _____ Merci de faire votre commande au comptoir. @ Please place order at the counter.
 _____ 🧡
 _____ Toutes nos recettes sont faites maison sur place, nos produits sont de saison et nos fruits et légumes sont locaux. @ All our recipes are homemade, our products are seasonal and our fruits and vegetables are local.
@@ -125,6 +123,8 @@ __ Flat white _ 4.5 _ 2 shots, tasse de 150 ml @ 2 shots, 150 ml cup
 __ Latte _ 5 _ 2 shots, tasse de 300 ml @ 2 shots, 300 ml cup
 
 __ Moka _ 5 _ 1 shot, chocolat, tasse de 300 ml @ 1 shot, chocolate, 300 ml cup
+
+__ Hojicha latte _ 5
 
 __ Ube latte _ 5 _ Igname violet originaire des Philippines, lait, tasse de 300 ml @ Purple yam from Philippines, milk, 300 ml cup
 
@@ -183,11 +183,17 @@ __ Granola de saison @ Seasonal Granola _ 9.5 _ Yaourt grec, granola maison, fru
 
 __ Les scones salés @ Salty scones _ 9.5 _ Deux scones, chèvre frais, ciboulette, bouquet de mâche @ Two scones, fresh goat cheese, chive, lamb's lettuce
 
-# __ Brioche toastée @ Toasted brioche _ 10.5 _ Brioche Nanterre toastée, crème de châtaigne, poires rôties à la vanille, quenelle de crème d'isigny, oranges, éclats de pistaches, sirop d'érable @ Toasted Nanterre brioche, chestnut cream, roasted pears with vanilla, isigny cream quenelle, oranges, pistachio slivers, maple syrup
+#__ Brioche toastée @ Toasted brioche _ 10.5 _ Brioche Nanterre toastée, crème de châtaigne, poires rôties à la vanille, quenelle de crème d'isigny, oranges, éclats de pistaches, sirop d'érable @ Toasted Nanterre brioche, chestnut cream, roasted pears with vanilla, isigny cream quenelle, oranges, pistachio slivers, maple syrup
 
 #__ Brioche toastée @ Toasted brioche _ 11.5 _ Brioche toastée, crème de châtaigne, rhubarbe, fraises, quenelle de crème d'isigny, éclats de pistache, sirop d'érable @ Toasted brioche, chestnut cream, rhubarb, strawberries, isigny cream quenelle, pistachio slivers, maple syrup
 
-__ Brioche toastée _ 12.5 _ Brioche Nanterre  toastée, crème de châtaigne, quenelle de crème d'isigny, abricots rôtis, fraises, éclats de pistache, pousses de basilic, sirop d'érable @ Brioche Nanterre toastée, chestnut cream, isigny cream quenelle, roasted apricots, strawberries, pistachio slivers, basil shoots, maple syrup
+#__ Brioche toastée _ 12.5 _ Brioche Nanterre  toastée, crème de châtaigne, quenelle de crème d'isigny, abricots rôtis, fraises, éclats de pistache, pousses de basilic, sirop d'érable @ Brioche Nanterre toastée, chestnut cream, isigny cream quenelle, roasted apricots, strawberries, pistachio slivers, basil shoots, maple syrup
+
+#__ Brioche toastée @ Toasted brioche _ 12.5 _ Brioche Nanterre toastée, crème de châtaigne, prunes rôties, figues, quenelle de crème d'isigny, éclats de pistaches sirop d'érable @ Toasted Nanterre brioche, chestnut cream, roasted plums, figs, Isigny cream quenelle, pistachio slivers, maple syrup
+
+__ Brioche toastée @ Toasted brioche _ 13 _ Brioche pur beurre by Pompom, poires pochées, kiwi, kaki, crème de châtaigne, quenelle de crème  d'isigny thé matcha, sirop d'érable, éclats de pistache @ Pure butter brioche by Pompom, poached pears, kiwi, persimmon, chestnut cream, quenelle of Isigny cream with matcha tea, maple syrup, pistachio slivers
+
+#__ Mini sandwich brioche @ Mini brioche sandwiche _ 9.5 _ Toasts de brioche, burrata fumée toastée, salade de mâche ciboulette, huile d'olive et fleur de sel. @ Brioche toast, smoked burrata, lamb's lettuce salad with chives, olive oil, and fleur de sel.
 
 _ Déjeuner @ Lunch
 
@@ -225,13 +231,27 @@ _____ À partir de 12H00 jusqu’à 14H30; non servis sur notre terrasse @ From 
 
 #__ Tartine chèvre-tomates @ Goat's cheese and tomato toast _ 16 _ Toast de pain au levain by Mama Baker, chèvre frais, tomates rôties aux graines de cumin et à l'huile d'olive, ciboulette, bouquet de mache, fleur de sel et poivre 5 baies @ Toast of sourdough bread by Mama Baker, fresh goat's cheese, roasted tomatoes with cumin seeds and olive oil, chives, bouquet of mache, fleur de sel and 5-berry pepper
 
-__ Tartine smokin' burrata _ 16.5 _ Toast de pain au levain by Mama Baker, tomates rôties au cumin, basilic frais, olives taggiasche, burratina fumée, bouquet de mâche, ciboulette @ Toast of sourdough bread by Mama Baker, roasted tomatoes with cumin, fresh basil, taggiasche olives, smoked burratina, bouquet of lamb's lettuce, chives
+#__ Tartine smokin' burrata _ 16.5 _ Toast de pain au levain by Mama Baker, tomates rôties au cumin, basilic frais, olives taggiasche, burratina fumée, bouquet de mâche, ciboulette @ Toast of sourdough bread by Mama Baker, roasted tomatoes with cumin, fresh basil, taggiasche olives, smoked burratina, bouquet of lamb's lettuce, chives
 
 #__ Brume de tomates @ Brume's tomato stew _16 _Tomates cocktails rôties et mijotées au cumin, haricots blancs, yaourt grecque, fêta, aneth, toast de pain Norvègien de chez mama Baker @ Roasted and stewed cocktail tomatoes with cumin, white beans, Greek yogurt, feta, dill, and a slice of Norwegian bread from Mama Baker
 
-__ La tartine abricotée @ The Apricot Toast _ 16.5 _ Toast de pain au levain by Mama Baker, abricots rôtis, burrata des Pouilles 125g, basilic frais, bouquet de mâche, pistaches concassées, basilic, huile d'olive, poivre, fleur de sel  @ Sourdough toast by Mama Baker, roasted apricots, 125g burrata from Puglia, fresh basil, lamb’s lettuce bouquet, crushed pistachios, basil, olive oil, pepper, fleur de sel.
+#__ La tartine abricotée @ The Apricot Toast _ 16.5 _ Toast de pain au levain by Mama Baker, abricots rôtis, burrata des Pouilles 125g, basilic frais, bouquet de mâche, pistaches concassées, basilic, huile d'olive, poivre, fleur de sel  @ Sourdough toast by Mama Baker, roasted apricots, 125g burrata from Puglia, fresh basil, lamb’s lettuce bouquet, crushed pistachios, basil, olive oil, pepper, fleur de sel.
 
-__ Borani banjan _ 16 _ Aubergines et tomates rôties mijotées au cumin, poivre citron, yaourt grecque, fêta, toast de pain au levain, coriandre et aneth @ Roasted eggplant and tomatoes simmered with cumin, lemon pepper, Greek yogurt, feta cheese, sourdough toast, cilantro, and dill
+#__ Borani banjan _ 16 _ Aubergines et tomates rôties mijotées au cumin, poivre citron, yaourt grecque, fêta, toast de pain au levain, coriandre et aneth @ Roasted eggplant and tomatoes simmered with cumin, lemon pepper, Greek yogurt, feta cheese, sourdough toast, cilantro, and dill
+
+#__ Tartine smokin' melon @ Smokin' melon tartine _ 16.5 _ Belle tranche de pain de mie toastée, burrata fumée, tranches de melon frais, bouquet de mâche, figues fraîches, coulis de fruits rouges, basilic, olives taggiasche, huile d'olive, poivre et fleur de sel @ Beautiful slice of toasted bread, smoked burrata, slices of fresh melon, bouquet of lamb's lettuce, fresh figs, red fruit coulis, basil, Taggiasca olives, olive oil, pepper, and fleur de sel
+
+#__ Tartine burrata de septembre @ September burrata tartine _ 16.5 _ Toast de pain au levain, prunes rôties, basilic frais, burrata des Pouilles bouquet de mâche, huile d'olive, fleur de sel, poivre 5 baies, figues fraîches @ Sourdough toast, roasted plums, fresh basil, burrata from Puglia, lamb's lettuce, olive oil, fleur de sel, five-peppercorn blend, fresh figs
+
+#__ Tartine d'octobre @ October tartine _ 16.5 _ Toast de pain au levain by Mama baker, prunes rouges rôties, bouquet de mâche, burrata des Pouilles, figues fraîches, basilic, pistaches, basilic frais, huile d'olive, fleur de sel, poivre 5 baies @ Sourdough toast by Mama Baker, roasted red plums, lamb's lettuce bouquet, burrata from Puglia, fresh figs, basil, pistachios, fresh basil, olive oil, fleur de sel, five-peppercorn blend
+
+__ Tartine d'hiver @ Winter tartine _ 16.5 _ Toaste de pain au levain by Mama baker, poêlée de champignons, ciboulette, burrata des Pouilles, bouquet de mâche huile d'olive, fleur de sel et poivre 5 baies @ Toasted sourdough bread by Mama Baker, pan-fried mushrooms, chives, burrata from Puglia, lamb's lettuce, olive oil, fleur de sel, and five-peppercorn blend
+
+__ Tartine Smokin'pear @ Smokin'pear tartine _ 16.5 _ Toast de brioche, burratina fumée fondante, poires pochées à la vanille et aux épices, bouquet de mâche, raisins, ciboulette, huile d'olive, sirop d'érable et fleur de sel @ Brioche toast, melted smoked burratina, poached pears with vanilla and spices, lamb's lettuce, grapes, chives, olive oil, maple syrup, and fleur de sel
+
+__ Pumpkin Brume @ Pumpkin Brume _ 16.5 _ Potimarrons et raisins noirs rôtis à  la fleur d'oranger, yaourt grecque, feta, huile d'olive, zaatar, coriandre et aneth, toast de pain au levain au zattar @ Roasted pumpkin and black grapes with orange blossom, Greek yogurt, feta cheese, olive oil, zaatar, cilantro, and dill, served on zaatar sourdough toast
+
+# __ Brume's soup _ 12_ Crème de champignon, émulsion de lait, toast de chèvre chaud @ Mushroom cream soup, milk emulsion, warm goat cheese toast
 
 
 _ Pâtisseries @ Pastries

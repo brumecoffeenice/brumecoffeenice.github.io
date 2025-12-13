@@ -42,10 +42,10 @@ function displayReviewBox() {
 
 async function main() {
 	hash = window.location.hash.replace("#", "");
-	var menulocal = 0;  // If 1, local menu will be used instead of online database
-	if (hash === "menulocal") {
+	var menulocal = 0;
+	if (hash === "local") {
 		menulocal = 1;
-		alert("Attention, vous utilisez le menu local. Il risque de ne pas être à jour.");
+		// alert("Attention, vous utilisez le menu local. Il risque de ne pas être à jour.");
 	}
 
 	if (hash === "black") {
