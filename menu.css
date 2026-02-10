@@ -44,7 +44,7 @@ mainR {
 	border: 5px solid var(--color-mainr-border);
 	max-width: 25em;
 	background: url('img/bac2.png');
-	background-size: 50%;
+	background-size: 40%;
 	background-repeat: repeat;
 	background-color: var(--color-bg0);
 }

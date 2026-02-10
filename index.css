@@ -27,9 +27,12 @@ bloc {
 	padding-right: 5mm;
 	padding-left: 5mm;
 	border-radius: 10px;
-	background-color: var(--color-bg0);
 	border: 5px solid var(--color-mainr-border);
 	max-width: 25em;
+	background: url('img/bac2.png');
+	background-size: 40%;
+	background-repeat: repeat;
+	background-color: var(--color-bg0);
 }
 
 bigbloc {
