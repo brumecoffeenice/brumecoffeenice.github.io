@@ -28,6 +28,9 @@ async function fetchLocalMenuText() {
 
 /** Charge le menu depuis Supabase */
 async function fetchSupabaseMenuText(_supabase) {
+	// Activate this line to test a supabase slow responce (milliseconds)
+	// await sleep(7000);
+
 	const { data, error } = await _supabase
 		.from("menu.menu")
 		.select("content")
@@ -56,19 +59,10 @@ function sleep(ms) {
 	return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-/**
- * fetched from database
- * - menulocal == 1 => force local
- * - sinon => supabase (timeout 8s) ; si erreur/timeout/vide => local
- *
- * Retourne: string (le contenu du menu)
- */
 async function fetcher(menulocal) {
-	// si tu veux éviter un warning qui reste affiché
 	clearMenuWarning();
 
 	// 0) sécurité : supabase client doit exister
-	// (tu dois avoir défini _supabase = supabase.createClient(URL, KEY))
 	if (typeof _supabase === "undefined" || !_supabase) {
 		// Si pas de client, on tombe direct sur local avec warning
 		const text = await fetchLocalMenuText();
@@ -106,15 +100,6 @@ async function fetcher(menulocal) {
 		return localText;
 	}
 }
-
-
-
-
-
-
-
-
-
 
 // lexes tokens
 function getTokens(text) {

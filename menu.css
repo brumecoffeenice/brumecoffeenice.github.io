@@ -40,9 +40,9 @@ mainR {
 	border-radius: 10px;
 	padding-top: 1em;
 	padding-bottom: 1em;
-	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px);
-	border: solid var(--color-mainr-border);
+	/* backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px); */
+	border: 5px solid var(--color-mainr-border);
 	max-width: 25em;
 }
 

@@ -94,7 +94,7 @@ buttonStyle {
 	margin-right: 0.3em;
 	padding: 0.3em;
 	border-radius: 1000px;
-	border: 2px solid var(--color-border2);
+	border: 5px solid var(--color-border2);
 }
 
 titleCirclecontainer {
@@ -104,32 +104,79 @@ titleCirclecontainer {
 	z-index: 3;
 	font-family: "Yeseva One", serif;
 	font-weight: bolder;
-	font-size: 500%;
+	font-size: 400%;
 	color: var(--color-logo1);
 	word-spacing: 0.1rem;
 	white-space: nowrap;
 	flex-shrink: 0;
-	margin: 0;
+	margin: 10vh;
 	/* margin-top: 10vh; */
-	margin-bottom: 2vh;
+	/* margin-bottom: 2vh; */
 	padding: 0;
+}
+titleCircleFilter {
+	/* your layout */
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+
+	/* circle */
+	width: 5em;
+	height: 5em;
+	min-width: 5em;
+	border-radius: 50%;
+	border: 5px solid var(--color-border2);
+
+	/* ✅ clipping + stacking context */
+	position: relative;
+	overflow: hidden;
+
+	/* keep if you need it */
+	z-index: 1;
+
+	/* remove these because layering will handle it */
+	background-color: transparent;
+}
+
+titleCircleFilter::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+
+	background-image: url("/img/brumewallpaper.jpg");
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+
+	z-index: 0;
+}
+
+titleCircleFilter::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+
+	/* your filter color */
+	background: rgba(255, 255, 255, 0.249);
+
+	/* optional: blur what's BEHIND the circle (backdrop-filter) */
+	/* backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); */
+
+	z-index: 1;
 }
 
 titleCircle {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
-	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px);
-	-webkit-mask-image: linear-gradient(var(--color-brume-circle-fade1) 50%, var(--color-brume-circle-fade2) 100%);
-	mask-image: linear-gradient(var(--color-brume-circle-fade1) 60%, var(--color-brume-circle-fade2) 90%);
-	/* background-color: #ffffff64; */
-	border-radius: 50%;
-	width: 5em;
-	height: 5em;
-	min-width: 5em;
-	/* border: 2px solid rgb(96, 96, 96); */
-	background-color: var(--color-brume-circle-bg);
+	align-items: center;
+
+	width: 100%;
+	height: 100%;
+	position: relative;
+	z-index: 2;
 }
 
 titleContainerfit {
@@ -153,7 +200,7 @@ titlecenterR2 {
 
 logoStyle1 {
 	font-size: 100%;
-	margin-bottom: -0.1em;
+	margin-bottom: -0.15em;
 	/* text-decoration: underline overline wavy #4d4d4d 2px;
 	text-underline-offset: 0.5em; */
 }
@@ -162,4 +209,6 @@ logoStyle2 {
 	font-size: 25%;
 	/* color: #757575;
 	text-decoration: underline solid grey 2px; */
+	font-family: "Bebas Neue", sans-serif;
+	letter-spacing: 0.2rem;
 }

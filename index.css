@@ -26,14 +26,26 @@ bloc {
 	margin-top: 1cm;
 	padding-right: 5mm;
 	padding-left: 5mm;
-	background-color: #ffffff6e;
+	/* background-color: #ffffff6e; */
 	border-radius: 10px;
 	/* border-top: 1px solid; */
-	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px);
+	/* backdrop-filter: blur(10px); */
+	/* -webkit-backdrop-filter: blur(10px); */
 	/* border: 1px solid rgb(255, 255, 255); */
-	background-image: linear-gradient(to right, #ffffff00, #ffffff00 10px, #ffffff4d 10px, #ffffff4d);
-	background-size: 20px 100%;
+	/* background-image: linear-gradient(to right, #ffffff00, #ffffff00 10px, #ffffff4d 10px, #ffffff4d); */
+	/* background-size: 20px 100%; */
+
+
+
+
+
+	background-color: var(--color-bg0);
+
+	border: 5px solid var(--color-mainr-border);
+	max-width: 25em;
+
+
+
 }
 
 photos {

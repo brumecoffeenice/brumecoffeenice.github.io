@@ -1,17 +1,17 @@
 :root {
 	/* Global color palette */
-	--color-bg: #ffede3;
-	--color-stripe1: #ffffff7e;
-	--color-stripe2: #ffffff9d;
-	--color-border1: #545454;
+	--color-bg: #ffeacf;
+	--color-stripe1: #ffddad;
+	--color-stripe2: #ffeacf;
+	--color-border1: #ffeacf;
 	/*linkStyle and button border*/
-	--color-border2: #545454;
+	--color-border2: #ffeacf;
 	/*buttonStyle border*/
-	--color-bg0: #fff3e4;
+	--color-bg0: #ffffff;
 	/*menu bloc bg*/
 	--color-bg1: #ffe9ce;
 	/*linkStyle and button bg*/
-	--color-bg2: #ffd6a3;
+	--color-bg2: #ffeacf;
 	/*selected linkStyle lighter bg*/
 	--color-underline1: #ffe9ce;
 	--color-font1: #585858;
@@ -30,14 +30,15 @@
 	/*error font*/
 	--color-font8: #494949;
 	/*button font*/
-	--color-logo1: #f1b061;
+	--color-logo1: #ffffff;
 	/*logo font*/
-	--color-mainr-border: #838383;
+	--color-mainr-border: #ffeacf;
 	/*main r border*/
 	--color-brume-circle-fade1: rgb(0, 0, 0);
 	--color-brume-circle-fade2: rgba(0, 0, 0, 0);
-	--color-brume-circle-bg: #ffffff71;
+	--color-brume-circle-bg: #f1b061;
 	--color-review-box-bg: rgb(255, 255, 255);
+
 }
 
 :root[data-theme="black"] {

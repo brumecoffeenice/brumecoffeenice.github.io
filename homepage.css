@@ -54,8 +54,8 @@ externalLogoC {
 	background-color: #ffffff00;
 	opacity: 1;
 	/* background-image: linear-gradient(to right, #ffffff7b, #ffffff7b 10px, #ffffff49 10px, #ffffff49); */
-	background-image: linear-gradient(to right, var(--color-stripe1), var(--color-stripe1) 10px, var(--color-stripe2) 10px, var(--color-stripe2));
-	background-size: 20px 100%;
+	background-image: linear-gradient(to right, var(--color-stripe1), var(--color-stripe1) 5px, var(--color-stripe2) 5px, var(--color-stripe2));
+	background-size: 10px 100%;
 	z-index: -5;
 	min-height: 100vh;
 }
@@ -73,9 +73,9 @@ externalLogoC {
 
 .linkStyle {
 	/* background-color: #ffede3; */
-	border: 2px solid var(--color-border1);
-	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px);
+	border: 5px solid var(--color-border1);
+	/* backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px); */
 	/* padding: 0.2em; */
 	align-items: center;
 	text-align: center;
@@ -107,9 +107,9 @@ a {
 }
 
 button {
-	border: 2px solid var(--color-border1);
-	backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px);
+	border: 10px solid var(--color-border1);
+	/* backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px); */
 	background-color: var(--color-bg1);
 	/* padding: 0.2em; */
 	align-items: center;

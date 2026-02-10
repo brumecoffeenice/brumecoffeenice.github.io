@@ -43,7 +43,7 @@ function displayReviewBox() {
 async function main() {
 	hash = window.location.hash.replace("#", "");
 	var menulocal = 0;
-	if (hash === "local") {
+	if (hash === "menulocal") {
 		menulocal = 1;
 		// alert("Attention, vous utilisez le menu local. Il risque de ne pas être à jour.");
 	}
