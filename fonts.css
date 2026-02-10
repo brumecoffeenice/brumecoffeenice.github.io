@@ -122,7 +122,8 @@ titleCircleFilter {
 	align-items: center;
 
 	/* circle */
-	width: 5em;
+	/* width: 5em;
+	width: 50vw; */
 	height: 5em;
 	min-width: 5em;
 	border-radius: 50%;
