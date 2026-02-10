@@ -36,7 +36,6 @@ mainR {
 	flex-direction: row;
 	justify-content: flex-start;
 	/* background-color: #ffede3; */
-	background-color: var(--color-bg0);
 	border-radius: 10px;
 	padding-top: 1em;
 	padding-bottom: 1em;
@@ -44,6 +43,10 @@ mainR {
 	-webkit-backdrop-filter: blur(10px); */
 	border: 5px solid var(--color-mainr-border);
 	max-width: 25em;
+	background: url('img/bac2.png');
+	background-size: 50%;
+	background-repeat: repeat;
+	background-color: var(--color-bg0);
 }
 
 /* mainr:first-child {
