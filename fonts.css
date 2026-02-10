@@ -115,6 +115,7 @@ titleCirclecontainer {
 	/* margin-bottom: 2vh; */
 	padding: 0;
 }
+
 titleCircleFilter {
 	/* your layout */
 	display: flex;
@@ -139,6 +140,7 @@ titleCircleFilter {
 
 	/* remove these because layering will handle it */
 	background-color: transparent;
+	filter: drop-shadow(0 0 2rem white);
 }
 
 titleCircleFilter::before {
@@ -205,6 +207,7 @@ logoStyle1 {
 	margin-bottom: -0.15em;
 	/* text-decoration: underline overline wavy #4d4d4d 2px;
 	text-underline-offset: 0.5em; */
+	filter: drop-shadow(0 0 0.1rem rgb(255, 255, 255));
 }
 
 logoStyle2 {
