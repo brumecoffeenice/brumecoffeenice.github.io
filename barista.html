@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Brume — Barista Screen</title>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&display=swap"
+		rel="stylesheet" />
+	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+	<style>
+		:root {
+			--cream: #2c1a0e;
+			--espresso: #fdf6ee;
+			--roast: #f0e4d2;
+			--caramel: #b05a1a;
+			--foam: #e8d5be;
+			--steam: #7a5c3e;
+			--accent: #c06820;
+			--done: #2d7a2d;
+			--done-bg: #eaf4ea;
+			--pending: #c06820;
+			--pending-bg: #fdf0e4;
+			--inprog: #a07800;
+			--urgent: #c0392b;
+			--card-bg: #fffaf4;
+			--border: rgba(160, 90, 30, 0.18);
+		}
+
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			background-color: var(--espresso);
+			font-family: 'DM Mono', monospace;
+			color: var(--cream);
+			min-height: 100vh;
+			overflow-x: hidden;
+		}
+
+		/* ── LOGIN ── */
+		#loginScreen {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			min-height: 100vh;
+		}
+
+		.login-box {
+			background: var(--card-bg);
+			border: 1.5px solid var(--border);
+			border-radius: 10px;
+			padding: 2.5rem 2.5rem 2rem;
+			width: 100%;
+			max-width: 360px;
+			box-shadow: 0 8px 32px rgba(160, 90, 30, .12);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.login-box::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 4px;
+			background: linear-gradient(90deg, var(--caramel), var(--accent));
+		}
+
+		.login-logo {
+			font-family: 'Playfair Display', serif;
+			font-size: 2rem;
+			font-weight: 900;
+			color: var(--accent);
+			margin-bottom: .2rem;
+		}
+
+		.login-sub {
+			font-size: .62rem;
+			letter-spacing: .22em;
+			text-transform: uppercase;
+			color: var(--steam);
+			margin-bottom: 2rem;
+		}
+
+		.login-label {
+			display: block;
+			font-size: .65rem;
+			letter-spacing: .18em;
+			text-transform: uppercase;
+			color: var(--steam);
+			margin-bottom: .4rem;
+		}
+
+		.login-input {
+			width: 100%;
+			padding: .65rem .85rem;
+			background: var(--espresso);
+			border: 1.5px solid var(--border);
+			border-radius: 5px;
+			font-family: 'DM Mono', monospace;
+			font-size: .85rem;
+			color: var(--cream);
+			outline: none;
+			margin-bottom: 1rem;
+			transition: border-color .2s;
+		}
+
+		.login-input:focus {
+			border-color: var(--accent);
+		}
+
+		.login-btn {
+			width: 100%;
+			padding: .75rem;
+			background: var(--accent);
+			border: none;
+			border-radius: 5px;
+			color: white;
+			font-family: 'DM Mono', monospace;
+			font-size: .75rem;
+			letter-spacing: .15em;
+			text-transform: uppercase;
+			cursor: pointer;
+			margin-top: .5rem;
+			transition: background .2s;
+			box-shadow: 0 2px 8px rgba(192, 104, 32, .25);
+		}
+
+		.login-btn:hover {
+			background: var(--caramel);
+		}
+
+		.login-btn:disabled {
+			opacity: .6;
+			cursor: not-allowed;
+		}
+
+		.login-error {
+			font-size: .72rem;
+			color: var(--urgent);
+			margin-top: .8rem;
+			text-align: center;
+			min-height: 1.2em;
+		}
+
+		/* ── APP ── */
+		#appScreen {
+			display: none;
+		}
+
+		header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 1rem 2rem;
+			border-bottom: 2px solid var(--border);
+			background: rgba(255, 250, 244, .97);
+			backdrop-filter: blur(8px);
+			position: sticky;
+			top: 0;
+			z-index: 100;
+			box-shadow: 0 2px 12px rgba(160, 90, 30, .08);
+		}
+
+		.logo-block {
+			display: flex;
+			align-items: baseline;
+			gap: .6rem;
+		}
+
+		.logo-title {
+			font-family: 'Playfair Display', serif;
+			font-size: 1.7rem;
+			font-weight: 900;
+			letter-spacing: .04em;
+			color: var(--accent);
+		}
+
+		.logo-sub {
+			font-size: .62rem;
+			letter-spacing: .25em;
+			text-transform: uppercase;
+			color: var(--steam);
+		}
+
+		.header-right {
+			display: flex;
+			align-items: center;
+			gap: 1.2rem;
+			flex-wrap: wrap;
+		}
+
+		.status-dot {
+			width: 9px;
+			height: 9px;
+			border-radius: 50%;
+			background: var(--done);
+			display: inline-block;
+			margin-right: .4rem;
+			animation: pulse-dot 2s infinite;
+		}
+
+		@keyframes pulse-dot {
+
+			0%,
+			100% {
+				opacity: 1;
+				transform: scale(1)
+			}
+
+			50% {
+				opacity: .5;
+				transform: scale(.8)
+			}
+		}
+
+		.status-label {
+			font-size: .7rem;
+			letter-spacing: .12em;
+			text-transform: uppercase;
+			color: var(--steam);
+		}
+
+		.clock {
+			font-size: 1.05rem;
+			color: var(--accent);
+			font-weight: 500;
+			letter-spacing: .08em;
+			background: var(--pending-bg);
+			padding: .3rem .7rem;
+			border-radius: 4px;
+			border: 1px solid rgba(192, 104, 32, .2);
+		}
+
+		input[type="date"]#datePicker {
+			background: var(--pending-bg);
+			border: 1px solid rgba(192, 104, 32, .3);
+			color: var(--accent);
+			padding: .35rem .6rem;
+			border-radius: 4px;
+			font-family: 'DM Mono', monospace;
+			font-size: .72rem;
+			cursor: pointer;
+			outline: none;
+			transition: border-color .2s;
+		}
+
+		input[type="date"]#datePicker:focus {
+			border-color: var(--accent);
+		}
+
+		.refresh-btn {
+			background: var(--accent);
+			border: none;
+			color: white;
+			padding: .45rem 1.1rem;
+			border-radius: 4px;
+			cursor: pointer;
+			font-family: 'DM Mono', monospace;
+			font-size: .7rem;
+			letter-spacing: .12em;
+			text-transform: uppercase;
+			transition: all .2s;
+			display: flex;
+			align-items: center;
+			gap: .4rem;
+			box-shadow: 0 2px 8px rgba(192, 104, 32, .25);
+		}
+
+		.refresh-btn:hover {
+			background: var(--caramel);
+		}
+
+		.refresh-btn.spinning svg {
+			animation: spin .8s linear infinite;
+		}
+
+		@keyframes spin {
+			to {
+				transform: rotate(360deg)
+			}
+		}
+
+		.logout-btn {
+			background: transparent;
+			border: 1px solid var(--border);
+			color: var(--steam);
+			padding: .4rem .8rem;
+			border-radius: 4px;
+			cursor: pointer;
+			font-family: 'DM Mono', monospace;
+			font-size: .65rem;
+			letter-spacing: .12em;
+			text-transform: uppercase;
+			transition: all .2s;
+		}
+
+		.logout-btn:hover {
+			border-color: var(--urgent);
+			color: var(--urgent);
+		}
+
+		.stats-bar {
+			display: flex;
+			border-bottom: 1px solid var(--border);
+			background: var(--roast);
+		}
+
+		.stat-item {
+			flex: 1;
+			padding: .8rem 1.5rem;
+			border-right: 1px solid var(--border);
+			display: flex;
+			align-items: baseline;
+			gap: .5rem;
+		}
+
+		.stat-item:last-child {
+			border-right: none;
+		}
+
+		.stat-num {
+			font-family: 'Playfair Display', serif;
+			font-size: 1.9rem;
+			font-weight: 700;
+			color: var(--accent);
+			line-height: 1;
+		}
+
+		.stat-label {
+			font-size: .62rem;
+			letter-spacing: .18em;
+			text-transform: uppercase;
+			color: var(--steam);
+		}
+
+		.board {
+			padding: 1.5rem 2rem;
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+			gap: 1.2rem;
+		}
+
+		.order-card {
+			background: var(--card-bg);
+			border: 1.5px solid var(--border);
+			border-radius: 8px;
+			overflow: hidden;
+			position: relative;
+			animation: card-in .35s ease both;
+			transition: border-color .25s, box-shadow .25s;
+			box-shadow: 0 2px 10px rgba(160, 90, 30, .07);
+		}
+
+		.order-card:hover {
+			border-color: rgba(192, 104, 32, .4);
+			box-shadow: 0 4px 20px rgba(160, 90, 30, .13);
+		}
+
+		@keyframes card-in {
+			from {
+				opacity: 0;
+				transform: translateY(12px)
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0)
+			}
+		}
+
+		.order-card::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 4px;
+			background: linear-gradient(90deg, var(--caramel), var(--accent));
+		}
+
+		.order-card.done-card::before {
+			background: linear-gradient(90deg, #2d7a2d, #4caf50);
+		}
+
+		.order-card.done-card {
+			opacity: .7;
+			border-color: rgba(45, 122, 45, .25);
+		}
+
+		.card-header {
+			padding: 1rem 1.2rem .75rem;
+			display: flex;
+			justify-content: space-between;
+			align-items: flex-start;
+			border-bottom: 1px solid var(--border);
+			background: rgba(240, 228, 210, .35);
+		}
+
+		.table-tag {
+			font-family: 'Playfair Display', serif;
+			font-size: 1.35rem;
+			font-weight: 700;
+			color: var(--cream);
+			line-height: 1;
+		}
+
+		.table-sub {
+			font-size: .6rem;
+			letter-spacing: .18em;
+			text-transform: uppercase;
+			color: var(--steam);
+			margin-top: .15rem;
+		}
+
+		.order-id {
+			font-size: .6rem;
+			color: var(--steam);
+			letter-spacing: .1em;
+			text-align: right;
+		}
+
+		.order-time {
+			font-size: .85rem;
+			color: var(--accent);
+			text-align: right;
+			margin-top: .2rem;
+			font-weight: 500;
+		}
+
+		.order-time.warn {
+			color: var(--inprog);
+			background: #fff8e0;
+			padding: .1rem .4rem;
+			border-radius: 3px;
+		}
+
+		.order-time.urgent {
+			color: white;
+			background: var(--urgent);
+			padding: .1rem .4rem;
+			border-radius: 3px;
+			animation: blink-urgent 1s infinite;
+		}
+
+		@keyframes blink-urgent {
+			50% {
+				opacity: .6
+			}
+		}
+
+		.items-list {
+			padding: .7rem 1rem;
+			display: flex;
+			flex-direction: column;
+			gap: .45rem;
+		}
+
+		.item-row {
+			display: flex;
+			align-items: center;
+			gap: .65rem;
+			padding: .55rem .8rem;
+			background: rgba(240, 228, 210, .3);
+			border-radius: 5px;
+			border-left: 3px solid transparent;
+			transition: all .18s;
+			cursor: pointer;
+			border: 1px solid transparent;
+			border-left: 3px solid transparent;
+		}
+
+		.item-row:hover {
+			background: rgba(192, 104, 32, .08);
+		}
+
+		.item-row.item-done {
+			border-left-color: var(--done);
+			background: var(--done-bg);
+			opacity: .65;
+		}
+
+		.item-row.item-done .item-name {
+			text-decoration: line-through;
+			text-decoration-color: rgba(45, 122, 45, .5);
+		}
+
+		.item-row.item-pending {
+			border-left-color: var(--pending);
+			background: var(--pending-bg);
+		}
+
+		.item-row.item-in-progress {
+			border-left-color: var(--inprog);
+			background: #fffbe8;
+		}
+
+		.item-qty {
+			font-family: 'Playfair Display', serif;
+			font-size: 1.25rem;
+			font-weight: 700;
+			color: var(--accent);
+			min-width: 1.5rem;
+			text-align: center;
+			line-height: 1;
+		}
+
+		.item-info {
+			flex: 1;
+		}
+
+		.item-name {
+			font-size: .88rem;
+			color: var(--cream);
+			font-weight: 500;
+			line-height: 1.25;
+		}
+
+		.item-note {
+			font-size: .7rem;
+			color: var(--accent);
+			margin-top: .2rem;
+			font-style: italic;
+			opacity: .85;
+		}
+
+		.item-status-btn {
+			width: 26px;
+			height: 26px;
+			border-radius: 50%;
+			border: 2px solid rgba(192, 104, 32, .35);
+			background: white;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: all .18s;
+			flex-shrink: 0;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, .06);
+		}
+
+		.item-status-btn:hover {
+			border-color: var(--done);
+			background: var(--done-bg);
+		}
+
+		.item-row.item-done .item-status-btn {
+			background: var(--done);
+			border-color: var(--done);
+		}
+
+		.item-status-btn svg {
+			width: 13px;
+			height: 13px;
+		}
+
+		.card-footer {
+			padding: .55rem 1rem .8rem;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			background: rgba(240, 228, 210, .2);
+			border-top: 1px solid var(--border);
+		}
+
+		.progress-bar-wrap {
+			flex: 1;
+			height: 4px;
+			background: rgba(192, 104, 32, .12);
+			border-radius: 3px;
+			overflow: hidden;
+			margin-right: .8rem;
+		}
+
+		.progress-bar-fill {
+			height: 100%;
+			background: linear-gradient(90deg, var(--caramel), var(--done));
+			border-radius: 3px;
+			transition: width .4s ease;
+		}
+
+		.progress-label {
+			font-size: .65rem;
+			letter-spacing: .1em;
+			color: var(--steam);
+			text-transform: uppercase;
+			font-weight: 500;
+		}
+
+		.complete-btn {
+			background: var(--done);
+			border: none;
+			color: white;
+			padding: .35rem .85rem;
+			border-radius: 4px;
+			cursor: pointer;
+			font-family: 'DM Mono', monospace;
+			font-size: .65rem;
+			letter-spacing: .1em;
+			text-transform: uppercase;
+			transition: all .18s;
+			margin-left: .7rem;
+		}
+
+		.complete-btn:hover {
+			background: #256025;
+		}
+
+		.empty-state {
+			grid-column: 1/-1;
+			text-align: center;
+			padding: 5rem 2rem;
+		}
+
+		.empty-icon {
+			font-size: 3.5rem;
+			margin-bottom: 1rem;
+		}
+
+		.empty-title {
+			font-family: 'Playfair Display', serif;
+			font-size: 1.5rem;
+			color: var(--steam);
+			font-style: italic;
+		}
+
+		.empty-sub {
+			font-size: .68rem;
+			letter-spacing: .2em;
+			text-transform: uppercase;
+			color: rgba(122, 92, 62, .5);
+			margin-top: .5rem;
+		}
+
+		.loading-overlay {
+			position: fixed;
+			inset: 0;
+			background: rgba(253, 246, 238, .92);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 500;
+			backdrop-filter: blur(4px);
+			transition: opacity .4s;
+		}
+
+		.loading-overlay.hidden {
+			opacity: 0;
+			pointer-events: none;
+		}
+
+		.loader-cup {
+			text-align: center;
+		}
+
+		.loader-cup .cup-emoji {
+			font-size: 3rem;
+			animation: float-cup 1.4s ease-in-out infinite;
+			display: block;
+		}
+
+		@keyframes float-cup {
+
+			0%,
+			100% {
+				transform: translateY(0)
+			}
+
+			50% {
+				transform: translateY(-10px)
+			}
+		}
+
+		.loader-text {
+			margin-top: 1rem;
+			font-size: .7rem;
+			letter-spacing: .3em;
+			text-transform: uppercase;
+			color: var(--steam);
+		}
+
+		.toast {
+			position: fixed;
+			bottom: 2rem;
+			right: 2rem;
+			background: rgba(192, 57, 43, .95);
+			color: white;
+			padding: .7rem 1.2rem;
+			border-radius: 5px;
+			font-size: .75rem;
+			z-index: 600;
+			transform: translateY(120px);
+			transition: transform .3s;
+			box-shadow: 0 4px 16px rgba(192, 57, 43, .3);
+		}
+
+		.toast.show {
+			transform: translateY(0);
+		}
+
+		::-webkit-scrollbar {
+			width: 6px;
+		}
+
+		::-webkit-scrollbar-track {
+			background: var(--roast);
+		}
+
+		::-webkit-scrollbar-thumb {
+			background: rgba(192, 104, 32, .3);
+			border-radius: 3px;
+		}
+
+		@media (max-width:600px) {
+			header {
+				padding: .8rem 1rem;
+				flex-wrap: wrap;
+				gap: .6rem;
+			}
+
+			.board {
+				padding: 1rem;
+				gap: 1rem;
+				grid-template-columns: 1fr;
+			}
+
+			.stats-bar .stat-item {
+				padding: .6rem .8rem;
+			}
+
+			.stat-num {
+				font-size: 1.5rem;
+			}
+		}
+	</style>
+</head>
+
+<body>
+
+	<!-- ── LOGIN SCREEN ── -->
+	<div id="loginScreen">
+		<div class="login-box">
+			<div class="login-logo">Brume</div>
+			<div class="login-sub">Barista Screen — Connexion</div>
+			<label class="login-label" for="loginEmail">Email</label>
+			<input class="login-input" type="email" id="loginEmail" placeholder="vous@example.com"
+				autocomplete="username" />
+			<label class="login-label" for="loginPassword">Mot de passe</label>
+			<input class="login-input" type="password" id="loginPassword" placeholder="••••••••"
+				autocomplete="current-password" onkeydown="if(event.key==='Enter') doLogin()" />
+			<button class="login-btn" id="loginBtn" onclick="doLogin()">Se connecter</button>
+			<div class="login-error" id="loginError"></div>
+		</div>
+	</div>
+
+	<!-- ── APP SCREEN ── -->
+	<div id="appScreen">
+
+		<div class="loading-overlay" id="loadingOverlay">
+			<div class="loader-cup">
+				<span class="cup-emoji">☕</span>
+				<div class="loader-text">Chargement des commandes…</div>
+			</div>
+		</div>
+
+		<div class="toast" id="toast"></div>
+
+		<header>
+			<div class="logo-block">
+				<span class="logo-title">Brume</span>
+				<span class="logo-sub">Barista Screen</span>
+			</div>
+			<div class="header-right">
+				<input type="date" id="datePicker" onchange="fetchOrders()" />
+				<span><span class="status-dot" id="statusDot"></span><span class="status-label"
+						id="statusLabel">Connexion…</span></span>
+				<span class="clock" id="clock">--:--:--</span>
+				<button class="refresh-btn" id="refreshBtn" onclick="fetchOrders()">
+					<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" width="13"
+						height="13">
+						<path d="M13.5 8A5.5 5.5 0 1 1 8 2.5c1.8 0 3.4.87 4.4 2.2" stroke-linecap="round" />
+						<polyline points="12,2 12.9,4.7 10.2,5.5" stroke-linecap="round" stroke-linejoin="round" />
+					</svg>
+					Actualiser
+				</button>
+				<button class="logout-btn" onclick="doLogout()">Déconnexion</button>
+			</div>
+		</header>
+
+		<div class="stats-bar">
+			<div class="stat-item"><span class="stat-num" id="statTotal">0</span><span
+					class="stat-label">Aujourd'hui</span></div>
+			<div class="stat-item"><span class="stat-num" id="statItems">0</span><span
+					class="stat-label">Boissons</span></div>
+			<div class="stat-item"><span class="stat-num" id="statDone">0</span><span class="stat-label">Servies</span>
+			</div>
+			<div class="stat-item"><span class="stat-num" id="statPending">0</span><span class="stat-label">Cuisine
+					ouverte</span></div>
+		</div>
+
+		<div class="board" id="board">
+			<div class="empty-state">
+				<div class="empty-icon">☕</div>
+				<div class="empty-title">Chargement…</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script>
+		// ╔══════════════════════════════════════════════════════════════════════╗
+		// ║  Only these two values live here. Both are safe to expose publicly. ║
+		// ╚══════════════════════════════════════════════════════════════════════╝
+		const SUPABASE_URL = 'https://cpvxjedlgjhcdqjyecmf.supabase.co';  // ← replace
+		const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwdnhqZWRsZ2poY2RxanllY21mIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkyNjMzMzYsImV4cCI6MjAxNDgzOTMzNn0.Rs-bqvUb0Eq7NEKX3tFc8WHJOjzk1Rc4fgRRU6OtVNs"
+		// Hiboutik credentials are stored ONLY in Supabase Edge Function secrets.
+
+		const EDGE_FN_URL = `${SUPABASE_URL}/functions/v1/hiboutik-proxy`;
+
+		const { createClient } = supabase;
+		const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+		// ── State ────────────────────────────────────────────────────────────
+		let orders = [];
+		let itemStatusMap = {};
+		let refreshTimer = null;
+		const REFRESH_INTERVAL = 15000;
+		const MAX_ORDERS = 100;
+		const CACHE_KEY = 'brume_item_status';
+		const CACHE_MAX = 100;
+
+		// ── Cache ────────────────────────────────────────────────────────────
+		function loadCache() {
+			try { const r = localStorage.getItem(CACHE_KEY); if (r) itemStatusMap = JSON.parse(r); }
+			catch { itemStatusMap = {}; }
+		}
+		function saveCache() {
+			try {
+				const keys = Object.keys(itemStatusMap);
+				if (keys.length > CACHE_MAX) {
+					const t = {}; keys.slice(keys.length - CACHE_MAX).forEach(k => { t[k] = itemStatusMap[k]; }); itemStatusMap = t;
+				}
+				localStorage.setItem(CACHE_KEY, JSON.stringify(itemStatusMap));
+			} catch { }
+		}
+
+		// ── Clock ────────────────────────────────────────────────────────────
+		function updateClock() {
+			const el = document.getElementById('clock');
+			if (el) el.textContent = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+		}
+		setInterval(updateClock, 1000);
+		updateClock();
+
+		// ── Auth ─────────────────────────────────────────────────────────────
+		async function doLogin() {
+			const email = document.getElementById('loginEmail').value.trim();
+			const password = document.getElementById('loginPassword').value;
+			const btn = document.getElementById('loginBtn');
+			const errEl = document.getElementById('loginError');
+			if (!email || !password) { errEl.textContent = 'Veuillez remplir tous les champs.'; return; }
+			btn.disabled = true; btn.textContent = 'Connexion…'; errEl.textContent = '';
+			const { error } = await sb.auth.signInWithPassword({ email, password });
+			if (error) { errEl.textContent = 'Identifiants incorrects.'; btn.disabled = false; btn.textContent = 'Se connecter'; }
+		}
+
+		async function doLogout() {
+			await sb.auth.signOut();
+		}
+
+		sb.auth.onAuthStateChange((event, session) => {
+			if (session) {
+				document.getElementById('loginScreen').style.display = 'none';
+				document.getElementById('appScreen').style.display = 'block';
+				loadCache();
+				initDatePicker();
+				fetchOrders();
+				startAutoRefresh();
+			} else {
+				document.getElementById('appScreen').style.display = 'none';
+				document.getElementById('loginScreen').style.display = 'flex';
+				clearInterval(refreshTimer);
+				const btn = document.getElementById('loginBtn');
+				btn.disabled = false; btn.textContent = 'Se connecter';
+			}
+		});
+
+		// ── Proxy call via Edge Function ─────────────────────────────────────
+		async function proxyFetch(path) {
+			const { data: { session } } = await sb.auth.getSession();
+			if (!session) throw new Error('Non authentifié');
+			const res = await fetch(EDGE_FN_URL, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
+				body: JSON.stringify({ path }),
+			});
+			if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error || `HTTP ${res.status}`); }
+			return res.json();
+		}
+
+		// ── Fetch orders ──────────────────────────────────────────────────────
+		async function fetchOrders() {
+			setStatus('loading'); spinRefresh(true);
+			try {
+				const pickedDate = document.getElementById('datePicker').value || new Date().toISOString().slice(0, 10);
+				const [yyyy, mm, dd] = pickedDate.split('-');
+				let saleMap = {};
+				try {
+					const arr = await proxyFetch('/open_sales/1').then(r => Array.isArray(r) ? r : Object.values(r));
+					arr.forEach(s => { if ((s.created_at || '').slice(0, 10) === pickedDate) saleMap[String(s.sale_id)] = s; });
+				} catch (e) { console.warn('open_sales:', e.message); }
+				try {
+					const arr = await proxyFetch(`/closed_sales/1/${yyyy}/${parseInt(mm)}/${parseInt(dd)}`).then(r => Array.isArray(r) ? r : Object.values(r));
+					arr.forEach(s => { saleMap[String(s.sale_id)] = s; });
+				} catch (e) { console.warn('closed_sales:', e.message); }
+
+				const saleIds = Object.keys(saleMap).slice(0, MAX_ORDERS);
+				if (!saleIds.length) { orders = []; render(); setStatus('online'); spinRefresh(false); hideLoader(); return; }
+
+				const fetched = await Promise.all(saleIds.map(async sid => {
+					try { const r = await proxyFetch(`/sales/${sid}`); return buildOrder(sid, Array.isArray(r) ? r[0] : r); }
+					catch { return null; }
+				}));
+				orders = fetched.filter(o => o && o.items.length > 0).sort((a, b) => b.fetchedAt - a.fetchedAt).slice(0, MAX_ORDERS);
+				render(); setStatus('online');
+			} catch (e) { console.error(e); setStatus('error'); showToast('Erreur : ' + e.message); }
+			spinRefresh(false); hideLoader();
+		}
+
+		// ── Build order ───────────────────────────────────────────────────────
+		function buildOrder(saleId, saleObj) {
+			if (!saleObj) return null;
+			const createdAt = saleObj.created_at ? new Date(saleObj.created_at).getTime() : Date.now();
+			const createdTime = saleObj.created_at ? new Date(saleObj.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : null;
+			const tableName = (saleObj.table_name?.trim()) || (saleObj.sale_ext_ref?.trim()) || (createdTime ? `Commande ${createdTime}` : `#${saleId}`);
+			const items = (saleObj.line_items || []).map(it => ({
+				id: it.line_item_id, name: it.product_model || '—',
+				qty: parseInt(it.quantity || it.multiple_quantity || 1),
+				note: it.modifiers_conc || '', status: itemStatusMap[it.line_item_id] ?? 0,
+			}));
+			return { saleId, tableName, items, fetchedAt: createdAt };
+		}
+
+		// ── Smart render ──────────────────────────────────────────────────────
+		function render() {
+			const board = document.getElementById('board');
+			if (!orders.length) {
+				board.innerHTML = `<div class="empty-state"><div class="empty-icon">☕</div><div class="empty-title">Aucune commande en cours</div><div class="empty-sub">Tout est servi — belle journée !</div></div>`;
+				updateStats(0, 0, 0, 0); return;
+			}
+			let totalItems = 0, doneItems = 0;
+			const existingCards = {};
+			board.querySelectorAll('.order-card[data-sale-id]').forEach(el => { existingCards[el.dataset.saleId] = el; });
+			const newSaleIds = new Set(orders.map(o => String(o.saleId)));
+			Object.keys(existingCards).forEach(id => { if (!newSaleIds.has(id)) existingCards[id].remove(); });
+
+			orders.forEach((order, oi) => {
+				const items = order.items, done = items.filter(i => i.status === 2).length;
+				const pct = items.length ? Math.round(done / items.length * 100) : 0;
+				const isAllDone = done === items.length && items.length > 0;
+				totalItems += items.length; doneItems += done;
+				const ageMins = Math.floor((Date.now() - order.fetchedAt) / 60000);
+				const timeClass = ageMins >= 10 ? 'urgent' : ageMins >= 5 ? 'warn' : '';
+				const timeLabel = ageMins < 1 ? "À l'instant" : `${ageMins} min`;
+				const sid = String(order.saleId);
+
+				if (existingCards[sid]) {
+					const card = existingCards[sid];
+					card.className = 'order-card' + (isAllDone ? ' done-card' : '');
+					const te = card.querySelector('.order-time'); if (te) { te.textContent = timeLabel; te.className = 'order-time ' + timeClass; }
+					const il = card.querySelector('.items-list'); if (il) il.innerHTML = renderItemsHtml(order);
+					const fill = card.querySelector('.progress-bar-fill'); if (fill) fill.style.width = pct + '%';
+					const pl = card.querySelector('.progress-label'); if (pl) pl.textContent = `${done}/${items.length}`;
+					const footer = card.querySelector('.card-footer');
+					if (footer) {
+						const ex = footer.querySelector('.complete-btn,.served-label');
+						if (!isAllDone && !footer.querySelector('.complete-btn')) {
+							if (ex) ex.remove();
+							const btn = document.createElement('button'); btn.className = 'complete-btn'; btn.style.marginLeft = '.7rem';
+							btn.textContent = '✓ Tout prêt'; btn.onclick = () => markAllDone(order.saleId); footer.appendChild(btn);
+						} else if (isAllDone && !footer.querySelector('.served-label')) {
+							if (ex) ex.remove();
+							const sp = document.createElement('span'); sp.className = 'served-label';
+							sp.style.cssText = 'font-size:.65rem;letter-spacing:.15em;color:var(--done);margin-left:.7rem;font-weight:500';
+							sp.textContent = 'SERVI ✓'; footer.appendChild(sp);
+						}
+					}
+				} else {
+					const card = document.createElement('div');
+					card.className = 'order-card' + (isAllDone ? ' done-card' : '');
+					card.dataset.saleId = sid; card.style.animationDelay = (oi * .05) + 's';
+					card.innerHTML = renderCardInner(order, isAllDone, done, pct, timeLabel, timeClass);
+					const allCards = board.querySelectorAll('.order-card');
+					if (oi < allCards.length) board.insertBefore(card, allCards[oi]); else board.appendChild(card);
+				}
+			});
+			const es = board.querySelector('.empty-state'); if (es) es.remove();
+			updateStats(orders.length, totalItems, doneItems, orders.filter(o => o.items.some(i => i.status !== 2)).length);
+		}
+
+		function renderItemsHtml(order) {
+			return order.items.map(it => {
+				const st = it.status, stClass = st === 2 ? 'item-done' : st === 1 ? 'item-in-progress' : 'item-pending';
+				return `<div class="item-row ${stClass}" onclick="cycleStatus('${order.saleId}','${it.id}')" title="Cliquer pour changer le statut">
+      <span class="item-qty">${it.qty}</span>
+      <div class="item-info">
+        <div class="item-name">${escHtml(it.name)}</div>
+        ${it.note ? `<div class="item-note">${escHtml(it.note)}</div>` : ''}
+      </div>
+      <button class="item-status-btn" onclick="cycleStatus('${order.saleId}','${it.id}');event.stopPropagation()">
+        ${st === 2
+						? `<svg viewBox="0 0 12 12" fill="none" stroke="white" stroke-width="2"><polyline points="1.5,6 5,9.5 10.5,2.5"/></svg>`
+						: `<svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="6" r="4.5"/></svg>`}
+      </button>
+    </div>`;
+			}).join('');
+		}
+
+		function renderCardInner(order, isAllDone, done, pct, timeLabel, timeClass) {
+			return `
+    <div class="card-header">
+      <div><div class="table-tag">${escHtml(order.tableName)}</div><div class="table-sub">Table / Commande</div></div>
+      <div><div class="order-id">#${order.saleId}</div><div class="order-time ${timeClass}">${timeLabel}</div></div>
+    </div>
+    <div class="items-list">${renderItemsHtml(order)}</div>
+    <div class="card-footer">
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+      <span class="progress-label">${done}/${order.items.length}</span>
+      ${!isAllDone
+					? `<button class="complete-btn" onclick="markAllDone('${order.saleId}')" style="margin-left:.7rem">✓ Tout prêt</button>`
+					: `<span class="served-label" style="font-size:.65rem;letter-spacing:.15em;color:var(--done);margin-left:.7rem;font-weight:500">SERVI ✓</span>`}
+    </div>`;
+		}
+
+		function updateStats(total, items, done, pending) {
+			document.getElementById('statTotal').textContent = total;
+			document.getElementById('statItems').textContent = items;
+			document.getElementById('statDone').textContent = done;
+			document.getElementById('statPending').textContent = pending;
+		}
+
+		function cycleStatus(saleId, itemId) {
+			const order = orders.find(o => o.saleId == saleId); if (!order) return;
+			const item = order.items.find(i => i.id == itemId); if (!item) return;
+			item.status = (item.status + 1) % 3; itemStatusMap[itemId] = item.status; saveCache(); render();
+		}
+
+		function markAllDone(saleId) {
+			const order = orders.find(o => o.saleId == saleId); if (!order) return;
+			for (const item of order.items) { if (item.status !== 2) { item.status = 2; itemStatusMap[item.id] = 2; } }
+			saveCache(); render();
+		}
+
+		function setStatus(state) {
+			const dot = document.getElementById('statusDot'), label = document.getElementById('statusLabel');
+			if (!dot || !label) return;
+			if (state === 'online') { dot.style.background = 'var(--done)'; label.textContent = 'En ligne'; }
+			else if (state === 'loading') { dot.style.background = 'var(--accent)'; label.textContent = 'Actualisation…'; }
+			else { dot.style.background = 'var(--urgent)'; label.textContent = 'Hors ligne'; }
+		}
+		function spinRefresh(on) { const b = document.getElementById('refreshBtn'); if (b) b.classList.toggle('spinning', on); }
+		function hideLoader() { const o = document.getElementById('loadingOverlay'); if (o) o.classList.add('hidden'); }
+
+		let toastTimer;
+		function showToast(msg) {
+			const t = document.getElementById('toast'); if (!t) return;
+			t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer);
+			toastTimer = setTimeout(() => t.classList.remove('show'), 4000);
+		}
+		function escHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+		function startAutoRefresh() {
+			if (refreshTimer) clearInterval(refreshTimer);
+			refreshTimer = setInterval(fetchOrders, REFRESH_INTERVAL);
+		}
+		function initDatePicker() {
+			const t = new Date();
+			document.getElementById('datePicker').value =
+				t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0');
+		}
+	</script>
+</body>
+
+</html>
