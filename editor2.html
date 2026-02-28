@@ -25,7 +25,6 @@
 			--c4: #d47a30;
 			--c5: #c84a6a;
 			--cc: #555040;
-			--csep: #4a3a20;
 			--cat: #8a7060;
 		}
 
@@ -34,11 +33,11 @@
 		*::after {
 			box-sizing: border-box;
 			margin: 0;
-			padding: 0;
+			padding: 0
 		}
 
 		html {
-			font-size: 16px;
+			font-size: 15px
 		}
 
 		body {
@@ -47,8 +46,7 @@
 			color: var(--text);
 			min-height: 100vh;
 			overflow-x: hidden;
-			/* Prevent iOS zoom on input focus */
-			-webkit-text-size-adjust: 100%;
+			-webkit-text-size-adjust: 100%
 		}
 
 		/* ── TOP BAR ── */
@@ -58,11 +56,11 @@
 			z-index: 100;
 			background: var(--bg2);
 			border-bottom: 1px solid var(--border);
-			padding: 0.5em 0.8em;
+			padding: .5em .8em;
 			display: flex;
 			align-items: center;
-			gap: 0.45em;
-			flex-wrap: wrap;
+			gap: .45em;
+			flex-wrap: wrap
 		}
 
 		.logo {
@@ -70,25 +68,25 @@
 			color: var(--gold);
 			font-size: 1.1em;
 			margin-right: auto;
-			white-space: nowrap;
+			white-space: nowrap
 		}
 
 		.logo sub {
 			font-family: 'Bebas Neue', sans-serif;
-			font-size: 0.5em;
+			font-size: .5em;
 			color: var(--muted);
-			letter-spacing: 0.12em;
+			letter-spacing: .12em;
 			vertical-align: middle;
-			margin-left: 0.35em;
+			margin-left: .35em
 		}
 
 		.btn {
 			font-family: 'Courier Prime', monospace;
-			font-size: 0.72em;
+			font-size: .68em;
 			font-weight: 700;
 			text-transform: uppercase;
-			letter-spacing: 0.06em;
-			padding: 0.38em 0.85em;
+			letter-spacing: .06em;
+			padding: .38em .85em;
 			border-radius: 999px;
 			border: 1.5px solid var(--border);
 			background: transparent;
@@ -96,86 +94,83 @@
 			cursor: pointer;
 			transition: all .14s;
 			white-space: nowrap;
-			/* good touch target */
-			min-height: 2em;
+			min-height: 2em
 		}
 
 		.btn:hover,
 		.btn:active {
 			border-color: var(--gold);
-			color: var(--gold);
+			color: var(--gold)
 		}
 
 		.btn.primary {
 			border-color: var(--gold);
 			background: var(--gold);
-			color: var(--bg);
+			color: var(--bg)
 		}
 
 		.btn.primary:hover,
 		.btn.primary:active {
-			background: #e0a838;
+			background: #e0a838
 		}
 
 		.btn.on {
 			border-color: var(--gold);
-			color: var(--gold);
+			color: var(--gold)
 		}
 
 		#topbar input {
 			font-family: 'Courier Prime', monospace;
-			font-size: 0.72em;
-			padding: 0.38em 0.85em;
+			padding: .38em .85em;
 			border-radius: 999px;
 			border: 1.5px solid var(--border);
 			background: var(--bg);
 			color: var(--text);
 			width: 10em;
 			outline: none;
-			/* prevent iOS zoom (needs font-size >= 16px equivalent) */
-			font-size: max(0.72em, 16px);
+			font-size: max(.72em, 16px)
 		}
 
 		#topbar input:focus {
-			border-color: var(--gold);
+			border-color: var(--gold)
 		}
 
 		#status {
 			width: 100%;
-			font-size: 0.7em;
+			font-size: .7em;
 			color: var(--muted);
-			padding-left: 0.2em;
-			min-height: 1em;
+			padding-left: .2em;
+			min-height: 1em
 		}
 
 		#status.ok {
-			color: #4caf7d;
+			color: #4caf7d
 		}
 
 		#status.err {
-			color: var(--red);
+			color: var(--red)
 		}
 
 		/* ── LEGEND ── */
 		#legend {
 			display: flex;
-			gap: 0.45em;
+			gap: .45em;
 			flex-wrap: wrap;
 			align-items: center;
-			padding: 0.45em 0.8em;
+			padding: .35em .8em;
 			background: var(--bg2);
 			border-bottom: 1px solid var(--border);
-			font-size: 0.63em;
+			font-size: .60em;
 			font-weight: 700;
 			text-transform: uppercase;
-			letter-spacing: 0.06em;
+			letter-spacing: .06em
 		}
 
 		.leg {
-			padding: 0.18em 0.55em;
+			padding: .18em .55em;
 			border-radius: 999px;
 			border: 1.5px solid;
-			white-space: nowrap;
+			white-space: nowrap
 		}
 
 		#legend-hint {
@@ -185,21 +180,20 @@
 			text-transform: none;
 			letter-spacing: 0;
 			font-size: 1em;
-			white-space: nowrap;
+			white-space: nowrap
 		}
 
 		/* ── PANELS ── */
 		.panel {
-			display: none;
+			display: none
 		}
 
 		.panel.active {
-			display: block;
+			display: block
 		}
 
-		/* ── VISUAL EDITOR ── */
 		#editor-wrap {
-			padding: 0.4em 0 6em;
+			padding: .4em 0 6em
 		}
 
 		/* ── LINE ROW ── */
@@ -207,26 +201,37 @@
 			display: flex;
 			align-items: flex-start;
 			border-radius: 3px;
-			min-height: 1.6em;
-			/* Each line is a row — overflow hidden by default */
+			min-height: 1.4em;
 			position: relative;
+			transition: background .1s
 		}
 
-		.line:hover {
-			background: rgba(255, 255, 255, 0.018);
+		.line:not(.editing) {
+			cursor: default
+		}
+
+		.line:not(.editing):hover {
+			background: rgba(255, 255, 255, .025)
+		}
+
+		.line.editing {
+			background: rgba(208, 151, 45, .05);
+			outline: 1px solid rgba(208, 151, 45, .3);
+			outline-offset: -1px;
+			border-radius: 3px;
+			cursor: default
 		}
 
 		.line.drag-ghost-over {
 			outline: 2px solid var(--gold);
 			outline-offset: -1px;
-			border-radius: 3px;
+			border-radius: 3px
 		}
 
 		.line.dragging {
-			opacity: 0.2;
+			opacity: .2
 		}
 
-		/* Drag handle */
 		.handle {
 			flex-shrink: 0;
 			width: 1.6em;
@@ -234,235 +239,262 @@
 			display: flex;
 			align-items: flex-start;
 			justify-content: center;
-			padding-top: 0.4em;
+			padding-top: .4em;
 			color: transparent;
-			font-size: 0.75em;
+			font-size: .75em;
 			user-select: none;
 			transition: color .12s;
 			cursor: grab;
-			touch-action: none;
-			/* allow touch drag */
+			touch-action: none
 		}
 
 		.line:hover .handle {
-			color: var(--muted);
+			color: var(--muted)
 		}
 
-		/* Left accent bar */
 		.line-accent {
 			flex-shrink: 0;
 			width: 3px;
 			align-self: stretch;
 			border-radius: 2px;
-			margin-right: 0.55em;
-			opacity: 0.75;
-			flex-shrink: 0;
+			margin-right: .55em;
+			opacity: .75
 		}
 
-		/* Edit wrap — contains overlay + raw input */
-		.line-edit-wrap {
+		.line-content-col {
 			flex: 1;
 			min-width: 0;
-			position: relative;
+			display: flex;
+			flex-direction: column
 		}
 
-		/*
-      TWO STATES:
-      collapsed (.line-edit-wrap, default):
-        - single line, overflow hidden, no wrap → cropped view
-      expanded (.line-edit-wrap.expanded):
-        - wraps freely, full height → full editing view
-    */
+		/* ── PREVIEW (read-only, always shown) ── */
+		.line-preview {
+			display: flex;
+			align-items: center;
+			min-height: 1.4em;
+			overflow: hidden;
+			position: relative
+		}
 
-		/* Colored overlay */
-		.line-colored {
-			position: absolute;
-			inset: 0;
-			z-index: 0;
-			padding: 0.22em 0.3em 0.22em 0;
+		.line-colored-preview {
+			padding: .22em .3em .22em 0;
 			pointer-events: none;
 			user-select: none;
-			overflow: hidden;
-		}
-
-		/* Collapsed: single line, spaces preserved */
-		.line-edit-wrap:not(.expanded) .line-colored {
 			white-space: pre;
-			/* preserves spaces, no wrap */
-		}
-
-		/* Expanded: wrap */
-		.line-edit-wrap.expanded .line-colored {
-			white-space: pre-wrap;
-			word-break: break-all;
-			position: relative;
-			/* let it define height */
-			overflow: visible;
-		}
-
-		/* Raw editable */
-		.line-raw {
-			position: relative;
-			z-index: 1;
-			outline: none;
-			padding: 0.22em 0.3em 0.22em 0;
-			color: transparent;
-			caret-color: var(--gold);
-			background: transparent;
-			width: 100%;
-			display: block;
-		}
-
-		/* Collapsed */
-		.line-edit-wrap:not(.expanded) .line-raw {
-			white-space: pre;
-			/* preserves spaces, no wrap */
 			overflow: hidden;
+			flex: 1;
+			min-width: 0
 		}
 
-		/* Expanded */
-		.line-edit-wrap.expanded .line-raw {
-			white-space: pre-wrap;
-			word-break: break-all;
-			overflow: visible;
-			/* overlay is now relative, so raw must be absolute to sit on top */
-			position: absolute;
-			inset: 0;
-			height: 100%;
-		}
-
-		/* When expanded, the wrap needs a height that matches the overlay */
-		.line-edit-wrap.expanded {
-			/* overlay in relative flow sets height; raw is absolute on top */
-		}
-
-		/* Segment colors */
-		.seg-0 {
-			color: var(--c0);
-			font-style: italic;
-		}
-
-		.seg-1 {
-			color: var(--c1);
-			font-style: italic;
-		}
-
-		.seg-2 {
-			color: var(--c2);
-			font-weight: 700;
-		}
-
-		.seg-3 {
-			color: var(--c3);
-		}
-
-		.seg-4 {
-			color: var(--c4);
-		}
-
-		.seg-5 {
-			color: var(--c5);
-		}
-
-		.seg-comment {
-			color: var(--cc);
-			font-style: italic;
-		}
-
-		.seg-empty {
-			color: transparent;
-		}
-
-		.sep {
-			color: var(--csep);
-		}
-
-		.at {
-			color: var(--cat);
-			font-style: italic;
-		}
-
-		/* Expand indicator — small fade on right edge when collapsed */
 		.line-fade {
 			position: absolute;
 			right: 0;
 			top: 0;
 			bottom: 0;
 			width: 3em;
-			z-index: 2;
 			pointer-events: none;
-			background: linear-gradient(to right, transparent, var(--bg) 90%);
-			transition: opacity .15s;
+			background: linear-gradient(to right, transparent, var(--bg) 90%)
 		}
 
-		.line-edit-wrap.expanded .line-fade {
-			opacity: 0;
+		.line.editing .line-fade {
+			background: linear-gradient(to right, transparent, #19110a 90%)
 		}
 
-		.line-edit-wrap:not(.expanded) .line-fade {
-			opacity: 1;
+		/* ── INLINE EDIT ROW ── */
+		.line-edit-row {
+			display: none;
+			flex-direction: column;
+			gap: 0;
+			padding: .3em .3em .4em 0;
+			border-top: 1px solid rgba(208, 151, 45, .2);
+			margin-top: .15em;
+			font-size: 14px
 		}
 
-		/* Don't show fade on short lines — handled by JS */
+		.line.editing .line-edit-row {
+			display: flex
+		}
 
-		/* Ghost type label */
+		/*
+      Single contenteditable div = the edit field.
+      It renders the colored spans directly, so the caret is always
+      perfectly aligned with the visible text. No overlay tricks needed.
+    */
+		.line-ce {
+			font-family: 'Courier Prime', monospace;
+			font-size: 16px;
+			line-height: 1.55;
+			word-break: break-all;
+			white-space: pre-wrap;
+			padding: .4em .65em;
+			border: 1.5px solid var(--border);
+			border-radius: 5px;
+			background: rgba(0, 0, 0, .4);
+			outline: none;
+			width: 100%;
+			caret-color: var(--gold);
+			min-height: 2em;
+			cursor: text;
+		}
+
+		.line-ce:focus {
+			border-color: var(--gold);
+			background: rgba(0, 0, 0, .55)
+		}
+
+		/* Segment colors — used both in preview and in the CE editor */
+		.s0 {
+			color: var(--c0);
+			font-style: italic
+		}
+
+		.s1 {
+			color: var(--c1);
+			font-style: italic
+		}
+
+		.s2 {
+			color: var(--c2);
+			font-weight: 700
+		}
+
+		.s3 {
+			color: var(--c3)
+		}
+
+		.s4 {
+			color: var(--c4)
+		}
+
+		.s5 {
+			color: var(--c5)
+		}
+
+		.sc {
+			color: var(--cc);
+			font-style: italic
+		}
+
+		.su {
+			color: var(--border)
+		}
+
+		/* underscore separators */
+		.sa {
+			color: var(--cat);
+			font-style: italic
+		}
+
+		/* @... parts */
+		.serr {
+			color: var(--red);
+			font-weight: 700
+		}
+
+		/* over-level error */
+
+		.line-edit-actions {
+			display: flex;
+			gap: .5em;
+			align-items: center;
+			padding-top: .3em;
+			font-size: 14px
+		}
+
+		.line-edit-hint {
+			font-size: 11px;
+			color: var(--muted);
+			flex: 1;
+			white-space: nowrap
+		}
+
 		.line-type-label {
 			flex-shrink: 0;
-			font-size: 0.58em;
+			font-size: 11px;
 			font-weight: 700;
 			text-transform: uppercase;
-			letter-spacing: 0.07em;
-			padding: 0 0.4em;
-			opacity: 0;
-			transition: opacity .12s;
+			letter-spacing: .07em;
+			padding: 0 .2em 0 .4em;
 			align-self: flex-start;
-			padding-top: 0.55em;
-			white-space: nowrap;
+			padding-top: .35em;
+			white-space: nowrap
 		}
 
-		.line:hover .line-type-label {
-			opacity: 1;
+
+
+		/* ── EDIT BUTTON (always visible, next to label) ── */
+		.line-edit-btn {
+			flex-shrink: 0;
+			background: none;
+			border: 1px solid transparent;
+			border-radius: 6px;
+			color: var(--muted);
+			font-size: 15px;
+			cursor: pointer;
+			padding: .3em .55em;
+			align-self: flex-start;
+			margin-top: .1em;
+			transition: all .12s;
+			line-height: 1;
+			min-width: 2.4em;
+			min-height: 2.4em;
+			display: flex;
+			align-items: center;
+			justify-content: center
 		}
 
-		/* Delete */
+		.line-edit-btn:hover,
+		.line-edit-btn:active {
+			border-color: var(--gold);
+			color: var(--gold)
+		}
+
+		.line.editing .line-edit-btn {
+			color: var(--gold);
+			border-color: rgba(208, 151, 45, .4)
+		}
+
 		.line-del {
 			flex-shrink: 0;
 			background: none;
-			border: none;
-			color: transparent;
-			font-size: 0.9em;
+			border: 1px solid transparent;
+			border-radius: 6px;
+			color: var(--border);
+			font-size: 15px;
 			cursor: pointer;
-			padding: 0.2em 0.5em;
-			transition: color .12s;
+			padding: .3em .5em;
+			transition: all .12s;
 			align-self: flex-start;
-			padding-top: 0.4em;
-			min-width: 2em;
-			min-height: 2em;
-			/* touch target */
+			margin-top: .1em;
+			min-width: 2.4em;
+			min-height: 2.4em;
+			display: flex;
+			align-items: center;
+			justify-content: center
 		}
 
 		.line:hover .line-del {
-			color: var(--muted);
+			color: var(--muted) !important
 		}
 
 		.line-del:hover,
 		.line-del:active {
-			color: var(--red) !important;
+			color: var(--red) !important
 		}
 
-		/* Add bar */
 		#add-bar {
 			display: flex;
-			gap: 0.5em;
+			gap: .5em;
 			flex-wrap: wrap;
 			justify-content: center;
 			margin-top: 1.5em;
-			padding: 0 1em;
+			padding: 0 1em
 		}
 
 		/* ── RAW PANEL ── */
 		#raw-wrap {
-			height: calc(100vh - 95px);
+			height: calc(100vh - 95px)
 		}
 
 		#raw-textarea {
@@ -471,57 +503,57 @@
 			background: var(--bg);
 			color: var(--text);
 			font-family: 'Courier Prime', monospace;
-			font-size: 0.88em;
+			font-size: .88em;
 			border: none;
 			outline: none;
-			padding: 1em 1em;
+			padding: 1em;
 			resize: none;
 			line-height: 1.65;
-			tab-size: 2;
+			tab-size: 2
 		}
 
 		/* ── DIFF PANEL ── */
 		#diff-wrap {
 			padding: 1em 1em 4em;
 			font-family: 'Courier Prime', monospace;
-			font-size: 0.82em;
-			line-height: 1.65;
+			font-size: .82em;
+			line-height: 1.65
 		}
 
 		.diff-line {
 			display: block;
-			padding: 0.05em 0.4em;
+			padding: .05em .4em;
 			border-radius: 2px;
 			white-space: pre-wrap;
-			word-break: break-all;
+			word-break: break-all
 		}
 
 		.diff-add {
-			background: rgba(76, 175, 125, 0.13);
-			color: #4caf7d;
+			background: rgba(76, 175, 125, .13);
+			color: #4caf7d
 		}
 
 		.diff-del {
-			background: rgba(160, 48, 32, 0.13);
+			background: rgba(160, 48, 32, .13);
 			color: #d06050;
-			text-decoration: line-through;
+			text-decoration: line-through
 		}
 
 		.diff-same {
-			color: var(--muted);
+			color: var(--muted)
 		}
 
 		::-webkit-scrollbar {
-			width: 5px;
+			width: 5px
 		}
 
 		::-webkit-scrollbar-track {
-			background: var(--bg);
+			background: var(--bg)
 		}
 
 		::-webkit-scrollbar-thumb {
 			background: var(--border);
-			border-radius: 3px;
+			border-radius: 3px
 		}
 	</style>
 </head>
@@ -549,7 +581,7 @@
 		<span class="leg" style="border-color:var(--c4);color:var(--c4)">_ description</span>
 		<span class="leg" style="border-color:var(--c5);color:var(--c5)">_____ commentaire</span>
 		<span class="leg" style="border-color:var(--cc);color:var(--cc)"># commenté</span>
-		<span id="legend-hint">tap = expand · ⠿ = déplacer</span>
+		<span id="legend-hint">✎ = modifier · ⠿ = déplacer</span>
 	</div>
 
 	<div id="panel-visual" class="panel active">
@@ -558,9 +590,9 @@
 			<div id="add-bar">
 				<button class="btn" onclick="insertLine(null,'')">＋ Vide</button>
 				<button class="btn" onclick="insertLine(null,'Nouveau Bloc')">＋ Bloc</button>
-				<button class="btn" onclick="insertLine(null,'_ ')">＋ Catégorie</button>
-				<button class="btn" onclick="insertLine(null,'__ ')">＋ Produit</button>
-				<button class="btn" onclick="insertLine(null,'_____ ')">＋ Commentaire</button>
+				<button class="btn" onclick="insertLine(null,'_')">＋ Catégorie</button>
+				<button class="btn" onclick="insertLine(null,'__')">＋ Produit</button>
+				<button class="btn" onclick="insertLine(null,'_____')">＋ Commentaire</button>
 			</div>
 		</div>
 	</div>
@@ -580,50 +612,122 @@
 		let _sb;
 		try { _sb = supabase.createClient(SupabaseUrl, SupabaseKey); } catch (e) { }
 
-		let rawLines = [];
-		let savedText = '';
+		let rawLines = [], savedText = '';
 
-		const FONT_SIZES = ['1.12em', '1.0em', '0.92em', '0.85em', '0.85em', '0.82em'];
+		const SIZES = ['0.95em', '0.85em', '0.80em', '0.75em', '0.75em', '0.72em'];
 		const LABELS = ['bloc', 'catégorie', 'produit', 'prix', 'description', 'commentaire'];
 		const COLORS = ['var(--c0)', 'var(--c1)', 'var(--c2)', 'var(--c3)', 'var(--c4)', 'var(--c5)'];
 
-		// ── COLORIZER ────────────────────────────────
-		function esc(s) {
-			return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-		}
+		// ─────────────────────────────────────────────────────────────
+		// COLORIZER
+		// Rules (simplified — _ is ONLY a level/separator char, never in text):
+		//   • leading _s  → level indicator (dimmed)
+		//   • remaining _s → field separators (dimmed)
+		//   • @...         → annotation (italic muted)
+		//   • text between separators gets color of its segment index
+		//   • line starting with # → full comment color
+		// ─────────────────────────────────────────────────────────────
+		function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
 		function colorize(raw) {
-			if (raw.trim() === '') return '<span class="seg-empty">&nbsp;</span>';
-			if (raw.trim().startsWith('#')) return `<span class="seg-comment">${esc(raw)}</span>`;
-			let u = 0;
-			while (raw[u] === '_') u++;
-			const baseType = Math.min(u, 5);
-			const prefix = raw.slice(0, u);
-			const rest = raw.slice(u);
-			const parts = rest.split(/ _ /);
+			if (!raw || raw.trim() === '') return '';
+			if (raw.trim().startsWith('#')) return `<span class="sc">${esc(raw)}</span>`;
+
+			// Count ALL leading underscores — no cap, so we can detect overflow
+			let lvl = 0;
+			while (raw[lvl] === '_') lvl++;
+
+			const leadingU = raw.slice(0, lvl);
+			const body = raw.slice(lvl);
+			const segs = body.split('_');
+
 			let html = '';
-			if (prefix) html += `<span class="sep">${esc(prefix)}</span>`;
-			parts.forEach((seg, i) => {
-				const cls = `seg-${Math.min(baseType + i, 5)}`;
-				if (i > 0) html += `<span class="sep"> _ </span>`;
+			// Leading underscores: show overflow ones in red
+			if (leadingU) {
+				const okU = leadingU.slice(0, 5);   // first 5 underscores are fine
+				const errU = leadingU.slice(5);       // beyond 5 → error
+				if (okU) html += `<span class="su">${esc(okU)}</span>`;
+				if (errU) html += `<span class="serr">${esc(errU)}</span>`;
+			}
+
+			segs.forEach((seg, i) => {
+				const realLvl = lvl + i;   // un-capped level for this segment
+				if (i > 0) {
+					// Separator underscore: error color if already over level
+					const sepCls = realLvl > 5 ? 'serr' : 'su';
+					html += `<span class="${sepCls}">_</span>`;
+				}
+				const cls = realLvl > 5 ? 'serr' : `s${Math.min(realLvl, 5)}`;
 				const atParts = seg.split('@');
 				html += `<span class="${cls}">${esc(atParts[0])}</span>`;
 				for (let j = 1; j < atParts.length; j++)
-					html += `<span class="at">@${esc(atParts[j])}</span>`;
+					html += `<span class="${realLvl > 5 ? 'serr' : 'sa'}">@${esc(atParts[j])}</span>`;
 			});
 			return html;
 		}
 
 		function lineInfo(raw) {
-			const t = raw.trim();
-			if (t === '') return { color: 'transparent', label: '', size: '0.88em', lv: -1 };
-			if (t.startsWith('#')) return { color: 'var(--cc)', label: '#', size: '0.80em', lv: -1 };
-			let u = 0; while (raw[u] === '_') u++;
-			const lv = Math.min(u, 5);
-			return { color: COLORS[lv], label: LABELS[lv], size: FONT_SIZES[lv], lv };
+			if (!raw || raw.trim() === '') return { color: 'transparent', label: '', size: '0.88em' };
+			if (raw.trim().startsWith('#')) return { color: 'var(--cc)', label: '#', size: '0.80em' };
+			let lvl = 0; while (raw[lvl] === '_') lvl++;
+			lvl = Math.min(lvl, 5);
+			return { color: COLORS[lvl], label: LABELS[lvl], size: SIZES[lvl] };
 		}
 
-		// ── RENDER ───────────────────────────────────
+		// ─────────────────────────────────────────────────────────────
+		// contenteditable helpers
+		// We store plain text in rawLines; the CE div shows colored HTML.
+		// On input we extract plaintext, recolorize, and restore caret.
+		// ─────────────────────────────────────────────────────────────
+
+		function getCaretOffset(el) {
+			// Returns character offset of caret within el's plain text
+			const sel = window.getSelection();
+			if (!sel || sel.rangeCount === 0) return 0;
+			const range = sel.getRangeAt(0);
+			const pre = range.cloneRange();
+			pre.selectNodeContents(el);
+			pre.setEnd(range.endContainer, range.endOffset);
+			return pre.toString().length;
+		}
+
+		function setCaretOffset(el, offset) {
+			// Restores caret to character offset within el
+			const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+			let remaining = offset;
+			let node;
+			while ((node = walker.nextNode())) {
+				if (remaining <= node.textContent.length) {
+					const range = document.createRange();
+					range.setStart(node, remaining);
+					range.collapse(true);
+					const sel = window.getSelection();
+					sel.removeAllRanges();
+					sel.addRange(range);
+					return;
+				}
+				remaining -= node.textContent.length;
+			}
+			// fallback: end of element
+			const range = document.createRange();
+			range.selectNodeContents(el);
+			range.collapse(false);
+			window.getSelection().removeAllRanges();
+			window.getSelection().addRange(range);
+		}
+
+		function getCEText(el) {
+			// Extract plain text from CE div (strip HTML, get innerText equivalent)
+			return el.innerText.replace(/\n/g, '');
+		}
+
+		function setCEContent(el, raw) {
+			el.innerHTML = colorize(raw);
+		}
+
+		// ─────────────────────────────────────────────────────────────
+		// RENDER
+		// ─────────────────────────────────────────────────────────────
 		function renderAll() {
 			const container = document.getElementById('lines-container');
 			container.innerHTML = '';
@@ -637,7 +741,7 @@
 			line.className = 'line';
 			line.dataset.idx = idx;
 
-			// Handle
+			// Drag handle
 			const handle = document.createElement('span');
 			handle.className = 'handle';
 			handle.textContent = '⠿';
@@ -649,124 +753,78 @@
 			accent.style.background = color;
 			line.appendChild(accent);
 
-			// Edit wrap
-			const wrap = document.createElement('div');
-			wrap.className = 'line-edit-wrap'; // collapsed by default
-			wrap.style.fontSize = size;
+			// Content column
+			const col = document.createElement('div');
+			col.className = 'line-content-col';
+			col.style.fontSize = size;
 
-			// Colored overlay
-			const colored = document.createElement('div');
-			colored.className = 'line-colored';
-			colored.innerHTML = colorize(text);
-			colored.setAttribute('aria-hidden', 'true');
-
-			// Raw editable
-			const raw = document.createElement('div');
-			raw.className = 'line-raw';
-			raw.contentEditable = 'true';
-			raw.spellcheck = false;
-			raw.textContent = text;
-
-			// Fade gradient (right edge indicator)
+			// ── Preview (always visible, read-only) ──
+			const preview = document.createElement('div');
+			preview.className = 'line-preview';
+			const coloredPreview = document.createElement('div');
+			coloredPreview.className = 'line-colored-preview';
+			coloredPreview.innerHTML = colorize(text);
 			const fade = document.createElement('div');
 			fade.className = 'line-fade';
+			preview.appendChild(coloredPreview);
+			preview.appendChild(fade);
+			col.appendChild(preview);
 
-			// ── EXPAND / COLLAPSE ──
-			// Click/tap on the line-edit-wrap (not on the editable itself while typing)
-			// expands it. Clicking elsewhere collapses all others.
-			function expand() {
-				// Collapse any other expanded line
-				document.querySelectorAll('.line-edit-wrap.expanded').forEach(w => {
-					if (w !== wrap) collapse(w);
-				});
-				wrap.classList.add('expanded');
-				raw.focus();
-				// Place caret at end
-				try {
-					const r = document.createRange(), s = window.getSelection();
-					r.selectNodeContents(raw); r.collapse(false);
-					s.removeAllRanges(); s.addRange(r);
-				} catch (e) { }
-			}
+			// ── Inline edit row ──
+			const editRow = document.createElement('div');
+			editRow.className = 'line-edit-row';
 
-			function collapse(w) {
-				w.classList.remove('expanded');
-			}
+			// The contenteditable field — colored text, caret always correct
+			const ce = document.createElement('div');
+			ce.className = 'line-ce';
+			ce.contentEditable = 'true';
+			ce.spellcheck = false;
+			ce.setAttribute('autocorrect', 'off');
+			ce.setAttribute('autocapitalize', 'off');
+			setCEContent(ce, text);
 
-			// Tap/click on wrap → expand
-			wrap.addEventListener('click', e => {
-				if (!wrap.classList.contains('expanded')) {
-					e.preventDefault();
-					expand();
-				}
-			});
-			// Touch tap
-			wrap.addEventListener('touchend', e => {
-				if (!wrap.classList.contains('expanded')) {
-					e.preventDefault();
-					expand();
-				}
-			}, { passive: false });
+			// Action row
+			const actRow = document.createElement('div');
+			actRow.className = 'line-edit-actions';
+			const hint = document.createElement('span');
+			hint.className = 'line-edit-hint';
+			hint.textContent = '↵ valider · esc annuler';
+			const btnCancel = document.createElement('button');
+			btnCancel.className = 'btn';
+			btnCancel.textContent = 'Annuler';
+			const btnConfirm = document.createElement('button');
+			btnConfirm.className = 'btn primary';
+			btnConfirm.textContent = '✓ Valider';
+			actRow.appendChild(hint);
+			actRow.appendChild(btnCancel);
+			actRow.appendChild(btnConfirm);
 
-			// Clicking outside → collapse this line
-			document.addEventListener('click', e => {
-				if (!wrap.contains(e.target) && !line.contains(e.target)) {
-					collapse(wrap);
-				}
-			});
+			editRow.appendChild(ce);
+			editRow.appendChild(actRow);
+			col.appendChild(editRow);
+			line.appendChild(col);
 
-			raw.addEventListener('input', () => {
-				const val = raw.innerText.replace(/\n/g, '');
-				rawLines[idx] = val;
-				colored.innerHTML = colorize(val);
-				const info = lineInfo(val);
-				accent.style.background = info.color;
-				typeLabel.textContent = info.label;
-				typeLabel.style.color = info.color;
-				wrap.style.fontSize = info.size;
-			});
-
-			raw.addEventListener('keydown', e => {
-				if (e.key === 'Enter') {
-					e.preventDefault();
-					collapse(wrap);
-					const t = rawLines[idx];
-					let prefix = '';
-					for (let i = 0; i < t.length; i++) { if (t[i] === '_') prefix += '_'; else break; }
-					insertLine(idx, prefix);
-					// Auto-expand next line after short delay
-					setTimeout(() => expandByIdx(idx + 1), 30);
-					return;
-				}
-				if (e.key === 'Escape') {
-					collapse(wrap);
-					return;
-				}
-				if (e.key === 'Backspace' && raw.innerText.replace(/\n/g, '') === '') {
-					e.preventDefault();
-					rawLines.splice(idx, 1);
-					renderAll();
-					focusLine(Math.max(0, idx - 1), true);
-				}
-			});
-
-			raw.addEventListener('paste', e => {
-				e.preventDefault();
-				const plain = e.clipboardData.getData('text/plain').replace(/\r?\n/g, '');
-				document.execCommand('insertText', false, plain);
-			});
-
-			wrap.appendChild(colored);
-			wrap.appendChild(raw);
-			wrap.appendChild(fade);
-			line.appendChild(wrap);
-
-			// Ghost label
+			// Type label (always visible)
 			const typeLabel = document.createElement('span');
 			typeLabel.className = 'line-type-label';
 			typeLabel.style.color = color;
 			typeLabel.textContent = label;
 			line.appendChild(typeLabel);
+
+			// Edit button — the ONLY way to open the editor
+			const editBtn = document.createElement('button');
+			editBtn.className = 'line-edit-btn';
+			editBtn.textContent = '✎';
+			editBtn.title = 'Modifier';
+			editBtn.addEventListener('click', e => {
+				e.stopPropagation();
+				if (line.classList.contains('editing')) {
+					applyClose(line, true);
+				} else {
+					openEditHere();
+				}
+			});
+			line.appendChild(editBtn);
 
 			// Delete
 			const del = document.createElement('button');
@@ -776,71 +834,161 @@
 				e.stopPropagation();
 				rawLines.splice(idx, 1);
 				renderAll();
-				focusLine(Math.max(0, idx - 1), true);
 			});
 			line.appendChild(del);
+
+			// ── CE input handler ──
+			// On every input: save caret, recolorize, restore caret, sync preview
+			ce.addEventListener('input', () => {
+				const caret = getCaretOffset(ce);
+				const raw = getCEText(ce);
+				setCEContent(ce, raw);
+				setCaretOffset(ce, caret);
+				// Sync preview + accent + label
+				coloredPreview.innerHTML = colorize(raw);
+				const info = lineInfo(raw);
+				accent.style.background = info.color;
+				col.style.fontSize = info.size;
+				typeLabel.textContent = info.label;
+				typeLabel.style.color = info.color;
+			});
+
+			// Prevent real newlines from being inserted
+			ce.addEventListener('keydown', e => {
+				if (e.key === 'Enter' && !e.shiftKey) {
+					e.preventDefault();
+					applyClose(line, true);
+					const val = rawLines[idx];
+					let prefix = ''; for (let i = 0; i < val.length; i++) { if (val[i] === '_') prefix += '_'; else break; }
+					insertLine(idx, prefix);
+					setTimeout(() => openEdit(idx + 1), 30);
+				} else if (e.key === 'Escape') {
+					e.preventDefault();
+					applyClose(line, false);
+				} else if (e.key === 'Backspace' && getCEText(ce) === '') {
+					e.preventDefault();
+					applyClose(line, false);
+					rawLines.splice(idx, 1);
+					renderAll();
+				}
+			});
+
+			// Strip formatting on paste — plain text only
+			ce.addEventListener('paste', e => {
+				e.preventDefault();
+				const plain = (e.clipboardData || window.clipboardData).getData('text/plain').replace(/\r?\n/g, '');
+				const caret = getCaretOffset(ce);
+				const cur = getCEText(ce);
+				const next = cur.slice(0, caret) + plain + cur.slice(caret);
+				setCEContent(ce, next);
+				setCaretOffset(ce, caret + plain.length);
+				coloredPreview.innerHTML = colorize(next);
+				const info = lineInfo(next);
+				accent.style.background = info.color;
+				col.style.fontSize = info.size;
+				typeLabel.textContent = info.label;
+				typeLabel.style.color = info.color;
+			});
+
+			// ── Open / close ──
+			function openEditHere() {
+				document.querySelectorAll('.line.editing').forEach(l => {
+					if (l !== line) applyClose(l, true);
+				});
+				setCEContent(ce, rawLines[idx]);
+				coloredPreview.innerHTML = colorize(rawLines[idx]);
+				line.classList.add('editing');
+				setTimeout(() => {
+					ce.focus();
+					// Place caret at end
+					const range = document.createRange();
+					range.selectNodeContents(ce);
+					range.collapse(false);
+					const sel = window.getSelection();
+					sel.removeAllRanges();
+					sel.addRange(range);
+					line.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+				}, 30);
+			}
+
+			btnConfirm.addEventListener('click', e => { e.stopPropagation(); applyClose(line, true); });
+			btnCancel.addEventListener('click', e => { e.stopPropagation(); applyClose(line, false); });
+
+			// Clicking anywhere outside an open editor → save & close it
+			// (clicking inside is fine — that's normal editing interaction)
+			document.addEventListener('pointerdown', e => {
+				if (line.classList.contains('editing') && !line.contains(e.target))
+					applyClose(line, true);
+			}, { capture: true, passive: true });
 
 			setupDrag(handle, line, idx);
 			return line;
 		}
 
-		function expandByIdx(idx) {
-			const wrap = document.querySelector(`.line[data-idx="${idx}"] .line-edit-wrap`);
-			if (wrap) {
-				document.querySelectorAll('.line-edit-wrap.expanded').forEach(w => {
-					if (w !== wrap) w.classList.remove('expanded');
-				});
-				wrap.classList.add('expanded');
-				const raw = wrap.querySelector('.line-raw');
-				if (raw) raw.focus();
+		// Save & close any line element
+		function applyClose(targetLine, doSave) {
+			const ce = targetLine.querySelector('.line-ce');
+			const tIdx = parseInt(targetLine.dataset.idx);
+			if (doSave && ce && !isNaN(tIdx)) {
+				const val = getCEText(ce);
+				rawLines[tIdx] = val;
+				const info = lineInfo(val);
+				const html = colorize(val);
+				targetLine.querySelector('.line-colored-preview').innerHTML = html;
+				setCEContent(ce, val);
+				targetLine.querySelector('.line-accent').style.background = info.color;
+				targetLine.querySelector('.line-content-col').style.fontSize = info.size;
+				const lbl = targetLine.querySelector('.line-type-label');
+				lbl.textContent = info.label; lbl.style.color = info.color;
 			}
+			targetLine.classList.remove('editing');
 		}
 
-		function focusLine(idx, expand) {
-			if (expand) {
-				expandByIdx(idx);
-			} else {
-				const el = document.querySelector(`.line[data-idx="${idx}"] .line-raw`);
-				if (el) el.focus();
-			}
+		// Open edit by index
+		function openEdit(idx) {
+			const lineEl = document.querySelector(`.line[data-idx="${idx}"]`);
+			if (!lineEl) return;
+			document.querySelectorAll('.line.editing').forEach(l => {
+				if (l !== lineEl) applyClose(l, true);
+			});
+			const ce = lineEl.querySelector('.line-ce');
+			setCEContent(ce, rawLines[idx] || '');
+			lineEl.querySelector('.line-colored-preview').innerHTML = colorize(rawLines[idx] || '');
+			lineEl.classList.add('editing');
+			setTimeout(() => {
+				ce.focus();
+				const range = document.createRange();
+				range.selectNodeContents(ce);
+				range.collapse(false);
+				const sel = window.getSelection();
+				sel.removeAllRanges();
+				sel.addRange(range);
+				lineEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+			}, 30);
 		}
 
 		function insertLine(afterIdx, text = '') {
 			if (afterIdx === null) rawLines.push(text);
 			else rawLines.splice(afterIdx + 1, 0, text);
 			renderAll();
-			const newIdx = afterIdx === null ? rawLines.length - 1 : afterIdx + 1;
-			expandByIdx(newIdx);
+			setTimeout(() => openEdit(afterIdx === null ? rawLines.length - 1 : afterIdx + 1), 30);
 		}
 
-		// ── DRAG (mouse + touch) ─────────────────────
+		// ── DRAG ──────────────────────────────────────────────────────
 		let dragState = null;
 
 		function setupDrag(handle, lineEl, idx) {
-			// Mouse
 			handle.addEventListener('mousedown', e => startDrag(e.clientY, lineEl, idx, 'mouse'));
-			// Touch
-			handle.addEventListener('touchstart', e => {
-				const t = e.touches[0];
-				startDrag(t.clientY, lineEl, idx, 'touch');
-			}, { passive: true });
+			handle.addEventListener('touchstart', e => startDrag(e.touches[0].clientY, lineEl, idx, 'touch'), { passive: true });
 		}
 
 		function startDrag(clientY, lineEl, idx, type) {
 			const rect = lineEl.getBoundingClientRect();
 			const ghost = lineEl.cloneNode(true);
-			ghost.style.cssText = `
-    position:fixed; left:${rect.left}px; top:${rect.top}px;
-    width:${rect.width}px; opacity:0.85; z-index:999;
-    background:var(--bg2); border:1px solid var(--gold);
-    border-radius:4px; pointer-events:none;
-    box-shadow:0 4px 24px rgba(0,0,0,0.6);
-  `;
+			ghost.style.cssText = `position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;opacity:.85;z-index:999;background:var(--bg2);border:1px solid var(--gold);border-radius:4px;pointer-events:none;box-shadow:0 4px 24px rgba(0,0,0,.6)`;
 			document.body.appendChild(ghost);
 			lineEl.classList.add('dragging');
-
 			dragState = { srcIdx: idx, ghost, lineEl, offsetY: clientY - rect.top };
-
 			if (type === 'touch') {
 				document.addEventListener('touchmove', onTouchMove, { passive: false });
 				document.addEventListener('touchend', onTouchEnd, { once: true });
@@ -851,23 +999,20 @@
 			if (!dragState) return;
 			dragState.ghost.style.top = (clientY - dragState.offsetY) + 'px';
 			document.querySelectorAll('.line.drag-ghost-over').forEach(l => l.classList.remove('drag-ghost-over'));
-			const target = getLineAtY(clientY);
-			if (target && target !== dragState.lineEl) target.classList.add('drag-ghost-over');
+			const t = getLineAtY(clientY);
+			if (t && t !== dragState.lineEl) t.classList.add('drag-ghost-over');
 		}
 
 		function endDrag(clientY) {
 			if (!dragState) return;
 			const { srcIdx, ghost, lineEl } = dragState;
-			ghost.remove();
-			lineEl.classList.remove('dragging');
+			ghost.remove(); lineEl.classList.remove('dragging');
 			document.querySelectorAll('.line.drag-ghost-over').forEach(l => l.classList.remove('drag-ghost-over'));
-
-			const target = getLineAtY(clientY);
-			if (target && target !== lineEl) {
-				const destIdx = parseInt(target.dataset.idx);
+			const t = getLineAtY(clientY);
+			if (t && t !== lineEl) {
+				const destIdx = parseInt(t.dataset.idx);
 				if (!isNaN(destIdx) && destIdx !== srcIdx) {
-					const rect = target.getBoundingClientRect();
-					const before = clientY < rect.top + rect.height / 2;
+					const before = clientY < t.getBoundingClientRect().top + t.getBoundingClientRect().height / 2;
 					const moved = rawLines.splice(srcIdx, 1)[0];
 					let dest = srcIdx < destIdx ? destIdx - 1 : destIdx;
 					if (!before) dest++;
@@ -878,16 +1023,10 @@
 			dragState = null;
 		}
 
-		// Mouse events
 		document.addEventListener('mousemove', e => moveDrag(e.clientY));
 		document.addEventListener('mouseup', e => endDrag(e.clientY));
-
-		// Touch events
 		function onTouchMove(e) { e.preventDefault(); moveDrag(e.touches[0].clientY); }
-		function onTouchEnd(e) {
-			endDrag(e.changedTouches[0].clientY);
-			document.removeEventListener('touchmove', onTouchMove);
-		}
+		function onTouchEnd(e) { endDrag(e.changedTouches[0].clientY); document.removeEventListener('touchmove', onTouchMove); }
 
 		function getLineAtY(y) {
 			for (const el of document.querySelectorAll('.line')) {
@@ -897,7 +1036,7 @@
 			return null;
 		}
 
-		// ── PANELS ───────────────────────────────────
+		// ── PANELS ────────────────────────────────────────────────────
 		function switchPanel(name) {
 			['visual', 'raw', 'diff'].forEach(p => {
 				document.getElementById(`panel-${p}`).classList.toggle('active', p === name);
@@ -908,20 +1047,17 @@
 		}
 
 		document.getElementById('raw-textarea').addEventListener('input', () => {
-			rawLines = document.getElementById('raw-textarea').value
-				.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+			rawLines = document.getElementById('raw-textarea').value.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
 		});
 
-		// ── DIFF ─────────────────────────────────────
+		// ── DIFF ──────────────────────────────────────────────────────
 		function renderDiff() {
 			const orig = savedText.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
-			const cur = rawLines;
 			const wrap = document.getElementById('diff-wrap');
-			if (orig.join('\n') === cur.join('\n')) {
+			if (orig.join('\n') === rawLines.join('\n')) {
 				wrap.innerHTML = '<span style="color:var(--muted)">Aucune modification.</span>'; return;
 			}
-			const diff = lcs(orig.slice(0, 400), cur.slice(0, 400));
-			wrap.innerHTML = diff.map(d =>
+			wrap.innerHTML = lcs(orig.slice(0, 400), rawLines.slice(0, 400)).map(d =>
 				`<span class="diff-line diff-${d.type}">${d.type === 'add' ? '＋' : d.type === 'del' ? '－' : '　'} ${esc(d.text)}</span>`
 			).join('\n');
 		}
@@ -929,11 +1065,9 @@
 		function lcs(a, b) {
 			const m = a.length, n = b.length;
 			const dp = Array.from({ length: m + 1 }, () => new Uint16Array(n + 1));
-			for (let i = m - 1; i >= 0; i--)
-				for (let j = n - 1; j >= 0; j--)
-					dp[i][j] = a[i] === b[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
-			const r = [];
-			let i = 0, j = 0;
+			for (let i = m - 1; i >= 0; i--) for (let j = n - 1; j >= 0; j--)
+				dp[i][j] = a[i] === b[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+			const r = []; let i = 0, j = 0;
 			while (i < m || j < n) {
 				if (i < m && j < n && a[i] === b[j]) { r.push({ type: 'same', text: a[i] }); i++; j++; }
 				else if (j < n && (i >= m || dp[i][j + 1] >= dp[i + 1][j])) { r.push({ type: 'add', text: b[j] }); j++; }
@@ -942,7 +1076,7 @@
 			return r;
 		}
 
-		// ── SAVE ─────────────────────────────────────
+		// ── SAVE ──────────────────────────────────────────────────────
 		function getText() { return rawLines.join('\n'); }
 
 		function copyMenu() {
@@ -971,7 +1105,7 @@
 			if (cls === 'ok') setTimeout(() => { el.textContent = ''; el.className = ''; }, 3500);
 		}
 
-		// ── INIT ─────────────────────────────────────
+		// ── INIT ──────────────────────────────────────────────────────
 		async function init() {
 			setStatus('Chargement…', '');
 			let text = '';
