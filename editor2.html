@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+	<meta charset="utf-8">
+	<META NAME="robots" CONTENT="noindex">
+	<title>Brume — Menu Editor</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Courier+Prime:wght@400;700&family=Bebas+Neue&display=swap"
+		rel="stylesheet">
+	<style>
+		:root {
+			--bg: #161008;
+			--bg2: #1e1508;
+			--border: #3d2e12;
+			--gold: #d0972d;
+			--muted: #6a5030;
+			--text: #ffeacf;
+			--red: #a03020;
+			--c0: #d0972d;
+			--c1: #9b72c8;
+			--c2: #4a9fd4;
+			--c3: #4caf7d;
+			--c4: #d47a30;
+			--c5: #c84a6a;
+			--cc: #555040;
+			--csep: #4a3a20;
+			--cat: #8a7060;
+		}
+
+		*,
+		*::before,
+		*::after {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		html {
+			font-size: 16px;
+		}
+
+		body {
+			font-family: 'Courier Prime', monospace;
+			background: var(--bg);
+			color: var(--text);
+			min-height: 100vh;
+			overflow-x: hidden;
+			/* Prevent iOS zoom on input focus */
+			-webkit-text-size-adjust: 100%;
+		}
+
+		/* ── TOP BAR ── */
+		#topbar {
+			position: sticky;
+			top: 0;
+			z-index: 100;
+			background: var(--bg2);
+			border-bottom: 1px solid var(--border);
+			padding: 0.5em 0.8em;
+			display: flex;
+			align-items: center;
+			gap: 0.45em;
+			flex-wrap: wrap;
+		}
+
+		.logo {
+			font-family: 'Yeseva One', serif;
+			color: var(--gold);
+			font-size: 1.1em;
+			margin-right: auto;
+			white-space: nowrap;
+		}
+
+		.logo sub {
+			font-family: 'Bebas Neue', sans-serif;
+			font-size: 0.5em;
+			color: var(--muted);
+			letter-spacing: 0.12em;
+			vertical-align: middle;
+			margin-left: 0.35em;
+		}
+
+		.btn {
+			font-family: 'Courier Prime', monospace;
+			font-size: 0.72em;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 0.06em;
+			padding: 0.38em 0.85em;
+			border-radius: 999px;
+			border: 1.5px solid var(--border);
+			background: transparent;
+			color: var(--muted);
+			cursor: pointer;
+			transition: all .14s;
+			white-space: nowrap;
+			/* good touch target */
+			min-height: 2em;
+		}
+
+		.btn:hover,
+		.btn:active {
+			border-color: var(--gold);
+			color: var(--gold);
+		}
+
+		.btn.primary {
+			border-color: var(--gold);
+			background: var(--gold);
+			color: var(--bg);
+		}
+
+		.btn.primary:hover,
+		.btn.primary:active {
+			background: #e0a838;
+		}
+
+		.btn.on {
+			border-color: var(--gold);
+			color: var(--gold);
+		}
+
+		#topbar input {
+			font-family: 'Courier Prime', monospace;
+			font-size: 0.72em;
+			padding: 0.38em 0.85em;
+			border-radius: 999px;
+			border: 1.5px solid var(--border);
+			background: var(--bg);
+			color: var(--text);
+			width: 10em;
+			outline: none;
+			/* prevent iOS zoom (needs font-size >= 16px equivalent) */
+			font-size: max(0.72em, 16px);
+		}
+
+		#topbar input:focus {
+			border-color: var(--gold);
+		}
+
+		#status {
+			width: 100%;
+			font-size: 0.7em;
+			color: var(--muted);
+			padding-left: 0.2em;
+			min-height: 1em;
+		}
+
+		#status.ok {
+			color: #4caf7d;
+		}
+
+		#status.err {
+			color: var(--red);
+		}
+
+		/* ── LEGEND ── */
+		#legend {
+			display: flex;
+			gap: 0.45em;
+			flex-wrap: wrap;
+			align-items: center;
+			padding: 0.45em 0.8em;
+			background: var(--bg2);
+			border-bottom: 1px solid var(--border);
+			font-size: 0.63em;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 0.06em;
+		}
+
+		.leg {
+			padding: 0.18em 0.55em;
+			border-radius: 999px;
+			border: 1.5px solid;
+			white-space: nowrap;
+		}
+
+		#legend-hint {
+			margin-left: auto;
+			color: var(--muted);
+			font-weight: 400;
+			text-transform: none;
+			letter-spacing: 0;
+			font-size: 1em;
+			white-space: nowrap;
+		}
+
+		/* ── PANELS ── */
+		.panel {
+			display: none;
+		}
+
+		.panel.active {
+			display: block;
+		}
+
+		/* ── VISUAL EDITOR ── */
+		#editor-wrap {
+			padding: 0.4em 0 6em;
+		}
+
+		/* ── LINE ROW ── */
+		.line {
+			display: flex;
+			align-items: flex-start;
+			border-radius: 3px;
+			min-height: 1.6em;
+			/* Each line is a row — overflow hidden by default */
+			position: relative;
+		}
+
+		.line:hover {
+			background: rgba(255, 255, 255, 0.018);
+		}
+
+		.line.drag-ghost-over {
+			outline: 2px solid var(--gold);
+			outline-offset: -1px;
+			border-radius: 3px;
+		}
+
+		.line.dragging {
+			opacity: 0.2;
+		}
+
+		/* Drag handle */
+		.handle {
+			flex-shrink: 0;
+			width: 1.6em;
+			align-self: stretch;
+			display: flex;
+			align-items: flex-start;
+			justify-content: center;
+			padding-top: 0.4em;
+			color: transparent;
+			font-size: 0.75em;
+			user-select: none;
+			transition: color .12s;
+			cursor: grab;
+			touch-action: none;
+			/* allow touch drag */
+		}
+
+		.line:hover .handle {
+			color: var(--muted);
+		}
+
+		/* Left accent bar */
+		.line-accent {
+			flex-shrink: 0;
+			width: 3px;
+			align-self: stretch;
+			border-radius: 2px;
+			margin-right: 0.55em;
+			opacity: 0.75;
+			flex-shrink: 0;
+		}
+
+		/* Edit wrap — contains overlay + raw input */
+		.line-edit-wrap {
+			flex: 1;
+			min-width: 0;
+			position: relative;
+		}
+
+		/*
+      TWO STATES:
+      collapsed (.line-edit-wrap, default):
+        - single line, overflow hidden, no wrap → cropped view
+      expanded (.line-edit-wrap.expanded):
+        - wraps freely, full height → full editing view
+    */
+
+		/* Colored overlay */
+		.line-colored {
+			position: absolute;
+			inset: 0;
+			z-index: 0;
+			padding: 0.22em 0.3em 0.22em 0;
+			pointer-events: none;
+			user-select: none;
+			overflow: hidden;
+		}
+
+		/* Collapsed: single line, spaces preserved */
+		.line-edit-wrap:not(.expanded) .line-colored {
+			white-space: pre;
+			/* preserves spaces, no wrap */
+		}
+
+		/* Expanded: wrap */
+		.line-edit-wrap.expanded .line-colored {
+			white-space: pre-wrap;
+			word-break: break-all;
+			position: relative;
+			/* let it define height */
+			overflow: visible;
+		}
+
+		/* Raw editable */
+		.line-raw {
+			position: relative;
+			z-index: 1;
+			outline: none;
+			padding: 0.22em 0.3em 0.22em 0;
+			color: transparent;
+			caret-color: var(--gold);
+			background: transparent;
+			width: 100%;
+			display: block;
+		}
+
+		/* Collapsed */
+		.line-edit-wrap:not(.expanded) .line-raw {
+			white-space: pre;
+			/* preserves spaces, no wrap */
+			overflow: hidden;
+		}
+
+		/* Expanded */
+		.line-edit-wrap.expanded .line-raw {
+			white-space: pre-wrap;
+			word-break: break-all;
+			overflow: visible;
+			/* overlay is now relative, so raw must be absolute to sit on top */
+			position: absolute;
+			inset: 0;
+			height: 100%;
+		}
+
+		/* When expanded, the wrap needs a height that matches the overlay */
+		.line-edit-wrap.expanded {
+			/* overlay in relative flow sets height; raw is absolute on top */
+		}
+
+		/* Segment colors */
+		.seg-0 {
+			color: var(--c0);
+			font-style: italic;
+		}
+
+		.seg-1 {
+			color: var(--c1);
+			font-style: italic;
+		}
+
+		.seg-2 {
+			color: var(--c2);
+			font-weight: 700;
+		}
+
+		.seg-3 {
+			color: var(--c3);
+		}
+
+		.seg-4 {
+			color: var(--c4);
+		}
+
+		.seg-5 {
+			color: var(--c5);
+		}
+
+		.seg-comment {
+			color: var(--cc);
+			font-style: italic;
+		}
+
+		.seg-empty {
+			color: transparent;
+		}
+
+		.sep {
+			color: var(--csep);
+		}
+
+		.at {
+			color: var(--cat);
+			font-style: italic;
+		}
+
+		/* Expand indicator — small fade on right edge when collapsed */
+		.line-fade {
+			position: absolute;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			width: 3em;
+			z-index: 2;
+			pointer-events: none;
+			background: linear-gradient(to right, transparent, var(--bg) 90%);
+			transition: opacity .15s;
+		}
+
+		.line-edit-wrap.expanded .line-fade {
+			opacity: 0;
+		}
+
+		.line-edit-wrap:not(.expanded) .line-fade {
+			opacity: 1;
+		}
+
+		/* Don't show fade on short lines — handled by JS */
+
+		/* Ghost type label */
+		.line-type-label {
+			flex-shrink: 0;
+			font-size: 0.58em;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: 0.07em;
+			padding: 0 0.4em;
+			opacity: 0;
+			transition: opacity .12s;
+			align-self: flex-start;
+			padding-top: 0.55em;
+			white-space: nowrap;
+		}
+
+		.line:hover .line-type-label {
+			opacity: 1;
+		}
+
+		/* Delete */
+		.line-del {
+			flex-shrink: 0;
+			background: none;
+			border: none;
+			color: transparent;
+			font-size: 0.9em;
+			cursor: pointer;
+			padding: 0.2em 0.5em;
+			transition: color .12s;
+			align-self: flex-start;
+			padding-top: 0.4em;
+			min-width: 2em;
+			min-height: 2em;
+			/* touch target */
+		}
+
+		.line:hover .line-del {
+			color: var(--muted);
+		}
+
+		.line-del:hover,
+		.line-del:active {
+			color: var(--red) !important;
+		}
+
+		/* Add bar */
+		#add-bar {
+			display: flex;
+			gap: 0.5em;
+			flex-wrap: wrap;
+			justify-content: center;
+			margin-top: 1.5em;
+			padding: 0 1em;
+		}
+
+		/* ── RAW PANEL ── */
+		#raw-wrap {
+			height: calc(100vh - 95px);
+		}
+
+		#raw-textarea {
+			width: 100%;
+			height: 100%;
+			background: var(--bg);
+			color: var(--text);
+			font-family: 'Courier Prime', monospace;
+			font-size: 0.88em;
+			border: none;
+			outline: none;
+			padding: 1em 1em;
+			resize: none;
+			line-height: 1.65;
+			tab-size: 2;
+		}
+
+		/* ── DIFF PANEL ── */
+		#diff-wrap {
+			padding: 1em 1em 4em;
+			font-family: 'Courier Prime', monospace;
+			font-size: 0.82em;
+			line-height: 1.65;
+		}
+
+		.diff-line {
+			display: block;
+			padding: 0.05em 0.4em;
+			border-radius: 2px;
+			white-space: pre-wrap;
+			word-break: break-all;
+		}
+
+		.diff-add {
+			background: rgba(76, 175, 125, 0.13);
+			color: #4caf7d;
+		}
+
+		.diff-del {
+			background: rgba(160, 48, 32, 0.13);
+			color: #d06050;
+			text-decoration: line-through;
+		}
+
+		.diff-same {
+			color: var(--muted);
+		}
+
+		::-webkit-scrollbar {
+			width: 5px;
+		}
+
+		::-webkit-scrollbar-track {
+			background: var(--bg);
+		}
+
+		::-webkit-scrollbar-thumb {
+			background: var(--border);
+			border-radius: 3px;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div id="topbar">
+		<div class="logo">Brume <sub>editor</sub></div>
+		<button class="btn on" id="btn-visual" onclick="switchPanel('visual')">✦ Visuel</button>
+		<button class="btn" id="btn-raw" onclick="switchPanel('raw')">⌨ Brut</button>
+		<button class="btn" id="btn-diff" onclick="switchPanel('diff')">⟳ Diff</button>
+		<button class="btn" onclick="copyMenu()">⧉ Copier</button>
+		<button class="btn" onclick="window.open('menu.html','_blank')">↗ Menu</button>
+		<input type="email" id="emailBox" placeholder="email" autocomplete="on">
+		<input type="password" id="passwordBox" placeholder="mot de passe" autocomplete="on">
+		<button class="btn primary" onclick="pushToSupabase()">↑ Push</button>
+		<div id="status"></div>
+	</div>
+
+	<div id="legend">
+		<span class="leg" style="border-color:var(--c0);color:var(--c0)">bloc</span>
+		<span class="leg" style="border-color:var(--c1);color:var(--c1)">_ catégorie</span>
+		<span class="leg" style="border-color:var(--c2);color:var(--c2)">__ produit</span>
+		<span class="leg" style="border-color:var(--c3);color:var(--c3)">_ prix</span>
+		<span class="leg" style="border-color:var(--c4);color:var(--c4)">_ description</span>
+		<span class="leg" style="border-color:var(--c5);color:var(--c5)">_____ commentaire</span>
+		<span class="leg" style="border-color:var(--cc);color:var(--cc)"># commenté</span>
+		<span id="legend-hint">tap = expand · ⠿ = déplacer</span>
+	</div>
+
+	<div id="panel-visual" class="panel active">
+		<div id="editor-wrap">
+			<div id="lines-container"></div>
+			<div id="add-bar">
+				<button class="btn" onclick="insertLine(null,'')">＋ Vide</button>
+				<button class="btn" onclick="insertLine(null,'Nouveau Bloc')">＋ Bloc</button>
+				<button class="btn" onclick="insertLine(null,'_ ')">＋ Catégorie</button>
+				<button class="btn" onclick="insertLine(null,'__ ')">＋ Produit</button>
+				<button class="btn" onclick="insertLine(null,'_____ ')">＋ Commentaire</button>
+			</div>
+		</div>
+	</div>
+
+	<div id="panel-raw" class="panel">
+		<div id="raw-wrap"><textarea id="raw-textarea" spellcheck="false"></textarea></div>
+	</div>
+
+	<div id="panel-diff" class="panel">
+		<div id="diff-wrap"></div>
+	</div>
+
+	<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+	<script>
+		const SupabaseUrl = "https://cpvxjedlgjhcdqjyecmf.supabase.co";
+		const SupabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwdnhqZWRsZ2poY2RxanllY21mIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkyNjMzMzYsImV4cCI6MjAxNDgzOTMzNn0.Rs-bqvUb0Eq7NEKX3tFc8WHJOjzk1Rc4fgRRU6OtVNs";
+		let _sb;
+		try { _sb = supabase.createClient(SupabaseUrl, SupabaseKey); } catch (e) { }
+
+		let rawLines = [];
+		let savedText = '';
+
+		const FONT_SIZES = ['1.12em', '1.0em', '0.92em', '0.85em', '0.85em', '0.82em'];
+		const LABELS = ['bloc', 'catégorie', 'produit', 'prix', 'description', 'commentaire'];
+		const COLORS = ['var(--c0)', 'var(--c1)', 'var(--c2)', 'var(--c3)', 'var(--c4)', 'var(--c5)'];
+
+		// ── COLORIZER ────────────────────────────────
+		function esc(s) {
+			return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+		}
+
+		function colorize(raw) {
+			if (raw.trim() === '') return '<span class="seg-empty">&nbsp;</span>';
+			if (raw.trim().startsWith('#')) return `<span class="seg-comment">${esc(raw)}</span>`;
+			let u = 0;
+			while (raw[u] === '_') u++;
+			const baseType = Math.min(u, 5);
+			const prefix = raw.slice(0, u);
+			const rest = raw.slice(u);
+			const parts = rest.split(/ _ /);
+			let html = '';
+			if (prefix) html += `<span class="sep">${esc(prefix)}</span>`;
+			parts.forEach((seg, i) => {
+				const cls = `seg-${Math.min(baseType + i, 5)}`;
+				if (i > 0) html += `<span class="sep"> _ </span>`;
+				const atParts = seg.split('@');
+				html += `<span class="${cls}">${esc(atParts[0])}</span>`;
+				for (let j = 1; j < atParts.length; j++)
+					html += `<span class="at">@${esc(atParts[j])}</span>`;
+			});
+			return html;
+		}
+
+		function lineInfo(raw) {
+			const t = raw.trim();
+			if (t === '') return { color: 'transparent', label: '', size: '0.88em', lv: -1 };
+			if (t.startsWith('#')) return { color: 'var(--cc)', label: '#', size: '0.80em', lv: -1 };
+			let u = 0; while (raw[u] === '_') u++;
+			const lv = Math.min(u, 5);
+			return { color: COLORS[lv], label: LABELS[lv], size: FONT_SIZES[lv], lv };
+		}
+
+		// ── RENDER ───────────────────────────────────
+		function renderAll() {
+			const container = document.getElementById('lines-container');
+			container.innerHTML = '';
+			rawLines.forEach((text, i) => container.appendChild(buildLineEl(text, i)));
+		}
+
+		function buildLineEl(text, idx) {
+			const { color, label, size } = lineInfo(text);
+
+			const line = document.createElement('div');
+			line.className = 'line';
+			line.dataset.idx = idx;
+
+			// Handle
+			const handle = document.createElement('span');
+			handle.className = 'handle';
+			handle.textContent = '⠿';
+			line.appendChild(handle);
+
+			// Accent bar
+			const accent = document.createElement('div');
+			accent.className = 'line-accent';
+			accent.style.background = color;
+			line.appendChild(accent);
+
+			// Edit wrap
+			const wrap = document.createElement('div');
+			wrap.className = 'line-edit-wrap'; // collapsed by default
+			wrap.style.fontSize = size;
+
+			// Colored overlay
+			const colored = document.createElement('div');
+			colored.className = 'line-colored';
+			colored.innerHTML = colorize(text);
+			colored.setAttribute('aria-hidden', 'true');
+
+			// Raw editable
+			const raw = document.createElement('div');
+			raw.className = 'line-raw';
+			raw.contentEditable = 'true';
+			raw.spellcheck = false;
+			raw.textContent = text;
+
+			// Fade gradient (right edge indicator)
+			const fade = document.createElement('div');
+			fade.className = 'line-fade';
+
+			// ── EXPAND / COLLAPSE ──
+			// Click/tap on the line-edit-wrap (not on the editable itself while typing)
+			// expands it. Clicking elsewhere collapses all others.
+			function expand() {
+				// Collapse any other expanded line
+				document.querySelectorAll('.line-edit-wrap.expanded').forEach(w => {
+					if (w !== wrap) collapse(w);
+				});
+				wrap.classList.add('expanded');
+				raw.focus();
+				// Place caret at end
+				try {
+					const r = document.createRange(), s = window.getSelection();
+					r.selectNodeContents(raw); r.collapse(false);
+					s.removeAllRanges(); s.addRange(r);
+				} catch (e) { }
+			}
+
+			function collapse(w) {
+				w.classList.remove('expanded');
+			}
+
+			// Tap/click on wrap → expand
+			wrap.addEventListener('click', e => {
+				if (!wrap.classList.contains('expanded')) {
+					e.preventDefault();
+					expand();
+				}
+			});
+			// Touch tap
+			wrap.addEventListener('touchend', e => {
+				if (!wrap.classList.contains('expanded')) {
+					e.preventDefault();
+					expand();
+				}
+			}, { passive: false });
+
+			// Clicking outside → collapse this line
+			document.addEventListener('click', e => {
+				if (!wrap.contains(e.target) && !line.contains(e.target)) {
+					collapse(wrap);
+				}
+			});
+
+			raw.addEventListener('input', () => {
+				const val = raw.innerText.replace(/\n/g, '');
+				rawLines[idx] = val;
+				colored.innerHTML = colorize(val);
+				const info = lineInfo(val);
+				accent.style.background = info.color;
+				typeLabel.textContent = info.label;
+				typeLabel.style.color = info.color;
+				wrap.style.fontSize = info.size;
+			});
+
+			raw.addEventListener('keydown', e => {
+				if (e.key === 'Enter') {
+					e.preventDefault();
+					collapse(wrap);
+					const t = rawLines[idx];
+					let prefix = '';
+					for (let i = 0; i < t.length; i++) { if (t[i] === '_') prefix += '_'; else break; }
+					insertLine(idx, prefix);
+					// Auto-expand next line after short delay
+					setTimeout(() => expandByIdx(idx + 1), 30);
+					return;
+				}
+				if (e.key === 'Escape') {
+					collapse(wrap);
+					return;
+				}
+				if (e.key === 'Backspace' && raw.innerText.replace(/\n/g, '') === '') {
+					e.preventDefault();
+					rawLines.splice(idx, 1);
+					renderAll();
+					focusLine(Math.max(0, idx - 1), true);
+				}
+			});
+
+			raw.addEventListener('paste', e => {
+				e.preventDefault();
+				const plain = e.clipboardData.getData('text/plain').replace(/\r?\n/g, '');
+				document.execCommand('insertText', false, plain);
+			});
+
+			wrap.appendChild(colored);
+			wrap.appendChild(raw);
+			wrap.appendChild(fade);
+			line.appendChild(wrap);
+
+			// Ghost label
+			const typeLabel = document.createElement('span');
+			typeLabel.className = 'line-type-label';
+			typeLabel.style.color = color;
+			typeLabel.textContent = label;
+			line.appendChild(typeLabel);
+
+			// Delete
+			const del = document.createElement('button');
+			del.className = 'line-del';
+			del.textContent = '✕';
+			del.addEventListener('click', e => {
+				e.stopPropagation();
+				rawLines.splice(idx, 1);
+				renderAll();
+				focusLine(Math.max(0, idx - 1), true);
+			});
+			line.appendChild(del);
+
+			setupDrag(handle, line, idx);
+			return line;
+		}
+
+		function expandByIdx(idx) {
+			const wrap = document.querySelector(`.line[data-idx="${idx}"] .line-edit-wrap`);
+			if (wrap) {
+				document.querySelectorAll('.line-edit-wrap.expanded').forEach(w => {
+					if (w !== wrap) w.classList.remove('expanded');
+				});
+				wrap.classList.add('expanded');
+				const raw = wrap.querySelector('.line-raw');
+				if (raw) raw.focus();
+			}
+		}
+
+		function focusLine(idx, expand) {
+			if (expand) {
+				expandByIdx(idx);
+			} else {
+				const el = document.querySelector(`.line[data-idx="${idx}"] .line-raw`);
+				if (el) el.focus();
+			}
+		}
+
+		function insertLine(afterIdx, text = '') {
+			if (afterIdx === null) rawLines.push(text);
+			else rawLines.splice(afterIdx + 1, 0, text);
+			renderAll();
+			const newIdx = afterIdx === null ? rawLines.length - 1 : afterIdx + 1;
+			expandByIdx(newIdx);
+		}
+
+		// ── DRAG (mouse + touch) ─────────────────────
+		let dragState = null;
+
+		function setupDrag(handle, lineEl, idx) {
+			// Mouse
+			handle.addEventListener('mousedown', e => startDrag(e.clientY, lineEl, idx, 'mouse'));
+			// Touch
+			handle.addEventListener('touchstart', e => {
+				const t = e.touches[0];
+				startDrag(t.clientY, lineEl, idx, 'touch');
+			}, { passive: true });
+		}
+
+		function startDrag(clientY, lineEl, idx, type) {
+			const rect = lineEl.getBoundingClientRect();
+			const ghost = lineEl.cloneNode(true);
+			ghost.style.cssText = `
+    position:fixed; left:${rect.left}px; top:${rect.top}px;
+    width:${rect.width}px; opacity:0.85; z-index:999;
+    background:var(--bg2); border:1px solid var(--gold);
+    border-radius:4px; pointer-events:none;
+    box-shadow:0 4px 24px rgba(0,0,0,0.6);
+  `;
+			document.body.appendChild(ghost);
+			lineEl.classList.add('dragging');
+
+			dragState = { srcIdx: idx, ghost, lineEl, offsetY: clientY - rect.top };
+
+			if (type === 'touch') {
+				document.addEventListener('touchmove', onTouchMove, { passive: false });
+				document.addEventListener('touchend', onTouchEnd, { once: true });
+			}
+		}
+
+		function moveDrag(clientY) {
+			if (!dragState) return;
+			dragState.ghost.style.top = (clientY - dragState.offsetY) + 'px';
+			document.querySelectorAll('.line.drag-ghost-over').forEach(l => l.classList.remove('drag-ghost-over'));
+			const target = getLineAtY(clientY);
+			if (target && target !== dragState.lineEl) target.classList.add('drag-ghost-over');
+		}
+
+		function endDrag(clientY) {
+			if (!dragState) return;
+			const { srcIdx, ghost, lineEl } = dragState;
+			ghost.remove();
+			lineEl.classList.remove('dragging');
+			document.querySelectorAll('.line.drag-ghost-over').forEach(l => l.classList.remove('drag-ghost-over'));
+
+			const target = getLineAtY(clientY);
+			if (target && target !== lineEl) {
+				const destIdx = parseInt(target.dataset.idx);
+				if (!isNaN(destIdx) && destIdx !== srcIdx) {
+					const rect = target.getBoundingClientRect();
+					const before = clientY < rect.top + rect.height / 2;
+					const moved = rawLines.splice(srcIdx, 1)[0];
+					let dest = srcIdx < destIdx ? destIdx - 1 : destIdx;
+					if (!before) dest++;
+					rawLines.splice(dest, 0, moved);
+					renderAll();
+				}
+			}
+			dragState = null;
+		}
+
+		// Mouse events
+		document.addEventListener('mousemove', e => moveDrag(e.clientY));
+		document.addEventListener('mouseup', e => endDrag(e.clientY));
+
+		// Touch events
+		function onTouchMove(e) { e.preventDefault(); moveDrag(e.touches[0].clientY); }
+		function onTouchEnd(e) {
+			endDrag(e.changedTouches[0].clientY);
+			document.removeEventListener('touchmove', onTouchMove);
+		}
+
+		function getLineAtY(y) {
+			for (const el of document.querySelectorAll('.line')) {
+				const r = el.getBoundingClientRect();
+				if (y >= r.top && y <= r.bottom) return el;
+			}
+			return null;
+		}
+
+		// ── PANELS ───────────────────────────────────
+		function switchPanel(name) {
+			['visual', 'raw', 'diff'].forEach(p => {
+				document.getElementById(`panel-${p}`).classList.toggle('active', p === name);
+				document.getElementById(`btn-${p}`).classList.toggle('on', p === name);
+			});
+			if (name === 'raw') document.getElementById('raw-textarea').value = getText();
+			if (name === 'diff') renderDiff();
+		}
+
+		document.getElementById('raw-textarea').addEventListener('input', () => {
+			rawLines = document.getElementById('raw-textarea').value
+				.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+		});
+
+		// ── DIFF ─────────────────────────────────────
+		function renderDiff() {
+			const orig = savedText.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+			const cur = rawLines;
+			const wrap = document.getElementById('diff-wrap');
+			if (orig.join('\n') === cur.join('\n')) {
+				wrap.innerHTML = '<span style="color:var(--muted)">Aucune modification.</span>'; return;
+			}
+			const diff = lcs(orig.slice(0, 400), cur.slice(0, 400));
+			wrap.innerHTML = diff.map(d =>
+				`<span class="diff-line diff-${d.type}">${d.type === 'add' ? '＋' : d.type === 'del' ? '－' : '　'} ${esc(d.text)}</span>`
+			).join('\n');
+		}
+
+		function lcs(a, b) {
+			const m = a.length, n = b.length;
+			const dp = Array.from({ length: m + 1 }, () => new Uint16Array(n + 1));
+			for (let i = m - 1; i >= 0; i--)
+				for (let j = n - 1; j >= 0; j--)
+					dp[i][j] = a[i] === b[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+			const r = [];
+			let i = 0, j = 0;
+			while (i < m || j < n) {
+				if (i < m && j < n && a[i] === b[j]) { r.push({ type: 'same', text: a[i] }); i++; j++; }
+				else if (j < n && (i >= m || dp[i][j + 1] >= dp[i + 1][j])) { r.push({ type: 'add', text: b[j] }); j++; }
+				else { r.push({ type: 'del', text: a[i] }); i++; }
+			}
+			return r;
+		}
+
+		// ── SAVE ─────────────────────────────────────
+		function getText() { return rawLines.join('\n'); }
+
+		function copyMenu() {
+			navigator.clipboard.writeText(getText()).then(() => setStatus('Copié !', 'ok'));
+		}
+
+		async function pushToSupabase() {
+			const email = document.getElementById('emailBox').value.trim();
+			const pw = document.getElementById('passwordBox').value;
+			if (!email || !pw) { setStatus('Email et mot de passe requis.', 'err'); return; }
+			setStatus('Connexion…', '');
+			try {
+				const { error: e1 } = await _sb.auth.signInWithPassword({ email, password: pw });
+				if (e1) throw e1;
+				const content = getText();
+				const { error: e2 } = await _sb.from('menu.menu').insert([{ content }]);
+				if (e2) throw e2;
+				savedText = content;
+				setStatus('✓ Publié !', 'ok');
+			} catch (err) { setStatus('Erreur : ' + (err.message || err), 'err'); }
+		}
+
+		function setStatus(msg, cls) {
+			const el = document.getElementById('status');
+			el.textContent = msg; el.className = cls || '';
+			if (cls === 'ok') setTimeout(() => { el.textContent = ''; el.className = ''; }, 3500);
+		}
+
+		// ── INIT ─────────────────────────────────────
+		async function init() {
+			setStatus('Chargement…', '');
+			let text = '';
+			try {
+				if (_sb) {
+					const { data, error } = await _sb.from('menu.menu').select('content').limit(1).order('id', { ascending: false });
+					if (!error && data?.[0]?.content) { text = data[0].content; setStatus('Chargé depuis Supabase', 'ok'); }
+					else throw 0;
+				} else throw 0;
+			} catch {
+				try {
+					text = await (await fetch('menu.menu', { cache: 'no-cache' })).text();
+					setStatus('Fichier local chargé', 'ok');
+				} catch { setStatus('Impossible de charger le menu.', 'err'); }
+			}
+			savedText = text;
+			rawLines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+			renderAll();
+		}
+
+		init();
+	</script>
+</body>
+
+</html>
