@@ -271,10 +271,11 @@
 		/* ── PREVIEW (read-only, always shown) ── */
 		.line-preview {
 			display: flex;
-			align-items: center;
+			align-items: flex-start;
 			min-height: 1.4em;
 			overflow: hidden;
-			position: relative
+			position: relative;
+			cursor: pointer
 		}
 
 		.line-colored-preview {
@@ -287,6 +288,17 @@
 			min-width: 0
 		}
 
+		/* Expanded: wrap full content */
+		.line.expanded .line-colored-preview {
+			white-space: pre-wrap;
+			word-break: break-word;
+			overflow: visible
+		}
+
+		.line.expanded .line-preview {
+			overflow: visible
+		}
+
 		.line-fade {
 			position: absolute;
 			right: 0;
@@ -294,7 +306,13 @@
 			bottom: 0;
 			width: 3em;
 			pointer-events: none;
-			background: linear-gradient(to right, transparent, var(--bg) 90%)
+			background: linear-gradient(to right, transparent, var(--bg) 90%);
+			transition: opacity .15s
+		}
+
+		.line.expanded .line-fade {
+			opacity: 0;
+			pointer-events: none
 		}
 
 		.line.editing .line-fade {
@@ -895,6 +913,8 @@
 				document.querySelectorAll('.line.editing').forEach(l => {
 					if (l !== line) applyClose(l, true);
 				});
+				// Also collapse any expanded line
+				document.querySelectorAll('.line.expanded').forEach(l => l.classList.remove('expanded'));
 				setCEContent(ce, rawLines[idx]);
 				coloredPreview.innerHTML = colorize(rawLines[idx]);
 				line.classList.add('editing');
@@ -914,11 +934,23 @@
 			btnConfirm.addEventListener('click', e => { e.stopPropagation(); applyClose(line, true); });
 			btnCancel.addEventListener('click', e => { e.stopPropagation(); applyClose(line, false); });
 
-			// Clicking anywhere outside an open editor → save & close it
-			// (clicking inside is fine — that's normal editing interaction)
+			// Tap preview → toggle expanded (shows full wrapped content, no editor)
+			let pdY = 0, pdT = 0;
+			preview.addEventListener('pointerdown', e => { pdY = e.clientY; pdT = Date.now(); }, { passive: true });
+			preview.addEventListener('pointerup', e => {
+				if (line.classList.contains('editing')) return;
+				if (Math.abs(e.clientY - pdY) < 8 && (Date.now() - pdT) < 500) {
+					e.stopPropagation();
+					line.classList.toggle('expanded');
+				}
+			});
+
+			// Clicking anywhere outside: close editor if open, collapse if expanded
 			document.addEventListener('pointerdown', e => {
-				if (line.classList.contains('editing') && !line.contains(e.target))
-					applyClose(line, true);
+				if (!line.contains(e.target)) {
+					if (line.classList.contains('editing')) applyClose(line, true);
+					if (line.classList.contains('expanded')) line.classList.remove('expanded');
+				}
 			}, { capture: true, passive: true });
 
 			setupDrag(handle, line, idx);
