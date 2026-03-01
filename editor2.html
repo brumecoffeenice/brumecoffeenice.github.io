@@ -214,6 +214,13 @@
 			background: rgba(255, 255, 255, .025)
 		}
 
+		.line.expanded:not(.editing) {
+			background: rgba(255, 255, 255, .04);
+			outline: 1px solid rgba(255, 255, 255, .08);
+			outline-offset: -1px;
+			border-radius: 4px
+		}
+
 		.line.editing {
 			background: rgba(208, 151, 45, .05);
 			outline: 1px solid rgba(208, 151, 45, .3);
@@ -427,32 +434,41 @@
 			white-space: nowrap
 		}
 
+		/* ── CONTROLS BAR (label + buttons, shown only when expanded) ── */
+		.line-controls {
+			display: none;
+			/* hidden by default */
+			align-items: center;
+			gap: .3em;
+			padding: .2em .3em .2em 0;
+			border-bottom: 1px solid rgba(208, 151, 45, .15);
+			margin-bottom: .1em;
+			font-size: 14px;
+		}
+
+		.line.expanded .line-controls,
+		.line.editing .line-controls {
+			display: flex;
+		}
+
 		.line-type-label {
-			flex-shrink: 0;
 			font-size: 11px;
 			font-weight: 700;
 			text-transform: uppercase;
 			letter-spacing: .07em;
-			padding: 0 .2em 0 .4em;
-			align-self: flex-start;
-			padding-top: .35em;
+			padding: 0 .3em 0 0;
+			flex: 1;
 			white-space: nowrap
 		}
 
-
-
-		/* ── EDIT BUTTON (always visible, next to label) ── */
-		.line-edit-btn {
+		.line-ctrl-btn {
 			flex-shrink: 0;
 			background: none;
 			border: 1px solid transparent;
 			border-radius: 6px;
-			color: var(--muted);
-			font-size: 15px;
+			font-size: 14px;
 			cursor: pointer;
-			padding: .3em .55em;
-			align-self: flex-start;
-			margin-top: .1em;
+			padding: .3em .5em;
 			transition: all .12s;
 			line-height: 1;
 			min-width: 2.4em;
@@ -462,8 +478,20 @@
 			justify-content: center
 		}
 
-		.line-edit-btn:hover,
-		.line-edit-btn:active {
+		.line-edit-btn {
+			color: var(--muted)
+		}
+
+		.line-insert-btn {
+			color: var(--muted)
+		}
+
+		.line-del {
+			color: var(--muted)
+		}
+
+		.line-ctrl-btn:hover,
+		.line-ctrl-btn:active {
 			border-color: var(--gold);
 			color: var(--gold)
 		}
@@ -473,32 +501,10 @@
 			border-color: rgba(208, 151, 45, .4)
 		}
 
-		.line-del {
-			flex-shrink: 0;
-			background: none;
-			border: 1px solid transparent;
-			border-radius: 6px;
-			color: var(--border);
-			font-size: 15px;
-			cursor: pointer;
-			padding: .3em .5em;
-			transition: all .12s;
-			align-self: flex-start;
-			margin-top: .1em;
-			min-width: 2.4em;
-			min-height: 2.4em;
-			display: flex;
-			align-items: center;
-			justify-content: center
-		}
-
-		.line:hover .line-del {
-			color: var(--muted) !important
-		}
-
 		.line-del:hover,
 		.line-del:active {
-			color: var(--red) !important
+			color: var(--red) !important;
+			border-color: var(--red) !important
 		}
 
 		#add-bar {
@@ -595,11 +601,11 @@
 		<span class="leg" style="border-color:var(--c0);color:var(--c0)">bloc</span>
 		<span class="leg" style="border-color:var(--c1);color:var(--c1)">_ catégorie</span>
 		<span class="leg" style="border-color:var(--c2);color:var(--c2)">__ produit</span>
-		<span class="leg" style="border-color:var(--c3);color:var(--c3)">_ prix</span>
-		<span class="leg" style="border-color:var(--c4);color:var(--c4)">_ description</span>
+		<span class="leg" style="border-color:var(--c3);color:var(--c3)">___ prix</span>
+		<span class="leg" style="border-color:var(--c4);color:var(--c4)">____ description</span>
 		<span class="leg" style="border-color:var(--c5);color:var(--c5)">_____ commentaire</span>
 		<span class="leg" style="border-color:var(--cc);color:var(--cc)"># commenté</span>
-		<span id="legend-hint">✎ = modifier · ⠿ = déplacer</span>
+		<span id="legend-hint">tap = voir · ✎ = modifier · ⠿ = déplacer</span>
 	</div>
 
 	<div id="panel-visual" class="panel active">
@@ -632,7 +638,7 @@
 
 		let rawLines = [], savedText = '';
 
-		const SIZES = ['0.95em', '0.85em', '0.80em', '0.75em', '0.75em', '0.72em'];
+		const SIZES = ['1.15em', '0.98em', '0.90em', '0.82em', '0.82em', '0.78em'];
 		const LABELS = ['bloc', 'catégorie', 'produit', 'prix', 'description', 'commentaire'];
 		const COLORS = ['var(--c0)', 'var(--c1)', 'var(--c2)', 'var(--c3)', 'var(--c4)', 'var(--c5)'];
 
@@ -822,16 +828,19 @@
 			col.appendChild(editRow);
 			line.appendChild(col);
 
-			// Type label (always visible)
+			// ── Controls bar (label + buttons) — shown only when expanded/editing ──
+			const controls = document.createElement('div');
+			controls.className = 'line-controls';
+
 			const typeLabel = document.createElement('span');
 			typeLabel.className = 'line-type-label';
 			typeLabel.style.color = color;
 			typeLabel.textContent = label;
-			line.appendChild(typeLabel);
+			controls.appendChild(typeLabel);
 
-			// Edit button — the ONLY way to open the editor
+			// Edit button
 			const editBtn = document.createElement('button');
-			editBtn.className = 'line-edit-btn';
+			editBtn.className = 'line-ctrl-btn line-edit-btn';
 			editBtn.textContent = '✎';
 			editBtn.title = 'Modifier';
 			editBtn.addEventListener('click', e => {
@@ -842,18 +851,38 @@
 					openEditHere();
 				}
 			});
-			line.appendChild(editBtn);
+			controls.appendChild(editBtn);
 
-			// Delete
+			// Insert below button
+			const insertBtn = document.createElement('button');
+			insertBtn.className = 'line-ctrl-btn line-insert-btn';
+			insertBtn.textContent = '＋';
+			insertBtn.title = 'Insérer une ligne en dessous';
+			insertBtn.addEventListener('click', e => {
+				e.stopPropagation();
+				line.classList.remove('expanded');
+				// Inherit same indent prefix
+				const val = rawLines[idx];
+				let prefix = ''; for (let i = 0; i < val.length; i++) { if (val[i] === '_') prefix += '_'; else break; }
+				insertLine(idx, prefix);
+				setTimeout(() => openEdit(idx + 1), 30);
+			});
+			controls.appendChild(insertBtn);
+
+			// Delete button
 			const del = document.createElement('button');
-			del.className = 'line-del';
+			del.className = 'line-ctrl-btn line-del';
 			del.textContent = '✕';
+			del.title = 'Supprimer';
 			del.addEventListener('click', e => {
 				e.stopPropagation();
 				rawLines.splice(idx, 1);
 				renderAll();
 			});
-			line.appendChild(del);
+			controls.appendChild(del);
+
+			// Controls go inside the content column, above the preview
+			col.insertBefore(controls, preview);
 
 			// ── CE input handler ──
 			// On every input: save caret, recolorize, restore caret, sync preview
@@ -934,18 +963,19 @@
 			btnConfirm.addEventListener('click', e => { e.stopPropagation(); applyClose(line, true); });
 			btnCancel.addEventListener('click', e => { e.stopPropagation(); applyClose(line, false); });
 
-			// Tap preview → toggle expanded (shows full wrapped content, no editor)
+			// Tap anywhere on the line → toggle expanded (scroll-safe, not on buttons)
 			let pdY = 0, pdT = 0;
-			preview.addEventListener('pointerdown', e => { pdY = e.clientY; pdT = Date.now(); }, { passive: true });
-			preview.addEventListener('pointerup', e => {
+			line.addEventListener('pointerdown', e => { pdY = e.clientY; pdT = Date.now(); }, { passive: true });
+			line.addEventListener('pointerup', e => {
 				if (line.classList.contains('editing')) return;
+				// Ignore taps on buttons (controls)
+				if (e.target.closest('.line-ctrl-btn,.handle')) return;
 				if (Math.abs(e.clientY - pdY) < 8 && (Date.now() - pdT) < 500) {
-					e.stopPropagation();
 					line.classList.toggle('expanded');
 				}
 			});
 
-			// Clicking anywhere outside: close editor if open, collapse if expanded
+			// Click outside → close editor / collapse
 			document.addEventListener('pointerdown', e => {
 				if (!line.contains(e.target)) {
 					if (line.classList.contains('editing')) applyClose(line, true);
