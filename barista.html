@@ -1280,6 +1280,7 @@
 			  ]
 			}
 			=================================================================== */
+			const hasTableName = !!(saleObj.ressource_name || saleObj.sale_ext_ref);
 			const tableName = saleObj.ressource_name || saleObj.sale_ext_ref || (createdTime ? createdTime : `#${saleId}`);
 			const items = (saleObj.line_items || []).map(it => ({
 				id: it.line_item_id, name: it.product_model || '—',
@@ -1290,7 +1291,7 @@
 			const saleTotal = parseFloat(saleObj.total) || 0;
 			const payment = saleObj.payment || '';
 			const isPaid = saleObj.completed_at && !saleObj.completed_at.startsWith('0000');
-			return { saleId, tableName, saleComment, items, fetchedAt: createdAt, saleTotal, payment, isPaid };
+			return { saleId, tableName, hasTableName, createdTime, saleComment, items, fetchedAt: createdAt, saleTotal, payment, isPaid };
 		}
 
 		// ── Smart render ──────────────────────────────────────────────────────
@@ -1373,7 +1374,7 @@
 		function renderCardInner(order, isAllDone, done, pct, timeLabel, timeClass) {
 			return `
     <div class="card-header">
-      <div><div class="table-tag">${escHtml(order.tableName)}</div><div class="table-sub">Table / Commande</div>${order.saleComment ? `<div class="sale-comment">💬 ${escHtml(order.saleComment)}</div>` : ""}</div>
+      <div><div class="table-tag">${escHtml(order.tableName)}</div>${order.hasTableName && order.createdTime ? `<div class="table-sub">${order.createdTime}</div>` : ""}${order.saleComment ? `<div class="sale-comment">💬 ${escHtml(order.saleComment)}</div>` : ""}</div>
       <div style="text-align:right">
         <div class="order-id">#${order.saleId} &nbsp;<span class="order-price">${order.saleTotal.toFixed(2).replace('.', ',')} €</span></div>
         <div style="display:flex;align-items:center;justify-content:flex-end;gap:.35rem;margin-top:.1rem">
