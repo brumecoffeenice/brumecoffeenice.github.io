@@ -300,6 +300,52 @@
 			flex-shrink: 0;
 		}
 
+		/* Mobile header dropdown */
+		.header-desktop {
+			display: contents;
+		}
+
+		.header-menu-btn {
+			display: none;
+			background: transparent;
+			border: 1px solid var(--border);
+			color: var(--steam);
+			width: 28px;
+			height: 28px;
+			border-radius: 4px;
+			cursor: pointer;
+			align-items: center;
+			justify-content: center;
+			font-size: 1rem;
+			line-height: 1;
+			flex-shrink: 0;
+		}
+
+		.header-dropdown {
+			display: none;
+			position: absolute;
+			top: 100%;
+			right: .5rem;
+			background: rgba(255, 250, 244, .98);
+			border: 1px solid var(--border);
+			border-radius: 6px;
+			box-shadow: 0 4px 16px rgba(160, 90, 30, .12);
+			padding: .5rem;
+			flex-direction: column;
+			gap: .4rem;
+			z-index: 200;
+			min-width: 180px;
+		}
+
+		.header-dropdown input[type="date"] {
+			width: 100%;
+		}
+
+		.header-dropdown .logout-btn {
+			width: 100%;
+			text-align: center;
+		}
+
 		.fullscreen-btn:hover {
 			border-color: var(--accent);
 			color: var(--accent);
@@ -784,9 +830,25 @@
 
 		@media (max-width:600px) {
 			header {
-				padding: .8rem 1rem;
-				flex-wrap: wrap;
-				gap: .6rem;
+				padding: .4rem .8rem;
+				flex-wrap: nowrap;
+				gap: .4rem;
+			}
+
+			.header-desktop {
+				display: none !important;
+			}
+
+			.header-menu-btn {
+				display: flex !important;
+			}
+
+			.header-dropdown.open {
+				display: flex !important;
+			}
+
+			.logo-sub {
+				display: none;
 			}
 
 			.board {
@@ -795,12 +857,24 @@
 				grid-template-columns: 1fr;
 			}
 
+			.stats-bar {
+				flex-wrap: wrap;
+			}
+
 			.stats-bar .stat-item {
-				padding: .3rem .6rem;
+				flex: 1 1 30%;
+				min-width: 0;
+				padding: .25rem .5rem;
+				border-right: 1px solid var(--border);
+				border-bottom: 1px solid var(--border);
 			}
 
 			.stat-num {
-				font-size: 1.1rem;
+				font-size: 1rem;
+			}
+
+			.stat-label {
+				font-size: .5rem;
 			}
 		}
 	</style>
@@ -842,7 +916,7 @@
 				<span class="logo-sub">Barista Screen</span>
 			</div>
 			<div class="header-right">
-				<input type="date" id="datePicker" onchange="fetchOrders()" />
+				<span class="header-desktop"><input type="date" id="datePicker" onchange="fetchOrders()" /></span>
 				<span class="status-dot" id="statusDot"></span>
 				<span class="clock" id="clock">--:--:--</span>
 				<button class="refresh-btn" id="refreshBtn" onclick="fetchOrders()" title="Actualiser">
@@ -852,7 +926,13 @@
 						<polyline points="12,2 12.9,4.7 10.2,5.5" stroke-linecap="round" stroke-linejoin="round" />
 					</svg>
 				</button>
-				<button class="logout-btn" onclick="doLogout()">Déconnexion</button>
+				<span class="header-desktop"><button class="logout-btn" onclick="doLogout()">Déconnexion</button></span>
+				<button class="header-menu-btn" onclick="toggleHeaderMenu()" title="Menu">⋯</button>
+				<div class="header-dropdown" id="headerDropdown">
+					<input type="date" id="datePickerMobile"
+						onchange="document.getElementById('datePicker').value=this.value; fetchOrders()" />
+					<button class="logout-btn" onclick="doLogout()">Déconnexion</button>
+				</div>
 				<button class="fullscreen-btn" id="fullscreenBtn" onclick="toggleFullscreen()" title="Plein écran">
 					<svg id="fsIcon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" width="14"
 						height="14">
@@ -1322,6 +1402,22 @@
 			toastTimer = setTimeout(() => t.classList.remove('show'), 4000);
 		}
 		function escHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+		function toggleHeaderMenu() {
+			const d = document.getElementById('headerDropdown');
+			d.classList.toggle('open');
+			// Sync mobile datepicker to current value
+			const main = document.getElementById('datePicker');
+			const mob = document.getElementById('datePickerMobile');
+			if (mob && main) mob.value = main.value;
+		}
+		// Close dropdown when clicking outside
+		document.addEventListener('click', e => {
+			if (!e.target.closest('.header-menu-btn') && !e.target.closest('.header-dropdown')) {
+				const d = document.getElementById('headerDropdown');
+				if (d) d.classList.remove('open');
+			}
+		});
 
 		function toggleFullscreen() {
 			if (!document.fullscreenElement) {
