@@ -620,6 +620,14 @@
 			flex: 1;
 		}
 
+		.item-cat-icon {
+			font-size: 1.3rem;
+			margin-right: .4rem;
+			line-height: 1;
+			display: inline-block;
+			vertical-align: middle;
+		}
+
 		.item-name {
 			font-size: .8rem;
 			color: var(--cream);
@@ -966,13 +974,19 @@
 
 		<div class="stats-bar">
 			<div class="stat-item"><span class="stat-num" id="statTotal">0</span><span
-					class="stat-label">Aujourd'hui</span></div>
-			<div class="stat-item"><span class="stat-num" id="statItems">0</span><span
+					class="stat-label">Commandes</span></div>
+			<div class="stat-item"><span class="stat-num" id="statBarista">0</span><span
+					class="stat-label">Barista</span></div>
+			<div class="stat-item"><span class="stat-num" id="statBoissons">0</span><span
 					class="stat-label">Boissons</span></div>
-			<div class="stat-item"><span class="stat-num" id="statDone">0</span><span class="stat-label">Servies</span>
+			<div class="stat-item"><span class="stat-num" id="statTasses">0</span><span class="stat-label">Tasses</span>
 			</div>
-			<div class="stat-item"><span class="stat-num" id="statPending">0</span><span class="stat-label">Cuisine
-					ouverte</span></div>
+			<div class="stat-item"><span class="stat-num" id="statPatisseries">0</span><span
+					class="stat-label">Patisseries</span></div>
+			<div class="stat-item"><span class="stat-num" id="statAutre">0</span><span class="stat-label">Autre</span>
+			</div>
+			<div class="stat-item"><span class="stat-num" id="statProductsTotal">0</span><span
+					class="stat-label">Total</span></div>
 			<div class="stat-item stat-item--revenue"><span class="stat-num stat-num--revenue" id="statRevenue">0,00
 					€</span></div>
 		</div>
@@ -1286,6 +1300,7 @@
 				id: it.line_item_id, name: it.product_model || '—',
 				qty: parseInt(it.quantity || it.multiple_quantity || 1),
 				note: it.modifiers_conc || '', comment: it.product_comments?.trim() || '', status: itemStatusMap[it.line_item_id] ?? 0,
+				category: it.category_name || '',
 			}));
 			const saleComment = saleObj.comments?.trim() || '';
 			const saleTotal = parseFloat(saleObj.total) || 0;
@@ -1299,7 +1314,7 @@
 			const board = document.getElementById('board');
 			if (!orders.length) {
 				board.innerHTML = `<div class="empty-state"><div class="empty-icon">☕</div><div class="empty-title">Aucune commande en cours</div><div class="empty-sub">Tout est servi — belle journée !</div></div>`;
-				updateStats(0, 0, 0, 0, 0); return;
+				updateStats(0, 0, 0, 0, 0, 0, 0, 0); return;
 			}
 			let totalItems = 0, doneItems = 0;
 			const existingCards = {};
@@ -1313,7 +1328,7 @@
 				const isAllDone = done === items.length && items.length > 0;
 				totalItems += items.length; doneItems += done;
 				const ageMins = Math.floor((Date.now() - order.fetchedAt) / 60000);
-				const timeClass = ageMins >= 10 ? 'urgent' : ageMins >= 5 ? 'warn' : '';
+				const timeClass = isAllDone ? '' : ageMins >= 10 ? 'urgent' : ageMins >= 5 ? 'warn' : '';
 				const timeLabel = ageMins < 1 ? "À l'instant" : `${ageMins} min`;
 				const sid = String(order.saleId);
 
@@ -1349,7 +1364,21 @@
 			});
 			const es = board.querySelector('.empty-state'); if (es) es.remove();
 			const revenueTotal = orders.reduce((s, o) => s + o.saleTotal, 0);
-			updateStats(orders.length, totalItems, doneItems, orders.filter(o => o.items.some(i => i.status !== 2)).length, revenueTotal);
+			const countCat = cat => orders.reduce((s, o) => s + o.items.filter(i => i.category === cat).reduce((a, i) => a + i.qty, 0), 0);
+			const productsTotal = orders.reduce((s, o) => s + o.items.reduce((a, i) => a + i.qty, 0), 0);
+			const barista = countCat('Barista'), boissons = countCat('Boissons fraiches'), tasses = countCat('Tasses'), patisseries = countCat('Patisseries');
+			const autre = productsTotal - barista - boissons - tasses - patisseries;
+			updateStats(orders.length, barista, boissons, tasses, patisseries, autre, productsTotal, revenueTotal);
+		}
+
+		function getCategoryIcon(category) {
+			const map = {
+				'Barista': '☕',
+				'Boissons fraiches': '🥤',
+				'Tasses': '🫖',
+				'Patisseries': '🍪',
+			};
+			return map[category] || '';
 		}
 
 		function renderItemsHtml(order) {
@@ -1358,7 +1387,7 @@
 				return `<div class="item-row ${stClass}" onclick="cycleStatus('${order.saleId}','${it.id}')" title="Cliquer pour changer le statut">
       <span class="item-qty">${it.qty}</span>
       <div class="item-info">
-        <div class="item-name">${escHtml(it.name)}</div>
+        <div class="item-name">${getCategoryIcon(it.category) ? `<span class="item-cat-icon">${getCategoryIcon(it.category)}</span>` : ''}${escHtml(it.name)}</div>
         ${it.note ? `<div class="item-note">${escHtml(it.note)}</div>` : ''}
         ${it.comment ? `<div class="item-comment">💬 ${escHtml(it.comment)}</div>` : ''}
       </div>
@@ -1393,11 +1422,14 @@
     </div>`;
 		}
 
-		function updateStats(total, items, done, pending, revenue) {
+		function updateStats(total, barista, boissons, tasses, patisseries, autre, productsTotal, revenue) {
 			document.getElementById('statTotal').textContent = total;
-			document.getElementById('statItems').textContent = items;
-			document.getElementById('statDone').textContent = done;
-			document.getElementById('statPending').textContent = pending;
+			document.getElementById('statBarista').textContent = barista;
+			document.getElementById('statBoissons').textContent = boissons;
+			document.getElementById('statTasses').textContent = tasses;
+			document.getElementById('statPatisseries').textContent = patisseries;
+			document.getElementById('statAutre').textContent = autre;
+			document.getElementById('statProductsTotal').textContent = productsTotal;
 			document.getElementById('statRevenue').textContent = (revenue || 0).toFixed(2).replace('.', ',') + ' €';
 		}
 
