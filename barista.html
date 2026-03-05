@@ -1492,7 +1492,7 @@
 						if (!isAllDone && !hdr.querySelector('.complete-btn')) {
 							if (act) act.remove();
 							const btn = document.createElement('button'); btn.className = 'complete-btn';
-							btn.textContent = '✓Prêt'; btn.onclick = () => markAllDone(order.saleId);
+							btn.textContent = '✓ Prêt'; btn.onclick = () => markAllDone(order.saleId);
 							hdr.querySelector('.card-header-right').appendChild(btn);
 						} else if (isAllDone && !hdr.querySelector('.served-label')) {
 							if (act) act.remove();
@@ -1553,7 +1553,7 @@
 				? `<span class="badge badge--paid">✓ ${escHtml(order.payment)}</span>`
 				: (order.payment ? `<span class="badge badge--unpaid">${escHtml(order.payment)}</span>` : '');
 			const actionHtml = !isAllDone
-				? `<button class="complete-btn" onclick="markAllDone('${order.saleId}')">✓Prêt</button>`
+				? `<button class="complete-btn" onclick="markAllDone('${order.saleId}')">✓ Prêt</button>`
 				: `<span class="served-label">SERVI ✓</span>`;
 			return `
     <div class="card-header">
