@@ -489,6 +489,25 @@
 			margin-top: .1rem;
 		}
 
+		.badge {
+			font-size: .55rem;
+			letter-spacing: .1em;
+			text-transform: uppercase;
+			padding: .1rem .35rem;
+			border-radius: 3px;
+			font-weight: 600;
+		}
+
+		.badge--paid {
+			background: var(--done-bg);
+			color: var(--done);
+		}
+
+		.badge--unpaid {
+			background: rgba(192, 104, 32, .12);
+			color: var(--accent);
+		}
+
 		.order-price {
 			color: var(--accent);
 			font-weight: 600;
@@ -1269,7 +1288,9 @@
 			}));
 			const saleComment = saleObj.comments?.trim() || '';
 			const saleTotal = parseFloat(saleObj.total) || 0;
-			return { saleId, tableName, saleComment, items, fetchedAt: createdAt, saleTotal };
+			const payment = saleObj.payment || '';
+			const isPaid = saleObj.completed_at && !saleObj.completed_at.startsWith('0000');
+			return { saleId, tableName, saleComment, items, fetchedAt: createdAt, saleTotal, payment, isPaid };
 		}
 
 		// ── Smart render ──────────────────────────────────────────────────────
@@ -1353,7 +1374,13 @@
 			return `
     <div class="card-header">
       <div><div class="table-tag">${escHtml(order.tableName)}</div><div class="table-sub">Table / Commande</div>${order.saleComment ? `<div class="sale-comment">💬 ${escHtml(order.saleComment)}</div>` : ""}</div>
-      <div style="text-align:right"><div class="order-id">#${order.saleId} &nbsp;<span class="order-price">${order.saleTotal.toFixed(2).replace('.', ',')} €</span></div><div class="order-time ${timeClass}">${timeLabel}</div></div>
+      <div style="text-align:right">
+        <div class="order-id">#${order.saleId} &nbsp;<span class="order-price">${order.saleTotal.toFixed(2).replace('.', ',')} €</span></div>
+        <div style="display:flex;align-items:center;justify-content:flex-end;gap:.35rem;margin-top:.1rem">
+          ${order.isPaid ? '<span class="badge badge--paid">✓ ' + escHtml(order.payment) + '</span>' : (order.payment ? '<span class="badge badge--unpaid">' + escHtml(order.payment) + '</span>' : '')}
+          <div class="order-time ${timeClass}">${timeLabel}</div>
+        </div>
+      </div>
     </div>
     <div class="items-list">${renderItemsHtml(order)}</div>
     <div class="card-footer">
