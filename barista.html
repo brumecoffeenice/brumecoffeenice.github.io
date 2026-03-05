@@ -158,8 +158,8 @@
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			padding: 1rem 2rem;
-			border-bottom: 2px solid var(--border);
+			padding: .45rem 1.2rem;
+			border-bottom: 1px solid var(--border);
 			background: rgba(255, 250, 244, .97);
 			backdrop-filter: blur(8px);
 			position: sticky;
@@ -176,15 +176,15 @@
 
 		.logo-title {
 			font-family: 'Playfair Display', serif;
-			font-size: 1.7rem;
+			font-size: 1.25rem;
 			font-weight: 900;
 			letter-spacing: .04em;
 			color: var(--accent);
 		}
 
 		.logo-sub {
-			font-size: .62rem;
-			letter-spacing: .25em;
+			font-size: .55rem;
+			letter-spacing: .2em;
 			text-transform: uppercase;
 			color: var(--steam);
 		}
@@ -192,13 +192,13 @@
 		.header-right {
 			display: flex;
 			align-items: center;
-			gap: 1.2rem;
-			flex-wrap: wrap;
+			gap: .6rem;
+			flex-wrap: nowrap;
 		}
 
 		.status-dot {
-			width: 9px;
-			height: 9px;
+			width: 11px;
+			height: 11px;
 			border-radius: 50%;
 			background: var(--done);
 			display: inline-block;
@@ -228,12 +228,12 @@
 		}
 
 		.clock {
-			font-size: 1.05rem;
+			font-size: .82rem;
 			color: var(--accent);
 			font-weight: 500;
-			letter-spacing: .08em;
+			letter-spacing: .06em;
 			background: var(--pending-bg);
-			padding: .3rem .7rem;
+			padding: .22rem .5rem;
 			border-radius: 4px;
 			border: 1px solid rgba(192, 104, 32, .2);
 		}
@@ -242,10 +242,10 @@
 			background: var(--pending-bg);
 			border: 1px solid rgba(192, 104, 32, .3);
 			color: var(--accent);
-			padding: .35rem .6rem;
+			padding: .22rem .5rem;
 			border-radius: 4px;
 			font-family: 'DM Mono', monospace;
-			font-size: .72rem;
+			font-size: .65rem;
 			cursor: pointer;
 			outline: none;
 			transition: border-color .2s;
@@ -259,18 +259,16 @@
 			background: var(--accent);
 			border: none;
 			color: white;
-			padding: .45rem 1.1rem;
+			width: 28px;
+			height: 28px;
 			border-radius: 4px;
 			cursor: pointer;
-			font-family: 'DM Mono', monospace;
-			font-size: .7rem;
-			letter-spacing: .12em;
-			text-transform: uppercase;
 			transition: all .2s;
 			display: flex;
 			align-items: center;
-			gap: .4rem;
+			justify-content: center;
 			box-shadow: 0 2px 8px rgba(192, 104, 32, .25);
+			flex-shrink: 0;
 		}
 
 		.refresh-btn:hover {
@@ -287,15 +285,35 @@
 			}
 		}
 
+		.fullscreen-btn {
+			background: transparent;
+			border: 1px solid var(--border);
+			color: var(--steam);
+			width: 28px;
+			height: 28px;
+			border-radius: 4px;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: all .2s;
+			flex-shrink: 0;
+		}
+
+		.fullscreen-btn:hover {
+			border-color: var(--accent);
+			color: var(--accent);
+		}
+
 		.logout-btn {
 			background: transparent;
 			border: 1px solid var(--border);
 			color: var(--steam);
-			padding: .4rem .8rem;
+			padding: .22rem .55rem;
 			border-radius: 4px;
 			cursor: pointer;
 			font-family: 'DM Mono', monospace;
-			font-size: .65rem;
+			font-size: .6rem;
 			letter-spacing: .12em;
 			text-transform: uppercase;
 			transition: all .2s;
@@ -314,7 +332,7 @@
 
 		.stat-item {
 			flex: 1;
-			padding: .8rem 1.5rem;
+			padding: .35rem 1rem;
 			border-right: 1px solid var(--border);
 			display: flex;
 			align-items: baseline;
@@ -325,26 +343,32 @@
 			border-right: none;
 		}
 
+		.stat-num--revenue {
+			font-size: 1.1rem;
+			color: var(--done);
+			letter-spacing: .02em;
+		}
+
 		.stat-num {
 			font-family: 'Playfair Display', serif;
-			font-size: 1.9rem;
+			font-size: 1.3rem;
 			font-weight: 700;
 			color: var(--accent);
 			line-height: 1;
 		}
 
 		.stat-label {
-			font-size: .62rem;
-			letter-spacing: .18em;
+			font-size: .55rem;
+			letter-spacing: .14em;
 			text-transform: uppercase;
 			color: var(--steam);
 		}
 
 		.board {
-			padding: 1.5rem 2rem;
+			padding: .7rem 1rem;
 			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-			gap: 1.2rem;
+			grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+			gap: .6rem;
 		}
 
 		.order-card {
@@ -395,7 +419,7 @@
 		}
 
 		.card-header {
-			padding: 1rem 1.2rem .75rem;
+			padding: .55rem 1rem .45rem;
 			display: flex;
 			justify-content: space-between;
 			align-items: flex-start;
@@ -405,18 +429,25 @@
 
 		.table-tag {
 			font-family: 'Playfair Display', serif;
-			font-size: 1.35rem;
+			font-size: .85rem;
 			font-weight: 700;
 			color: var(--cream);
 			line-height: 1;
 		}
 
 		.table-sub {
-			font-size: .6rem;
-			letter-spacing: .18em;
+			font-size: .52rem;
+			letter-spacing: .15em;
 			text-transform: uppercase;
 			color: var(--steam);
-			margin-top: .15rem;
+			margin-top: .1rem;
+		}
+
+		.order-price {
+			color: var(--accent);
+			font-weight: 600;
+			font-size: .62rem;
+			letter-spacing: .04em;
 		}
 
 		.order-id {
@@ -427,10 +458,10 @@
 		}
 
 		.order-time {
-			font-size: .85rem;
+			font-size: .72rem;
 			color: var(--accent);
 			text-align: right;
-			margin-top: .2rem;
+			margin-top: .1rem;
 			font-weight: 500;
 		}
 
@@ -456,10 +487,10 @@
 		}
 
 		.items-list {
-			padding: .7rem 1rem;
+			padding: .4rem .7rem;
 			display: flex;
 			flex-direction: column;
-			gap: .45rem;
+			gap: .28rem;
 		}
 
 		.item-row {
@@ -482,13 +513,22 @@
 
 		.item-row.item-done {
 			border-left-color: var(--done);
-			background: var(--done-bg);
-			opacity: .65;
+			border-left-width: 4px;
+			background: #d4edda;
+			opacity: 1;
 		}
 
 		.item-row.item-done .item-name {
-			text-decoration: line-through;
-			text-decoration-color: rgba(45, 122, 45, .5);
+			color: #1a5c1a;
+			font-weight: 600;
+		}
+
+		.item-row.item-done .item-note {
+			color: #2d7a2d;
+		}
+
+		.item-row.item-done .item-qty {
+			color: #1a5c1a;
 		}
 
 		.item-row.item-pending {
@@ -497,16 +537,16 @@
 		}
 
 		.item-row.item-in-progress {
-			border-left-color: var(--inprog);
-			background: #fffbe8;
+			border-left-color: var(--pending);
+			background: var(--pending-bg);
 		}
 
 		.item-qty {
 			font-family: 'Playfair Display', serif;
-			font-size: 1.25rem;
+			font-size: .95rem;
 			font-weight: 700;
 			color: var(--accent);
-			min-width: 1.5rem;
+			min-width: 1.2rem;
 			text-align: center;
 			line-height: 1;
 		}
@@ -516,23 +556,47 @@
 		}
 
 		.item-name {
-			font-size: .88rem;
+			font-size: .8rem;
 			color: var(--cream);
 			font-weight: 500;
-			line-height: 1.25;
+			line-height: 1.2;
+		}
+
+		.sale-comment {
+			font-size: .72rem;
+			color: #5a3e28;
+			background: rgba(176, 90, 26, .12);
+			border-left: 2px solid var(--caramel);
+			padding: .15rem .45rem;
+			border-radius: 0 3px 3px 0;
+			margin-top: .25rem;
+			font-weight: 500;
+			max-width: 220px;
+		}
+
+		.item-comment {
+			font-size: .8rem;
+			color: #5a3e28;
+			background: rgba(176, 90, 26, .1);
+			border-left: 2px solid var(--caramel);
+			padding: .15rem .4rem;
+			border-radius: 0 3px 3px 0;
+			margin-top: .15rem;
+			font-style: normal;
+			font-weight: 500;
 		}
 
 		.item-note {
-			font-size: .7rem;
+			font-size: .73rem;
 			color: var(--accent);
-			margin-top: .2rem;
+			margin-top: .05rem;
 			font-style: italic;
-			opacity: .85;
+			font-weight: 500;
 		}
 
 		.item-status-btn {
-			width: 26px;
-			height: 26px;
+			width: 22px;
+			height: 22px;
 			border-radius: 50%;
 			border: 2px solid rgba(192, 104, 32, .35);
 			background: white;
@@ -553,15 +617,16 @@
 		.item-row.item-done .item-status-btn {
 			background: var(--done);
 			border-color: var(--done);
+			box-shadow: 0 0 0 3px rgba(45, 122, 45, .25);
 		}
 
 		.item-status-btn svg {
-			width: 13px;
-			height: 13px;
+			width: 11px;
+			height: 11px;
 		}
 
 		.card-footer {
-			padding: .55rem 1rem .8rem;
+			padding: .35rem .8rem .45rem;
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
@@ -597,15 +662,15 @@
 			background: var(--done);
 			border: none;
 			color: white;
-			padding: .35rem .85rem;
+			padding: .25rem .65rem;
 			border-radius: 4px;
 			cursor: pointer;
 			font-family: 'DM Mono', monospace;
-			font-size: .65rem;
-			letter-spacing: .1em;
+			font-size: .6rem;
+			letter-spacing: .08em;
 			text-transform: uppercase;
 			transition: all .18s;
-			margin-left: .7rem;
+			margin-left: .5rem;
 		}
 
 		.complete-btn:hover {
@@ -625,7 +690,7 @@
 
 		.empty-title {
 			font-family: 'Playfair Display', serif;
-			font-size: 1.5rem;
+			font-size: 1.1rem;
 			color: var(--steam);
 			font-style: italic;
 		}
@@ -725,17 +790,17 @@
 			}
 
 			.board {
-				padding: 1rem;
-				gap: 1rem;
+				padding: .5rem;
+				gap: .5rem;
 				grid-template-columns: 1fr;
 			}
 
 			.stats-bar .stat-item {
-				padding: .6rem .8rem;
+				padding: .3rem .6rem;
 			}
 
 			.stat-num {
-				font-size: 1.5rem;
+				font-size: 1.1rem;
 			}
 		}
 	</style>
@@ -778,18 +843,25 @@
 			</div>
 			<div class="header-right">
 				<input type="date" id="datePicker" onchange="fetchOrders()" />
-				<span><span class="status-dot" id="statusDot"></span><span class="status-label"
-						id="statusLabel">Connexion…</span></span>
+				<span class="status-dot" id="statusDot"></span>
 				<span class="clock" id="clock">--:--:--</span>
-				<button class="refresh-btn" id="refreshBtn" onclick="fetchOrders()">
-					<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" width="13"
-						height="13">
+				<button class="refresh-btn" id="refreshBtn" onclick="fetchOrders()" title="Actualiser">
+					<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" width="16"
+						height="16">
 						<path d="M13.5 8A5.5 5.5 0 1 1 8 2.5c1.8 0 3.4.87 4.4 2.2" stroke-linecap="round" />
 						<polyline points="12,2 12.9,4.7 10.2,5.5" stroke-linecap="round" stroke-linejoin="round" />
 					</svg>
-					Actualiser
 				</button>
 				<button class="logout-btn" onclick="doLogout()">Déconnexion</button>
+				<button class="fullscreen-btn" id="fullscreenBtn" onclick="toggleFullscreen()" title="Plein écran">
+					<svg id="fsIcon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" width="14"
+						height="14">
+						<polyline points="1,5 1,1 5,1" />
+						<polyline points="11,1 15,1 15,5" />
+						<polyline points="15,11 15,15 11,15" />
+						<polyline points="5,15 1,15 1,11" />
+					</svg>
+				</button>
 			</div>
 		</header>
 
@@ -802,6 +874,8 @@
 			</div>
 			<div class="stat-item"><span class="stat-num" id="statPending">0</span><span class="stat-label">Cuisine
 					ouverte</span></div>
+			<div class="stat-item stat-item--revenue"><span class="stat-num stat-num--revenue" id="statRevenue">0,00
+					€</span></div>
 		</div>
 
 		<div class="board" id="board">
@@ -828,6 +902,8 @@
 
 		// ── State ────────────────────────────────────────────────────────────
 		let orders = [];
+		let isFetching = false;
+		let saleDetailCache = {}; // saleId -> { saleObj, total } — avoids re-fetching unchanged sales
 		let itemStatusMap = {};
 		let refreshTimer = null;
 		const REFRESH_INTERVAL = 15000;
@@ -906,6 +982,7 @@
 
 		// ── Fetch orders ──────────────────────────────────────────────────────
 		async function fetchOrders() {
+			if (isFetching) return; isFetching = true;
 			setStatus('loading'); spinRefresh(true);
 			try {
 				const pickedDate = document.getElementById('datePicker').value || new Date().toISOString().slice(0, 10);
@@ -923,14 +1000,35 @@
 				const saleIds = Object.keys(saleMap).slice(0, MAX_ORDERS);
 				if (!saleIds.length) { orders = []; render(); setStatus('online'); spinRefresh(false); hideLoader(); return; }
 
-				const fetched = await Promise.all(saleIds.map(async sid => {
-					try { const r = await proxyFetch(`/sales/${sid}`); return buildOrder(sid, Array.isArray(r) ? r[0] : r); }
-					catch { return null; }
+				// Only fetch detail for sales that are new or whose total changed (item added/removed)
+				// This reduces N calls per refresh to only the delta — usually 0-2 instead of 15-30
+				const toFetch = saleIds.filter(sid => {
+					const cached = saleDetailCache[sid];
+					if (!cached) return true; // new sale, must fetch
+					const freshTotal = saleMap[sid]?.total;
+					return freshTotal !== cached.total; // total changed = items changed
+				});
+				console.log(`[fetch] ${toFetch.length} new/changed out of ${saleIds.length} sales`);
+				await Promise.all(toFetch.map(async sid => {
+					try {
+						const r = await proxyFetch(`/sales/${sid}`);
+						const obj = Array.isArray(r) ? r[0] : r;
+						saleDetailCache[sid] = { saleObj: obj, total: saleMap[sid]?.total };
+					} catch (e) { console.warn('sale detail:', sid, e.message); }
 				}));
+				// Evict sales no longer in today's list
+				const activeSet = new Set(saleIds);
+				Object.keys(saleDetailCache).forEach(sid => { if (!activeSet.has(sid)) delete saleDetailCache[sid]; });
+
+				const fetched = saleIds.map(sid => {
+					const cached = saleDetailCache[sid];
+					if (!cached) return null;
+					return buildOrder(sid, cached.saleObj);
+				});
 				orders = fetched.filter(o => o && o.items.length > 0).sort((a, b) => b.fetchedAt - a.fetchedAt).slice(0, MAX_ORDERS);
 				render(); setStatus('online');
 			} catch (e) { console.error(e); setStatus('error'); showToast('Erreur : ' + e.message); }
-			spinRefresh(false); hideLoader();
+			spinRefresh(false); hideLoader(); isFetching = false;
 		}
 
 		// ── Build order ───────────────────────────────────────────────────────
@@ -938,13 +1036,160 @@
 			if (!saleObj) return null;
 			const createdAt = saleObj.created_at ? new Date(saleObj.created_at).getTime() : Date.now();
 			const createdTime = saleObj.created_at ? new Date(saleObj.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }) : null;
-			const tableName = (saleObj.table_name?.trim()) || (saleObj.sale_ext_ref?.trim()) || (createdTime ? `Commande ${createdTime}` : `#${saleId}`);
+			/* === HIBOUTIK API — full response example for /sales/55598 ===
+			{
+			  "sale_id": 55598,
+			  "created_at": "2026-03-05 12:57:38",
+			  "completed_at": "0000-00-00 00:00:00",
+			  "store_id": 1,
+			  "vendor_id": 1,
+			  "unique_sale_id": "",
+			  "invoice_id": "",
+			  "customer_id": 0,
+			  "currency": "EUR",
+			  "total": "40.50",
+			  "billing_address": 0,
+			  "shipping_address": 0,
+			  "payment": "CB",
+			  "without_taxes": 0,
+			  "prices_without_taxes": 0,
+			  "ressource_id": 14,           // <- table id (double-s, French typo in API)
+			  "points": 0,
+			  "sale_ext_ref": "",
+			  "service_charge": "0.00",
+			  "guests_number": 0,
+			  "takeaway": 0,
+			  "shipping_ref": "",
+			  "customs_duty": "0.00",
+			  "vat_number": "",
+			  "date_z": 0,
+			  "sale_key": "2x1qr0jik9b7f2p6jmug9wchn",
+			  "quotation": 0,
+			  "sale_misc": null,
+			  "sale_num_fac": "",
+			  "pickup_date": "0000-00-00 00:00:00",
+			  "nth_closed_store": 0,
+			  "cash_tendered": "0.00",
+			  "account_status": 1,
+			  "completed_at_date": "0000-00-00",
+			  "created_at_date": "2026-03-05",
+			  "completed_at_yyyymmddhhmmss": "00000000000000",
+			  "created_at_date_yyyy": "2026",
+			  "created_at_date_mm": "03",
+			  "created_at_date_dd": "05",
+			  "created_at_date_hh": "12",
+			  "created_at_date_min": "57",
+			  "created_at_date_ss": "38",
+			  "completed_at_date_yyyy": "0000",
+			  "completed_at_date_mm": "00",
+			  "completed_at_date_dd": "00",
+			  "completed_at_date_hh": "00",
+			  "completed_at_date_min": "00",
+			  "completed_at_date_ss": "00",
+			  "date_z_yyyy": "0",
+			  "date_z_mm": false,
+			  "date_z_dd": false,
+			  "pickup_date_yyyy": "0000",
+			  "pickup_date_mm": "00",
+			  "pickup_date_dd": "00",
+			  "pickup_date_hh": "00",
+			  "pickup_date_min": "00",
+			  "pickup_date_ss": "00",
+			  "pickup_date_utc": "0000-00-00 00:00:00",
+			  "current_date": "2026-03-05",
+			  "current_date_yyyy": "2026",
+			  "current_date_mm": "03",
+			  "current_date_dd": "05",
+			  "ressource_name": "Table 4",  // <- THE table name field (double-s, French typo in API)
+			  "line_items": [
+				{
+				  "product_id": 45,
+				  "product_size": 0,
+				  "quantity": 1,
+				  "product_price": "3.00",
+				  "product_currency": "EUR",
+				  "vat": "0.100",
+				  "package": 0,
+				  "points": 0,
+				  "discount": "0.00",
+				  "stock_withdrawal": 1,
+				  "credit_note": 0,
+				  "credit_note_id": 0,
+				  "product_comments": "",
+				  "serial_number": "",
+				  "line_item_id_return": 0,
+				  "date_return": 0,
+				  "kitchen_pos": 1,
+				  "product_supply_price": "0.00",
+				  "line_item_id": 134508,
+				  "detail_commande_id": 134508,
+				  "item_unit_net_wo_discount": "2.73",
+				  "item_unit_gross_wo_discount": "3.00",
+				  "item_unit_discount_net": "0.00",
+				  "item_unit_discount_gross": "0.00",
+				  "item_unit_net": "2.73",
+				  "item_unit_tax": "0.27",
+				  "item_unit_gross": "3.00",
+				  "item_discount_net": "0.00",
+				  "item_discount_tax": "0.00",
+				  "item_discount_gross": "0.00",
+				  "item_discount_percentage": "0.00",
+				  "item_total_net": "2.73",
+				  "item_total_gross": "3.00",
+				  "item_total_tax": "0.27",
+				  "tax_label": "10%",
+				  "tax_value": 10,
+				  "product_model": "cortado",
+				  "product_model_short": "",
+				  "product_barcode": "2430000000454",
+				  "product_brand": 0,
+				  "product_supplier": 0,
+				  "product_category": 1,
+				  "product_size_type": 0,
+				  "product_package": 0,
+				  "product_stock_management": 0,
+				  "product_supplier_reference": "",
+				  "product_desc": "",
+				  "storage_location": "",
+				  "product_arch": 0,
+				  "products_ref_ext": "",
+				  "product_display_www": 0,
+				  "accounting_account": "",
+				  "misc_date": "0000-00-00",
+				  "misc_decimal": "0.00",
+				  "misc_int": 0,
+				  "misc_varchar": "",
+				  "misc_varchar2": "",
+				  "misc_text": "",
+				  "multiple": 1,
+				  "category_name": "Barista",
+				  "size_name": "",
+				  "tags": [],
+				  "modifiers": [
+					{
+					  "modifier_id": 8,
+					  "modifier_label": "chaud",
+					  "modifier_price": "0.00"
+					}
+				  ],
+				  "modifiers_conc": "chaud",
+				  "multiple_quantity": 1,
+				  "multiple_product_price": 3,
+				  "item_unit_net_5d": "2.72727",
+				  "item_discount_percentage_round_0": "0"
+				}
+			  ]
+			}
+			=================================================================== */
+			const tableName = saleObj.ressource_name || saleObj.sale_ext_ref || (createdTime ? createdTime : `#${saleId}`);
 			const items = (saleObj.line_items || []).map(it => ({
 				id: it.line_item_id, name: it.product_model || '—',
 				qty: parseInt(it.quantity || it.multiple_quantity || 1),
-				note: it.modifiers_conc || '', status: itemStatusMap[it.line_item_id] ?? 0,
+				note: it.modifiers_conc || '', comment: it.product_comments?.trim() || '', status: itemStatusMap[it.line_item_id] ?? 0,
 			}));
-			return { saleId, tableName, items, fetchedAt: createdAt };
+			const saleComment = saleObj.comments?.trim() || '';
+			const saleTotal = parseFloat(saleObj.total) || 0;
+			return { saleId, tableName, saleComment, items, fetchedAt: createdAt, saleTotal };
 		}
 
 		// ── Smart render ──────────────────────────────────────────────────────
@@ -952,7 +1197,7 @@
 			const board = document.getElementById('board');
 			if (!orders.length) {
 				board.innerHTML = `<div class="empty-state"><div class="empty-icon">☕</div><div class="empty-title">Aucune commande en cours</div><div class="empty-sub">Tout est servi — belle journée !</div></div>`;
-				updateStats(0, 0, 0, 0); return;
+				updateStats(0, 0, 0, 0, 0); return;
 			}
 			let totalItems = 0, doneItems = 0;
 			const existingCards = {};
@@ -1001,7 +1246,8 @@
 				}
 			});
 			const es = board.querySelector('.empty-state'); if (es) es.remove();
-			updateStats(orders.length, totalItems, doneItems, orders.filter(o => o.items.some(i => i.status !== 2)).length);
+			const revenueTotal = orders.reduce((s, o) => s + o.saleTotal, 0);
+			updateStats(orders.length, totalItems, doneItems, orders.filter(o => o.items.some(i => i.status !== 2)).length, revenueTotal);
 		}
 
 		function renderItemsHtml(order) {
@@ -1012,6 +1258,7 @@
       <div class="item-info">
         <div class="item-name">${escHtml(it.name)}</div>
         ${it.note ? `<div class="item-note">${escHtml(it.note)}</div>` : ''}
+        ${it.comment ? `<div class="item-comment">💬 ${escHtml(it.comment)}</div>` : ''}
       </div>
       <button class="item-status-btn" onclick="cycleStatus('${order.saleId}','${it.id}');event.stopPropagation()">
         ${st === 2
@@ -1025,8 +1272,8 @@
 		function renderCardInner(order, isAllDone, done, pct, timeLabel, timeClass) {
 			return `
     <div class="card-header">
-      <div><div class="table-tag">${escHtml(order.tableName)}</div><div class="table-sub">Table / Commande</div></div>
-      <div><div class="order-id">#${order.saleId}</div><div class="order-time ${timeClass}">${timeLabel}</div></div>
+      <div><div class="table-tag">${escHtml(order.tableName)}</div><div class="table-sub">Table / Commande</div>${order.saleComment ? `<div class="sale-comment">💬 ${escHtml(order.saleComment)}</div>` : ""}</div>
+      <div style="text-align:right"><div class="order-id">#${order.saleId} &nbsp;<span class="order-price">${order.saleTotal.toFixed(2).replace('.', ',')} €</span></div><div class="order-time ${timeClass}">${timeLabel}</div></div>
     </div>
     <div class="items-list">${renderItemsHtml(order)}</div>
     <div class="card-footer">
@@ -1038,17 +1285,18 @@
     </div>`;
 		}
 
-		function updateStats(total, items, done, pending) {
+		function updateStats(total, items, done, pending, revenue) {
 			document.getElementById('statTotal').textContent = total;
 			document.getElementById('statItems').textContent = items;
 			document.getElementById('statDone').textContent = done;
 			document.getElementById('statPending').textContent = pending;
+			document.getElementById('statRevenue').textContent = (revenue || 0).toFixed(2).replace('.', ',') + ' €';
 		}
 
 		function cycleStatus(saleId, itemId) {
 			const order = orders.find(o => o.saleId == saleId); if (!order) return;
 			const item = order.items.find(i => i.id == itemId); if (!item) return;
-			item.status = (item.status + 1) % 3; itemStatusMap[itemId] = item.status; saveCache(); render();
+			item.status = item.status === 2 ? 0 : 2; itemStatusMap[itemId] = item.status; saveCache(); render();
 		}
 
 		function markAllDone(saleId) {
@@ -1058,11 +1306,11 @@
 		}
 
 		function setStatus(state) {
-			const dot = document.getElementById('statusDot'), label = document.getElementById('statusLabel');
-			if (!dot || !label) return;
-			if (state === 'online') { dot.style.background = 'var(--done)'; label.textContent = 'En ligne'; }
-			else if (state === 'loading') { dot.style.background = 'var(--accent)'; label.textContent = 'Actualisation…'; }
-			else { dot.style.background = 'var(--urgent)'; label.textContent = 'Hors ligne'; }
+			const dot = document.getElementById('statusDot');
+			if (!dot) return;
+			if (state === 'online') { dot.style.background = 'var(--done)'; dot.title = 'En ligne'; }
+			else if (state === 'loading') { dot.style.background = 'var(--accent)'; dot.title = 'Actualisation…'; }
+			else { dot.style.background = 'var(--urgent)'; dot.title = 'Hors ligne'; }
 		}
 		function spinRefresh(on) { const b = document.getElementById('refreshBtn'); if (b) b.classList.toggle('spinning', on); }
 		function hideLoader() { const o = document.getElementById('loadingOverlay'); if (o) o.classList.add('hidden'); }
@@ -1074,6 +1322,22 @@
 			toastTimer = setTimeout(() => t.classList.remove('show'), 4000);
 		}
 		function escHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+		function toggleFullscreen() {
+			if (!document.fullscreenElement) {
+				document.documentElement.requestFullscreen().catch(() => { });
+			} else {
+				document.exitFullscreen();
+			}
+		}
+		document.addEventListener('fullscreenchange', () => {
+			const isFs = !!document.fullscreenElement;
+			const icon = document.getElementById('fsIcon');
+			if (!icon) return;
+			icon.innerHTML = isFs
+				? '<polyline points="1,5 5,5 5,1"/><polyline points="11,1 11,5 15,5"/><polyline points="15,11 11,11 11,15"/><polyline points="5,15 5,11 1,11"/>'
+				: '<polyline points="1,5 1,1 5,1"/><polyline points="11,1 15,1 15,5"/><polyline points="15,11 15,15 11,15"/><polyline points="5,15 1,15 1,11"/>';
+		});
 
 		function startAutoRefresh() {
 			if (refreshTimer) clearInterval(refreshTimer);
