@@ -53,4 +53,5 @@ photos {
 	/* padding-bottom: 2%; */
 	margin-bottom: 1%;
 	position: relative;
+	max-width: 20em;
 }

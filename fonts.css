@@ -203,6 +203,14 @@ titlecenterR2 {
 	width: 100%;
 }
 
+simplecenterR {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+}
+
 logoStyle1 {
 	font-size: 100%;
 	margin-bottom: -0.15em;

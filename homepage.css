@@ -66,10 +66,10 @@ externalLogoC {
 }
 
 .photo {
-	max-width: 10em;
+	max-width: 30em;
 	pointer-events: none;
-	position: relative;
-	width: 90vw;
+	/* position: relative; */
+	width: 100vw;
 }
 
 .linkStyle {
