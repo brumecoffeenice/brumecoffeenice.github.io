@@ -5,14 +5,22 @@ body {
 	overflow-x: hidden;
 }
 
-headerR {
-	display: flex;
-	flex-direction: row;
-	justify-content: left;
-	padding-bottom: 2vh;
-	padding-top: 1em;
+/* ── Striped background ────────────────────────────── */
+.stripes {
+	top: 0;
+	background-color: #ffffff00;
+	opacity: 1;
+	background-image: linear-gradient(to right,
+			var(--color-stripe1),
+			var(--color-stripe1) 5px,
+			var(--color-stripe2) 5px,
+			var(--color-stripe2));
+	background-size: 10px 100%;
+	z-index: -5;
+	min-height: 100vh;
 }
 
+/* ── Fixed parallax background ────────────────────── */
 .background {
 	z-index: -6;
 	position: fixed;
@@ -25,15 +33,28 @@ headerR {
 	background-position: left;
 	background-size: cover;
 	transform: translate3d(0px, 0px, 0px);
-	/* filter: brightness(1.3) saturate(0.6); */
 }
 
+/* ── Header nav ────────────────────────────────────── */
+headerR {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	padding: 0.8em 1em 0.6em;
+	gap: 0.4em;
+}
+
+headerR a {
+	margin: 0;
+}
+
+/* ── Social logo rows ──────────────────────────────── */
 externalLogoR {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
-	padding-top: 1em;
-	padding-bottom: 1em;
+	padding: 0.6em 0;
 }
 
 externalLogoC {
@@ -44,91 +65,57 @@ externalLogoC {
 
 .instaLogo {
 	height: 1cm;
-	/* width: auto;
-	margin-bottom: 0.3cm;
-	margin-bottom: 0.3cm; */
 }
 
-.stripes {
-	top: 0;
-	background-color: #ffffff00;
-	opacity: 1;
-	/* background-image: linear-gradient(to right, #ffffff7b, #ffffff7b 10px, #ffffff49 10px, #ffffff49); */
-	background-image: linear-gradient(to right, var(--color-stripe1), var(--color-stripe1) 5px, var(--color-stripe2) 5px, var(--color-stripe2));
-	background-size: 10px 100%;
-	z-index: -5;
-	min-height: 100vh;
-}
-
-.tshirt {
-	width: 100vw;
-	pointer-events: none;
-}
-
+/* ── Hero photo ────────────────────────────────────── */
 .photo {
-	/* max-width: 30em; */
+	width: 100%;
+	max-height: 60vh;
+	object-fit: cover;
 	pointer-events: none;
-	/* position: relative; */
-	width: 100vw;
+	display: block;
 }
 
+/* ── Link pills ────────────────────────────────────── */
 .linkStyle {
-	/* background-color: #ffede3; */
 	border: 5px solid var(--color-border1);
-	/* backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px); */
-	/* padding: 0.2em; */
 	align-items: center;
 	text-align: center;
-	vertical-align: auto;
-	/* height: 20px; */
 	text-decoration: underline;
 	text-decoration-color: var(--color-underline1);
 	border-radius: 1000px;
-	padding: 0.3em;
+	padding: 0.3em 0.7em;
 	background-color: var(--color-bg1);
 }
 
 a {
 	text-decoration: none;
 	display: block;
-	margin-top: 1em;
-	margin-bottom: 1em;
+	margin-top: 0.4em;
+	margin-bottom: 0.4em;
 }
 
 .selectedLinkStyle {
-	/* font-weight: bold; */
 	text-decoration: underline;
-	/* font-family: 'Caprasimo', cursive; */
-	/* text-transform: uppercase; */
-	/* backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px); */
 	background-color: var(--color-bg2);
-
 }
 
 button {
 	border: 10px solid var(--color-border1);
-	/* backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px); */
 	background-color: var(--color-bg1);
-	/* padding: 0.2em; */
 	align-items: center;
 	text-align: center;
-	vertical-align: auto;
-	/* height: 20px; */
 	text-decoration: underline;
 	text-decoration-color: var(--color-underline1);
 	border-radius: 1000px;
 	padding: 0.3em;
 }
 
+/* ── Monospace train element ───────────────────────── */
 train {
-	font: 'courier prime';
-	font-size: 100%;
-	width: 50em;
-	white-space: pre;
 	font-family: "Courier New", Courier, monospace;
 	font-size: 1rem;
 	letter-spacing: 0px;
+	width: 50em;
+	white-space: pre;
 }

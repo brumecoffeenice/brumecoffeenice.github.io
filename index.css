@@ -1,7 +1,9 @@
+/* ── Layout primitives ─────────────────────────────── */
+
 blocC {
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
+	justify-content: flex-start;
 }
 
 blocR {
@@ -17,41 +19,84 @@ blocVrac {
 	flex-direction: row;
 	justify-content: center;
 	flex-wrap: wrap;
+	gap: 0.4em;
+}
+
+/* ── Info cards grid ───────────────────────────────── */
+
+bigbloc {
+	display: grid;
+	/* 3 equal columns on desktop */
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1.2em;
+	padding: 1.2em;
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 1200px;
+	margin: 0 auto;
 }
 
 bloc {
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
-	margin-top: 1cm;
-	padding-right: 5mm;
-	padding-left: 5mm;
-	border-radius: 10px;
+	justify-content: flex-start;
+	padding: 0.8em 1em 1em;
+	border-radius: 12px;
 	border: 5px solid var(--color-mainr-border);
-	max-width: 25em;
 	background: url('img/bac2.png');
 	background-size: 40%;
 	background-repeat: repeat;
 	background-color: var(--color-bg0);
+	/* no fixed max-width – grid cell controls width */
+	min-width: 0;
 }
 
-bigbloc {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	flex-wrap: wrap;
+/* 2 columns on medium screens */
+@media (max-width: 900px) {
+	bigbloc {
+		grid-template-columns: repeat(2, 1fr);
+	}
 }
+
+/* 1 column on phones */
+@media (max-width: 560px) {
+	bigbloc {
+		grid-template-columns: 1fr;
+		padding: 0.7em;
+		gap: 0.8em;
+	}
+}
+
+/* ── Photo grid ────────────────────────────────────── */
 
 photos {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	/* 4 columns desktop */
+	gap: 6px;
+	width: 100%;
+	padding: 1em;
+	box-sizing: border-box;
 }
 
 .tabloidphoto {
-	width: 49.5%;
-	/* padding-bottom: 2%; */
-	margin-bottom: 1%;
-	position: relative;
-	/* max-width: 20em; */
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+	display: block;
+	border-radius: 4px;
+}
+
+@media (max-width: 900px) {
+	photos {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+@media (max-width: 560px) {
+	photos {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 4px;
+		padding: 0.5em;
+	}
 }
