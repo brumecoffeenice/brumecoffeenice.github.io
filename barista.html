@@ -1053,6 +1053,138 @@
 				grid-template-columns: 1fr;
 			}
 		}
+
+		/* ── DEBUG PANEL ── */
+		#debugPanel {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			max-height: 38vh;
+			background: rgba(10, 5, 2, 0.93);
+			color: #a8d8a0;
+			font-family: 'DM Mono', monospace;
+			font-size: .68rem;
+			z-index: 9999;
+			display: flex;
+			flex-direction: column;
+			border-top: 2px solid var(--accent);
+			backdrop-filter: blur(6px);
+		}
+
+		#debugPanel.hidden {
+			display: none;
+		}
+
+		#debugToggle {
+			position: fixed;
+			bottom: .5rem;
+			right: .5rem;
+			background: rgba(10, 5, 2, 0.85);
+			color: var(--accent);
+			border: 1px solid var(--accent);
+			border-radius: 5px;
+			font-family: 'DM Mono', monospace;
+			font-size: .6rem;
+			letter-spacing: .1em;
+			text-transform: uppercase;
+			padding: .25rem .55rem;
+			cursor: pointer;
+			z-index: 10000;
+		}
+
+		#debugHeader {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: .3rem .75rem;
+			border-bottom: 1px solid rgba(192, 94, 8, 0.3);
+			background: rgba(192, 94, 8, 0.08);
+			flex-shrink: 0;
+		}
+
+		#debugHeader span {
+			color: var(--accent);
+			font-weight: 600;
+			letter-spacing: .12em;
+			text-transform: uppercase;
+			font-size: .65rem;
+		}
+
+		#debugClear {
+			background: none;
+			border: 1px solid rgba(192, 94, 8, 0.4);
+			color: var(--accent);
+			border-radius: 3px;
+			padding: .1rem .4rem;
+			cursor: pointer;
+			font-family: 'DM Mono', monospace;
+			font-size: .6rem;
+		}
+
+		#debugLog {
+			overflow-y: auto;
+			flex: 1;
+			padding: .4rem .75rem;
+			display: flex;
+			flex-direction: column;
+			gap: .25rem;
+		}
+
+		.dlog {
+			display: flex;
+			flex-direction: column;
+			gap: .1rem;
+			border-left: 2px solid #333;
+			padding-left: .5rem;
+		}
+
+		.dlog.ok {
+			border-left-color: #3a8a3a;
+		}
+
+		.dlog.err {
+			border-left-color: #c0281e;
+			color: #f08080;
+		}
+
+		.dlog.warn {
+			border-left-color: #c09000;
+			color: #e0c060;
+		}
+
+		.dlog.info {
+			border-left-color: #3a6aaa;
+			color: #80b0e0;
+		}
+
+		.dlog-time {
+			color: #556;
+			font-size: .6rem;
+		}
+
+		.dlog-url {
+			color: #aaa;
+			word-break: break-all;
+		}
+
+		.dlog-body {
+			color: #8ecf8e;
+			white-space: pre-wrap;
+			word-break: break-all;
+			max-height: 80px;
+			overflow: hidden;
+			cursor: pointer;
+		}
+
+		.dlog-body.expanded {
+			max-height: none;
+		}
+
+		.dlog-count {
+			color: #6a9;
+			font-size: .62rem;
+		}
 	</style>
 </head>
 
@@ -1092,7 +1224,8 @@
 				<span class="logo-sub">Barista Screen</span>
 			</div>
 			<div class="header-right">
-				<span class="header-desktop"><input type="date" id="datePicker" onchange="fetchOrders()" /></span>
+				<span class="header-desktop"><input type="date" id="datePicker" autocomplete="off"
+						onchange="selectedDate=this.value; fetchOrders()" /></span>
 				<span class="status-dot" id="statusDot"></span>
 				<span class="clock" id="clock">--:--:--</span>
 				<button class="refresh-btn" id="refreshBtn" onclick="fetchOrders()" title="Actualiser">
@@ -1105,8 +1238,8 @@
 				<span class="header-desktop"><button class="logout-btn" onclick="doLogout()">Déconnexion</button></span>
 				<button class="header-menu-btn" onclick="toggleHeaderMenu()" title="Menu">⋯</button>
 				<div class="header-dropdown" id="headerDropdown">
-					<input type="date" id="datePickerMobile"
-						onchange="document.getElementById('datePicker').value=this.value; fetchOrders()" />
+					<input type="date" id="datePickerMobile" autocomplete="off"
+						onchange="selectedDate=this.value; document.getElementById('datePicker').value=this.value; fetchOrders()" />
 					<button class="logout-btn" onclick="doLogout()">Déconnexion</button>
 				</div>
 				<button class="fullscreen-btn" id="fullscreenBtn" onclick="toggleFullscreen()" title="Plein écran">
@@ -1147,6 +1280,16 @@
 			</div>
 		</div>
 
+
+		<button id="debugToggle" onclick="toggleDebug()">🔍 Debug</button>
+		<div id="debugPanel" class="hidden">
+			<div id="debugHeader">
+				<span>🔍 API Debug Log</span>
+				<button id="debugClear" onclick="clearDebugLog()">Effacer</button>
+			</div>
+			<div id="debugLog"></div>
+		</div>
+
 	</div>
 
 	<script>
@@ -1166,8 +1309,37 @@
 		let orders = [];
 		let isFetching = false;
 		let saleDetailCache = {}; // saleId -> { saleObj, total } — avoids re-fetching unchanged sales
+		let lastFetchedDate = null; // tracks date to detect changes and clear cache
 		let itemStatusMap = {};
 		let refreshTimer = null;
+		let knownOrderIds = null; // null = first load (no sound), Set after that
+
+		// ── Debug panel ──────────────────────────────────────────────────────
+		let debugOpen = false;
+		function toggleDebug() {
+			debugOpen = !debugOpen;
+			document.getElementById('debugPanel').classList.toggle('hidden', !debugOpen);
+			document.getElementById('debugToggle').textContent = debugOpen ? '✕ Debug' : '🔍 Debug';
+		}
+		function clearDebugLog() { document.getElementById('debugLog').innerHTML = ''; }
+		function dlog(type, label, url, data) {
+			const el = document.getElementById('debugLog');
+			if (!el) return;
+			const t = new Date().toLocaleTimeString('fr-FR');
+			const entry = document.createElement('div');
+			entry.className = 'dlog ' + type;
+			let bodyHtml = '';
+			if (data !== undefined) {
+				const str = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+				const preview = str.length > 600 ? str.slice(0, 600) + '…' : str;
+				bodyHtml = `<div class="dlog-body" onclick="this.classList.toggle('expanded')">${escHtml(preview)}</div>`;
+				if (Array.isArray(data)) bodyHtml += `<div class="dlog-count">→ ${data.length} élément(s)</div>`;
+			}
+			entry.innerHTML = `<div class="dlog-time">${t} — <strong>${label}</strong></div>${url ? `<div class="dlog-url">${escHtml(url)}</div>` : ''}${bodyHtml}`;
+			el.appendChild(entry);
+			el.scrollTop = el.scrollHeight;
+		}
+
 		const REFRESH_INTERVAL = 15000;
 		const MAX_ORDERS = 100;
 		const CACHE_KEY = 'brume_item_status';
@@ -1212,12 +1384,17 @@
 			await sb.auth.signOut();
 		}
 
+		let appInitialized = false;
+		let selectedDate = null; // source of truth for selected date — never read from DOM
 		sb.auth.onAuthStateChange((event, session) => {
 			if (session) {
 				document.getElementById('loginScreen').style.display = 'none';
 				document.getElementById('appScreen').style.display = 'block';
 				loadCache();
-				initDatePicker();
+				if (!appInitialized) {
+					appInitialized = true;
+					initDatePicker(); // only set date on very first login
+				}
 				fetchOrders();
 				startAutoRefresh();
 			} else {
@@ -1247,20 +1424,45 @@
 			if (isFetching) return; isFetching = true;
 			setStatus('loading'); spinRefresh(true);
 			try {
-				const pickedDate = document.getElementById('datePicker').value || new Date().toISOString().slice(0, 10);
+				const pickedDate = selectedDate || new Date().toISOString().slice(0, 10);
+				if (pickedDate !== lastFetchedDate) {
+					saleDetailCache = {};
+					orders = [];
+					knownOrderIds = null;
+					lastFetchedDate = pickedDate;
+				}
 				const [yyyy, mm, dd] = pickedDate.split('-');
 				let saleMap = {};
+				const todayStr2 = new Date().toISOString().slice(0, 10);
+				if (pickedDate > todayStr2) {
+					dlog('warn', `⚠️ Date dans le futur ! (aujourd'hui = ${todayStr2})`, `Date cible : ${pickedDate} — aucune commande possible`);
+				} else {
+					dlog('info', 'Fetch démarré', `Date cible : ${pickedDate}`);
+				}
 				try {
-					const arr = await proxyFetch('/open_sales/1').then(r => Array.isArray(r) ? r : Object.values(r));
-					arr.forEach(s => { if ((s.created_at || '').slice(0, 10) === pickedDate) saleMap[String(s.sale_id)] = s; });
-				} catch (e) { console.warn('open_sales:', e.message); }
+					const raw = await proxyFetch('/open_sales/1');
+					const arr = Array.isArray(raw) ? raw : Object.values(raw);
+					const matched = arr.filter(s => (s.created_at || '').slice(0, 10) === pickedDate);
+					matched.forEach(s => { saleMap[String(s.sale_id)] = s; });
+					dlog('ok', `open_sales → ${arr.length} total, ${matched.length} pour ${pickedDate}`, '/open_sales/1', arr.slice(0, 5));
+				} catch (e) {
+					dlog('err', 'open_sales ERREUR', '/open_sales/1', e.message);
+					console.warn('open_sales:', e.message);
+				}
+				const closedPath = `/closed_sales/1/${yyyy}/${parseInt(mm)}/${parseInt(dd)}`;
 				try {
-					const arr = await proxyFetch(`/closed_sales/1/${yyyy}/${parseInt(mm)}/${parseInt(dd)}`).then(r => Array.isArray(r) ? r : Object.values(r));
+					const raw = await proxyFetch(closedPath);
+					const arr = Array.isArray(raw) ? raw : Object.values(raw);
 					arr.forEach(s => { saleMap[String(s.sale_id)] = s; });
-				} catch (e) { console.warn('closed_sales:', e.message); }
+					dlog('ok', `closed_sales → ${arr.length} commande(s)`, closedPath, arr.slice(0, 5));
+				} catch (e) {
+					dlog('err', 'closed_sales ERREUR', closedPath, e.message);
+					console.warn('closed_sales:', e.message);
+				}
 
 				const saleIds = Object.keys(saleMap).slice(0, MAX_ORDERS);
-				if (!saleIds.length) { orders = []; render(); setStatus('online'); spinRefresh(false); hideLoader(); return; }
+				dlog(saleIds.length ? 'ok' : 'warn', `saleMap total : ${saleIds.length} vente(s)`, null, saleIds);
+				if (!saleIds.length) { orders = []; render(); setStatus('online'); spinRefresh(false); hideLoader(); isFetching = false; return; }
 
 				// Only fetch detail for sales that are new or whose total changed (item added/removed)
 				// This reduces N calls per refresh to only the delta — usually 0-2 instead of 15-30
@@ -1288,6 +1490,13 @@
 					return buildOrder(sid, cached.saleObj);
 				});
 				orders = fetched.filter(o => o && o.items.length > 0).sort((a, b) => b.fetchedAt - a.fetchedAt).slice(0, MAX_ORDERS);
+				// Detect new orders and play sound
+				const currentIds = new Set(orders.map(o => String(o.saleId)));
+				if (knownOrderIds !== null) {
+					const hasNew = orders.some(o => !knownOrderIds.has(String(o.saleId)));
+					if (hasNew) playNewOrderSound();
+				}
+				knownOrderIds = currentIds;
 				render(); setStatus('online');
 			} catch (e) { console.error(e); setStatus('error'); showToast('Erreur : ' + e.message); }
 			spinRefresh(false); hideLoader(); isFetching = false;
@@ -1611,6 +1820,25 @@
 			t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer);
 			toastTimer = setTimeout(() => t.classList.remove('show'), 4000);
 		}
+		function playNewOrderSound() {
+			try {
+				const ctx = new (window.AudioContext || window.webkitAudioContext)();
+				const notes = [523.25, 659.25, 783.99, 1046.50]; // C5 E5 G5 C6
+				notes.forEach((freq, i) => {
+					const osc = ctx.createOscillator();
+					const gain = ctx.createGain();
+					osc.connect(gain); gain.connect(ctx.destination);
+					osc.type = 'sine';
+					osc.frequency.setValueAtTime(freq, ctx.currentTime);
+					const t = ctx.currentTime + i * 0.13;
+					gain.gain.setValueAtTime(0, t);
+					gain.gain.linearRampToValueAtTime(0.22, t + 0.02);
+					gain.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
+					osc.start(t); osc.stop(t + 0.35);
+				});
+			} catch (e) { console.warn('sound:', e); }
+		}
+
 		function escHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 
 		function toggleHeaderMenu() {
@@ -1650,9 +1878,13 @@
 			refreshTimer = setInterval(fetchOrders, REFRESH_INTERVAL);
 		}
 		function initDatePicker() {
-			const t = new Date();
-			document.getElementById('datePicker').value =
-				t.getFullYear() + '-' + String(t.getMonth() + 1).padStart(2, '0') + '-' + String(t.getDate()).padStart(2, '0');
+			const today = new Date();
+			const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+			selectedDate = todayStr;
+			const el = document.getElementById('datePicker');
+			const mob = document.getElementById('datePickerMobile');
+			if (el) el.value = todayStr;
+			if (mob) mob.value = todayStr;
 		}
 	</script>
 </body>
