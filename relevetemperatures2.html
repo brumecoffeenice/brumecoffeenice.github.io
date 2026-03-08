@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="robots" content="noindex, nofollow">
+	<title>Relevés de Températures</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link
+		href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap"
+		rel="stylesheet">
+	<style>
+		:root {
+			--bg: #f5f4f0;
+			--surface: #ffffff;
+			--surface2: #f0efe9;
+			--border: #dddbd4;
+			--border2: #c8c5bc;
+			--accent: #1a7a52;
+			--accent-light: #e8f5ef;
+			--accent2: #145e3e;
+			--danger: #c0392b;
+			--danger-light: #fdf0ee;
+			--warn: #b8820a;
+			--warn-light: #fdf8e8;
+			--cold: #1a6fa0;
+			--cold-light: #e8f2f8;
+			--text: #1a1917;
+			--muted: #7a776e;
+			--muted2: #a09d95;
+			--mono: 'DM Mono', monospace;
+			--sans: 'Syne', sans-serif;
+			--shadow: 0 1px 3px rgba(0, 0, 0, .08), 0 1px 2px rgba(0, 0, 0, .05);
+			--shadow-md: 0 4px 12px rgba(0, 0, 0, .1), 0 2px 4px rgba(0, 0, 0, .06);
+		}
+
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		body {
+			background: var(--bg);
+			color: var(--text);
+			font-family: var(--mono);
+			min-height: 100vh;
+		}
+
+		/* ── LOGIN ─────────────────────────────────────────── */
+		#loginScreen {
+			display: none;
+			/* shown/hidden by onAuthStateChange */
+			position: fixed;
+			inset: 0;
+			align-items: center;
+			justify-content: center;
+			background: var(--bg);
+			z-index: 100;
+		}
+
+		.login-box {
+			width: min(400px, 92vw);
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-top: 3px solid var(--accent);
+			border-radius: 6px;
+			padding: 2.8rem 2.4rem;
+			box-shadow: var(--shadow-md);
+			animation: fadeUp .4s ease both;
+		}
+
+		.login-logo {
+			font-family: var(--sans);
+			font-size: .75rem;
+			font-weight: 700;
+			letter-spacing: .2em;
+			text-transform: uppercase;
+			color: var(--accent);
+			margin-bottom: 1.8rem;
+		}
+
+		.login-title {
+			font-family: var(--sans);
+			font-size: 1.8rem;
+			font-weight: 800;
+			line-height: 1.15;
+			margin-bottom: 2rem;
+		}
+
+		.login-title span {
+			color: var(--accent);
+		}
+
+		.login-label {
+			display: block;
+			font-size: .62rem;
+			letter-spacing: .15em;
+			text-transform: uppercase;
+			color: var(--muted);
+			margin-bottom: .35rem;
+			margin-top: 1rem;
+			font-weight: 500;
+		}
+
+		.login-label:first-of-type {
+			margin-top: 0;
+		}
+
+		.login-input {
+			width: 100%;
+			background: var(--surface2);
+			border: 1px solid var(--border);
+			border-radius: 4px;
+			color: var(--text);
+			font-family: var(--mono);
+			font-size: .88rem;
+			padding: .65rem .9rem;
+			outline: none;
+			transition: border-color .2s, box-shadow .2s;
+		}
+
+		.login-input:focus {
+			border-color: var(--accent);
+			background: var(--surface);
+			box-shadow: 0 0 0 3px rgba(26, 122, 82, .1);
+		}
+
+		.login-btn {
+			width: 100%;
+			margin-top: 1.5rem;
+			background: var(--accent);
+			color: #fff;
+			border: none;
+			border-radius: 4px;
+			padding: .8rem;
+			font-family: var(--mono);
+			font-size: .9rem;
+			font-weight: 500;
+			cursor: pointer;
+			transition: background .2s;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: .5rem;
+		}
+
+		.login-btn:hover {
+			background: var(--accent2);
+		}
+
+		.login-btn:disabled {
+			opacity: .5;
+			cursor: not-allowed;
+		}
+
+		.login-error {
+			margin-top: .8rem;
+			background: var(--danger-light);
+			border: 1px solid rgba(192, 57, 43, .2);
+			color: var(--danger);
+			border-radius: 4px;
+			padding: .55rem .9rem;
+			font-size: .78rem;
+			display: none;
+		}
+
+		/* ── APP ───────────────────────────────────────────── */
+		#appScreen {
+			display: none;
+		}
+
+		.topbar {
+			position: sticky;
+			top: 0;
+			z-index: 50;
+			background: rgba(255, 255, 255, .93);
+			backdrop-filter: blur(10px);
+			border-bottom: 1px solid var(--border);
+			padding: .75rem 2rem;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 1rem;
+			box-shadow: var(--shadow);
+		}
+
+		.topbar-brand {
+			font-family: var(--sans);
+			font-size: .95rem;
+			font-weight: 800;
+			display: flex;
+			align-items: center;
+			gap: .5rem;
+		}
+
+		.brand-dot {
+			width: 8px;
+			height: 8px;
+			background: var(--accent);
+			border-radius: 50%;
+		}
+
+		.topbar-actions {
+			display: flex;
+			align-items: center;
+			gap: .5rem;
+			flex-wrap: wrap;
+		}
+
+		.btn {
+			padding: .4rem .85rem;
+			font-size: .75rem;
+			border-radius: 4px;
+			border: 1px solid var(--border);
+			cursor: pointer;
+			font-family: var(--mono);
+			background: var(--surface);
+			color: var(--text);
+			transition: all .15s;
+			display: inline-flex;
+			align-items: center;
+			gap: .3rem;
+			font-weight: 500;
+		}
+
+		.btn:hover {
+			border-color: var(--accent);
+			color: var(--accent);
+			background: var(--accent-light);
+		}
+
+		.btn.active {
+			background: var(--accent);
+			color: #fff;
+			border-color: var(--accent);
+		}
+
+		.btn.btn-accent {
+			background: var(--accent);
+			color: #fff;
+			border-color: var(--accent);
+		}
+
+		.btn.btn-accent:hover {
+			background: var(--accent2);
+			border-color: var(--accent2);
+		}
+
+		.btn.btn-danger {
+			color: var(--danger);
+			border-color: rgba(192, 57, 43, .3);
+			background: transparent;
+		}
+
+		.btn.btn-danger:hover {
+			background: var(--danger-light);
+		}
+
+		.btn.btn-del {
+			background: var(--danger);
+			color: #fff;
+			border-color: var(--danger);
+		}
+
+		.btn.btn-del:hover {
+			background: #a93226;
+		}
+
+		.user-chip {
+			font-size: .7rem;
+			color: var(--muted);
+			padding: .35rem .75rem;
+			background: var(--surface2);
+			border: 1px solid var(--border);
+			border-radius: 20px;
+			max-width: 200px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		/* ── CONTENT ───────────────────────────────────────── */
+		.content {
+			padding: 2rem;
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+
+		/* Stats */
+		.stats-row {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+			gap: .8rem;
+			margin-bottom: 1.5rem;
+		}
+
+		.stat-card {
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-radius: 6px;
+			padding: 1.1rem 1.3rem;
+			box-shadow: var(--shadow);
+			transition: border-color .2s;
+		}
+
+		.stat-card:hover {
+			border-color: var(--accent);
+		}
+
+		.stat-label {
+			font-size: .6rem;
+			letter-spacing: .15em;
+			text-transform: uppercase;
+			color: var(--muted);
+			margin-bottom: .4rem;
+			font-weight: 500;
+		}
+
+		.stat-value {
+			font-family: var(--sans);
+			font-size: 1.5rem;
+			font-weight: 800;
+			color: var(--accent);
+			line-height: 1;
+		}
+
+		.stat-sub {
+			font-size: .65rem;
+			color: var(--muted2);
+			margin-top: .25rem;
+		}
+
+		/* Add panel */
+		.add-panel {
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-top: 2px solid var(--accent);
+			border-radius: 6px;
+			padding: 1.4rem 1.5rem;
+			margin-bottom: 1.5rem;
+			display: none;
+			box-shadow: var(--shadow);
+			animation: fadeDown .2s ease;
+		}
+
+		.add-panel.open {
+			display: block;
+		}
+
+		.panel-title {
+			font-family: var(--sans);
+			font-size: .78rem;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: .1em;
+			color: var(--accent);
+			margin-bottom: 1rem;
+		}
+
+		.form-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+			gap: .7rem;
+			margin-bottom: 1rem;
+		}
+
+		.f-field label {
+			display: block;
+			font-size: .6rem;
+			letter-spacing: .15em;
+			text-transform: uppercase;
+			color: var(--muted);
+			margin-bottom: .3rem;
+			font-weight: 500;
+		}
+
+		.f-field input {
+			width: 100%;
+			background: var(--surface2);
+			border: 1px solid var(--border);
+			border-radius: 4px;
+			color: var(--text);
+			font-family: var(--mono);
+			font-size: .88rem;
+			padding: .55rem .8rem;
+			outline: none;
+			transition: border-color .2s, box-shadow .2s;
+		}
+
+		.f-field input:focus {
+			border-color: var(--accent);
+			background: var(--surface);
+			box-shadow: 0 0 0 3px rgba(26, 122, 82, .1);
+		}
+
+		.form-actions {
+			display: flex;
+			gap: .5rem;
+			flex-wrap: wrap;
+		}
+
+		/* Table */
+		.table-wrap {
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-radius: 6px;
+			overflow: hidden;
+			box-shadow: var(--shadow);
+		}
+
+		.table-header {
+			padding: .85rem 1.3rem;
+			border-bottom: 1px solid var(--border);
+			background: var(--surface2);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 1rem;
+			flex-wrap: wrap;
+		}
+
+		.table-title {
+			font-family: var(--sans);
+			font-size: .78rem;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: .1em;
+		}
+
+		.row-count {
+			font-size: .7rem;
+			color: var(--muted);
+			background: var(--surface);
+			border: 1px solid var(--border);
+			padding: .18rem .6rem;
+			border-radius: 20px;
+		}
+
+		.loading-bar {
+			height: 2px;
+			background: var(--border);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.loading-bar::after {
+			content: '';
+			position: absolute;
+			left: -40%;
+			width: 40%;
+			height: 100%;
+			background: var(--accent);
+			animation: slide 1s linear infinite;
+		}
+
+		.table-scroll {
+			overflow-x: auto;
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+
+		thead th {
+			font-size: .6rem;
+			letter-spacing: .15em;
+			text-transform: uppercase;
+			color: var(--muted);
+			padding: .65rem 1rem;
+			text-align: left;
+			border-bottom: 1px solid var(--border);
+			background: var(--surface2);
+			white-space: nowrap;
+			font-weight: 500;
+		}
+
+		tbody tr {
+			border-bottom: 1px solid var(--border);
+			transition: background .12s;
+		}
+
+		tbody tr:last-child {
+			border-bottom: none;
+		}
+
+		tbody tr:hover {
+			background: rgba(26, 122, 82, .03);
+		}
+
+		tbody tr.editing {
+			background: rgba(26, 122, 82, .06);
+		}
+
+		td {
+			padding: .58rem 1rem;
+			font-size: .82rem;
+			white-space: nowrap;
+			vertical-align: middle;
+		}
+
+		.td-date {
+			color: var(--muted);
+			font-size: .75rem;
+		}
+
+		.td-temp {
+			font-family: var(--sans);
+			font-weight: 700;
+			font-size: .9rem;
+		}
+
+		.td-temp.cold {
+			color: var(--cold);
+		}
+
+		.td-temp.ok {
+			color: var(--accent);
+		}
+
+		.td-temp.warm {
+			color: var(--warn);
+		}
+
+		.td-temp.hot {
+			color: var(--danger);
+		}
+
+		.badge {
+			font-size: .68rem;
+			padding: .18rem .5rem;
+			border-radius: 3px;
+			font-weight: 500;
+			letter-spacing: .04em;
+		}
+
+		.badge.matin {
+			background: var(--warn-light);
+			color: var(--warn);
+			border: 1px solid rgba(184, 130, 10, .2);
+		}
+
+		.badge.soir {
+			background: var(--cold-light);
+			color: var(--cold);
+			border: 1px solid rgba(26, 111, 160, .2);
+		}
+
+		.td-operator {
+			font-size: .72rem;
+			color: var(--muted);
+			text-transform: uppercase;
+			letter-spacing: .04em;
+		}
+
+		/* Inline edit inputs */
+		td input.ie {
+			background: var(--surface);
+			border: 1px solid var(--accent);
+			border-radius: 3px;
+			color: var(--text);
+			font-family: var(--mono);
+			font-size: .8rem;
+			padding: .22rem .45rem;
+			width: 80px;
+			outline: none;
+			box-shadow: 0 0 0 2px rgba(26, 122, 82, .1);
+		}
+
+		td input.ie.wide {
+			width: 110px;
+		}
+
+		.row-actions {
+			display: flex;
+			gap: .25rem;
+		}
+
+		.icon-btn {
+			width: 28px;
+			height: 28px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			border-radius: 4px;
+			border: 1px solid var(--border);
+			background: transparent;
+			cursor: pointer;
+			color: var(--muted2);
+			font-size: .75rem;
+			transition: all .15s;
+		}
+
+		.icon-btn.edit:hover {
+			border-color: var(--accent);
+			color: var(--accent);
+			background: var(--accent-light);
+		}
+
+		.icon-btn.del:hover {
+			border-color: var(--danger);
+			color: var(--danger);
+			background: var(--danger-light);
+		}
+
+		.icon-btn.save:hover {
+			border-color: var(--accent);
+			color: var(--accent);
+			background: var(--accent-light);
+		}
+
+		.icon-btn.cancel:hover {
+			border-color: var(--border2);
+			color: var(--text);
+			background: var(--surface2);
+		}
+
+		.empty-state {
+			padding: 4rem 2rem;
+			text-align: center;
+			color: var(--muted2);
+		}
+
+		.empty-state .ico {
+			font-size: 2.5rem;
+			opacity: .35;
+			margin-bottom: .8rem;
+		}
+
+		.empty-state p {
+			font-size: .8rem;
+			line-height: 1.7;
+		}
+
+		/* Toast */
+		#toastZone {
+			position: fixed;
+			bottom: 2rem;
+			right: 2rem;
+			z-index: 9999;
+			display: flex;
+			flex-direction: column;
+			gap: .5rem;
+			pointer-events: none;
+		}
+
+		.toast {
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-left: 3px solid var(--accent);
+			border-radius: 5px;
+			padding: .7rem 1.1rem;
+			font-size: .78rem;
+			box-shadow: var(--shadow-md);
+			animation: toastIn .3s ease both;
+			max-width: 280px;
+		}
+
+		.toast.err {
+			border-left-color: var(--danger);
+		}
+
+		/* Delete modal */
+		.modal-overlay {
+			position: fixed;
+			inset: 0;
+			background: rgba(0, 0, 0, .3);
+			z-index: 200;
+			display: none;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.modal-overlay.open {
+			display: flex;
+			animation: fadeIn .2s ease;
+		}
+
+		.modal {
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-top: 2px solid var(--danger);
+			border-radius: 6px;
+			padding: 2rem;
+			width: min(340px, 90vw);
+			box-shadow: var(--shadow-md);
+		}
+
+		.modal h3 {
+			font-family: var(--sans);
+			font-weight: 700;
+			margin-bottom: .4rem;
+		}
+
+		.modal p {
+			font-size: .78rem;
+			color: var(--muted);
+			margin-bottom: 1.5rem;
+			line-height: 1.5;
+		}
+
+		.modal-actions {
+			display: flex;
+			gap: .5rem;
+			justify-content: flex-end;
+		}
+
+		/* Print */
+		@media print {
+
+			.topbar,
+			.stats-row,
+			.add-panel,
+			.row-actions {
+				display: none !important;
+			}
+
+			body {
+				background: white;
+			}
+
+			.table-wrap {
+				box-shadow: none;
+			}
+		}
+
+		@media (max-width: 600px) {
+			.content {
+				padding: 1rem;
+			}
+
+			.topbar {
+				padding: .7rem 1rem;
+			}
+		}
+
+		/* Animations */
+		@keyframes fadeUp {
+			from {
+				opacity: 0;
+				transform: translateY(14px);
+			}
+
+			to {
+				opacity: 1;
+				transform: none;
+			}
+		}
+
+		@keyframes fadeDown {
+			from {
+				opacity: 0;
+				transform: translateY(-8px);
+			}
+
+			to {
+				opacity: 1;
+				transform: none;
+			}
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+			}
+
+			to {
+				opacity: 1;
+			}
+		}
+
+		@keyframes slide {
+			to {
+				left: 140%;
+			}
+		}
+
+		@keyframes toastIn {
+			from {
+				opacity: 0;
+				transform: translateX(14px);
+			}
+
+			to {
+				opacity: 1;
+				transform: none;
+			}
+		}
+
+		@keyframes spin {
+			to {
+				transform: rotate(360deg);
+			}
+		}
+
+		.spinner {
+			width: 13px;
+			height: 13px;
+			border: 2px solid rgba(255, 255, 255, .3);
+			border-top-color: #fff;
+			border-radius: 50%;
+			animation: spin .6s linear infinite;
+			display: inline-block;
+		}
+	</style>
+</head>
+
+<body>
+
+	<!-- LOGIN -->
+	<div id="loginScreen" style="display:flex;">
+		<div class="login-box">
+			<div class="login-logo">Brume</div>
+			<div class="login-title">Relevés de<br><span>Températures</span></div>
+			<label class="login-label" for="loginEmail">Email</label>
+			<input class="login-input" type="email" id="loginEmail" placeholder="vous@example.com" autocomplete="email">
+			<label class="login-label" for="loginPassword">Mot de passe</label>
+			<input class="login-input" type="password" id="loginPassword" placeholder="••••••••"
+				autocomplete="current-password">
+			<button class="login-btn" id="loginBtn" onclick="doLogin()">Se connecter</button>
+			<div class="login-error" id="loginError"></div>
+		</div>
+	</div>
+
+	<!-- APP -->
+	<div id="appScreen">
+		<div class="topbar">
+			<div class="topbar-brand">
+				<div class="brand-dot"></div>
+				TempLog
+			</div>
+			<div class="topbar-actions">
+				<button class="btn" onclick="toggleAddPanel()" id="addToggleBtn">＋ Nouveau relevé</button>
+				<button class="btn" id="freezerBtn" onclick="toggleFreezer()">Option 1</button>
+				<button class="btn" onclick="window.print()">⎙ Imprimer</button>
+				<div class="user-chip" id="userChip">—</div>
+				<button class="btn btn-danger" onclick="doLogout()">Déconnexion</button>
+			</div>
+		</div>
+
+		<div class="content">
+
+			<!-- Stats -->
+			<div class="stats-row">
+				<div class="stat-card">
+					<div class="stat-label">Total relevés</div>
+					<div class="stat-value" id="statTotal">—</div>
+				</div>
+				<div class="stat-card">
+					<div class="stat-label">Frigo 1 (moy.)</div>
+					<div class="stat-value" id="statF1">—</div>
+					<div class="stat-sub">°C</div>
+				</div>
+				<div class="stat-card">
+					<div class="stat-label">Frigo 2 (moy.)</div>
+					<div class="stat-value" id="statF2">—</div>
+					<div class="stat-sub">°C</div>
+				</div>
+				<div class="stat-card" id="statCongelCard" style="display:none">
+					<div class="stat-label">Congel (moy.)</div>
+					<div class="stat-value" id="statCongel">—</div>
+					<div class="stat-sub">°C</div>
+				</div>
+				<div class="stat-card">
+					<div class="stat-label">Dernier relevé</div>
+					<div class="stat-value" id="statLast" style="font-size:1.1rem">—</div>
+				</div>
+			</div>
+
+			<!-- Add panel -->
+			<div class="add-panel" id="addPanel">
+				<div class="panel-title">↗ Nouveau relevé</div>
+				<div class="form-grid">
+					<div class="f-field"><label>Frigo 1 (°C)</label><input id="nFrigo1" type="number" value="3"></div>
+					<div class="f-field"><label>Frigo 2 (°C)</label><input id="nFrigo2" type="number" value="3"></div>
+					<div class="f-field" id="nCongelField" style="display:none"><label>Congel (°C)</label><input
+							id="nCongel" type="number" value="-19"></div>
+					<div class="f-field"><label>Matin / Soir</label><input id="nHour" value="matin"></div>
+					<div class="f-field"><label>Date</label><input id="nDate" type="date"></div>
+					<div class="f-field"><label>Opérateur</label><input id="nOperator" type="text" value="roxane"></div>
+				</div>
+				<div class="form-actions">
+					<button class="btn btn-accent" onclick="submitNew()">Enregistrer</button>
+					<button class="btn" onclick="toggleAddPanel()">Annuler</button>
+				</div>
+			</div>
+
+			<!-- Table -->
+			<div class="table-wrap">
+				<div class="table-header">
+					<div style="display:flex;align-items:center;gap:.7rem;flex-wrap:wrap">
+						<span class="table-title">Historique</span>
+						<span class="row-count" id="rowCount">0 relevés</span>
+					</div>
+				</div>
+				<div class="loading-bar" id="loadingBar" style="display:none"></div>
+				<div class="table-scroll">
+					<table>
+						<thead>
+							<tr id="tableHead"></tr>
+						</thead>
+						<tbody id="tableBody"></tbody>
+					</table>
+					<div class="empty-state" id="emptyState" style="display:none">
+						<div class="ico">🌡</div>
+						<p>Aucun relevé trouvé.<br>Commencez par ajouter un nouveau relevé.</p>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<!-- Delete modal -->
+	<div class="modal-overlay" id="deleteModal">
+		<div class="modal">
+			<h3>Supprimer ce relevé ?</h3>
+			<p>Cette action est irréversible.</p>
+			<div class="modal-actions">
+				<button class="btn" onclick="closeModal()">Annuler</button>
+				<button class="btn btn-del" id="confirmDeleteBtn">Supprimer</button>
+			</div>
+		</div>
+	</div>
+
+	<div id="toastZone"></div>
+
+	<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+	<script>
+		const SUPABASE_URL = "https://cpvxjedlgjhcdqjyecmf.supabase.co";
+		const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwdnhqZWRsZ2poY2RxanllY21mIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkyNjMzMzYsImV4cCI6MjAxNDgzOTMzNn0.Rs-bqvUb0Eq7NEKX3tFc8WHJOjzk1Rc4fgRRU6OtVNs";
+		const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+		let g_data = [], g_allowFreezer = false, g_deleteId = null, g_editingId = null;
+		let appInitialized = false;
+
+		// ── AUTH ─────────────────────────────────────────────────────────────────
+		// Supabase persists the session in localStorage automatically.
+		// onAuthStateChange fires immediately on page load with the existing session,
+		// so the user is never asked to log in again if already authenticated —
+		// exactly like the other Brume pages.
+		sb.auth.onAuthStateChange((event, session) => {
+			if (session) {
+				document.getElementById('loginScreen').style.display = 'none';
+				document.getElementById('appScreen').style.display = 'block';
+				document.getElementById('userChip').textContent = session.user.email;
+				if (!appInitialized) {
+					appInitialized = true;
+					// first-time init only
+				}
+				fetchData();
+			} else {
+				document.getElementById('appScreen').style.display = 'none';
+				document.getElementById('loginScreen').style.display = 'flex';
+				const btn = document.getElementById('loginBtn');
+				btn.disabled = false;
+				btn.textContent = 'Se connecter';
+			}
+		});
+
+		async function doLogin() {
+			const email = document.getElementById('loginEmail').value.trim();
+			const password = document.getElementById('loginPassword').value;
+			const btn = document.getElementById('loginBtn');
+			const errEl = document.getElementById('loginError');
+			if (!email || !password) { showErr('Veuillez remplir tous les champs.'); return; }
+			btn.disabled = true;
+			btn.innerHTML = '<span class="spinner"></span> Connexion…';
+			errEl.style.display = 'none';
+			const { error } = await sb.auth.signInWithPassword({ email, password });
+			if (error) {
+				showErr('Email ou mot de passe incorrect.');
+				btn.disabled = false;
+				btn.textContent = 'Se connecter';
+			}
+			// success → onAuthStateChange fires automatically
+		}
+
+		async function doLogout() {
+			await sb.auth.signOut();
+			// onAuthStateChange fires → shows login screen
+		}
+
+		function showErr(msg) {
+			const el = document.getElementById('loginError');
+			el.textContent = msg;
+			el.style.display = 'block';
+		}
+
+		document.getElementById('loginPassword').addEventListener('keydown', e => {
+			if (e.key === 'Enter') doLogin();
+		});
+
+		// ── DATA ─────────────────────────────────────────────────────────────────
+		async function fetchData() {
+			setLoading(true);
+			const { data, error } = await sb.from('temperatures')
+				.select().limit(10000).order('date', { ascending: false });
+			setLoading(false);
+			if (error) { toast('Erreur: ' + error.message, true); return; }
+			g_data = data;
+			renderTable();
+			updateStats();
+		}
+
+		function updateStats() {
+			document.getElementById('statTotal').textContent = g_data.length;
+			const avg = key => {
+				const vals = g_data.map(d => parseFloat(d[key])).filter(v => !isNaN(v));
+				return vals.length ? (vals.reduce((a, b) => a + b, 0) / vals.length).toFixed(1) : '—';
+			};
+			document.getElementById('statF1').textContent = avg('frigo1');
+			document.getElementById('statF2').textContent = avg('frigo2');
+			document.getElementById('statCongel').textContent = avg('congel');
+			const last = g_data[0];
+			document.getElementById('statLast').textContent = last ? fmtDate(last.date) : '—';
+		}
+
+		// ── TABLE ─────────────────────────────────────────────────────────────────
+		function renderTable() {
+			const head = document.getElementById('tableHead');
+			const body = document.getElementById('tableBody');
+			const empty = document.getElementById('emptyState');
+
+			head.innerHTML = `
+			<th>Date</th>
+			<th>Frigo 1 (°C)</th>
+			<th>Frigo 2 (°C)</th>
+			${g_allowFreezer ? '<th>Congel (°C)</th>' : ''}
+			<th>Matin / Soir</th>
+			<th>Opérateur</th>
+			<th></th>
+		`;
+
+			document.getElementById('rowCount').textContent =
+				g_data.length + ' relevé' + (g_data.length !== 1 ? 's' : '');
+
+			body.innerHTML = '';
+			if (!g_data.length) { empty.style.display = 'block'; return; }
+			empty.style.display = 'none';
+
+			for (const row of g_data) {
+				const tr = document.createElement('tr');
+				// Store id as string on the row — read back consistently everywhere
+				tr.dataset.id = String(row.id);
+
+				if (g_editingId === String(row.id)) {
+					tr.classList.add('editing');
+					tr.innerHTML = `
+					<td><input class="ie wide" id="e_date" type="date" value="${row.date ? row.date.slice(0, 10) : ''}"></td>
+					<td><input class="ie" id="e_frigo1" type="number" value="${row.frigo1 ?? ''}"></td>
+					<td><input class="ie" id="e_frigo2" type="number" value="${row.frigo2 ?? ''}"></td>
+					${g_allowFreezer ? `<td><input class="ie" id="e_congel" type="number" value="${row.congel ?? ''}"></td>` : ''}
+					<td><input class="ie" id="e_hour" value="${row.hour ?? ''}"></td>
+					<td><input class="ie wide" id="e_operator" value="${row.operator ?? ''}"></td>
+					<td><div class="row-actions">
+						<button class="icon-btn save"   title="Sauvegarder" data-action="save">✓</button>
+						<button class="icon-btn cancel" title="Annuler"      data-action="cancel">✕</button>
+					</div></td>
+				`;
+				} else {
+					const h = (row.hour || '').toLowerCase();
+					const hClass = h.includes('mat') ? 'matin' : h.includes('soir') ? 'soir' : '';
+					tr.innerHTML = `
+					<td class="td-date">${fmtDate(row.date)}</td>
+					<td class="td-temp ${tempClass(row.frigo1)}">${row.frigo1 ?? '—'}</td>
+					<td class="td-temp ${tempClass(row.frigo2)}">${row.frigo2 ?? '—'}</td>
+					${g_allowFreezer ? `<td class="td-temp cold">${row.congel ?? '—'}</td>` : ''}
+					<td><span class="badge ${hClass}">${row.hour ?? '—'}</span></td>
+					<td class="td-operator">${row.operator ?? '—'}</td>
+					<td><div class="row-actions">
+						<button class="icon-btn edit" title="Modifier"  data-action="edit">✎</button>
+						<button class="icon-btn del"  title="Supprimer" data-action="delete">✕</button>
+					</div></td>
+				`;
+				}
+				body.appendChild(tr);
+			}
+		}
+
+		// ── ADD ───────────────────────────────────────────────────────────────────
+		function toggleAddPanel() {
+			const panel = document.getElementById('addPanel');
+			const btn = document.getElementById('addToggleBtn');
+			const open = panel.classList.toggle('open');
+			btn.classList.toggle('active', open);
+			if (open) document.getElementById('nDate').value = new Date().toISOString().slice(0, 10);
+		}
+
+		async function submitNew() {
+			const vals = {
+				frigo1: parseOrNull(document.getElementById('nFrigo1').value),
+				frigo2: parseOrNull(document.getElementById('nFrigo2').value),
+				congel: parseOrNull(document.getElementById('nCongel').value),
+				hour: document.getElementById('nHour').value,
+				date: document.getElementById('nDate').value || new Date().toDateString(),
+				operator: document.getElementById('nOperator').value,
+			};
+			setLoading(true);
+			const { error } = await sb.from('temperatures').insert(vals);
+			setLoading(false);
+			if (error) { toast('Erreur: ' + error.message, true); return; }
+			toast('Relevé enregistré ✓');
+			toggleAddPanel();
+			await fetchData();
+		}
+
+		// ── TABLE EVENT DELEGATION ────────────────────────────────────────────────
+		// Using delegation instead of inline onclick avoids id interpolation bugs
+		document.getElementById('tableBody').addEventListener('click', function (e) {
+			const btn = e.target.closest('[data-action]');
+			if (!btn) return;
+			const id = btn.closest('tr')?.dataset.id;
+			const action = btn.dataset.action;
+			if (action === 'edit') startEdit(id);
+			if (action === 'cancel') cancelEdit();
+			if (action === 'save') saveEdit(id);
+			if (action === 'delete') askDelete(id);
+		});
+
+		// ── EDIT ──────────────────────────────────────────────────────────────────
+		function startEdit(id) { g_editingId = String(id); renderTable(); }
+		function cancelEdit() { g_editingId = null; renderTable(); }
+
+		async function saveEdit(id) {
+			const congelEl = document.getElementById('e_congel');
+			const vals = {
+				frigo1: parseOrNull(document.getElementById('e_frigo1').value),
+				frigo2: parseOrNull(document.getElementById('e_frigo2').value),
+				congel: congelEl ? parseOrNull(congelEl.value) : null,
+				hour: document.getElementById('e_hour').value,
+				date: document.getElementById('e_date').value,
+				operator: document.getElementById('e_operator').value,
+			};
+			setLoading(true);
+			const { error } = await sb.from('temperatures').update(vals).eq('id', id);
+			setLoading(false);
+			if (error) { toast('Erreur: ' + error.message, true); return; }
+			toast('Relevé mis à jour ✓');
+			g_editingId = null;
+			await fetchData();
+		}
+
+		// ── DELETE ────────────────────────────────────────────────────────────────
+		function askDelete(id) {
+			g_deleteId = id;
+			document.getElementById('deleteModal').classList.add('open');
+			document.getElementById('confirmDeleteBtn').onclick = confirmDelete;
+		}
+		function closeModal() {
+			g_deleteId = null;
+			document.getElementById('deleteModal').classList.remove('open');
+		}
+		async function confirmDelete() {
+			const id = g_deleteId;  // capture before closeModal() nulls it
+			if (!id) return;
+			closeModal();
+			setLoading(true);
+			const { error } = await sb.from('temperatures').delete().eq('id', id);
+			setLoading(false);
+			if (error) { toast('Erreur: ' + error.message, true); return; }
+			toast('Relevé supprimé');
+			await fetchData();
+		}
+
+		// ── FREEZER ───────────────────────────────────────────────────────────────
+		function toggleFreezer() {
+			g_allowFreezer = !g_allowFreezer;
+			document.getElementById('freezerBtn').classList.toggle('active', g_allowFreezer);
+			document.getElementById('nCongelField').style.display = g_allowFreezer ? '' : 'none';
+			document.getElementById('statCongelCard').style.display = g_allowFreezer ? '' : 'none';
+			renderTable();
+		}
+
+		// ── UTILS ─────────────────────────────────────────────────────────────────
+		function parseOrNull(v) {
+			const n = parseFloat(v);
+			return isNaN(n) ? null : n;
+		}
+		function tempClass(v) {
+			const n = parseFloat(v);
+			if (isNaN(n)) return '';
+			if (n < 0) return 'cold';
+			if (n <= 4) return 'ok';
+			if (n <= 8) return 'warm';
+			return 'hot';
+		}
+		function fmtDate(d) {
+			const dt = new Date(d);
+			return isNaN(dt) ? (d || '') : dt.toLocaleDateString('fr-FR');
+		}
+		function setLoading(v) {
+			document.getElementById('loadingBar').style.display = v ? 'block' : 'none';
+		}
+		function toast(msg, err = false) {
+			const el = document.createElement('div');
+			el.className = 'toast' + (err ? ' err' : '');
+			el.textContent = msg;
+			document.getElementById('toastZone').appendChild(el);
+			setTimeout(() => el.remove(), 3500);
+		}
+
+		document.getElementById('deleteModal').addEventListener('click', function (e) {
+			if (e.target === this) closeModal();
+		});
+	</script>
+</body>
+
+</html>
