@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Fill Températures — Test</title>
+	<link
+		href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&display=swap"
+		rel="stylesheet" />
+	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+	<style>
+		:root {
+			--bg: #f5ead8;
+			--surface: #eddfc8;
+			--card-bg: #fdf6ec;
+			--border: rgba(160, 100, 30, .15);
+			--border-mid: rgba(160, 100, 30, .25);
+			--cream: #1e0e04;
+			--text-dim: #7a5a38;
+			--text-muted: #b89068;
+			--accent: #c05e08;
+			--caramel: #8f4208;
+			--gold: #c05e08;
+			--done: #1e7a1e;
+			--done-bg: rgba(30, 122, 30, .12);
+			--done-text: #1e6a1e;
+			--urgent: #c0281e;
+			--warn: #9a6e00;
+			--warn-bg: rgba(154, 110, 0, .12);
+			--skip: #8888aa;
+			--skip-bg: rgba(128, 128, 160, .10);
+		}
+
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			background: var(--bg);
+			font-family: 'DM Mono', monospace;
+			color: var(--cream);
+			min-height: 100vh;
+		}
+
+		/* ── LOGIN ── */
+		#loginScreen {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			min-height: 100vh;
+		}
+
+		.login-box {
+			background: var(--card-bg);
+			border: 1px solid var(--border-mid);
+			border-radius: 10px;
+			padding: 2.5rem 2.5rem 2rem;
+			width: 100%;
+			max-width: 360px;
+			box-shadow: 0 8px 32px rgba(160, 90, 30, .12);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.login-box::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 4px;
+			background: linear-gradient(90deg, var(--caramel), var(--gold));
+		}
+
+		.login-logo {
+			font-family: 'Playfair Display', serif;
+			font-size: 2rem;
+			font-weight: 900;
+			color: var(--gold);
+			margin-bottom: .2rem;
+		}
+
+		.login-sub {
+			font-size: .62rem;
+			letter-spacing: .22em;
+			text-transform: uppercase;
+			color: var(--text-dim);
+			margin-bottom: 2rem;
+		}
+
+		.login-label {
+			display: block;
+			font-size: .65rem;
+			letter-spacing: .18em;
+			text-transform: uppercase;
+			color: var(--text-dim);
+			margin-bottom: .4rem;
+		}
+
+		.login-input {
+			width: 100%;
+			padding: .65rem .85rem;
+			background: rgba(255, 255, 255, .7);
+			border: 1.5px solid var(--border);
+			border-radius: 5px;
+			font-family: 'DM Mono', monospace;
+			font-size: .85rem;
+			color: var(--cream);
+			outline: none;
+			margin-bottom: 1rem;
+			transition: border-color .2s;
+		}
+
+		.login-input:focus {
+			border-color: var(--accent);
+		}
+
+		.login-btn {
+			width: 100%;
+			padding: .75rem;
+			background: var(--accent);
+			border: none;
+			border-radius: 5px;
+			color: white;
+			font-family: 'DM Mono', monospace;
+			font-size: .75rem;
+			letter-spacing: .15em;
+			text-transform: uppercase;
+			cursor: pointer;
+			margin-top: .5rem;
+			transition: background .2s;
+			box-shadow: 0 2px 8px rgba(192, 104, 32, .25);
+		}
+
+		.login-btn:hover {
+			background: var(--caramel);
+		}
+
+		.login-btn:disabled {
+			opacity: .6;
+			cursor: not-allowed;
+		}
+
+		.login-error {
+			font-size: .72rem;
+			color: var(--urgent);
+			margin-top: .8rem;
+			text-align: center;
+			min-height: 1.2em;
+		}
+
+		/* ── APP ── */
+		#appScreen {
+			display: none;
+		}
+
+		header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: .5rem 1.4rem;
+			background: rgba(245, 234, 216, .97);
+			backdrop-filter: blur(8px);
+			position: sticky;
+			top: 0;
+			z-index: 100;
+			box-shadow: 0 1px 8px rgba(160, 100, 30, .12);
+			border-bottom: 1px solid var(--border-mid);
+		}
+
+		.logo-block {
+			display: flex;
+			align-items: baseline;
+			gap: .6rem;
+		}
+
+		.logo-title {
+			font-family: 'Playfair Display', serif;
+			font-size: 1.25rem;
+			font-weight: 900;
+			letter-spacing: .04em;
+			color: var(--accent);
+		}
+
+		.logo-sub {
+			font-size: .55rem;
+			letter-spacing: .2em;
+			text-transform: uppercase;
+			color: var(--text-dim);
+		}
+
+		.logout-btn {
+			background: transparent;
+			border: 1px solid var(--border);
+			color: var(--text-dim);
+			padding: .22rem .55rem;
+			border-radius: 4px;
+			cursor: pointer;
+			font-family: 'DM Mono', monospace;
+			font-size: .6rem;
+			letter-spacing: .12em;
+			text-transform: uppercase;
+			transition: all .2s;
+		}
+
+		.logout-btn:hover {
+			border-color: var(--urgent);
+			color: var(--urgent);
+		}
+
+		/* ── MAIN CONTENT ── */
+		.main-wrap {
+			max-width: 820px;
+			margin: 0 auto;
+			padding: 1.5rem 1rem 3rem;
+		}
+
+		.section-title {
+			font-family: 'Playfair Display', serif;
+			font-size: 1.1rem;
+			font-weight: 700;
+			color: var(--accent);
+			margin-bottom: 1rem;
+			display: flex;
+			align-items: center;
+			gap: .5rem;
+		}
+
+		/* ── CONFIG CARD ── */
+		.config-card {
+			background: var(--card-bg);
+			border: 1px solid var(--border-mid);
+			border-radius: 10px;
+			padding: 1.4rem 1.6rem;
+			margin-bottom: 1.4rem;
+			box-shadow: 0 2px 12px rgba(160, 100, 30, .08);
+			position: relative;
+			overflow: hidden;
+		}
+
+		.config-card::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 3px;
+			background: linear-gradient(90deg, var(--caramel), var(--gold));
+		}
+
+		.config-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+			gap: .9rem 1.2rem;
+		}
+
+		.field {
+			display: flex;
+			flex-direction: column;
+			gap: .3rem;
+		}
+
+		.field label {
+			font-size: .62rem;
+			letter-spacing: .16em;
+			text-transform: uppercase;
+			color: var(--text-dim);
+		}
+
+		.field input,
+		.field select {
+			padding: .55rem .75rem;
+			background: rgba(255, 255, 255, .7);
+			border: 1.5px solid var(--border);
+			border-radius: 5px;
+			font-family: 'DM Mono', monospace;
+			font-size: .82rem;
+			color: var(--cream);
+			outline: none;
+			transition: border-color .2s;
+		}
+
+		.field input:focus,
+		.field select:focus {
+			border-color: var(--accent);
+		}
+
+		.run-btn {
+			margin-top: 1.1rem;
+			padding: .7rem 1.6rem;
+			background: var(--accent);
+			border: none;
+			border-radius: 5px;
+			color: white;
+			font-family: 'DM Mono', monospace;
+			font-size: .75rem;
+			letter-spacing: .15em;
+			text-transform: uppercase;
+			cursor: pointer;
+			transition: background .2s;
+			box-shadow: 0 2px 8px rgba(192, 104, 32, .25);
+		}
+
+		.run-btn:hover {
+			background: var(--caramel);
+		}
+
+		.run-btn:disabled {
+			opacity: .6;
+			cursor: not-allowed;
+		}
+
+		/* ── PROGRESS / STATUS ── */
+		.status-bar {
+			background: var(--card-bg);
+			border: 1px solid var(--border);
+			border-radius: 8px;
+			padding: .75rem 1rem;
+			margin-bottom: 1.2rem;
+			font-size: .72rem;
+			color: var(--text-dim);
+			display: none;
+		}
+
+		.status-bar.visible {
+			display: block;
+		}
+
+		.progress-track {
+			height: 4px;
+			background: rgba(160, 100, 30, .12);
+			border-radius: 2px;
+			margin-top: .5rem;
+		}
+
+		.progress-fill {
+			height: 100%;
+			background: var(--accent);
+			border-radius: 2px;
+			transition: width .3s ease;
+			width: 0;
+		}
+
+		/* ── DATE TABLE ── */
+		.dates-card {
+			background: var(--card-bg);
+			border: 1px solid var(--border-mid);
+			border-radius: 10px;
+			overflow: hidden;
+			box-shadow: 0 2px 12px rgba(160, 100, 30, .08);
+		}
+
+		.dates-header {
+			display: grid;
+			grid-template-columns: 110px 1fr 1fr 100px 1fr;
+			gap: 0;
+			background: var(--surface);
+			border-bottom: 1px solid var(--border-mid);
+			padding: .55rem 1rem;
+			font-size: .58rem;
+			letter-spacing: .14em;
+			text-transform: uppercase;
+			color: var(--text-dim);
+		}
+
+		.date-row {
+			display: grid;
+			grid-template-columns: 110px 1fr 1fr 100px 1fr;
+			gap: 0;
+			padding: .55rem 1rem;
+			border-bottom: 1px solid var(--border);
+			align-items: center;
+			animation: rowIn .2s ease both;
+		}
+
+		.date-row:last-child {
+			border-bottom: none;
+		}
+
+		@keyframes rowIn {
+			from {
+				opacity: 0;
+				transform: translateY(6px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		.date-label {
+			font-size: .78rem;
+			font-weight: 500;
+		}
+
+		.sales-count {
+			font-size: .72rem;
+			color: var(--text-dim);
+			display: flex;
+			align-items: center;
+			gap: .3rem;
+		}
+
+		.sales-count .dot {
+			width: 7px;
+			height: 7px;
+			border-radius: 50%;
+			background: var(--accent);
+			display: inline-block;
+		}
+
+		.sales-count .dot.zero {
+			background: var(--text-muted);
+		}
+
+		.status-pill {
+			font-size: .6rem;
+			letter-spacing: .1em;
+			text-transform: uppercase;
+			padding: .15rem .5rem;
+			border-radius: 20px;
+			font-weight: 600;
+			white-space: nowrap;
+			display: inline-flex;
+			align-items: center;
+			gap: .3rem;
+		}
+
+		.pill-existing {
+			background: var(--done-bg);
+			color: var(--done-text);
+		}
+
+		.pill-pending {
+			background: rgba(192, 94, 8, .12);
+			color: var(--accent);
+		}
+
+		.pill-skip {
+			background: var(--skip-bg);
+			color: var(--skip);
+		}
+
+		.pill-done {
+			background: var(--done-bg);
+			color: var(--done-text);
+		}
+
+		.pill-error {
+			background: rgba(192, 40, 30, .12);
+			color: var(--urgent);
+		}
+
+		.pill-loading {
+			background: var(--warn-bg);
+			color: var(--warn);
+		}
+
+		.row-action {
+			font-size: .65rem;
+			color: var(--text-dim);
+			white-space: nowrap;
+		}
+
+		/* ── FOOTER BUTTONS ── */
+		.footer-actions {
+			display: flex;
+			gap: .8rem;
+			margin-top: 1.4rem;
+			flex-wrap: wrap;
+		}
+
+		.submit-btn {
+			padding: .72rem 2rem;
+			background: var(--done);
+			border: none;
+			border-radius: 5px;
+			color: white;
+			font-family: 'DM Mono', monospace;
+			font-size: .75rem;
+			letter-spacing: .15em;
+			text-transform: uppercase;
+			cursor: pointer;
+			transition: background .2s;
+			box-shadow: 0 2px 8px rgba(30, 122, 30, .2);
+		}
+
+		.submit-btn:hover {
+			background: #166916;
+		}
+
+		.submit-btn:disabled {
+			opacity: .6;
+			cursor: not-allowed;
+		}
+
+		.reset-btn {
+			padding: .72rem 1.4rem;
+			background: transparent;
+			border: 1.5px solid var(--border-mid);
+			color: var(--text-dim);
+			font-family: 'DM Mono', monospace;
+			font-size: .75rem;
+			letter-spacing: .15em;
+			text-transform: uppercase;
+			cursor: pointer;
+			border-radius: 5px;
+			transition: all .2s;
+		}
+
+		.reset-btn:hover {
+			border-color: var(--accent);
+			color: var(--accent);
+		}
+
+		/* ── SUMMARY ── */
+		.summary-box {
+			display: none;
+			background: var(--done-bg);
+			border: 1px solid rgba(30, 122, 30, .25);
+			border-radius: 8px;
+			padding: 1rem 1.2rem;
+			margin-top: 1rem;
+			font-size: .78rem;
+			color: var(--done-text);
+			line-height: 1.7;
+		}
+
+		.summary-box.visible {
+			display: block;
+		}
+
+		.summary-box strong {
+			font-weight: 700;
+		}
+
+		/* ── TOAST ── */
+		.toast {
+			position: fixed;
+			bottom: 1.5rem;
+			left: 50%;
+			transform: translateX(-50%) translateY(60px);
+			background: #2a1406;
+			color: #fdf6ec;
+			padding: .65rem 1.4rem;
+			border-radius: 6px;
+			font-size: .72rem;
+			letter-spacing: .06em;
+			opacity: 0;
+			transition: all .3s;
+			z-index: 999;
+			pointer-events: none;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, .25);
+		}
+
+		.toast.show {
+			opacity: 1;
+			transform: translateX(-50%) translateY(0);
+		}
+
+		.temps-preview {
+			font-size: .7rem;
+			color: var(--accent);
+			font-weight: 500;
+			letter-spacing: .02em;
+			background: rgba(192, 94, 8, .08);
+			border: 1px solid rgba(192, 94, 8, .2);
+			padding: .2rem .5rem;
+			border-radius: 4px;
+			white-space: nowrap;
+		}
+
+		.empty-note {
+			padding: 2rem 1rem;
+			text-align: center;
+			font-size: .78rem;
+			color: var(--text-muted);
+			letter-spacing: .08em;
+		}
+
+		@media (max-width:600px) {
+
+			.dates-header,
+			.date-row {
+				grid-template-columns: 90px 1fr 80px 1fr;
+			}
+
+			.dates-header>*:nth-child(3),
+			.date-row>*:nth-child(3) {
+				display: none;
+			}
+		}
+	</style>
+</head>
+
+<body>
+
+	<!-- ── LOGIN ── -->
+	<div id="loginScreen">
+		<div class="login-box">
+			<div class="login-logo">Brume</div>
+			<div class="login-sub">Fill Températures — Test</div>
+			<label class="login-label" for="loginEmail">Email</label>
+			<input class="login-input" type="email" id="loginEmail" placeholder="vous@example.com"
+				autocomplete="username" />
+			<label class="login-label" for="loginPassword">Mot de passe</label>
+			<input class="login-input" type="password" id="loginPassword" placeholder="••••••••"
+				autocomplete="current-password" onkeydown="if(event.key==='Enter') doLogin()" />
+			<button class="login-btn" id="loginBtn" onclick="doLogin()">Se connecter</button>
+			<div class="login-error" id="loginError"></div>
+		</div>
+	</div>
+
+	<!-- ── APP ── -->
+	<div id="appScreen">
+		<div class="toast" id="toast"></div>
+
+		<header>
+			<div class="logo-block">
+				<span class="logo-title">Brume</span>
+				<span class="logo-sub">Fill Températures · Test</span>
+			</div>
+			<button class="logout-btn" onclick="doLogout()">Déconnexion</button>
+		</header>
+
+		<div class="main-wrap">
+
+			<!-- Config -->
+			<div class="config-card">
+				<div class="section-title">⚙️ Paramètres du relevé</div>
+				<div class="config-grid">
+					<div class="field">
+						<label>Opérateur</label>
+						<input type="text" id="cfgOperator" value="roxane" />
+					</div>
+					<div class="field">
+						<label>matin / soir</label>
+						<select id="cfgHour">
+							<option value="matin" selected>matin</option>
+							<option value="soir">soir</option>
+						</select>
+					</div>
+					<div class="field">
+						<label>Date début</label>
+						<input type="date" id="cfgDateFrom" />
+					</div>
+					<div class="field">
+						<label>Date fin</label>
+						<input type="date" id="cfgDateTo" />
+					</div>
+				</div>
+				<button class="run-btn" id="analyzeBtn" onclick="runAnalysis()">🔍 Analyser les dates</button>
+			</div>
+
+			<!-- Status bar -->
+			<div class="status-bar" id="statusBar">
+				<span id="statusText">Initialisation…</span>
+				<div class="progress-track">
+					<div class="progress-fill" id="progressFill"></div>
+				</div>
+			</div>
+
+			<!-- Date table -->
+			<div id="datesSection" style="display:none">
+				<div class="section-title" style="margin-bottom:.6rem">📋 Dates à traiter</div>
+				<div class="dates-card">
+					<div class="dates-header">
+						<div>Date</div>
+						<div>Commandes Hiboutik</div>
+						<div>Relevé existant</div>
+						<div>Action</div>
+						<div>Températures enregistrées</div>
+					</div>
+					<div id="datesBody"></div>
+				</div>
+
+				<div class="footer-actions">
+					<button class="submit-btn" id="submitBtn" onclick="submitRecords()">✓ Enregistrer les
+						relevés</button>
+					<button class="reset-btn" onclick="resetAll()">↺ Recommencer</button>
+				</div>
+
+				<div class="summary-box" id="summaryBox"></div>
+			</div>
+
+		</div>
+	</div>
+
+	<script>
+		const SUPABASE_URL = 'https://cpvxjedlgjhcdqjyecmf.supabase.co';
+		const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwdnhqZWRsZ2poY2RxanllY21mIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkyNjMzMzYsImV4cCI6MjAxNDgzOTMzNn0.Rs-bqvUb0Eq7NEKX3tFc8WHJOjzk1Rc4fgRRU6OtVNs";
+		const EDGE_FN_URL = `${SUPABASE_URL}/functions/v1/hiboutik-proxy`;
+
+		const { createClient } = supabase;
+		const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+		// ── State ──────────────────────────────────────────────────────────────────
+		// Array of { date, salesCount, existingRecord, action:'insert'|'skip', result:'pending'|'done'|'error'|'skip', errorMsg }
+		let dateRows = [];
+
+		// ── Auth ───────────────────────────────────────────────────────────────────
+		async function doLogin() {
+			const email = document.getElementById('loginEmail').value.trim();
+			const password = document.getElementById('loginPassword').value;
+			const btn = document.getElementById('loginBtn');
+			const errEl = document.getElementById('loginError');
+			if (!email || !password) { errEl.textContent = 'Veuillez remplir tous les champs.'; return; }
+			btn.disabled = true; btn.textContent = 'Connexion…'; errEl.textContent = '';
+			const { error } = await sb.auth.signInWithPassword({ email, password });
+			if (error) { errEl.textContent = 'Identifiants incorrects.'; btn.disabled = false; btn.textContent = 'Se connecter'; }
+		}
+		async function doLogout() { await sb.auth.signOut(); }
+
+		sb.auth.onAuthStateChange((event, session) => {
+			if (session) {
+				document.getElementById('loginScreen').style.display = 'none';
+				document.getElementById('appScreen').style.display = 'block';
+				initDates();
+			} else {
+				document.getElementById('appScreen').style.display = 'none';
+				document.getElementById('loginScreen').style.display = 'flex';
+				document.getElementById('loginBtn').disabled = false;
+				document.getElementById('loginBtn').textContent = 'Se connecter';
+			}
+		});
+
+		// ── Date helpers ───────────────────────────────────────────────────────────
+		function toDateStr(d) {
+			return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+		}
+		function addDays(dateStr, n) {
+			const d = new Date(dateStr + 'T12:00:00');
+			d.setDate(d.getDate() + n);
+			return toDateStr(d);
+		}
+		function dateRange(from, to) {
+			const dates = [];
+			let cur = from;
+			while (cur <= to) { dates.push(cur); cur = addDays(cur, 1); }
+			return dates;
+		}
+		function isoToDateString(isoStr) {
+			// YYYY-MM-DD -> "Wed Nov 12 2025" (same as JS Date.toDateString())
+			// Use T12:00:00 to avoid timezone midnight issues
+			return new Date(isoStr + 'T12:00:00').toDateString();
+		}
+		function parseDateString(ds) {
+			// "Wed Nov 12 2025" -> ISO YYYY-MM-DD for internal comparisons
+			const d = new Date(ds);
+			if (isNaN(d)) return null;
+			return toDateStr(d);
+		}
+
+		async function initDates() {
+			// Default date range: from last existing record + 1 day to today
+			const today = toDateStr(new Date());
+			document.getElementById('cfgDateTo').value = today;
+
+			// Try to get the last record date from supabase
+			try {
+				const { data, error } = await sb
+					.from('temperatures')
+					.select('date');
+				if (!error && data && data.length > 0) {
+					// date stored as toDateString() e.g. "Wed Nov 12 2025" — parse all, find the most recent
+					const isoDates = data.map(r => parseDateString(r.date)).filter(Boolean);
+					isoDates.sort();
+					const lastDate = isoDates[isoDates.length - 1];
+					const nextDay = addDays(lastDate, 1);
+					document.getElementById('cfgDateFrom').value = nextDay <= today ? nextDay : today;
+				} else {
+					// No records yet — start from 30 days ago
+					const d30 = new Date(); d30.setDate(d30.getDate() - 30);
+					document.getElementById('cfgDateFrom').value = toDateStr(d30);
+				}
+			} catch (e) {
+				const d30 = new Date(); d30.setDate(d30.getDate() - 30);
+				document.getElementById('cfgDateFrom').value = toDateStr(d30);
+			}
+		}
+
+		// ── Proxy call ─────────────────────────────────────────────────────────────
+		async function proxyFetch(path) {
+			const { data: { session } } = await sb.auth.getSession();
+			if (!session) throw new Error('Non authentifié');
+			const res = await fetch(EDGE_FN_URL, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
+				body: JSON.stringify({ path }),
+			});
+			if (!res.ok) { const e = await res.json().catch(() => ({})); throw new Error(e.error || `HTTP ${res.status}`); }
+			return res.json();
+		}
+
+		// ── Parallel per-day fetch — proven correct, fast via Promise.all ──────────
+		async function buildSalesMap(fromDate, toDate, onProgress) {
+			const dates = dateRange(fromDate, toDate);
+			const salesMap = {};
+			const BATCH = 5; // run 5 days in parallel at a time to avoid overwhelming the proxy
+
+			// open_sales once — catches any not-yet-closed sales for today
+			try {
+				const raw = await proxyFetch('/open_sales/1');
+				const arr = Array.isArray(raw) ? raw : Object.values(raw);
+				arr.forEach(s => {
+					const d = (s.created_at || '').slice(0, 10);
+					if (d >= fromDate && d <= toDate) salesMap[d] = (salesMap[d] || 0) + 1;
+				});
+			} catch (e) { console.warn('open_sales:', e); }
+
+			for (let i = 0; i < dates.length; i += BATCH) {
+				const batch = dates.slice(i, i + BATCH);
+				onProgress(
+					`Vérification ${batch[0].split('-').reverse().join('/')}… (${i + 1}/${dates.length})`,
+					5 + Math.round(85 * i / dates.length)
+				);
+				await Promise.all(batch.map(async (d) => {
+					const [yyyy, mm, dd] = d.split('-');
+					try {
+						const raw = await proxyFetch(`/closed_sales/1/${yyyy}/${parseInt(mm)}/${parseInt(dd)}`);
+						const arr = Array.isArray(raw) ? raw : Object.values(raw);
+						if (arr.length > 0) salesMap[d] = (salesMap[d] || 0) + arr.length;
+					} catch (e) { console.warn('closed_sales', d, e); }
+				}));
+			}
+
+			return salesMap;
+		}
+
+		// ── ANALYSIS ───────────────────────────────────────────────────────────────
+		async function runAnalysis() {
+			const fromDate = document.getElementById('cfgDateFrom').value;
+			const toDate = document.getElementById('cfgDateTo').value;
+			if (!fromDate || !toDate || fromDate > toDate) {
+				showToast('Dates invalides — vérifiez début et fin.'); return;
+			}
+
+			const analyzeBtn = document.getElementById('analyzeBtn');
+			analyzeBtn.disabled = true; analyzeBtn.textContent = '⏳ Analyse…';
+			document.getElementById('datesSection').style.display = 'none';
+			document.getElementById('summaryBox').classList.remove('visible');
+
+			const dates = dateRange(fromDate, toDate);
+			setStatus('visible', `Récupération des relevés existants…`, 0);
+
+			// 1. Fetch existing temperature records — date is DD/MM/YYYY string, filter in JS
+			let existingMap = {};
+			try {
+				const { data, error } = await sb
+					.from('temperatures')
+					.select('*');
+				if (!error && data) {
+					data.forEach(r => {
+						const isoKey = parseDateString(r.date);
+						if (isoKey && isoKey >= fromDate && isoKey <= toDate) existingMap[isoKey] = r;
+					});
+				}
+			} catch (e) { console.warn('existing records fetch:', e); }
+
+			setStatus('visible', `Récupération des ventes Hiboutik…`, 5);
+
+			// 2. Fetch ALL sales for the date range in bulk (one call per month, not per day)
+			const salesMap = await buildSalesMap(fromDate, toDate, (msg, pct) => {
+				setStatus('visible', msg, pct);
+			});
+
+			setStatus('visible', 'Construction des relevés…', 92);
+
+			// 3. Build date rows
+			dateRows = [];
+			for (const d of dates) {
+				const salesCount = salesMap[d] || 0;
+				const existingRecord = existingMap[d] || null;
+				const hasSales = salesCount > 0;
+				const action = (hasSales && !existingRecord) ? 'insert'
+					: (!hasSales) ? 'skip_no_sales'
+						: 'skip_exists';
+
+				const generated = action === 'insert'
+					? { frigo1: randFrigo(), frigo2: randFrigo(), congel: randCongel() }
+					: null;
+
+				dateRows.push({ date: d, salesCount, existingRecord, action, result: 'pending', errorMsg: '', generated });
+			}
+
+			setStatus('visible', 'Analyse terminée.', 100);
+			renderTable();
+			document.getElementById('datesSection').style.display = 'block';
+			analyzeBtn.disabled = false; analyzeBtn.textContent = '🔍 Analyser les dates';
+
+			const insertCount = dateRows.filter(r => r.action === 'insert').length;
+			if (insertCount === 0) {
+				document.getElementById('submitBtn').disabled = true;
+				showToast('Aucun relevé à enregistrer.');
+			} else {
+				document.getElementById('submitBtn').disabled = false;
+			}
+		}
+
+		function renderTable() {
+			const body = document.getElementById('datesBody');
+			if (!dateRows.length) {
+				body.innerHTML = `<div class="empty-note">Aucune date à afficher.</div>`;
+				return;
+			}
+			body.innerHTML = dateRows.map((row, i) => {
+				const actionLabel = row.action === 'insert' ? `<span class="status-pill pill-pending">À créer</span>`
+					: row.action === 'skip_no_sales' ? `<span class="status-pill pill-skip">Pas de ventes</span>`
+						: `<span class="status-pill pill-existing">Relevé existant</span>`;
+
+				const resultLabel = row.result === 'pending' && row.action === 'insert' && row.generated
+					? `<span class="temps-preview">🌡 ${row.generated.frigo1}° · ${row.generated.frigo2}° · ❄ ${row.generated.congel}°</span>`
+					: row.result === 'pending' && row.action === 'insert' ? `<span class="status-pill pill-pending">—</span>`
+						: row.result === 'pending' ? `<span class="status-pill pill-skip">ignoré</span>`
+							: row.result === 'done' ? `<span class="status-pill pill-done">✓ Enregistré</span>`
+								: row.result === 'error' ? `<span class="status-pill pill-error" title="${escHtml(row.errorMsg)}">Erreur</span>`
+									: row.result === 'loading' ? `<span class="status-pill pill-loading">…</span>`
+										: `<span class="status-pill pill-skip">ignoré</span>`;
+
+				const salesHtml = `<span class="sales-count"><span class="dot${row.salesCount === 0 ? ' zero' : ''}"></span>${row.salesCount} vente${row.salesCount > 1 ? 's' : ''}</span>`;
+				const existHtml = row.existingRecord
+					? `<span style="color:var(--done-text);font-size:.72rem;">✓ ${row.existingRecord.operator || ''} · ${row.existingRecord.hour || ''}</span>`
+					: `<span style="color:var(--text-muted);font-size:.72rem;">—</span>`;
+
+				return `<div class="date-row" id="row-${i}" style="animation-delay:${i * .03}s">
+        <div class="date-label">${isoToDateString(row.date)}</div>
+        <div>${salesHtml}</div>
+        <div>${existHtml}</div>
+        <div>${actionLabel}</div>
+        <div id="result-${i}">${resultLabel}</div>
+      </div>`;
+			}).join('');
+		}
+
+		function updateRowResult(i, result, errorMsg = '') {
+			dateRows[i].result = result;
+			dateRows[i].errorMsg = errorMsg;
+			const cell = document.getElementById(`result-${i}`);
+			if (!cell) return;
+			const gen = dateRows[i].generated;
+			const label = result === 'done' && gen
+				? `<span class="status-pill pill-done">✓ ${gen.frigo1}° · ${gen.frigo2}° · ❄ ${gen.congel}°</span>`
+				: result === 'done' ? `<span class="status-pill pill-done">✓ Enregistré</span>`
+					: result === 'error' ? `<span class="status-pill pill-error" title="${escHtml(errorMsg)}">Erreur</span>`
+						: result === 'loading' ? `<span class="status-pill pill-loading">…</span>`
+							: `<span class="status-pill pill-skip">ignoré</span>`;
+			cell.innerHTML = label;
+		}
+
+		// ── Realistic random temperatures ─────────────────────────────────────────
+		// Returns a float with 1 decimal, slightly correlated to feel realistic
+		function randFrigo() {
+			// Integer between 1 and 4
+			return Math.round(1 + Math.random() * 3);
+		}
+		function randCongel() {
+			// Integer between -22 and -19
+			return Math.round(-22 + Math.random() * 3);
+		}
+		async function submitRecords() {
+			const operator = document.getElementById('cfgOperator').value.trim() || 'roxane';
+			const hour = document.getElementById('cfgHour').value;
+
+			const toInsert = dateRows.filter(r => r.action === 'insert');
+			if (!toInsert.length) { showToast('Rien à enregistrer.'); return; }
+
+			const submitBtn = document.getElementById('submitBtn');
+			submitBtn.disabled = true; submitBtn.textContent = '⏳ Enregistrement…';
+			setStatus('visible', `Enregistrement de ${toInsert.length} relevé(s)…`, 0);
+
+			let done = 0, errors = 0;
+
+			for (let i = 0; i < dateRows.length; i++) {
+				const row = dateRows[i];
+				if (row.action !== 'insert') continue;
+				updateRowResult(i, 'loading');
+
+				// Use temps generated at analysis time — no re-randomisation
+				const { frigo1, frigo2, congel } = row.generated;
+
+				try {
+					const record = {
+						date: isoToDateString(row.date), // e.g. "Wed Nov 12 2025" — matches relevetemperatures.js
+						frigo1: String(frigo1),             // e.g. "3"
+						frigo2: String(frigo2),             // e.g. "2"
+						congel: String(congel),             // e.g. "-20"
+						hour: hour,                       // "matin" or "soir"
+						operator: operator,                   // "roxane"
+					};
+					const { error } = await sb.from('temperatures').insert([record]);
+					if (error) throw new Error(error.message);
+					updateRowResult(i, 'done');
+					done++;
+				} catch (e) {
+					updateRowResult(i, 'error', e.message);
+					errors++;
+				}
+
+				const processed = done + errors;
+				setStatus('visible', `Enregistrement… (${processed}/${toInsert.length})`, Math.round(100 * processed / toInsert.length));
+			}
+
+			// Mark skipped rows
+			dateRows.forEach((row, i) => {
+				if (row.action !== 'insert' && row.result === 'pending') updateRowResult(i, 'skipped');
+			});
+
+			setStatus('visible', errors ? `Terminé avec ${errors} erreur(s).` : 'Tous les relevés ont été enregistrés !', 100);
+			submitBtn.textContent = '✓ Terminé';
+
+			const summaryBox = document.getElementById('summaryBox');
+			summaryBox.innerHTML = errors
+				? `<strong>${done} relevé(s) enregistré(s)</strong> · <span style="color:var(--urgent)">${errors} erreur(s)</span> — Vérifiez la console ou les droits Supabase.`
+				: `<strong>${done} relevé(s) enregistré(s)</strong> pour <strong>${operator}</strong> (${hour}) · frigos 1–4 °C aléatoires · congel −22 à −19 °C aléatoire.`;
+			summaryBox.classList.add('visible');
+			showToast(errors ? `${done} ok, ${errors} erreur(s)` : `${done} relevé(s) enregistrés ✓`);
+		}
+
+		// ── HELPERS ────────────────────────────────────────────────────────────────
+		function resetAll() {
+			dateRows = [];
+			document.getElementById('datesSection').style.display = 'none';
+			document.getElementById('summaryBox').classList.remove('visible');
+			setStatus('hidden');
+			document.getElementById('submitBtn').disabled = false;
+			document.getElementById('submitBtn').textContent = '✓ Enregistrer les relevés';
+			initDates();
+		}
+
+		function setStatus(mode, text = '', pct = 0) {
+			const bar = document.getElementById('statusBar');
+			const txt = document.getElementById('statusText');
+			const fill = document.getElementById('progressFill');
+			if (mode === 'hidden') { bar.classList.remove('visible'); return; }
+			bar.classList.add('visible');
+			txt.textContent = text;
+			fill.style.width = pct + '%';
+		}
+
+		let toastTimer;
+		function showToast(msg) {
+			const t = document.getElementById('toast');
+			t.textContent = msg; t.classList.add('show');
+			clearTimeout(toastTimer);
+			toastTimer = setTimeout(() => t.classList.remove('show'), 4000);
+		}
+
+		function escHtml(s) {
+			return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+		}
+	</script>
+</body>
+
+</html>
