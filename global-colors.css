@@ -1,84 +1,86 @@
 :root {
-	/* Global color palette */
-	--color-bg: #ffeacf;
-	--color-stripe1: #ffddad;
-	--color-stripe2: #ffeacf;
-	--color-border1: #ffeacf;
-	/*linkStyle and button border*/
-	--color-border2: #ffeacf;
-	/*buttonStyle border*/
-	--color-bg0: #fffaf4;
-	/*menu bloc bg*/
-	--color-bg1: #ffffff;
-	/*linkStyle and button bg*/
-	--color-bg2: #ffffff;
-	/*selected linkStyle lighter bg*/
-	--color-underline1: #585858;
-	--color-font1: #585858;
-	/*menu font*/
-	--color-font2: #4f4f4f;
-	/*categorie font*/
-	--color-font3: #b37933;
-	/*produit font*/
-	--color-font4: #696969;
-	/*prix font*/
-	--color-font5: #2e2e2e;
-	/*description font*/
-	--color-font6: #575757;
-	/*commentaires*/
-	--color-font7: #ff0000;
-	/*error font*/
-	--color-font8: #494949;
-	/*button font*/
-	--color-logo1: #ffffff;
-	/*logo font*/
-	--color-mainr-border: #ffeacf;
-	/*main r border*/
-	--color-brume-circle-fade1: rgb(0, 0, 0);
-	--color-brume-circle-fade2: rgba(0, 0, 0, 0);
-	--color-brume-circle-bg: #f1b061;
-	--color-review-box-bg: rgb(255, 255, 255);
+	/* ── Page background ───────────────────────────────── */
+	--bg-page: #ffeacf;
+	--bg-stripe-dark: #ffddad;
+	--bg-stripe-light: #ffeacf;
 
+	/* ── Surface backgrounds ───────────────────────────── */
+	--bg-surface: #fffaf4;
+	/* menu card bg */
+	--bg-control: #ffffff;
+	/* buttons, link pills */
+	--bg-control-active: #ffffff;
+	/* selected nav item */
+	--bg-dialog: #ffffff;
+	/* review dialog */
+	--bg-circle: #f1b061;
+	/* brume title circle */
+
+	/* ── Borders ───────────────────────────────────────── */
+	--border-nav: #ffeacf;
+	/* nav button / link pill */
+	--border-card: #ffeacf;
+	/* card-menu / card-bloc border */
+	--border-circle: #ffeacf;
+	/* title circle */
+
+	/* ── Typography ────────────────────────────────────── */
+	--text-menu: #585858;
+	/* section label */
+	--text-category: #4f4f4f;
+	/* category heading */
+	--text-product: #b37933;
+	/* product name */
+	--text-price: #696969;
+	/* price */
+	--text-description: #2e2e2e;
+	/* description */
+	--text-comment: #575757;
+	/* comments / dialog */
+	--text-error: #ff0000;
+	/* error / défaut */
+	--text-control: #494949;
+	/* button / pill label */
+	--text-logo: #ffffff;
+	/* logo overlay text */
+
+	/* ── Decorative ────────────────────────────────────── */
+	--circle-fade-start: rgb(0, 0, 0);
+	--circle-fade-end: rgba(0, 0, 0, 0);
+	--text-underline: #585858;
 }
 
 :root[data-theme="black"] {
-	/* Global color palette */
-	--color-bg: #000000;
-	--color-stripe1: #000000;
-	--color-stripe2: #000000;
-	--color-border1: #ffffff;
-	/*linkStyle and button border*/
-	--color-border2: #ffffff;
-	/*buttonStyle border*/
-	--color-bg0: #000000;
-	/*menu bloc bg*/
-	--color-bg1: #000000;
-	/*linkStyle and button bg*/
-	--color-bg2: #000000;
-	/*selected linkStyle lighter bg*/
-	--color-underline1: #ffffff;
-	--color-font1: #ffffff;
-	/*menu font*/
-	--color-font2: #ffffff;
-	/*categorie font*/
-	--color-font3: #ffffff;
-	/*produit font*/
-	--color-font4: #ffffff;
-	/*prix font*/
-	--color-font5: #ffffff;
-	/*description font*/
-	--color-font6: #ffffff;
-	/*commentaires*/
-	--color-font7: #ff0000;
-	/*error font*/
-	--color-font8: #ffffff;
-	/*button font*/
-	--color-logo1: #ffffff;
-	/*logo font*/
-	--color-mainr-border: #ffffff;
-	/*main r border*/
-	--color-brume-circle-fade1: rgb(0, 0, 0);
-	--color-brume-circle-fade2: rgba(0, 0, 0, 0);
-	--color-brume-circle-bg: rgb(0, 0, 0);
-	--color-review-box-bg: rgb(0, 0, 0);
+	/* ── Page background ───────────────────────────────── */
+	--bg-page: #000000;
+	--bg-stripe-dark: #000000;
+	--bg-stripe-light: #000000;
+
+	/* ── Surface backgrounds ───────────────────────────── */
+	--bg-surface: #000000;
+	--bg-control: #000000;
+	--bg-control-active: #000000;
+	--bg-dialog: #000000;
+	--bg-circle: #000000;
+
+	/* ── Borders ───────────────────────────────────────── */
+	--border-nav: #ffffff;
+	--border-card: #ffffff;
+	--border-circle: #ffffff;
+
+	/* ── Typography ────────────────────────────────────── */
+	--text-menu: #ffffff;
+	--text-category: #ffffff;
+	--text-product: #ffffff;
+	--text-price: #ffffff;
+	--text-description: #ffffff;
+	--text-comment: #ffffff;
+	--text-error: #ff0000;
+	--text-control: #ffffff;
+	--text-logo: #ffffff;
+
+	/* ── Decorative ────────────────────────────────────── */
+	--circle-fade-start: rgb(0, 0, 0);
+	--circle-fade-end: rgba(0, 0, 0, 0);
+	--text-underline: #ffffff;
 }

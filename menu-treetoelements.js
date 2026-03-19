@@ -1,4 +1,3 @@
-
 function createCustomElement(element, type, containerType) {
 	var newElement = document.createElement(type);
 	var container = document.createElement(containerType);
@@ -24,21 +23,21 @@ function createCustomElement(element, type, containerType) {
 function createBlocContainer(bloc) {
 	if (bloc.texts[0][0] == '!') {
 		var menuBox = document.getElementById('menuBox');
-		var blocContainer = document.createElement('leftMainC');		// contains our hole new menu
+		var blocContainer = document.createElement('col-card-left');		// contains our hole new menu
 		menuBox.appendChild(blocContainer);
 		return blocContainer;
 	} else if (bloc.texts[0][0] == '>') {
 		var targetBox = document.getElementById(bloc.texts[0].substring(1));
 		targetBox.innerHTML = '';
-		var blocContainer = document.createElement('leftMainC');		// contains our hole new menu
+		var blocContainer = document.createElement('col-card-left');		// contains our hole new menu
 		targetBox.appendChild(blocContainer);
 		return blocContainer;
 	} else {
 		var menuBox = document.getElementById('menuBox');
-		var blocContainer = document.createElement('mainR');		// contains our hole new menu
-		var leftContainer = document.createElement('leftMainC');	// for the vertical menu name
-		var rightContainer = document.createElement('rightMainC');	// for the content of the menu
-		var newElement = document.createElement('menuStyle');		// for the sliding menu name
+		var blocContainer = document.createElement('card-menu');		// contains our hole new menu
+		var leftContainer = document.createElement('col-card-left');	// for the vertical menu name
+		var rightContainer = document.createElement('col-card-right');	// for the content of the menu
+		var newElement = document.createElement('style-menu');		// for the sliding menu name
 
 		menuBox.appendChild(blocContainer);
 		blocContainer.appendChild(leftContainer);
@@ -63,15 +62,15 @@ function treeToElements(tree) {
 		for (var element of bloc.children) {
 			switch (element.type) {
 				case '1':
-					var newelement = createCustomElement(element, 'categorieStyle', 'centerR');
-					newelement.classList.add("categoriecanterr");
+					var newelement = createCustomElement(element, 'style-category', 'row-center');
+					newelement.classList.add("category-section");
 					blocContainer.appendChild(newelement);
 					break;
 				case '2':
-					var produitPrixContainer = document.createElement('produitPrixR');
-					var produit = document.createElement('produitStyle');
-					var dots = document.createElement('dots');
-					var prix = document.createElement('prixStyle');
+					var produitPrixContainer = document.createElement('row-product-price');
+					var produit = document.createElement('style-product');
+					var dots = document.createElement('style-dots');
+					var prix = document.createElement('style-price');
 
 					produitPrixContainer.appendChild(produit);
 					produitPrixContainer.appendChild(dots);
@@ -82,10 +81,10 @@ function treeToElements(tree) {
 					blocContainer.appendChild(produitPrixContainer);
 					break;
 				case '4':
-					blocContainer.appendChild(createCustomElement(element, 'descriptionStyle', 'leftR'));
+					blocContainer.appendChild(createCustomElement(element, 'style-description', 'row-left'));
 					break;
 				case '5':
-					blocContainer.appendChild(createCustomElement(element, 'commentaireStyle', 'centerR'));
+					blocContainer.appendChild(createCustomElement(element, 'style-comment', 'row-center'));
 					break;
 				default:
 					console.error("there is an unexpected type in the list");
@@ -94,4 +93,3 @@ function treeToElements(tree) {
 		}
 	}
 }
-

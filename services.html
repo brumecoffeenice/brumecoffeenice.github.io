@@ -4,122 +4,352 @@
 <head>
 	<meta name="robots" content="noindex, nofollow">
 	<meta charset="utf-8">
-	<title>Services</title>
-	<meta name="viewport"
-		content="width=device-width, height=device-height, minimum-scale=1.0, initial-scale=1.0, maximum-scale=1.0">
+	<title>Services — Brume</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<link rel="stylesheet" href="global-colors.css">
-	<link rel="stylesheet" href="fonts.css">
-	<link rel="stylesheet" href="index.css">
-	<link rel="stylesheet" href="homepage.css">
-	<link rel="stylesheet" href="fog.css">
+	<style>
+		/* ── Google Fonts ──────────────────────────────── */
+		@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+		@import url('https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap');
+
+		/* ── Reset & base ──────────────────────────────── */
+		* {
+			box-sizing: border-box;
+		}
+
+		body {
+			margin: 0;
+			background-color: #0d0d0d;
+			color: #e8d5b7;
+			font-family: 'Courier Prime', monospace;
+			overflow-x: hidden;
+		}
+
+		/* ── Page wrapper ──────────────────────────────── */
+		.stripes {
+			background-color: #0d0d0d;
+			min-height: 100vh;
+			position: relative;
+		}
+
+		/* Subtle scanline overlay */
+		.stripes::after {
+			content: '';
+			position: fixed;
+			inset: 0;
+			background: repeating-linear-gradient(to bottom,
+					transparent 0px,
+					transparent 3px,
+					rgba(0, 0, 0, 0.08) 3px,
+					rgba(0, 0, 0, 0.08) 4px);
+			pointer-events: none;
+			z-index: 10;
+		}
+
+		/* ── Header ────────────────────────────────────── */
+		row-header {
+			display: flex;
+			flex-direction: row;
+			justify-content: flex-start;
+			align-items: center;
+			padding: 0.8em 1em 0.6em;
+			gap: 0.4em;
+		}
+
+		row-header a {
+			margin: 0;
+			text-decoration: none;
+			display: block;
+		}
+
+		style-button {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			text-align: center;
+			font-family: 'Courier Prime', monospace;
+			font-weight: bold;
+			font-size: 0.9rem;
+			letter-spacing: 0.05em;
+			padding: 0.3em 0.7em;
+			border-radius: 1000px;
+			border: 2px solid #444;
+			color: #a08060;
+			background: transparent;
+			cursor: pointer;
+		}
+
+		style-button.selectedLinkStyle {
+			border-color: #e8d5b7;
+			color: #e8d5b7;
+			background: rgba(232, 213, 183, 0.07);
+		}
+
+		style-button:hover {
+			border-color: #e8d5b7;
+			color: #e8d5b7;
+		}
+
+		/* ── Train container ───────────────────────────── */
+		.train-window {
+			width: 100%;
+			overflow: hidden;
+			padding: 1.5em 0 0.5em;
+			border-top: 1px solid #333;
+			border-bottom: 1px solid #333;
+			margin-bottom: 2em;
+		}
+
+		.train-line {
+			display: block;
+			font-family: 'Courier Prime', monospace;
+			font-size: clamp(0.45rem, 1.3vw, 0.78rem);
+			line-height: 1.15;
+			white-space: pre;
+			color: #c4a96e;
+			letter-spacing: 0;
+			overflow: hidden;
+		}
+
+		/* ── Terminal section ──────────────────────────── */
+		.terminal-section {
+			max-width: 52em;
+			margin: 0 auto;
+			padding: 0 1.5em 4em;
+		}
+
+		.terminal-prompt {
+			font-family: 'Courier Prime', monospace;
+			font-size: 0.85rem;
+			color: #666;
+			margin-bottom: 2em;
+			line-height: 1.7;
+		}
+
+		.terminal-prompt span {
+			color: #c4a96e;
+		}
+
+		/* ── Service links ─────────────────────────────── */
+		.service-list {
+			display: flex;
+			flex-direction: column;
+			gap: 0.6em;
+		}
+
+		.service-list a {
+			display: flex;
+			align-items: baseline;
+			gap: 0.8em;
+			text-decoration: none;
+			margin: 0;
+			padding: 0.55em 1em;
+			border: 1px solid #2a2a2a;
+			border-radius: 4px;
+			transition: border-color 0.15s, background 0.15s;
+			background: rgba(255, 255, 255, 0.015);
+		}
+
+		.service-list a:hover {
+			border-color: #c4a96e;
+			background: rgba(196, 169, 110, 0.06);
+		}
+
+		.service-list a::before {
+			content: '→';
+			color: #c4a96e;
+			font-family: 'Courier Prime', monospace;
+			font-size: 0.9rem;
+			flex-shrink: 0;
+			transition: transform 0.15s;
+		}
+
+		.service-list a:hover::before {
+			transform: translateX(3px);
+		}
+
+		.service-label {
+			font-family: 'Courier Prime', monospace;
+			font-size: 0.92rem;
+			color: #e8d5b7;
+			line-height: 1.4;
+		}
+
+		.service-label .tag {
+			font-size: 0.72rem;
+			color: #666;
+			margin-left: 0.6em;
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+		}
+
+		/* ── Section heading ───────────────────────────── */
+		.section-heading {
+			font-family: 'Yeseva One', serif;
+			font-size: 1.4rem;
+			color: #c4a96e;
+			margin: 2.5em 0 1em;
+			border-bottom: 1px solid #2a2a2a;
+			padding-bottom: 0.4em;
+			letter-spacing: 0.03em;
+		}
+
+		/* ── Footer note ───────────────────────────────── */
+		.footer-note {
+			margin-top: 3em;
+			font-size: 0.78rem;
+			color: #444;
+			line-height: 1.7;
+			border-top: 1px solid #1e1e1e;
+			padding-top: 1.5em;
+		}
+
+		.footer-note a {
+			display: inline;
+			margin: 0;
+			color: #666;
+			text-decoration: underline;
+		}
+
+		.footer-note a:hover {
+			color: #c4a96e;
+		}
+	</style>
 </head>
 
-
 <body>
-	<img class="background" src="img/brumewallpaper.jpg" alt="stripes">
 	<div class="stripes">
-		<headerR>
-			<a href="index.html">
-				<buttonStyle>Accueil</buttonStyle>
-			</a>
-			<a href="menu.html">
-				<buttonStyle>Menu</buttonStyle>
-			</a>
-			<a href="services.html">
-				<buttonStyle class="selectedLinkStyle">Services</buttonStyle>
-			</a>
-		</headerR>
 
-		<!-- <train id="train"></train> -->
-		<blocC>
-			<train id="train0"></train>
-			<train id="train1"></train>
-			<train id="train2"></train>
-			<train id="train3"></train>
-			<train id="train4"></train>
-			<train id="train5"></train>
-		</blocC>
+		<row-header>
+			<a href="index.html"><style-button>Accueil</style-button></a>
+			<a href="menu.html"><style-button>Menu</style-button></a>
+			<a href="services.html"><style-button class="selectedLinkStyle">Services</style-button></a>
+		</row-header>
 
-		<bloc>
-			<blocC>
-				<blocR>
-					<commentaireStyle>
-						Salut à toi ! Si tu es ici par hasard, tu es le bienvenu ! Cette page permet d'accéder aux
-						services supplémentaires du site de brume. Les voici :
-					</commentaireStyle>
-				</blocR>
-				<a href="relevetemperatures.html">
-					<buttonStyle>Relevés de températures des frigos</buttonStyle>
-				</a>
-				<a href="relevetemperatures2.html">
-					<buttonStyle>Nouveau relevés de températures des frigos</buttonStyle>
-				</a>
+		<!-- ASCII train — width measured in JS so it always fits -->
+		<div class="train-window" id="trainWindow">
+			<span class="train-line" id="train0"></span>
+			<span class="train-line" id="train1"></span>
+			<span class="train-line" id="train2"></span>
+			<span class="train-line" id="train3"></span>
+			<span class="train-line" id="train4"></span>
+			<span class="train-line" id="train5"></span>
+		</div>
+
+		<div class="terminal-section">
+			<p class="terminal-prompt">
+				<span>brume@services:~$</span> ls -la /services<br>
+				Salut ! Si tu es ici par hasard, tu es le bienvenu.<br>
+				Voici les services internes du site de Brume.
+			</p>
+
+			<div class="section-heading">Gestion du menu</div>
+			<div class="service-list">
 				<a href="editor.html">
-					<buttonStyle>Editeur de menu</buttonStyle>
+					<span class="service-label">Éditeur de menu <span class="tag">legacy</span></span>
 				</a>
 				<a href="editor2.html">
-					<buttonStyle>Nouvel editeur de menu</buttonStyle>
+					<span class="service-label">Nouvel éditeur de menu <span class="tag">v2</span></span>
 				</a>
 				<a href="menu.html#menulocal">
-					<buttonStyle>Menu utilisant le menu stocké localement en cas de galère
-						avec le server qui stocke le menu</buttonStyle>
+					<span class="service-label">Menu local <span class="tag">fallback offline</span></span>
 				</a>
-				<a href="https://github.com/simon-ameye">
-					<buttonStyle>Lien vers le GitHub du gars qui a fait ce site, contacte le si tu veux le même pour ton
-						resto</buttonStyle>
+			</div>
+
+			<div class="section-heading">Relevés de températures</div>
+			<div class="service-list">
+				<a href="relevetemperatures.html">
+					<span class="service-label">Relevés frigos <span class="tag">legacy</span></span>
 				</a>
+				<a href="relevetemperatures2.html">
+					<span class="service-label">Nouveaux relevés frigos <span class="tag">v2</span></span>
+				</a>
+			</div>
+
+			<div class="section-heading">Autres</div>
+			<div class="service-list">
 				<a href="barista.html">
-					<buttonStyle>Barista screen</buttonStyle>
+					<span class="service-label">Barista screen</span>
 				</a>
-			</blocC>
-		</bloc>
+				<a href="https://github.com/simon-ameye" target="_blank">
+					<span class="service-label">GitHub du développeur <span class="tag">contact</span></span>
+				</a>
+			</div>
+
+			<p class="footer-note">
+				Ce site a été conçu et développé par
+				<a href="https://github.com/simon-ameye" target="_blank">Simon Ameye</a>.
+				Contacte-le si tu veux le même pour ton resto.
+			</p>
+		</div>
+
 	</div>
+
 	<script>
 		async function startTrain() {
-			// Load ASCII art train from txt file
 			const response = await fetch("train.txt");
 			const text = await response.text();
-
-			// Ensure no trailing empty lines
 			const lines = text.split("\n");
 
-			const width = 70; // visible window width (same as CSS width)
+			// Ensure we have exactly 6 lines
+			while (lines.length < 6) lines.push("");
+
+			const trainEls = [
+				document.getElementById("train0"),
+				document.getElementById("train1"),
+				document.getElementById("train2"),
+				document.getElementById("train3"),
+				document.getElementById("train4"),
+				document.getElementById("train5"),
+			];
+
 			let offset = 0;
+			let width = 80; // fallback
 
-			function render() {
-				padded0 = " ".repeat(width) + lines[0] + " ".repeat(width)
-				padded1 = " ".repeat(width) + lines[1] + " ".repeat(width)
-				padded2 = " ".repeat(width) + lines[2] + " ".repeat(width)
-				padded3 = " ".repeat(width) + lines[3] + " ".repeat(width)
-				padded4 = " ".repeat(width) + lines[4] + " ".repeat(width)
-				padded5 = " ".repeat(width) + lines[5] + " ".repeat(width)
-				frame0 = padded0.substring(offset, offset + width);
-				frame1 = padded1.substring(offset, offset + width);
-				frame2 = padded2.substring(offset, offset + width);
-				frame3 = padded3.substring(offset, offset + width);
-				frame4 = padded4.substring(offset, offset + width);
-				frame5 = padded5.substring(offset, offset + width);
+			/**
+			 * Measure how many monospace characters fit in the container.
+			 * We create a hidden probe element, measure one character's width,
+			 * then divide the container's pixel width by that.
+			 */
+			function measureWidth() {
+				const probe = document.createElement("span");
+				probe.style.cssText = [
+					"position:absolute",
+					"visibility:hidden",
+					"white-space:pre",
+					"font-family:'Courier Prime',monospace",
+					`font-size:${getComputedStyle(trainEls[0]).fontSize}`,
+				].join(";");
+				probe.textContent = "X";
+				document.body.appendChild(probe);
+				const charW = probe.getBoundingClientRect().width;
+				document.body.removeChild(probe);
 
-				document.getElementById("train0").textContent = frame0;
-				document.getElementById("train1").textContent = frame1;
-				document.getElementById("train2").textContent = frame2;
-				document.getElementById("train3").textContent = frame3;
-				document.getElementById("train4").textContent = frame4;
-				document.getElementById("train5").textContent = frame5;
-
-				offset++;
-				// Reset when end of train reached
-				if (offset > padded0.length) {
-					offset = 0;
-				}
+				const containerW = document.getElementById("trainWindow").clientWidth;
+				width = charW > 0 ? Math.floor(containerW / charW) : 80;
 			}
 
-			// Refresh every 100ms
-			setInterval(render, 200);
+			measureWidth();
+			window.addEventListener("resize", measureWidth);
+
+			function render() {
+				for (let i = 0; i < 6; i++) {
+					const line = lines[i] || "";
+					// Pad on both sides so the train scrolls in and out
+					const padded = " ".repeat(width) + line + " ".repeat(width);
+					trainEls[i].textContent = padded.substring(offset, offset + width);
+				}
+				offset++;
+				// Reset when the full padded string has scrolled through
+				const maxLen = width + (lines[0]?.length ?? 0) + width;
+				if (offset > maxLen) offset = 0;
+			}
+
+			setInterval(render, 120);
 		}
 
 		startTrain();
 	</script>
-
 </body>
+
+</html>

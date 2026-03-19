@@ -21,76 +21,73 @@
 		<div id="reviewBox"></div>
 		<br>
 		<form method="dialog">
-			<centerR>
+			<row-center>
 				<button autofocus>
-					<commentaireStyle>
+					<style-comment>
 						OK
-					</commentaireStyle>
+					</style-comment>
 				</button>
-			</centerR>
+			</row-center>
 		</form>
 	</dialog>
 
-	<!-- <div class="cloudContainer">
-		<img class="cloud cloud1" src="img/cloud7.webp" alt="cloud">
-		<img class="cloud cloud2" src="img/cloud7.webp" alt="cloud">
-		<img class="cloud cloud3" src="img/cloud7.webp" alt="cloud">
-	</div> -->
 	<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-	<!-- <img class="background" src="img/brumewallpaper.jpg" alt="stripes"> -->
 	<div class="stripes">
-		<buttonStyle id="menu-warning"></buttonStyle>
-		<headerR>
+		<style-button id="menu-warning"></style-button>
+		<row-header>
 			<a href="index.html">
-				<buttonStyle>Accueil</buttonStyle>
+				<style-button>Accueil</style-button>
 			</a>
 			<a href="menu.html">
-				<buttonStyle class="selectedLinkStyle">Menu</buttonStyle>
+				<style-button class="selectedLinkStyle">Menu</style-button>
 			</a>
-		</headerR>
-		<!-- <img class="tshirt" src="img/tshirt.svg" alt="logo" /> -->
-		<!-- <titleCirclecontainer>
-			<titleCircleFilter>
-				<titleCircle>
-					<titleCenterC1>
-						<titleContainerfit>
-							<titlecenterR2>
-								<logoStyle1>Brume</logoStyle1>
-							</titlecenterR2>
-							<titlecenterR2>
-								<logoStyle2>Coffee in Nice</logoStyle2>
-							</titlecenterR2>
-						</titleContainerfit>
-					</titleCenterC1>
-				</titleCircle>
-			</titleCircleFilter>
-		</titleCirclecontainer> -->
+		</row-header>
 
-		<brumeTitleR>
-			<brumeTitleStyle>Brume</brumeTitleStyle>
-		</brumeTitleR>
+		<!-- Commented-out title circle variant:
+		<style-title-circle-container>
+			<style-title-circle-filter>
+				<style-title-circle>
+					<col-title-center>
+						<style-title-circle-fit>
+							<row-title-end>
+								<style-logo-main>Brume</style-logo-main>
+							</row-title-end>
+							<row-title-end>
+								<style-logo-sub>Coffee in Nice</style-logo-sub>
+							</row-title-end>
+						</style-title-circle-fit>
+					</col-title-center>
+				</style-title-circle>
+			</style-title-circle-filter>
+		</style-title-circle-container>
+		-->
 
+		<row-brume-title>
+			<style-brume-title>Brume</style-brume-title>
+		</row-brume-title>
 
-		<simplecenterR>
+		<row-photo-center>
 			<img class="photo" src="img/photo.jpg" alt="logo" />
-		</simplecenterR>
+		</row-photo-center>
 
 		<div>
-			<!-- <externalLogoR>
-				<externalLogoC>
+			<!-- Commented-out social row:
+			<row-social>
+				<col-social>
 					<a href="https://www.instagram.com/brume.coffee.nice/" target="_blank">
 						<img class="instaLogo" src="img/instagram_logo.svg" alt="Brume Instagram" />
 					</a>
-				</externalLogoC>
-			</externalLogoR> -->
-			<buttonsR>
-				<buttonStyle id="languageBox0"></buttonStyle>
-				<buttonStyle id="languageBox1"></buttonStyle>
-			</buttonsR>
-			<centerR>
+				</col-social>
+			</row-social>
+			-->
+			<row-buttons>
+				<style-button id="languageBox0"></style-button>
+				<style-button id="languageBox1"></style-button>
+			</row-buttons>
+			<row-center>
 				<div id="introBox" class="introBox"></div>
-			</centerR>
+			</row-center>
 			<div id="menuBox" class="menuBox"></div>
 		</div>
 		<script src="menu-fetchtotree.js"></script>

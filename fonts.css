@@ -3,10 +3,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caprasimo&family=VT323&display=swap');
 
-menuStyle {
+/* ── Section label (vertical, sticky) ─────────────── */
+style-menu {
 	position: sticky;
 	top: 0;
-	color: var(--color-font1);
+	color: var(--text-menu);
 	font-family: 'Yeseva One', cursive;
 	font-weight: bolder;
 	font-size: 190%;
@@ -15,21 +16,23 @@ menuStyle {
 	word-spacing: 0.5rem;
 	white-space: nowrap;
 	flex-shrink: 0;
-	background-color: #d0972d00;
+	background-color: transparent;
 }
 
-categorieStyle {
+/* ── Category heading ──────────────────────────────── */
+style-category {
 	text-align: center;
-	color: var(--color-font2);
+	color: var(--text-category);
 	font-family: 'Yeseva One', cursive;
 	font-weight: bolder;
 	font-size: 250%;
 	min-height: 0;
 }
 
-produitStyle {
+/* ── Product name ──────────────────────────────────── */
+style-product {
 	text-align: left;
-	color: var(--color-font3);
+	color: var(--text-product);
 	font-family: 'Courier Prime';
 	font-size: 120%;
 	text-transform: uppercase;
@@ -38,55 +41,58 @@ produitStyle {
 	font-weight: bolder;
 }
 
-prixStyle {
+/* ── Price ─────────────────────────────────────────── */
+style-price {
 	text-align: right;
-	color: var(--color-font4);
+	color: var(--text-price);
 	font-family: 'Courier Prime';
 	font-size: 120%;
 	padding-left: 1em;
 	flex-shrink: 1;
 }
 
-descriptionStyle {
+/* ── Description ───────────────────────────────────── */
+style-description {
 	text-align: justify;
-	color: var(--color-font5);
-	font-family: 'courier prime';
+	color: var(--text-description);
+	font-family: 'Courier Prime';
 	font-size: 100%;
 	margin-top: 0.4em;
 	flex-shrink: 1;
 }
 
-commentaireStyle {
+/* ── Comment / body text ───────────────────────────── */
+style-comment {
 	text-align: center;
-	color: var(--color-font6);
-	font-family: 'courier prime';
+	color: var(--text-comment);
+	font-family: 'Courier Prime';
 	font-size: 120%;
 	margin-top: 0.5em;
 	min-height: 0;
 	flex-shrink: 1;
 }
 
-defautStyle {
-	color: var(--color-font7);
+/* ── Error / défaut ────────────────────────────────── */
+style-error {
+	color: var(--text-error);
 }
 
-dots {
+/* ── Dot leader ────────────────────────────────────── */
+style-dots {
 	flex-grow: 1;
 	height: 1em;
-	/* background: radial-gradient(circle at 50% 0.75em, black 0.1em, transparent 0); */
-	background: radial-gradient(circle at 50% 0.75em, var(--color-font1) 0.1em, transparent 0);
+	background: radial-gradient(circle at 50% 0.75em, var(--text-menu) 0.1em, transparent 0);
 	background-size: 0.7em;
 	background-repeat: repeat-x;
 }
 
-/*for language box*/
-buttonStyle {
+/* ── Nav / language button pill ────────────────────── */
+style-button {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	text-align: center;
-	color: var(--color-font8);
-	/* font-family: 'Courier Prime'; */
+	color: var(--text-control);
 	font-family: 'Yeseva One';
 	font-weight: bolder;
 	font-size: 115%;
@@ -95,10 +101,11 @@ buttonStyle {
 	margin-right: 0.3em;
 	padding: 0.3em;
 	border-radius: 1000px;
-	border: 5px solid var(--color-border2);
+	border: 5px solid var(--border-nav);
 }
 
-titleCirclecontainer {
+/* ── Title circle (logo variant) ───────────────────── */
+style-title-circle-container {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
@@ -106,96 +113,73 @@ titleCirclecontainer {
 	font-family: "Yeseva One", serif;
 	font-weight: bolder;
 	font-size: 400%;
-	color: var(--color-logo1);
+	color: var(--text-logo);
 	word-spacing: 0.1rem;
 	white-space: nowrap;
 	flex-shrink: 0;
 	margin-bottom: 7vh;
 	margin-top: 3vh;
-	/* margin-top: 10vh; */
-	/* margin-bottom: 2vh; */
 	padding: 0;
 }
 
-titleCircleFilter {
-	/* your layout */
+style-title-circle-filter {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
-
-	/* circle */
-	/* width: 5em;
-	width: 50vw; */
 	height: 5em;
 	min-width: 5em;
 	border-radius: 50%;
-	border: 5px solid var(--color-border2);
-
-	/* ✅ clipping + stacking context */
+	border: 5px solid var(--border-circle);
 	position: relative;
 	overflow: hidden;
-
-	/* keep if you need it */
 	z-index: 1;
-
-	/* remove these because layering will handle it */
 	background-color: transparent;
 	filter: drop-shadow(0 0 2rem white);
 }
 
-titleCircleFilter::before {
+style-title-circle-filter::before {
 	content: "";
 	position: absolute;
 	inset: 0;
-
 	background-image: url("/img/brumewallpaper.jpg");
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
-
 	z-index: 0;
 }
 
-titleCircleFilter::after {
+style-title-circle-filter::after {
 	content: "";
 	position: absolute;
 	inset: 0;
-
-	/* your filter color */
 	background: rgba(255, 255, 255, 0.249);
-
-	/* optional: blur what's BEHIND the circle (backdrop-filter) */
-	/* backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px); */
-
 	z-index: 1;
 }
 
-titleCircle {
+style-title-circle {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	align-items: center;
-
 	width: 100%;
 	height: 100%;
 	position: relative;
 	z-index: 2;
 }
 
-titleContainerfit {
-	border: #48484800 solid;
+style-title-circle-fit {
+	border: transparent solid;
 }
 
-titleCenterC1 {
+col-title-center {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 }
 
-titlecenterR2 {
+row-title-end {
 	display: flex;
 	flex-direction: row;
 	justify-content: end;
@@ -203,27 +187,15 @@ titlecenterR2 {
 	width: 100%;
 }
 
-simplecenterR {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-	width: 100%;
-	margin-bottom: 3em;
-}
-
-logoStyle1 {
+/* ── Logo text variants ────────────────────────────── */
+style-logo-main {
 	font-size: 100%;
 	margin-bottom: -0.15em;
-	/* text-decoration: underline overline wavy #4d4d4d 2px;
-	text-underline-offset: 0.5em; */
 	filter: drop-shadow(0 0 0.1rem rgb(255, 255, 255));
 }
 
-logoStyle2 {
+style-logo-sub {
 	font-size: 25%;
-	/* color: #757575;
-	text-decoration: underline solid grey 2px; */
 	font-family: "Bebas Neue", sans-serif;
 	letter-spacing: 0.2rem;
 }

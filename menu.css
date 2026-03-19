@@ -1,98 +1,122 @@
-leftR {
+/* ═══════════════════════════════════════════════════════
+   NAMING CONVENTION
+   ─────────────────────────────────────────────────────
+   Layout:
+     row-*        flex row containers
+     col-*        flex column containers
+     card-*       card containers
+
+   Typography elements (defined in fonts.css):
+     style-menu, style-category, style-product,
+     style-price, style-description, style-comment,
+     style-error, style-dots, style-button,
+     style-title-circle-*, style-logo-*
+
+   Utility classes:
+     .menuBox     grid of menu cards
+     .introBox    constrained intro text block
+     .reviewBox   dialog background override
+   ═══════════════════════════════════════════════════════ */
+
+
+/* ── Utility rows ──────────────────────────────────── */
+
+row-left {
 	display: flex;
 	flex-direction: row;
-	justify-content: left;
+	justify-content: flex-start;
 	align-items: center;
 	flex-wrap: wrap;
-	min-height: 0;
 }
 
-buttonsR {
+row-center {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	width: 100%;
+}
+
+row-buttons {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 	flex-wrap: wrap;
-	min-height: 0;
 	margin-top: 2vh;
 	margin-bottom: 2vh;
 }
 
-/*contener for name and price*/
-produitPrixR {
+/* ── Product name + price row ──────────────────────── */
+
+row-product-price {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	min-height: 0;
+	align-items: center;
 	margin-top: 3em;
-	height: fit-content;
-	align-items: center;
-	flex-shrink: 1;
+	width: 100%;
 }
 
-mainR {
-	margin-top: 15vh;
-	margin-top: 2em;
+/* ── Menu card ─────────────────────────────────────── */
+/*
+ * card-menu: a single card in the menu grid.
+ * The card itself is a row: col-card-left holds the
+ * vertical label, col-card-right holds all content.
+ */
+
+card-menu {
 	display: flex;
 	flex-direction: row;
-	justify-content: flex-start;
-	/* background-color: #ffede3; */
+	align-items: stretch;
 	border-radius: 30px;
-	padding-top: 1em;
-	padding-bottom: 1em;
-	/* backdrop-filter: blur(10px);
-	-webkit-backdrop-filter: blur(10px); */
-	border: 5px solid var(--color-mainr-border);
-	max-width: 30em;
-	background: url('img/bac2.png');
+	padding: 1em 0;
+	border: 5px solid var(--border-card);
+	background: url('img/bac2.png') repeat;
 	background-size: 40%;
-	background-repeat: repeat;
-	background-color: var(--color-bg0);
+	background-color: var(--bg-surface);
+	/* width is driven by .menuBox grid */
+	width: 100%;
+	box-sizing: border-box;
 }
 
-/* mainr:first-child {
-	margin-top: 5vh;
-} */
-
-leftMainC {
+col-card-left {
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
-	/* background-color: rgba(255, 255, 255, 0); */
-	flex-grow: 0;
-
+	justify-content: flex-start;
+	flex: 0 0 auto;
+	/* never grow, never shrink */
 }
 
-centerR {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: center;
-	flex-wrap: wrap;
-	min-height: 0;
-}
-
-rightMainC {
+col-card-right {
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
-	flex-grow: 1;
-	padding-right: 1em;
-	padding-left: 0.5em;
+	justify-content: flex-start;
+	flex: 1 1 0;
+	/* take all remaining width */
+	min-width: 0;
+	/* allow text to wrap */
+	padding: 0 1em 0 0.5em;
 }
 
-.categoriecanterr {
+/* ── Category section spacing ──────────────────────── */
+
+.category-section {
 	margin-top: 6em;
+	width: 100%;
 }
 
-.categoriecanterr:first-child {
-	margin-top: 0em;
+.category-section:first-child {
+	margin-top: 0;
 }
+
+/* ── Review dialog ─────────────────────────────────── */
 
 dialog {
 	position: fixed;
-	background-color: #ffffff;
-	width: 60vw;
 	top: 0;
+	width: 60vw;
+	background-color: var(--bg-dialog);
 }
 
 dialog::backdrop {
@@ -103,16 +127,28 @@ dialog::backdrop {
 }
 
 .reviewBox {
-	background-color: var(--color-review-box-bg);
+	background-color: var(--bg-dialog);
 }
 
+/* ── Menu grid ─────────────────────────────────────── */
+/*
+ * CSS Grid: each column is exactly 30em wide.
+ * auto-fill packs as many columns as fit; cards never
+ * stretch beyond 30em and are always the same width.
+ * On narrow viewports the grid naturally collapses to
+ * a single centred column.
+ */
+
 .menuBox {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	align-items: flex-start;
-	justify-content: space-evenly;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(30em, 100%), 1fr));
+	gap: 1em;
+	/* padding: 1em; */
+	justify-items: center;
+	/* center each card within its cell */
 }
+
+/* ── Intro box ─────────────────────────────────────── */
 
 .introBox {
 	max-width: 30em;

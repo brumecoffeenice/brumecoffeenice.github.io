@@ -1,26 +1,29 @@
+/* ═══════════════════════════════════════════════════════
+   Shared page layout — used by both index.html and menu.html
+   ═══════════════════════════════════════════════════════ */
+
 body {
 	margin: 0;
-	background-color: var(--color-bg);
+	background-color: var(--bg-page);
 	max-width: 100%;
 	overflow-x: hidden;
 }
 
 /* ── Striped background ────────────────────────────── */
+
 .stripes {
-	top: 0;
-	background-color: #ffffff00;
-	opacity: 1;
+	background-color: transparent;
 	background-image: linear-gradient(to right,
-			var(--color-stripe1),
-			var(--color-stripe1) 5px,
-			var(--color-stripe2) 5px,
-			var(--color-stripe2));
+			var(--bg-stripe-dark),
+			var(--bg-stripe-dark) 5px,
+			var(--bg-stripe-light) 5px,
+			var(--bg-stripe-light));
 	background-size: 10px 100%;
-	z-index: -5;
 	min-height: 100vh;
 }
 
 /* ── Fixed parallax background ────────────────────── */
+
 .background {
 	z-index: -6;
 	position: fixed;
@@ -29,14 +32,15 @@ body {
 	top: 0;
 	left: 0;
 	pointer-events: none;
-	background-repeat: no-repeat;
-	background-position: left;
 	background-size: cover;
-	transform: translate3d(0px, 0px, 0px);
+	background-position: left;
+	background-repeat: no-repeat;
+	transform: translate3d(0, 0, 0);
 }
 
 /* ── Header nav ────────────────────────────────────── */
-headerR {
+
+row-header {
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-start;
@@ -45,19 +49,20 @@ headerR {
 	gap: 0.4em;
 }
 
-headerR a {
+row-header a {
 	margin: 0;
 }
 
-/* ── Social logo rows ──────────────────────────────── */
-externalLogoR {
+/* ── Social logo row / column ──────────────────────── */
+
+row-social {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
 	padding: 0.6em 0;
 }
 
-externalLogoC {
+col-social {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -68,6 +73,7 @@ externalLogoC {
 }
 
 /* ── Hero photo ────────────────────────────────────── */
+
 .photo {
 	width: 100%;
 	max-height: 60vh;
@@ -77,15 +83,15 @@ externalLogoC {
 }
 
 /* ── Link pills ────────────────────────────────────── */
+
 .linkStyle {
-	border: 5px solid var(--color-border1);
-	align-items: center;
+	border: 5px solid var(--border-nav);
 	text-align: center;
 	text-decoration: underline;
-	text-decoration-color: var(--color-underline1);
+	text-decoration-color: var(--text-underline);
 	border-radius: 1000px;
 	padding: 0.3em 0.7em;
-	background-color: var(--color-bg1);
+	background-color: var(--bg-control);
 }
 
 a {
@@ -97,38 +103,122 @@ a {
 
 .selectedLinkStyle {
 	text-decoration: underline;
-	background-color: var(--color-bg2);
+	background-color: var(--bg-control-active);
 }
 
 button {
-	border: 10px solid var(--color-border1);
-	background-color: var(--color-bg1);
-	align-items: center;
+	border: 10px solid var(--border-nav);
+	background-color: var(--bg-control);
 	text-align: center;
 	text-decoration: underline;
-	text-decoration-color: var(--color-underline1);
+	text-decoration-color: var(--text-underline);
 	border-radius: 1000px;
 	padding: 0.3em;
 }
 
-brumeTitleR {
+/* ── Brume title ───────────────────────────────────── */
+
+row-brume-title {
 	display: flex;
 	justify-content: center;
-	padding: 3em 0 3em;
+	padding: 3em 0;
 }
 
-brumeTitleStyle {
+style-brume-title {
 	font-family: 'Yeseva One', serif;
 	font-size: 3rem;
 	color: #111111;
 	letter-spacing: 0.04em;
 }
 
-/* ── Monospace train element ───────────────────────── */
+/* ── Centered photo row ────────────────────────────── */
+
+row-photo-center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	margin-bottom: 3em;
+}
+
+/* ── Monospace train ───────────────────────────────── */
+
 train {
 	font-family: "Courier New", Courier, monospace;
 	font-size: 1rem;
-	letter-spacing: 0px;
 	width: 50em;
 	white-space: pre;
+}
+
+
+/* ═══════════════════════════════════════════════════════
+   index.html — info card grid
+   ═══════════════════════════════════════════════════════ */
+
+/*
+ * card-grid: CSS Grid so every card-bloc in the same row
+ * is exactly the same width, regardless of content.
+ * auto-fill + minmax collapses to one column on mobile.
+ */
+
+card-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(26em, 100%), 1fr));
+	gap: 1em;
+	padding: 1em;
+}
+
+/*
+ * card-bloc: column-direction flex so its children
+ * (row-bloc, col-bloc) stack vertically.
+ * align-items: stretch makes every child fill the full
+ * card width, so style-category centers correctly.
+ */
+
+card-bloc {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	/* children fill card width */
+	border-radius: 20px;
+	padding: 1.2em 1.4em;
+	border: 5px solid var(--border-card);
+	background-color: var(--bg-surface);
+	box-sizing: border-box;
+}
+
+/*
+ * row-bloc: a row inside a card.
+ * justify-content: center so inline elements like
+ * style-category are centred by default.
+ * Use row-bloc-left if you need left-aligned content.
+ */
+
+row-bloc {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	width: 100%;
+}
+
+/* col-bloc: a column inside a card, full width */
+
+col-bloc {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	width: 100%;
+}
+
+/* row-wrap: free-flowing row (Articles links) */
+
+row-wrap {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.3em;
+	width: 100%;
 }
