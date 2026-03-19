@@ -36,13 +36,13 @@ mainR {
 	flex-direction: row;
 	justify-content: flex-start;
 	/* background-color: #ffede3; */
-	border-radius: 10px;
+	border-radius: 30px;
 	padding-top: 1em;
 	padding-bottom: 1em;
 	/* backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px); */
 	border: 5px solid var(--color-mainr-border);
-	max-width: 25em;
+	max-width: 30em;
 	background: url('img/bac2.png');
 	background-size: 40%;
 	background-repeat: repeat;

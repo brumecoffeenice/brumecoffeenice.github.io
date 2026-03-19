@@ -111,6 +111,19 @@ button {
 	padding: 0.3em;
 }
 
+brumeTitleR {
+	display: flex;
+	justify-content: center;
+	padding: 3em 0 3em;
+}
+
+brumeTitleStyle {
+	font-family: 'Yeseva One', serif;
+	font-size: 3rem;
+	color: #111111;
+	letter-spacing: 0.04em;
+}
+
 /* ── Monospace train element ───────────────────────── */
 train {
 	font-family: "Courier New", Courier, monospace;
