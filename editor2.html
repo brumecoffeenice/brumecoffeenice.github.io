@@ -1,599 +1,389 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
 	<meta charset="utf-8">
 	<meta name="robots" content="noindex, nofollow">
 	<title>Brume — Menu Editor</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link
-		href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Courier+Prime:wght@400;700&family=Bebas+Neue&display=swap"
-		rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Courier+Prime:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
 	<style>
 		:root {
-			--bg: #161008;
-			--bg2: #1e1508;
-			--border: #3d2e12;
-			--gold: #d0972d;
-			--muted: #6a5030;
-			--text: #ffeacf;
-			--red: #a03020;
-			--c0: #d0972d;
-			--c1: #9b72c8;
-			--c2: #4a9fd4;
-			--c3: #4caf7d;
-			--c4: #d47a30;
-			--c5: #c84a6a;
-			--cc: #555040;
-			--cat: #8a7060;
+			--bg:         #ffffff;
+			--bg-bar:     rgba(255,255,255,0.88);
+
+			--border:     #d0cac4;
+			--border-md:  #b8b0a8;
+			--border-str: #7a6e66;
+
+			--ink:        #111008;
+			--ink2:       #3a3028;
+			--muted:      #8a8078;
+
+			--accent:        #b84c2a;
+			--accent-border: #b84c2a;
+			--accent-bg:     rgba(184,76,42,0.07);
+
+			/* Segment colors */
+			--c0: #b84c2a;
+			--c1: #4e7020;
+			--c2: #2a5a7a;
+			--c3: #8b3a00;
+			--c4: #1e6b50;
+			--c5: #6a3a10;
+			--cc: #8a8078;
+			--cat:#5a6a4a;
+			--red:#b82020;
 		}
 
-		*,
-		*::before,
-		*::after {
-			box-sizing: border-box;
-			margin: 0;
-			padding: 0
-		}
-
-		html {
-			font-size: 15px
-		}
+		*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0 }
+		html { font-size: 15px }
 
 		body {
 			font-family: 'Courier Prime', monospace;
 			background: var(--bg);
-			color: var(--text);
+			color: var(--ink);
 			min-height: 100vh;
 			overflow-x: hidden;
-			-webkit-text-size-adjust: 100%
+			-webkit-text-size-adjust: 100%;
 		}
 
-		/* ── TOP BAR ── */
+		/* ══ TOP BAR ══════════════════════════════════════════════════ */
 		#topbar {
 			position: sticky;
 			top: 0;
-			z-index: 100;
-			background: var(--bg2);
-			border-bottom: 1px solid var(--border);
-			padding: .5em .8em;
+			z-index: 200;
+			background: var(--bg-bar);
+			backdrop-filter: blur(24px) saturate(180%);
+			-webkit-backdrop-filter: blur(24px) saturate(180%);
+			border-bottom: 2px solid var(--border-str);
 			display: flex;
 			align-items: center;
-			gap: .45em;
-			flex-wrap: wrap
+			gap: .4em;
+			flex-wrap: nowrap;
+			padding: 0 .8em;
+			height: 42px;
+			overflow: hidden;
+		}
+
+		/* On smaller screens let it wrap but keep height auto */
+		@media (max-width: 800px) {
+			#topbar { flex-wrap: wrap; height: auto; padding: .35em .8em; }
+			#status  { order: 99 }
 		}
 
 		.logo {
-			font-family: 'Yeseva One', serif;
-			color: var(--gold);
-			font-size: 1.1em;
-			margin-right: auto;
-			white-space: nowrap
+			font-family: 'Playfair Display', serif;
+			font-weight: 600;
+			font-size: 1.05em;
+			color: var(--ink);
+			white-space: nowrap;
+			margin-right: .2em;
+			flex-shrink: 0;
 		}
-
 		.logo sub {
 			font-family: 'Bebas Neue', sans-serif;
-			font-size: .5em;
-			color: var(--muted);
-			letter-spacing: .12em;
-			vertical-align: middle;
-			margin-left: .35em
+			font-size: .44em; color: var(--muted);
+			letter-spacing: .16em; vertical-align: middle; margin-left: .4em;
 		}
 
+		.topbar-sep {
+			flex-shrink: 0;
+			width: 1px; height: 22px;
+			background: var(--border-md);
+			margin: 0 .2em;
+		}
+
+		.topbar-spacer { flex: 1; min-width: 0 }
+
+		/* ── Buttons ── */
 		.btn {
 			font-family: 'Courier Prime', monospace;
-			font-size: .68em;
-			font-weight: 700;
-			text-transform: uppercase;
-			letter-spacing: .06em;
-			padding: .38em .85em;
-			border-radius: 999px;
-			border: 1.5px solid var(--border);
+			font-size: .63em; font-weight: 700;
+			text-transform: uppercase; letter-spacing: .06em;
+			padding: .32em .8em;
+			border: 1.5px solid var(--border-md);
 			background: transparent;
-			color: var(--muted);
+			color: var(--ink2);
 			cursor: pointer;
-			transition: all .14s;
+			transition: border-color .12s, color .12s, background .12s;
 			white-space: nowrap;
-			min-height: 2em
+			height: 28px;
+			line-height: 1;
+			flex-shrink: 0;
 		}
-
-		.btn:hover,
-		.btn:active {
-			border-color: var(--gold);
-			color: var(--gold)
+		.btn:hover, .btn:active {
+			border-color: var(--accent-border);
+			color: var(--accent);
+			background: var(--accent-bg);
 		}
-
 		.btn.primary {
-			border-color: var(--gold);
-			background: var(--gold);
-			color: var(--bg)
+			border-color: var(--accent);
+			background: var(--accent);
+			color: #fff;
 		}
-
-		.btn.primary:hover,
-		.btn.primary:active {
-			background: #e0a838
+		.btn.primary:hover, .btn.primary:active {
+			background: #9e3e20;
+			border-color: #9e3e20;
 		}
-
 		.btn.on {
-			border-color: var(--gold);
-			color: var(--gold)
+			border-color: var(--accent-border);
+			background: var(--accent-bg);
+			color: var(--accent);
 		}
 
 		#topbar input {
 			font-family: 'Courier Prime', monospace;
-			padding: .38em .85em;
-			border-radius: 999px;
-			border: 1.5px solid var(--border);
-			background: var(--bg);
-			color: var(--text);
-			width: 10em;
+			font-size: max(.63em, 15px);
+			padding: 0 .7em;
+			border: 1.5px solid var(--border-md);
+			background: transparent;
+			color: var(--ink);
+			width: 9em;
 			outline: none;
-			font-size: max(.72em, 16px)
+			height: 28px;
+			flex-shrink: 0;
+			transition: border-color .12s;
 		}
-
-		#topbar input:focus {
-			border-color: var(--gold)
-		}
+		#topbar input::placeholder { color: var(--muted) }
+		#topbar input:focus { border-color: var(--accent-border) }
 
 		#status {
-			width: 100%;
-			font-size: .7em;
-			color: var(--muted);
-			padding-left: .2em;
-			min-height: 1em
+			font-size: .6em; color: var(--muted);
+			letter-spacing: .04em;
+			white-space: nowrap;
+			flex-shrink: 0;
 		}
+		#status.ok  { color: var(--c4) }
+		#status.err { color: var(--red) }
 
-		#status.ok {
-			color: #4caf7d
-		}
-
-		#status.err {
-			color: var(--red)
-		}
-
-		/* ── LEGEND ── */
+		/* ══ LEGEND ═══════════════════════════════════════════════════ */
 		#legend {
-			display: flex;
-			gap: .45em;
-			flex-wrap: wrap;
-			align-items: center;
-			padding: .35em .8em;
-			background: var(--bg2);
-			border-bottom: 1px solid var(--border);
-			font-size: .60em;
-			font-weight: 700;
-			text-transform: uppercase;
-			letter-spacing: .06em
+			display: flex; gap: .4em; flex-wrap: wrap; align-items: center;
+			padding: .3em .8em;
+			background: rgba(255,255,255,0.92);
+			backdrop-filter: blur(16px);
+			-webkit-backdrop-filter: blur(16px);
+			border-bottom: 1.5px solid var(--border);
+			font-size: .57em; font-weight: 700;
+			text-transform: uppercase; letter-spacing: .06em;
+			position: sticky; top: 42px; z-index: 190;
 		}
-
 		.leg {
-			padding: .18em .55em;
-			border-radius: 999px;
+			padding: .15em .52em;
 			border: 1.5px solid;
-			white-space: nowrap
+			white-space: nowrap;
 		}
-
 		#legend-hint {
-			margin-left: auto;
-			color: var(--muted);
-			font-weight: 400;
-			text-transform: none;
-			letter-spacing: 0;
-			font-size: 1em;
-			white-space: nowrap
+			margin-left: auto; color: var(--muted);
+			font-weight: 400; text-transform: none; letter-spacing: 0;
+			white-space: nowrap;
 		}
 
-		/* ── PANELS ── */
-		.panel {
-			display: none
-		}
+		/* ══ PANELS ═══════════════════════════════════════════════════ */
+		.panel { display: none }
+		.panel.active { display: block }
+		#editor-wrap { padding: .4em 0 6em }
 
-		.panel.active {
-			display: block
-		}
-
-		#editor-wrap {
-			padding: .4em 0 6em
-		}
-
-		/* ── LINE ROW ── */
+		/* ══ LINE ROW ═════════════════════════════════════════════════ */
 		.line {
-			display: flex;
-			align-items: flex-start;
-			border-radius: 3px;
-			min-height: 1.4em;
-			position: relative;
-			transition: background .1s
+			display: flex; align-items: flex-start;
+			min-height: 1.4em; position: relative;
+			transition: background .10s;
 		}
-
-		.line:not(.editing) {
-			cursor: default
-		}
-
 		.line:not(.editing):hover {
-			background: rgba(255, 255, 255, .025)
+			background: #f8f6f3;
 		}
-
 		.line.expanded:not(.editing) {
-			background: rgba(255, 255, 255, .04);
-			outline: 1px solid rgba(255, 255, 255, .08);
+			background: #f5f2ee;
+			outline: 1.5px solid var(--border-md);
 			outline-offset: -1px;
-			border-radius: 4px
 		}
-
+		/* The key fix: editing line gets a strong visible border */
 		.line.editing {
-			background: rgba(208, 151, 45, .05);
-			outline: 1px solid rgba(208, 151, 45, .3);
+			background: #fff;
+			outline: 2px solid var(--accent);
 			outline-offset: -1px;
-			border-radius: 3px;
-			cursor: default
+			cursor: default;
 		}
-
 		.line.drag-ghost-over {
-			outline: 2px solid var(--gold);
+			outline: 2px solid var(--accent);
 			outline-offset: -1px;
-			border-radius: 3px
 		}
-
-		.line.dragging {
-			opacity: .2
-		}
+		.line.dragging { opacity: .15 }
 
 		.handle {
-			flex-shrink: 0;
-			width: 1.6em;
-			align-self: stretch;
-			display: flex;
-			align-items: flex-start;
-			justify-content: center;
-			padding-top: .4em;
-			color: transparent;
-			font-size: .75em;
-			user-select: none;
-			transition: color .12s;
-			cursor: grab;
-			touch-action: none
+			flex-shrink: 0; width: 1.6em; align-self: stretch;
+			display: flex; align-items: flex-start; justify-content: center;
+			padding-top: .42em; color: transparent; font-size: .75em;
+			user-select: none; transition: color .12s; cursor: grab; touch-action: none;
 		}
-
-		.line:hover .handle {
-			color: var(--muted)
-		}
+		.line:hover .handle { color: var(--border-str) }
 
 		.line-accent {
-			flex-shrink: 0;
-			width: 3px;
-			align-self: stretch;
-			border-radius: 2px;
+			flex-shrink: 0; width: 3px; align-self: stretch;
 			margin-right: .55em;
-			opacity: .75
 		}
+		.line-content-col { flex: 1; min-width: 0; display: flex; flex-direction: column }
 
-		.line-content-col {
-			flex: 1;
-			min-width: 0;
-			display: flex;
-			flex-direction: column
-		}
-
-		/* ── PREVIEW (read-only, always shown) ── */
+		/* ── Preview ── */
 		.line-preview {
-			display: flex;
-			align-items: flex-start;
-			min-height: 1.4em;
-			overflow: hidden;
-			position: relative;
-			cursor: pointer
+			display: flex; align-items: flex-start;
+			min-height: 1.4em; overflow: hidden;
+			position: relative; cursor: pointer;
 		}
-
 		.line-colored-preview {
 			padding: .22em .3em .22em 0;
-			pointer-events: none;
-			user-select: none;
-			white-space: pre;
-			overflow: hidden;
-			flex: 1;
-			min-width: 0
+			pointer-events: none; user-select: none;
+			white-space: pre; overflow: hidden; flex: 1; min-width: 0;
 		}
-
-		/* Expanded: wrap full content */
-		.line.expanded .line-colored-preview {
-			white-space: pre-wrap;
-			word-break: break-word;
-			overflow: visible
-		}
-
-		.line.expanded .line-preview {
-			overflow: visible
-		}
-
+		.line.expanded .line-colored-preview { white-space: pre-wrap; word-break: break-word; overflow: visible }
+		.line.expanded .line-preview { overflow: visible }
 		.line-fade {
-			position: absolute;
-			right: 0;
-			top: 0;
-			bottom: 0;
-			width: 3em;
+			position: absolute; right: 0; top: 0; bottom: 0; width: 3.5em;
 			pointer-events: none;
-			background: linear-gradient(to right, transparent, var(--bg) 90%);
-			transition: opacity .15s
+			background: linear-gradient(to right, transparent, #ffffff 90%);
+			transition: opacity .15s;
 		}
+		.line:hover    .line-fade { background: linear-gradient(to right, transparent, #f8f6f3 90%) }
+		.line.expanded .line-fade { opacity: 0; pointer-events: none }
+		.line.editing  .line-fade { background: linear-gradient(to right, transparent, #ffffff 90%) }
 
-		.line.expanded .line-fade {
-			opacity: 0;
-			pointer-events: none
-		}
-
-		.line.editing .line-fade {
-			background: linear-gradient(to right, transparent, #19110a 90%)
-		}
-
-		/* ── INLINE EDIT ROW ── */
+		/* ── Edit row ── */
 		.line-edit-row {
-			display: none;
-			flex-direction: column;
-			gap: 0;
+			display: none; flex-direction: column;
 			padding: .3em .3em .4em 0;
-			border-top: 1px solid rgba(208, 151, 45, .2);
-			margin-top: .15em;
-			font-size: 14px
+			border-top: 1px solid var(--border);
+			margin-top: .15em; font-size: 14px;
 		}
+		.line.editing .line-edit-row { display: flex }
 
-		.line.editing .line-edit-row {
-			display: flex
-		}
-
-		/*
-      Single contenteditable div = the edit field.
-      It renders the colored spans directly, so the caret is always
-      perfectly aligned with the visible text. No overlay tricks needed.
-    */
 		.line-ce {
 			font-family: 'Courier Prime', monospace;
-			font-size: 16px;
-			line-height: 1.55;
-			word-break: break-all;
-			white-space: pre-wrap;
+			font-size: 15px; line-height: 1.55;
+			word-break: break-all; white-space: pre-wrap;
 			padding: .4em .65em;
-			border: 1.5px solid var(--border);
-			border-radius: 5px;
-			background: rgba(0, 0, 0, .4);
-			outline: none;
-			width: 100%;
-			caret-color: var(--gold);
-			min-height: 2em;
-			cursor: text;
+			border: 1.5px solid var(--border-md);
+			background: #fff;
+			outline: none; width: 100%;
+			caret-color: var(--accent);
+			min-height: 2em; cursor: text; color: var(--ink);
+			transition: border-color .12s;
 		}
-
 		.line-ce:focus {
-			border-color: var(--gold);
-			background: rgba(0, 0, 0, .55)
+			border-color: var(--accent-border);
 		}
 
-		/* Segment colors — used both in preview and in the CE editor */
-		.s0 {
-			color: var(--c0);
-			font-style: italic
-		}
-
-		.s1 {
-			color: var(--c1);
-			font-style: italic
-		}
-
-		.s2 {
-			color: var(--c2);
-			font-weight: 700
-		}
-
-		.s3 {
-			color: var(--c3)
-		}
-
-		.s4 {
-			color: var(--c4)
-		}
-
-		.s5 {
-			color: var(--c5)
-		}
-
-		.sc {
-			color: var(--cc);
-			font-style: italic
-		}
-
-		.su {
-			color: var(--border)
-		}
-
-		/* underscore separators */
-		.sa {
-			color: var(--cat);
-			font-style: italic
-		}
-
-		/* @... parts */
-		.serr {
-			color: var(--red);
-			font-weight: 700
-		}
-
-		/* over-level error */
+		/* ── Segment colors ── */
+		.s0 { color: var(--c0); font-style: italic }
+		.s1 { color: var(--c1); font-style: italic }
+		.s2 { color: var(--c2); font-weight: 700 }
+		.s3 { color: var(--c3) }
+		.s4 { color: var(--c4) }
+		.s5 { color: var(--c5) }
+		.sc { color: var(--cc); font-style: italic }
+		.su { color: #c0b8b0 }
+		.sa { color: var(--cat); font-style: italic }
+		.serr { color: var(--red); font-weight: 700 }
 
 		.line-edit-actions {
-			display: flex;
-			gap: .5em;
-			align-items: center;
-			padding-top: .3em;
-			font-size: 14px
+			display: flex; gap: .5em; align-items: center;
+			padding-top: .3em; font-size: 14px;
 		}
+		.line-edit-hint { font-size: 11px; color: var(--muted); flex: 1; white-space: nowrap }
 
-		.line-edit-hint {
-			font-size: 11px;
-			color: var(--muted);
-			flex: 1;
-			white-space: nowrap
-		}
-
-		/* ── CONTROLS BAR (label + buttons, shown only when expanded) ── */
+		/* ── Controls bar ── */
 		.line-controls {
-			display: none;
-			/* hidden by default */
-			align-items: center;
-			gap: .3em;
+			display: none; align-items: center; gap: .3em;
 			padding: .2em .3em .2em 0;
-			border-bottom: 1px solid rgba(208, 151, 45, .15);
-			margin-bottom: .1em;
-			font-size: 14px;
+			border-bottom: 1px solid var(--border);
+			margin-bottom: .1em; font-size: 14px;
 		}
-
 		.line.expanded .line-controls,
-		.line.editing .line-controls {
-			display: flex;
-		}
+		.line.editing   .line-controls { display: flex }
 
 		.line-type-label {
-			font-size: 11px;
-			font-weight: 700;
-			text-transform: uppercase;
-			letter-spacing: .07em;
-			padding: 0 .3em 0 0;
-			flex: 1;
-			white-space: nowrap
+			font-size: 10px; font-weight: 700;
+			text-transform: uppercase; letter-spacing: .10em;
+			padding: 0 .3em 0 0; flex: 1; white-space: nowrap;
 		}
 
 		.line-ctrl-btn {
 			flex-shrink: 0;
-			background: none;
-			border: 1px solid transparent;
-			border-radius: 6px;
-			font-size: 14px;
-			cursor: pointer;
-			padding: .3em .5em;
-			transition: all .12s;
-			line-height: 1;
-			min-width: 2.4em;
-			min-height: 2.4em;
-			display: flex;
-			align-items: center;
-			justify-content: center
+			background: transparent;
+			border: 1.5px solid var(--border);
+			font-size: 13px; cursor: pointer;
+			padding: .3em .5em; transition: all .12s; line-height: 1;
+			min-width: 2.3em; min-height: 2.2em;
+			display: flex; align-items: center; justify-content: center;
+			color: var(--ink2);
 		}
-
-		.line-edit-btn {
-			color: var(--muted)
+		.line-ctrl-btn:hover, .line-ctrl-btn:active {
+			border-color: var(--accent-border);
+			background: var(--accent-bg);
+			color: var(--accent);
 		}
-
-		.line-insert-btn {
-			color: var(--muted)
-		}
-
-		.line-del {
-			color: var(--muted)
-		}
-
-		.line-ctrl-btn:hover,
-		.line-ctrl-btn:active {
-			border-color: var(--gold);
-			color: var(--gold)
-		}
-
 		.line.editing .line-edit-btn {
-			color: var(--gold);
-			border-color: rgba(208, 151, 45, .4)
+			border-color: var(--accent-border);
+			background: var(--accent-bg);
+			color: var(--accent);
 		}
-
-		.line-del:hover,
-		.line-del:active {
+		.line-del:hover, .line-del:active {
 			color: var(--red) !important;
-			border-color: var(--red) !important
+			border-color: var(--red) !important;
+			background: rgba(184,32,32,0.06) !important;
 		}
 
 		#add-bar {
-			display: flex;
-			gap: .5em;
-			flex-wrap: wrap;
-			justify-content: center;
-			margin-top: 1.5em;
-			padding: 0 1em
+			display: flex; gap: .5em; flex-wrap: wrap;
+			justify-content: center; margin-top: 1.5em; padding: 0 1em;
 		}
 
-		/* ── RAW PANEL ── */
-		#raw-wrap {
-			height: calc(100vh - 95px)
-		}
-
+		/* ══ RAW PANEL ════════════════════════════════════════════════ */
+		#raw-wrap { height: calc(100vh - 88px) }
 		#raw-textarea {
-			width: 100%;
-			height: 100%;
-			background: var(--bg);
-			color: var(--text);
-			font-family: 'Courier Prime', monospace;
-			font-size: .88em;
-			border: none;
-			outline: none;
-			padding: 1em;
-			resize: none;
-			line-height: 1.65;
-			tab-size: 2
+			width: 100%; height: 100%;
+			background: var(--bg); color: var(--ink);
+			font-family: 'Courier Prime', monospace; font-size: .88em;
+			border: none; outline: none; padding: 1em;
+			resize: none; line-height: 1.65; tab-size: 2;
 		}
 
-		/* ── DIFF PANEL ── */
+		/* ══ DIFF PANEL ═══════════════════════════════════════════════ */
 		#diff-wrap {
 			padding: 1em 1em 4em;
-			font-family: 'Courier Prime', monospace;
-			font-size: .82em;
-			line-height: 1.65
+			font-family: 'Courier Prime', monospace; font-size: .82em; line-height: 1.65;
 		}
-
 		.diff-line {
-			display: block;
-			padding: .05em .4em;
-			border-radius: 2px;
-			white-space: pre-wrap;
-			word-break: break-all
+			display: block; padding: .05em .4em;
+			white-space: pre-wrap; word-break: break-all;
 		}
+		.diff-add  { background: rgba(30,107,80,0.08);  color: #1e6b50 }
+		.diff-del  { background: rgba(184,32,32,0.07);  color: #aa2020; text-decoration: line-through }
+		.diff-same { color: var(--muted) }
 
-		.diff-add {
-			background: rgba(76, 175, 125, .13);
-			color: #4caf7d
-		}
-
-		.diff-del {
-			background: rgba(160, 48, 32, .13);
-			color: #d06050;
-			text-decoration: line-through
-		}
-
-		.diff-same {
-			color: var(--muted)
-		}
-
-		::-webkit-scrollbar {
-			width: 5px
-		}
-
-		::-webkit-scrollbar-track {
-			background: var(--bg)
-		}
-
-		::-webkit-scrollbar-thumb {
-			background: var(--border);
-			border-radius: 3px
-		}
+		::-webkit-scrollbar { width: 5px }
+		::-webkit-scrollbar-track { background: var(--bg) }
+		::-webkit-scrollbar-thumb { background: var(--border-md); }
+		::-webkit-scrollbar-thumb:hover { background: var(--border-str) }
 	</style>
 </head>
-
 <body>
 
 	<div id="topbar">
 		<div class="logo">Brume <sub>editor</sub></div>
-		<button class="btn on" id="btn-visual" onclick="switchPanel('visual')">✦ Visuel</button>
-		<button class="btn" id="btn-raw" onclick="switchPanel('raw')">⌨ Brut</button>
-		<button class="btn" id="btn-diff" onclick="switchPanel('diff')">⟳ Diff</button>
-		<button class="btn" onclick="copyMenu()">⧉ Copier</button>
-		<button class="btn" onclick="window.open('menu.html','_blank')">↗ Menu</button>
-		<input type="email" id="emailBox" placeholder="email" autocomplete="on">
+		<div class="topbar-sep"></div>
+		<button class="btn on"  id="btn-visual" onclick="switchPanel('visual')">✦ Visuel</button>
+		<button class="btn"     id="btn-raw"    onclick="switchPanel('raw')">⌨ Brut</button>
+		<button class="btn"     id="btn-diff"   onclick="switchPanel('diff')">⟳ Diff</button>
+		<div class="topbar-sep"></div>
+		<button class="btn"     onclick="copyMenu()">⧉ Copier</button>
+		<button class="btn"     onclick="window.open('menu.html','_blank')">↗ Menu</button>
+		<button class="btn"     id="btn-fullscreen" onclick="toggleFullscreen()" title="Plein écran">⛶</button>
+		<div class="topbar-sep"></div>
+		<input type="email"    id="emailBox"    placeholder="email"         autocomplete="on">
 		<input type="password" id="passwordBox" placeholder="mot de passe" autocomplete="on">
 		<button class="btn primary" onclick="pushToSupabase()">↑ Push</button>
+		<div class="topbar-sep"></div>
 		<div id="status"></div>
 	</div>
 
@@ -621,575 +411,398 @@
 		</div>
 	</div>
 
-	<div id="panel-raw" class="panel">
-		<div id="raw-wrap"><textarea id="raw-textarea" spellcheck="false"></textarea></div>
-	</div>
-
-	<div id="panel-diff" class="panel">
-		<div id="diff-wrap"></div>
-	</div>
+	<div id="panel-raw"  class="panel"><div id="raw-wrap"><textarea id="raw-textarea" spellcheck="false"></textarea></div></div>
+	<div id="panel-diff" class="panel"><div id="diff-wrap"></div></div>
 
 	<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 	<script>
 		const SupabaseUrl = "https://cpvxjedlgjhcdqjyecmf.supabase.co";
 		const SupabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwdnhqZWRsZ2poY2RxanllY21mIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkyNjMzMzYsImV4cCI6MjAxNDgzOTMzNn0.Rs-bqvUb0Eq7NEKX3tFc8WHJOjzk1Rc4fgRRU6OtVNs";
 		let _sb;
-		try { _sb = supabase.createClient(SupabaseUrl, SupabaseKey); } catch (e) { }
+		try { _sb = supabase.createClient(SupabaseUrl, SupabaseKey); } catch(e) {}
 
 		let rawLines = [], savedText = '';
 
-		const SIZES = ['1.15em', '0.98em', '0.90em', '0.82em', '0.82em', '0.78em'];
-		const LABELS = ['bloc', 'catégorie', 'produit', 'prix', 'description', 'commentaire'];
-		const COLORS = ['var(--c0)', 'var(--c1)', 'var(--c2)', 'var(--c3)', 'var(--c4)', 'var(--c5)'];
+		const SIZES  = ['1.12em','0.97em','0.90em','0.82em','0.82em','0.78em'];
+		const LABELS = ['bloc','catégorie','produit','prix','description','commentaire'];
+		const COLORS = ['var(--c0)','var(--c1)','var(--c2)','var(--c3)','var(--c4)','var(--c5)'];
 
-		// ─────────────────────────────────────────────────────────────
-		// COLORIZER
-		// Rules (simplified — _ is ONLY a level/separator char, never in text):
-		//   • leading _s  → level indicator (dimmed)
-		//   • remaining _s → field separators (dimmed)
-		//   • @...         → annotation (italic muted)
-		//   • text between separators gets color of its segment index
-		//   • line starting with # → full comment color
-		// ─────────────────────────────────────────────────────────────
-		function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+		function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') }
 
-		function colorize(raw) {
-			if (!raw || raw.trim() === '') return '';
-			if (raw.trim().startsWith('#')) return `<span class="sc">${esc(raw)}</span>`;
-
-			// Count ALL leading underscores — no cap, so we can detect overflow
-			let lvl = 0;
-			while (raw[lvl] === '_') lvl++;
-
-			const leadingU = raw.slice(0, lvl);
-			const body = raw.slice(lvl);
-			const segs = body.split('_');
-
-			let html = '';
-			// Leading underscores: show overflow ones in red
-			if (leadingU) {
-				const okU = leadingU.slice(0, 5);   // first 5 underscores are fine
-				const errU = leadingU.slice(5);       // beyond 5 → error
-				if (okU) html += `<span class="su">${esc(okU)}</span>`;
-				if (errU) html += `<span class="serr">${esc(errU)}</span>`;
+		function colorize(raw){
+			if(!raw||raw.trim()==='') return '';
+			if(raw.trim().startsWith('#')) return `<span class="sc">${esc(raw)}</span>`;
+			let lvl=0; while(raw[lvl]==='_') lvl++;
+			const leadingU=raw.slice(0,lvl), body=raw.slice(lvl), segs=body.split('_');
+			let html='';
+			if(leadingU){
+				const okU=leadingU.slice(0,5), errU=leadingU.slice(5);
+				if(okU)  html+=`<span class="su">${esc(okU)}</span>`;
+				if(errU) html+=`<span class="serr">${esc(errU)}</span>`;
 			}
-
-			segs.forEach((seg, i) => {
-				const realLvl = lvl + i;   // un-capped level for this segment
-				if (i > 0) {
-					// Separator underscore: error color if already over level
-					const sepCls = realLvl > 5 ? 'serr' : 'su';
-					html += `<span class="${sepCls}">_</span>`;
-				}
-				const cls = realLvl > 5 ? 'serr' : `s${Math.min(realLvl, 5)}`;
-				const atParts = seg.split('@');
-				html += `<span class="${cls}">${esc(atParts[0])}</span>`;
-				for (let j = 1; j < atParts.length; j++)
-					html += `<span class="${realLvl > 5 ? 'serr' : 'sa'}">@${esc(atParts[j])}</span>`;
+			segs.forEach((seg,i)=>{
+				const rl=lvl+i;
+				if(i>0){ const sc=rl>5?'serr':'su'; html+=`<span class="${sc}">_</span>`; }
+				const cls=rl>5?'serr':`s${Math.min(rl,5)}`;
+				const ap=seg.split('@');
+				html+=`<span class="${cls}">${esc(ap[0])}</span>`;
+				for(let j=1;j<ap.length;j++) html+=`<span class="${rl>5?'serr':'sa'}">@${esc(ap[j])}</span>`;
 			});
 			return html;
 		}
 
-		function lineInfo(raw) {
-			if (!raw || raw.trim() === '') return { color: 'transparent', label: '', size: '0.88em' };
-			if (raw.trim().startsWith('#')) return { color: 'var(--cc)', label: '#', size: '0.80em' };
-			let lvl = 0; while (raw[lvl] === '_') lvl++;
-			lvl = Math.min(lvl, 5);
-			return { color: COLORS[lvl], label: LABELS[lvl], size: SIZES[lvl] };
+		function lineInfo(raw){
+			if(!raw||raw.trim()==='') return {color:'transparent',label:'',size:'0.88em'};
+			if(raw.trim().startsWith('#')) return {color:'var(--cc)',label:'#',size:'0.80em'};
+			let lvl=0; while(raw[lvl]==='_') lvl++; lvl=Math.min(lvl,5);
+			return {color:COLORS[lvl],label:LABELS[lvl],size:SIZES[lvl]};
 		}
 
-		// ─────────────────────────────────────────────────────────────
-		// contenteditable helpers
-		// We store plain text in rawLines; the CE div shows colored HTML.
-		// On input we extract plaintext, recolorize, and restore caret.
-		// ─────────────────────────────────────────────────────────────
-
-		function getCaretOffset(el) {
-			// Returns character offset of caret within el's plain text
-			const sel = window.getSelection();
-			if (!sel || sel.rangeCount === 0) return 0;
-			const range = sel.getRangeAt(0);
-			const pre = range.cloneRange();
-			pre.selectNodeContents(el);
-			pre.setEnd(range.endContainer, range.endOffset);
+		function getCaretOffset(el){
+			const sel=window.getSelection(); if(!sel||sel.rangeCount===0) return 0;
+			const range=sel.getRangeAt(0), pre=range.cloneRange();
+			pre.selectNodeContents(el); pre.setEnd(range.endContainer,range.endOffset);
 			return pre.toString().length;
 		}
-
-		function setCaretOffset(el, offset) {
-			// Restores caret to character offset within el
-			const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
-			let remaining = offset;
-			let node;
-			while ((node = walker.nextNode())) {
-				if (remaining <= node.textContent.length) {
-					const range = document.createRange();
-					range.setStart(node, remaining);
-					range.collapse(true);
-					const sel = window.getSelection();
-					sel.removeAllRanges();
-					sel.addRange(range);
-					return;
+		function setCaretOffset(el,offset){
+			const walker=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);
+			let rem=offset, node;
+			while((node=walker.nextNode())){
+				if(rem<=node.textContent.length){
+					const r=document.createRange(); r.setStart(node,rem); r.collapse(true);
+					const sel=window.getSelection(); sel.removeAllRanges(); sel.addRange(r); return;
 				}
-				remaining -= node.textContent.length;
+				rem-=node.textContent.length;
 			}
-			// fallback: end of element
-			const range = document.createRange();
-			range.selectNodeContents(el);
-			range.collapse(false);
-			window.getSelection().removeAllRanges();
-			window.getSelection().addRange(range);
+			const r=document.createRange(); r.selectNodeContents(el); r.collapse(false);
+			window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
+		}
+		function getCEText(el){ return el.innerText.replace(/\n/g,'') }
+		function setCEContent(el,raw){ el.innerHTML=colorize(raw) }
+
+		function renderAll(){
+			const c=document.getElementById('lines-container'); c.innerHTML='';
+			rawLines.forEach((t,i)=>c.appendChild(buildLineEl(t,i)));
 		}
 
-		function getCEText(el) {
-			// Extract plain text from CE div (strip HTML, get innerText equivalent)
-			return el.innerText.replace(/\n/g, '');
-		}
+		function buildLineEl(text,idx){
+			const {color,label,size}=lineInfo(text);
+			const line=document.createElement('div');
+			line.className='line'; line.dataset.idx=idx;
 
-		function setCEContent(el, raw) {
-			el.innerHTML = colorize(raw);
-		}
+			const handle=document.createElement('span');
+			handle.className='handle'; handle.textContent='⠿'; line.appendChild(handle);
 
-		// ─────────────────────────────────────────────────────────────
-		// RENDER
-		// ─────────────────────────────────────────────────────────────
-		function renderAll() {
-			const container = document.getElementById('lines-container');
-			container.innerHTML = '';
-			rawLines.forEach((text, i) => container.appendChild(buildLineEl(text, i)));
-		}
+			const accent=document.createElement('div');
+			accent.className='line-accent'; accent.style.background=color; line.appendChild(accent);
 
-		function buildLineEl(text, idx) {
-			const { color, label, size } = lineInfo(text);
+			const col=document.createElement('div');
+			col.className='line-content-col'; col.style.fontSize=size;
 
-			const line = document.createElement('div');
-			line.className = 'line';
-			line.dataset.idx = idx;
+			const preview=document.createElement('div'); preview.className='line-preview';
+			const cp=document.createElement('div'); cp.className='line-colored-preview'; cp.innerHTML=colorize(text);
+			const fade=document.createElement('div'); fade.className='line-fade';
+			preview.appendChild(cp); preview.appendChild(fade); col.appendChild(preview);
 
-			// Drag handle
-			const handle = document.createElement('span');
-			handle.className = 'handle';
-			handle.textContent = '⠿';
-			line.appendChild(handle);
+			const editRow=document.createElement('div'); editRow.className='line-edit-row';
+			const ce=document.createElement('div');
+			ce.className='line-ce'; ce.contentEditable='true'; ce.spellcheck=false;
+			ce.setAttribute('autocorrect','off'); ce.setAttribute('autocapitalize','off');
+			setCEContent(ce,text);
 
-			// Accent bar
-			const accent = document.createElement('div');
-			accent.className = 'line-accent';
-			accent.style.background = color;
-			line.appendChild(accent);
-
-			// Content column
-			const col = document.createElement('div');
-			col.className = 'line-content-col';
-			col.style.fontSize = size;
-
-			// ── Preview (always visible, read-only) ──
-			const preview = document.createElement('div');
-			preview.className = 'line-preview';
-			const coloredPreview = document.createElement('div');
-			coloredPreview.className = 'line-colored-preview';
-			coloredPreview.innerHTML = colorize(text);
-			const fade = document.createElement('div');
-			fade.className = 'line-fade';
-			preview.appendChild(coloredPreview);
-			preview.appendChild(fade);
-			col.appendChild(preview);
-
-			// ── Inline edit row ──
-			const editRow = document.createElement('div');
-			editRow.className = 'line-edit-row';
-
-			// The contenteditable field — colored text, caret always correct
-			const ce = document.createElement('div');
-			ce.className = 'line-ce';
-			ce.contentEditable = 'true';
-			ce.spellcheck = false;
-			ce.setAttribute('autocorrect', 'off');
-			ce.setAttribute('autocapitalize', 'off');
-			setCEContent(ce, text);
-
-			// Action row
-			const actRow = document.createElement('div');
-			actRow.className = 'line-edit-actions';
-			const hint = document.createElement('span');
-			hint.className = 'line-edit-hint';
-			hint.textContent = '↵ valider · esc annuler';
-			const btnCancel = document.createElement('button');
-			btnCancel.className = 'btn';
-			btnCancel.textContent = 'Annuler';
-			const btnConfirm = document.createElement('button');
-			btnConfirm.className = 'btn primary';
-			btnConfirm.textContent = '✓ Valider';
-			actRow.appendChild(hint);
-			actRow.appendChild(btnCancel);
-			actRow.appendChild(btnConfirm);
-
-			editRow.appendChild(ce);
-			editRow.appendChild(actRow);
-			col.appendChild(editRow);
+			const actRow=document.createElement('div'); actRow.className='line-edit-actions';
+			const hint=document.createElement('span'); hint.className='line-edit-hint'; hint.textContent='↵ valider · esc annuler';
+			const btnCancel=document.createElement('button'); btnCancel.className='btn'; btnCancel.textContent='Annuler';
+			const btnConfirm=document.createElement('button'); btnConfirm.className='btn primary'; btnConfirm.textContent='✓ Valider';
+			actRow.appendChild(hint); actRow.appendChild(btnCancel); actRow.appendChild(btnConfirm);
+			editRow.appendChild(ce); editRow.appendChild(actRow); col.appendChild(editRow);
 			line.appendChild(col);
 
-			// ── Controls bar (label + buttons) — shown only when expanded/editing ──
-			const controls = document.createElement('div');
-			controls.className = 'line-controls';
+			const controls=document.createElement('div'); controls.className='line-controls';
+			const typeLabel=document.createElement('span'); typeLabel.className='line-type-label';
+			typeLabel.style.color=color; typeLabel.textContent=label; controls.appendChild(typeLabel);
 
-			const typeLabel = document.createElement('span');
-			typeLabel.className = 'line-type-label';
-			typeLabel.style.color = color;
-			typeLabel.textContent = label;
-			controls.appendChild(typeLabel);
-
-			// Edit button
-			const editBtn = document.createElement('button');
-			editBtn.className = 'line-ctrl-btn line-edit-btn';
-			editBtn.textContent = '✎';
-			editBtn.title = 'Modifier';
-			editBtn.addEventListener('click', e => {
+			const editBtn=document.createElement('button'); editBtn.className='line-ctrl-btn line-edit-btn';
+			editBtn.textContent='✎'; editBtn.title='Modifier';
+			editBtn.addEventListener('click',e=>{
 				e.stopPropagation();
-				if (line.classList.contains('editing')) {
-					applyClose(line, true);
-				} else {
-					openEditHere();
-				}
+				if(line.classList.contains('editing')) applyClose(line,true); else openEditHere();
 			});
 			controls.appendChild(editBtn);
 
-			// Insert below button
-			const insertBtn = document.createElement('button');
-			insertBtn.className = 'line-ctrl-btn line-insert-btn';
-			insertBtn.textContent = '＋';
-			insertBtn.title = 'Insérer une ligne en dessous';
-			insertBtn.addEventListener('click', e => {
-				e.stopPropagation();
-				line.classList.remove('expanded');
-				// Inherit same indent prefix
-				const val = rawLines[idx];
-				let prefix = ''; for (let i = 0; i < val.length; i++) { if (val[i] === '_') prefix += '_'; else break; }
-				insertLine(idx, prefix);
-				setTimeout(() => openEdit(idx + 1), 30);
+			const insertBtn=document.createElement('button'); insertBtn.className='line-ctrl-btn line-insert-btn';
+			insertBtn.textContent='＋'; insertBtn.title='Insérer en dessous';
+			insertBtn.addEventListener('click',e=>{
+				e.stopPropagation(); line.classList.remove('expanded');
+				const val=rawLines[idx]; let prefix='';
+				for(let i=0;i<val.length;i++){ if(val[i]==='_') prefix+='_'; else break; }
+				insertLine(idx,prefix); setTimeout(()=>openEdit(idx+1),30);
 			});
 			controls.appendChild(insertBtn);
 
-			// Delete button
-			const del = document.createElement('button');
-			del.className = 'line-ctrl-btn line-del';
-			del.textContent = '✕';
-			del.title = 'Supprimer';
-			del.addEventListener('click', e => {
-				e.stopPropagation();
-				rawLines.splice(idx, 1);
-				renderAll();
-			});
+			const del=document.createElement('button'); del.className='line-ctrl-btn line-del';
+			del.textContent='✕'; del.title='Supprimer';
+			del.addEventListener('click',e=>{ e.stopPropagation(); rawLines.splice(idx,1); renderAll(); });
 			controls.appendChild(del);
 
-			// Controls go inside the content column, above the preview
-			col.insertBefore(controls, preview);
+			col.insertBefore(controls,preview);
 
-			// ── CE input handler ──
-			// On every input: save caret, recolorize, restore caret, sync preview
-			ce.addEventListener('input', () => {
-				const caret = getCaretOffset(ce);
-				const raw = getCEText(ce);
-				setCEContent(ce, raw);
-				setCaretOffset(ce, caret);
-				// Sync preview + accent + label
-				coloredPreview.innerHTML = colorize(raw);
-				const info = lineInfo(raw);
-				accent.style.background = info.color;
-				col.style.fontSize = info.size;
-				typeLabel.textContent = info.label;
-				typeLabel.style.color = info.color;
+			ce.addEventListener('input',()=>{
+				const caret=getCaretOffset(ce), raw=getCEText(ce);
+				setCEContent(ce,raw); setCaretOffset(ce,caret);
+				cp.innerHTML=colorize(raw);
+				const info=lineInfo(raw);
+				accent.style.background=info.color; col.style.fontSize=info.size;
+				typeLabel.textContent=info.label; typeLabel.style.color=info.color;
 			});
-
-			// Prevent real newlines from being inserted
-			ce.addEventListener('keydown', e => {
-				if (e.key === 'Enter' && !e.shiftKey) {
-					e.preventDefault();
-					applyClose(line, true);
-					const val = rawLines[idx];
-					let prefix = ''; for (let i = 0; i < val.length; i++) { if (val[i] === '_') prefix += '_'; else break; }
-					insertLine(idx, prefix);
-					setTimeout(() => openEdit(idx + 1), 30);
-				} else if (e.key === 'Escape') {
-					e.preventDefault();
-					applyClose(line, false);
-				} else if (e.key === 'Backspace' && getCEText(ce) === '') {
-					e.preventDefault();
-					applyClose(line, false);
-					rawLines.splice(idx, 1);
-					renderAll();
+			ce.addEventListener('keydown',e=>{
+				if(e.key==='Enter'&&!e.shiftKey){
+					e.preventDefault(); applyClose(line,true);
+					const val=rawLines[idx]; let prefix='';
+					for(let i=0;i<val.length;i++){ if(val[i]==='_') prefix+='_'; else break; }
+					insertLine(idx,prefix); setTimeout(()=>openEdit(idx+1),30);
+				} else if(e.key==='Escape'){
+					e.preventDefault(); applyClose(line,false);
+				} else if(e.key==='Backspace'&&getCEText(ce)===''){
+					e.preventDefault(); applyClose(line,false); rawLines.splice(idx,1); renderAll();
 				}
 			});
-
-			// Strip formatting on paste — plain text only
-			ce.addEventListener('paste', e => {
+			ce.addEventListener('paste',e=>{
 				e.preventDefault();
-				const plain = (e.clipboardData || window.clipboardData).getData('text/plain').replace(/\r?\n/g, '');
-				const caret = getCaretOffset(ce);
-				const cur = getCEText(ce);
-				const next = cur.slice(0, caret) + plain + cur.slice(caret);
-				setCEContent(ce, next);
-				setCaretOffset(ce, caret + plain.length);
-				coloredPreview.innerHTML = colorize(next);
-				const info = lineInfo(next);
-				accent.style.background = info.color;
-				col.style.fontSize = info.size;
-				typeLabel.textContent = info.label;
-				typeLabel.style.color = info.color;
+				const plain=(e.clipboardData||window.clipboardData).getData('text/plain').replace(/\r?\n/g,'');
+				const caret=getCaretOffset(ce), cur=getCEText(ce);
+				const next=cur.slice(0,caret)+plain+cur.slice(caret);
+				setCEContent(ce,next); setCaretOffset(ce,caret+plain.length);
+				cp.innerHTML=colorize(next);
+				const info=lineInfo(next);
+				accent.style.background=info.color; col.style.fontSize=info.size;
+				typeLabel.textContent=info.label; typeLabel.style.color=info.color;
 			});
 
-			// ── Open / close ──
-			function openEditHere() {
-				document.querySelectorAll('.line.editing').forEach(l => {
-					if (l !== line) applyClose(l, true);
-				});
-				// Also collapse any expanded line
-				document.querySelectorAll('.line.expanded').forEach(l => l.classList.remove('expanded'));
-				setCEContent(ce, rawLines[idx]);
-				coloredPreview.innerHTML = colorize(rawLines[idx]);
+			function openEditHere(){
+				document.querySelectorAll('.line.editing').forEach(l=>{ if(l!==line) applyClose(l,true); });
+				document.querySelectorAll('.line.expanded').forEach(l=>l.classList.remove('expanded'));
+				setCEContent(ce,rawLines[idx]); cp.innerHTML=colorize(rawLines[idx]);
 				line.classList.add('editing');
-				setTimeout(() => {
+				setTimeout(()=>{
 					ce.focus();
-					// Place caret at end
-					const range = document.createRange();
-					range.selectNodeContents(ce);
-					range.collapse(false);
-					const sel = window.getSelection();
-					sel.removeAllRanges();
-					sel.addRange(range);
-					line.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-				}, 30);
+					const r=document.createRange(); r.selectNodeContents(ce); r.collapse(false);
+					const s=window.getSelection(); s.removeAllRanges(); s.addRange(r);
+					line.scrollIntoView({behavior:'smooth',block:'nearest'});
+				},30);
 			}
 
-			btnConfirm.addEventListener('click', e => { e.stopPropagation(); applyClose(line, true); });
-			btnCancel.addEventListener('click', e => { e.stopPropagation(); applyClose(line, false); });
+			btnConfirm.addEventListener('click',e=>{ e.stopPropagation(); applyClose(line,true); });
+			btnCancel.addEventListener('click',e=>{ e.stopPropagation(); applyClose(line,false); });
 
-			// Tap anywhere on the line → toggle expanded (scroll-safe, not on buttons)
-			let pdY = 0, pdT = 0;
-			line.addEventListener('pointerdown', e => { pdY = e.clientY; pdT = Date.now(); }, { passive: true });
-			line.addEventListener('pointerup', e => {
-				if (line.classList.contains('editing')) return;
-				// Ignore taps on buttons (controls)
-				if (e.target.closest('.line-ctrl-btn,.handle')) return;
-				if (Math.abs(e.clientY - pdY) < 8 && (Date.now() - pdT) < 500) {
-					line.classList.toggle('expanded');
-				}
+			let pdY=0,pdT=0;
+			line.addEventListener('pointerdown',e=>{ pdY=e.clientY; pdT=Date.now(); },{passive:true});
+			line.addEventListener('pointerup',e=>{
+				if(line.classList.contains('editing')) return;
+				if(e.target.closest('.line-ctrl-btn,.handle')) return;
+				if(Math.abs(e.clientY-pdY)<8&&(Date.now()-pdT)<500) line.classList.toggle('expanded');
 			});
-
-			// Click outside → close editor / collapse
-			document.addEventListener('pointerdown', e => {
-				if (!line.contains(e.target)) {
-					if (line.classList.contains('editing')) applyClose(line, true);
-					if (line.classList.contains('expanded')) line.classList.remove('expanded');
+			document.addEventListener('pointerdown',e=>{
+				if(!line.contains(e.target)){
+					if(line.classList.contains('editing')) applyClose(line,true);
+					if(line.classList.contains('expanded')) line.classList.remove('expanded');
 				}
-			}, { capture: true, passive: true });
+			},{capture:true,passive:true});
 
-			setupDrag(handle, line, idx);
+			setupDrag(handle,line,idx);
 			return line;
 		}
 
-		// Save & close any line element
-		function applyClose(targetLine, doSave) {
-			const ce = targetLine.querySelector('.line-ce');
-			const tIdx = parseInt(targetLine.dataset.idx);
-			if (doSave && ce && !isNaN(tIdx)) {
-				const val = getCEText(ce);
-				rawLines[tIdx] = val;
-				const info = lineInfo(val);
-				const html = colorize(val);
-				targetLine.querySelector('.line-colored-preview').innerHTML = html;
-				setCEContent(ce, val);
-				targetLine.querySelector('.line-accent').style.background = info.color;
-				targetLine.querySelector('.line-content-col').style.fontSize = info.size;
-				const lbl = targetLine.querySelector('.line-type-label');
-				lbl.textContent = info.label; lbl.style.color = info.color;
+		function applyClose(targetLine,doSave){
+			const ce=targetLine.querySelector('.line-ce');
+			const tIdx=parseInt(targetLine.dataset.idx);
+			if(doSave&&ce&&!isNaN(tIdx)){
+				const val=getCEText(ce); rawLines[tIdx]=val;
+				const info=lineInfo(val);
+				targetLine.querySelector('.line-colored-preview').innerHTML=colorize(val);
+				setCEContent(ce,val);
+				targetLine.querySelector('.line-accent').style.background=info.color;
+				targetLine.querySelector('.line-content-col').style.fontSize=info.size;
+				const lbl=targetLine.querySelector('.line-type-label');
+				lbl.textContent=info.label; lbl.style.color=info.color;
 			}
 			targetLine.classList.remove('editing');
 		}
 
-		// Open edit by index
-		function openEdit(idx) {
-			const lineEl = document.querySelector(`.line[data-idx="${idx}"]`);
-			if (!lineEl) return;
-			document.querySelectorAll('.line.editing').forEach(l => {
-				if (l !== lineEl) applyClose(l, true);
-			});
-			const ce = lineEl.querySelector('.line-ce');
-			setCEContent(ce, rawLines[idx] || '');
-			lineEl.querySelector('.line-colored-preview').innerHTML = colorize(rawLines[idx] || '');
+		function openEdit(idx){
+			const lineEl=document.querySelector(`.line[data-idx="${idx}"]`); if(!lineEl) return;
+			document.querySelectorAll('.line.editing').forEach(l=>{ if(l!==lineEl) applyClose(l,true); });
+			const ce=lineEl.querySelector('.line-ce');
+			setCEContent(ce,rawLines[idx]||'');
+			lineEl.querySelector('.line-colored-preview').innerHTML=colorize(rawLines[idx]||'');
 			lineEl.classList.add('editing');
-			setTimeout(() => {
+			setTimeout(()=>{
 				ce.focus();
-				const range = document.createRange();
-				range.selectNodeContents(ce);
-				range.collapse(false);
-				const sel = window.getSelection();
-				sel.removeAllRanges();
-				sel.addRange(range);
-				lineEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-			}, 30);
+				const r=document.createRange(); r.selectNodeContents(ce); r.collapse(false);
+				const s=window.getSelection(); s.removeAllRanges(); s.addRange(r);
+				lineEl.scrollIntoView({behavior:'smooth',block:'nearest'});
+			},30);
 		}
 
-		function insertLine(afterIdx, text = '') {
-			if (afterIdx === null) rawLines.push(text);
-			else rawLines.splice(afterIdx + 1, 0, text);
+		function insertLine(afterIdx,text=''){
+			if(afterIdx===null) rawLines.push(text);
+			else rawLines.splice(afterIdx+1,0,text);
 			renderAll();
-			setTimeout(() => openEdit(afterIdx === null ? rawLines.length - 1 : afterIdx + 1), 30);
+			setTimeout(()=>openEdit(afterIdx===null?rawLines.length-1:afterIdx+1),30);
 		}
 
-		// ── DRAG ──────────────────────────────────────────────────────
-		let dragState = null;
-
-		function setupDrag(handle, lineEl, idx) {
-			handle.addEventListener('mousedown', e => startDrag(e.clientY, lineEl, idx, 'mouse'));
-			handle.addEventListener('touchstart', e => startDrag(e.touches[0].clientY, lineEl, idx, 'touch'), { passive: true });
+		/* ── DRAG ── */
+		let dragState=null;
+		function setupDrag(handle,lineEl,idx){
+			handle.addEventListener('mousedown',e=>startDrag(e.clientY,lineEl,idx,'mouse'));
+			handle.addEventListener('touchstart',e=>startDrag(e.touches[0].clientY,lineEl,idx,'touch'),{passive:true});
 		}
-
-		function startDrag(clientY, lineEl, idx, type) {
-			const rect = lineEl.getBoundingClientRect();
-			const ghost = lineEl.cloneNode(true);
-			ghost.style.cssText = `position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;opacity:.85;z-index:999;background:var(--bg2);border:1px solid var(--gold);border-radius:4px;pointer-events:none;box-shadow:0 4px 24px rgba(0,0,0,.6)`;
+		function startDrag(clientY,lineEl,idx,type){
+			const rect=lineEl.getBoundingClientRect();
+			const ghost=lineEl.cloneNode(true);
+			ghost.style.cssText=`position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;opacity:.92;z-index:999;background:#fff;border:2px solid var(--accent);pointer-events:none;box-shadow:0 4px 20px rgba(0,0,0,.10)`;
 			document.body.appendChild(ghost);
 			lineEl.classList.add('dragging');
-			dragState = { srcIdx: idx, ghost, lineEl, offsetY: clientY - rect.top };
-			if (type === 'touch') {
-				document.addEventListener('touchmove', onTouchMove, { passive: false });
-				document.addEventListener('touchend', onTouchEnd, { once: true });
+			dragState={srcIdx:idx,ghost,lineEl,offsetY:clientY-rect.top};
+			if(type==='touch'){
+				document.addEventListener('touchmove',onTouchMove,{passive:false});
+				document.addEventListener('touchend',onTouchEnd,{once:true});
 			}
 		}
-
-		function moveDrag(clientY) {
-			if (!dragState) return;
-			dragState.ghost.style.top = (clientY - dragState.offsetY) + 'px';
-			document.querySelectorAll('.line.drag-ghost-over').forEach(l => l.classList.remove('drag-ghost-over'));
-			const t = getLineAtY(clientY);
-			if (t && t !== dragState.lineEl) t.classList.add('drag-ghost-over');
+		function moveDrag(clientY){
+			if(!dragState) return;
+			dragState.ghost.style.top=(clientY-dragState.offsetY)+'px';
+			document.querySelectorAll('.line.drag-ghost-over').forEach(l=>l.classList.remove('drag-ghost-over'));
+			const t=getLineAtY(clientY);
+			if(t&&t!==dragState.lineEl) t.classList.add('drag-ghost-over');
 		}
-
-		function endDrag(clientY) {
-			if (!dragState) return;
-			const { srcIdx, ghost, lineEl } = dragState;
+		function endDrag(clientY){
+			if(!dragState) return;
+			const {srcIdx,ghost,lineEl}=dragState;
 			ghost.remove(); lineEl.classList.remove('dragging');
-			document.querySelectorAll('.line.drag-ghost-over').forEach(l => l.classList.remove('drag-ghost-over'));
-			const t = getLineAtY(clientY);
-			if (t && t !== lineEl) {
-				const destIdx = parseInt(t.dataset.idx);
-				if (!isNaN(destIdx) && destIdx !== srcIdx) {
-					const before = clientY < t.getBoundingClientRect().top + t.getBoundingClientRect().height / 2;
-					const moved = rawLines.splice(srcIdx, 1)[0];
-					let dest = srcIdx < destIdx ? destIdx - 1 : destIdx;
-					if (!before) dest++;
-					rawLines.splice(dest, 0, moved);
-					renderAll();
+			document.querySelectorAll('.line.drag-ghost-over').forEach(l=>l.classList.remove('drag-ghost-over'));
+			const t=getLineAtY(clientY);
+			if(t&&t!==lineEl){
+				const destIdx=parseInt(t.dataset.idx);
+				if(!isNaN(destIdx)&&destIdx!==srcIdx){
+					const before=clientY<t.getBoundingClientRect().top+t.getBoundingClientRect().height/2;
+					const moved=rawLines.splice(srcIdx,1)[0];
+					let dest=srcIdx<destIdx?destIdx-1:destIdx;
+					if(!before) dest++;
+					rawLines.splice(dest,0,moved); renderAll();
 				}
 			}
-			dragState = null;
+			dragState=null;
 		}
-
-		document.addEventListener('mousemove', e => moveDrag(e.clientY));
-		document.addEventListener('mouseup', e => endDrag(e.clientY));
-		function onTouchMove(e) { e.preventDefault(); moveDrag(e.touches[0].clientY); }
-		function onTouchEnd(e) { endDrag(e.changedTouches[0].clientY); document.removeEventListener('touchmove', onTouchMove); }
-
-		function getLineAtY(y) {
-			for (const el of document.querySelectorAll('.line')) {
-				const r = el.getBoundingClientRect();
-				if (y >= r.top && y <= r.bottom) return el;
+		document.addEventListener('mousemove',e=>moveDrag(e.clientY));
+		document.addEventListener('mouseup',e=>endDrag(e.clientY));
+		function onTouchMove(e){ e.preventDefault(); moveDrag(e.touches[0].clientY); }
+		function onTouchEnd(e){ endDrag(e.changedTouches[0].clientY); document.removeEventListener('touchmove',onTouchMove); }
+		function getLineAtY(y){
+			for(const el of document.querySelectorAll('.line')){
+				const r=el.getBoundingClientRect();
+				if(y>=r.top&&y<=r.bottom) return el;
 			}
 			return null;
 		}
 
-		// ── PANELS ────────────────────────────────────────────────────
-		function switchPanel(name) {
-			['visual', 'raw', 'diff'].forEach(p => {
-				document.getElementById(`panel-${p}`).classList.toggle('active', p === name);
-				document.getElementById(`btn-${p}`).classList.toggle('on', p === name);
+		function switchPanel(name){
+			['visual','raw','diff'].forEach(p=>{
+				document.getElementById(`panel-${p}`).classList.toggle('active',p===name);
+				document.getElementById(`btn-${p}`).classList.toggle('on',p===name);
 			});
-			if (name === 'raw') document.getElementById('raw-textarea').value = getText();
-			if (name === 'diff') renderDiff();
+			if(name==='raw') document.getElementById('raw-textarea').value=getText();
+			if(name==='diff') renderDiff();
 		}
-
-		document.getElementById('raw-textarea').addEventListener('input', () => {
-			rawLines = document.getElementById('raw-textarea').value.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+		document.getElementById('raw-textarea').addEventListener('input',()=>{
+			rawLines=document.getElementById('raw-textarea').value.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n');
 		});
 
-		// ── DIFF ──────────────────────────────────────────────────────
-		function renderDiff() {
-			const orig = savedText.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
-			const wrap = document.getElementById('diff-wrap');
-			if (orig.join('\n') === rawLines.join('\n')) {
-				wrap.innerHTML = '<span style="color:var(--muted)">Aucune modification.</span>'; return;
-			}
-			wrap.innerHTML = lcs(orig.slice(0, 400), rawLines.slice(0, 400)).map(d =>
-				`<span class="diff-line diff-${d.type}">${d.type === 'add' ? '＋' : d.type === 'del' ? '－' : '　'} ${esc(d.text)}</span>`
+		function renderDiff(){
+			const orig=savedText.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n');
+			const wrap=document.getElementById('diff-wrap');
+			if(orig.join('\n')===rawLines.join('\n')){ wrap.innerHTML='<span style="color:var(--muted)">Aucune modification.</span>'; return; }
+			wrap.innerHTML=lcs(orig.slice(0,400),rawLines.slice(0,400)).map(d=>
+				`<span class="diff-line diff-${d.type}">${d.type==='add'?'＋':d.type==='del'?'－':'　'} ${esc(d.text)}</span>`
 			).join('\n');
 		}
-
-		function lcs(a, b) {
-			const m = a.length, n = b.length;
-			const dp = Array.from({ length: m + 1 }, () => new Uint16Array(n + 1));
-			for (let i = m - 1; i >= 0; i--) for (let j = n - 1; j >= 0; j--)
-				dp[i][j] = a[i] === b[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
-			const r = []; let i = 0, j = 0;
-			while (i < m || j < n) {
-				if (i < m && j < n && a[i] === b[j]) { r.push({ type: 'same', text: a[i] }); i++; j++; }
-				else if (j < n && (i >= m || dp[i][j + 1] >= dp[i + 1][j])) { r.push({ type: 'add', text: b[j] }); j++; }
-				else { r.push({ type: 'del', text: a[i] }); i++; }
+		function lcs(a,b){
+			const m=a.length,n=b.length;
+			const dp=Array.from({length:m+1},()=>new Uint16Array(n+1));
+			for(let i=m-1;i>=0;i--) for(let j=n-1;j>=0;j--)
+				dp[i][j]=a[i]===b[j]?dp[i+1][j+1]+1:Math.max(dp[i+1][j],dp[i][j+1]);
+			const r=[];let i=0,j=0;
+			while(i<m||j<n){
+				if(i<m&&j<n&&a[i]===b[j]){ r.push({type:'same',text:a[i]}); i++;j++; }
+				else if(j<n&&(i>=m||dp[i][j+1]>=dp[i+1][j])){ r.push({type:'add',text:b[j]}); j++; }
+				else { r.push({type:'del',text:a[i]}); i++; }
 			}
 			return r;
 		}
 
-		// ── SAVE ──────────────────────────────────────────────────────
-		function getText() { return rawLines.join('\n'); }
-
-		function copyMenu() {
-			navigator.clipboard.writeText(getText()).then(() => setStatus('Copié !', 'ok'));
+		function toggleFullscreen(){
+			const btn=document.getElementById('btn-fullscreen');
+			if(!document.fullscreenElement&&!document.webkitFullscreenElement){
+				const el=document.documentElement;
+				if(el.requestFullscreen) el.requestFullscreen();
+				else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+				btn.classList.add('on');
+			} else {
+				if(document.exitFullscreen) document.exitFullscreen();
+				else if(document.webkitExitFullscreen) document.webkitExitFullscreen();
+				btn.classList.remove('on');
+			}
 		}
+		document.addEventListener('fullscreenchange',()=>{
+			const btn=document.getElementById('btn-fullscreen');
+			if(!document.fullscreenElement) btn.classList.remove('on'); else btn.classList.add('on');
+		});
 
-		async function pushToSupabase() {
-			const email = document.getElementById('emailBox').value.trim();
-			const pw = document.getElementById('passwordBox').value;
-			if (!email || !pw) { setStatus('Email et mot de passe requis.', 'err'); return; }
-			setStatus('Connexion…', '');
+		function getText(){ return rawLines.join('\n') }
+		function copyMenu(){
+			navigator.clipboard.writeText(getText()).then(()=>setStatus('Copié !','ok'));
+		}
+		async function pushToSupabase(){
+			const email=document.getElementById('emailBox').value.trim();
+			const pw=document.getElementById('passwordBox').value;
+			if(!email||!pw){ setStatus('Email et mot de passe requis.','err'); return; }
+			setStatus('Connexion…','');
 			try {
-				const { error: e1 } = await _sb.auth.signInWithPassword({ email, password: pw });
-				if (e1) throw e1;
-				const content = getText();
-				const { error: e2 } = await _sb.from('menu.menu').insert([{ content }]);
-				if (e2) throw e2;
-				savedText = content;
-				setStatus('✓ Publié !', 'ok');
-			} catch (err) { setStatus('Erreur : ' + (err.message || err), 'err'); }
+				const {error:e1}=await _sb.auth.signInWithPassword({email,password:pw});
+				if(e1) throw e1;
+				const content=getText();
+				const {error:e2}=await _sb.from('menu.menu').insert([{content}]);
+				if(e2) throw e2;
+				savedText=content; setStatus('✓ Publié !','ok');
+			} catch(err){ setStatus('Erreur : '+(err.message||err),'err'); }
+		}
+		function setStatus(msg,cls){
+			const el=document.getElementById('status');
+			el.textContent=msg; el.className=cls||'';
+			if(cls==='ok') setTimeout(()=>{ el.textContent=''; el.className=''; },3500);
 		}
 
-		function setStatus(msg, cls) {
-			const el = document.getElementById('status');
-			el.textContent = msg; el.className = cls || '';
-			if (cls === 'ok') setTimeout(() => { el.textContent = ''; el.className = ''; }, 3500);
-		}
-
-		// ── INIT ──────────────────────────────────────────────────────
-		async function init() {
-			setStatus('Chargement…', '');
-			let text = '';
+		async function init(){
+			setStatus('Chargement…','');
+			let text='';
 			try {
-				if (_sb) {
-					const { data, error } = await _sb.from('menu.menu').select('content').limit(1).order('id', { ascending: false });
-					if (!error && data?.[0]?.content) { text = data[0].content; setStatus('Chargé depuis Supabase', 'ok'); }
+				if(_sb){
+					const {data,error}=await _sb.from('menu.menu').select('content').limit(1).order('id',{ascending:false});
+					if(!error&&data?.[0]?.content){ text=data[0].content; setStatus('Chargé depuis Supabase','ok'); }
 					else throw 0;
 				} else throw 0;
 			} catch {
 				try {
-					text = await (await fetch('menu.menu', { cache: 'no-cache' })).text();
-					setStatus('Fichier local chargé', 'ok');
-				} catch { setStatus('Impossible de charger le menu.', 'err'); }
+					text=await(await fetch('menu.menu',{cache:'no-cache'})).text();
+					setStatus('Fichier local chargé','ok');
+				} catch { setStatus('Impossible de charger le menu.','err'); }
 			}
-			savedText = text;
-			rawLines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+			savedText=text;
+			rawLines=text.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n');
 			renderAll();
 		}
 
 		init();
 	</script>
 </body>
-
 </html>
