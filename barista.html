@@ -534,11 +534,44 @@
 
 		.table-tag {
 			font-family: 'Playfair Display', serif;
-			font-size: .9rem;
+			font-size: .95rem;
 			font-weight: 700;
-			color: var(--cream);
+			color: #7a3a00;
 			line-height: 1.2;
 			word-break: break-word;
+		}
+
+		.table-tag--takeaway {
+			color: var(--urgent);
+			font-weight: 900;
+			text-transform: uppercase;
+			letter-spacing: .04em;
+		}
+
+		.table-ext-ref {
+			font-size: .62rem;
+			font-weight: 500;
+			color: #5a7a3a;
+			letter-spacing: .06em;
+			white-space: nowrap;
+			background: rgba(90, 122, 58, 0.10);
+			padding: .1rem .35rem;
+			border-radius: 3px;
+		}
+
+		.table-created-time {
+			font-size: .75rem;
+			font-weight: 600;
+			color: #2a6a8a;
+			letter-spacing: .03em;
+			white-space: nowrap;
+		}
+
+		.table-sale-id {
+			font-size: .52rem;
+			color: var(--text-muted);
+			letter-spacing: .08em;
+			white-space: nowrap;
 		}
 
 		.table-sub {
@@ -1342,9 +1375,9 @@
 		}
 
 		const REFRESH_INTERVAL = 15000;
-		const MAX_ORDERS = 100;
+		const MAX_ORDERS = 500;
 		const CACHE_KEY = 'brume_item_status';
-		const CACHE_MAX = 100;
+		const CACHE_MAX = 500;
 
 		// ── Cache ────────────────────────────────────────────────────────────
 		function loadCache() {
@@ -1654,7 +1687,10 @@
 			}
 			=================================================================== */
 			const hasTableName = !!(saleObj.ressource_name || saleObj.sale_ext_ref);
-			const tableName = saleObj.ressource_name || saleObj.sale_ext_ref || (createdTime ? createdTime : `#${saleId}`);
+			const tableName = saleObj.ressource_name || '';
+			const tableSaleExt = saleObj.sale_ext_ref || '';
+			const tableCreatedTime = createdTime || '';
+			const tableSaleId = saleId;
 			const items = (saleObj.line_items || []).map(it => ({
 				id: it.line_item_id, name: it.product_model || '—',
 				qty: parseInt(it.quantity || it.multiple_quantity || 1),
@@ -1665,7 +1701,7 @@
 			const saleTotal = parseFloat(saleObj.total) || 0;
 			const payment = saleObj.payment || '';
 			const isPaid = saleObj.completed_at && !saleObj.completed_at.startsWith('0000');
-			return { saleId, tableName, hasTableName, createdTime, saleComment, items, fetchedAt: createdAt, saleTotal, payment, isPaid };
+			return { saleId, tableName, tableSaleExt, tableCreatedTime, tableSaleId, hasTableName, createdTime, saleComment, items, fetchedAt: createdAt, saleTotal, payment, isPaid };
 		}
 
 		// ── Smart render ──────────────────────────────────────────────────────
@@ -1694,7 +1730,7 @@
 				if (existingCards[sid]) {
 					const card = existingCards[sid];
 					card.className = 'order-card' + (isAllDone ? ' done-card' : '');
-					const te = card.querySelector('.order-time'); if (te) { te.textContent = timeLabel; te.className = 'order-time ' + timeClass; }
+					<!-- const te = card.querySelector('.order-time'); if (te) { te.textContent = timeLabel; te.className = 'order-time ' + timeClass; } -->
 					const il = card.querySelector('.items-list'); if (il) il.innerHTML = renderItemsHtml(order);
 					const hdr = card.querySelector('.card-header');
 					if (hdr) {
@@ -1766,15 +1802,17 @@
 				? `<button class="complete-btn" onclick="markAllDone('${order.saleId}')">✓ Prêt</button>`
 				: `<span class="served-label">SERVI ✓</span>`;
 			return `
-    <div class="card-header">
+		<div class="card-header">
       <div class="card-header-left">
-        <span class="table-tag">${escHtml(order.tableName)}</span>
-        <span class="order-id">#${order.saleId}</span>
+        ${order.tableName ? `<span class="table-tag${order.tableName.trim().toUpperCase() === 'TAKEAWAY' ? ' table-tag--takeaway' : ''}">${escHtml(order.tableName)}</span>` : ''}
+        ${order.tableCreatedTime ? `<span class="table-created-time">${escHtml(order.tableCreatedTime)}</span>` : ''}
+        ${order.tableSaleExt ? `<span class="table-ext-ref">${escHtml(order.tableSaleExt)}</span>` : ''}
+        <span class="table-sale-id">#${order.tableSaleId}</span>
         <span class="order-price">${order.saleTotal.toFixed(2).replace('.', ',')} €</span>
       </div>
       <div class="card-header-right">
         ${badge}
-        <div class="order-time ${timeClass}">${timeLabel}</div>
+        <!-- <div class="order-time ${timeClass}">${timeLabel}</div> -->
         ${actionHtml}
       </div>
     </div>
