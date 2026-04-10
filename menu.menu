@@ -1,16 +1,16 @@
-############################################
-#                     ____    ______       #
-# Brume menu editor  /\###\  /#:+_+:\      #
-#                    \ \##+\/:+:/_\ :\     #
-#                     \ \#:+:+:+: : . \    #
-# By: Simon Ameye      \ \:+:___: .    \   #
-#                       \ \ :\_/.  /\   \  #
-#                        \ \______/\ \___\ #
+#############################################
+#                     ____    ______        #
+# Brume menu editor  /\###\  /#:+_+:\       #
+#                    \ \##+\/:+:/_\ :\      #
+#                     \ \#:+:+:+: : . \     #
+# By: Simon Ameye      \ \:+:___: .    \    #
+#                       \ \ :\_/.  /\   \   #
+#                        \ \______/\ \___\  #
 # Please star my Github ! \/______/  \/___/ #
-#                                          #
-# https://github.com/simon-ameye/          #
-#                                          #
-############################################
+#                                           #
+# https://github.com/simon-ameye/           #
+#                                           #
+#############################################
 
 #          o ___                                            __  __                                   o ___       _      _      _                    
 #    o O °  | _ )     _ _   _  _    _ __     ___      o O °|  \/  |   ___    _ _     _  _      o O °  | __|   __| |    (_)    | |_     ___      _ _ 
@@ -34,6 +34,9 @@
 #La première ligne spécifie le niveau en fonction du nombre de delimiter0. Elle est appelée 'header0' (spécifie les niveaux)
 #La deuxième ligne spécifie le niveau en fonction du nombre de delimiter1. Elle est appelée 'header1' (spécifie les langues)
 #Les lignes vides ou commençant par "#" sont ignorées
+#Les allergènes doivent être exactement ceux de la liste suivante : "céréales, crustacés, oeufs, poissons, arachides, soja, lait, fruits à coques, céleri, moutarde, sésame, sulfites, lupin, mollusques"
+#Les allergènes n'ont pas besoin de traduction, elle est automatiquement appliquée
+#Un allergène inconnu sera quand même affiché, mais il sera surligné en rouge
 #Vous pouvez créer des blocs spéciaux dont les noms commencent par "!" ou >
 #"!" crée un bloc dont le nom ne sera pas affiché
 #">" spécifie l'ID HTML de l'élément dans lequel ajouter le contenu mis en forme
