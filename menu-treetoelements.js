@@ -1,3 +1,46 @@
+// Allergen dictionary : canonical French key -> { fr, en }
+// Keys must match what is written in the .menu file (after normalisation)
+const ALLERGENS = {
+	"cereales": { texts: ["Céréales (gluten)", "Cereals (gluten)"] },
+	"crustaces": { texts: ["Crustacés", "Crustaceans"] },
+	"oeufs": { texts: ["Œufs", "Eggs"] },
+	"poissons": { texts: ["Poissons", "Fish"] },
+	"arachides": { texts: ["Arachides", "Peanuts"] },
+	"soja": { texts: ["Soja", "Soy"] },
+	"lait": { texts: ["Lait (lactose)", "Milk (lactose)"] },
+	"fruits a coques": { texts: ["Fruits à coques", "Tree nuts"] },
+	"celeri": { texts: ["Céleri", "Celery"] },
+	"moutarde": { texts: ["Moutarde", "Mustard"] },
+	"sesame": { texts: ["Sésame", "Sesame"] },
+	"sulfites": { texts: ["Sulfites", "Sulphites"] },
+	"lupin": { texts: ["Lupin", "Lupin"] },
+	"mollusques": { texts: ["Mollusques", "Molluscs"] },
+};
+
+// Normalise a string for dictionary lookup :
+// lowercase, strip accents, collapse whitespace
+function normaliseAllergen(str) {
+	return str.trim()
+		.toLowerCase()
+		.normalize("NFD").replace(/[\u0300-\u036f]/g, "") // strip accents (é->e, à->a, etc.)
+		.replace(/\s+/g, " ");
+}
+
+// Parse a raw comma-separated allergen string from the .menu file.
+// Returns an array of { texts: [fr, en], known: bool }.
+// Unknown entries (typos, unlisted values) are passed through as-is in both languages.
+function parseAllergens(rawText) {
+	return rawText.split(',').map(s => s.trim()).filter(Boolean).map(raw => {
+		const norm = normaliseAllergen(raw);
+		if (ALLERGENS[norm]) {
+			return { texts: ALLERGENS[norm].texts, known: true };
+		}
+		return { texts: [raw, raw], known: false }; // unknown : display as-is
+	});
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 function createCustomElement(element, type, containerType) {
 	var newElement = document.createElement(type);
 	var container = document.createElement(containerType);
@@ -50,6 +93,27 @@ function createBlocContainer(bloc) {
 	}
 }
 
+// Build the allergen row for a product element.
+// Finds the type-5 child (optional), returns null if absent.
+function createAllergenRow(element) {
+	var allergens = parseAllergens(element.texts[0]);
+	if (allergens.length === 0) return null;
+
+	var row = document.createElement('row-allergens');
+	var label = document.createElement('style-allergen-label');
+	label.textContent = actualLanguage === 0 ? 'Allergènes :' : 'Allergens:';
+	row.appendChild(label);
+
+	for (var a of allergens) {
+		var pill = document.createElement('style-allergen-pill');
+		if (!a.known) pill.classList.add('allergen-unknown');
+		pill.textContent = a.texts[actualLanguage];
+		row.appendChild(pill);
+	}
+
+	return row;
+}
+
 function treeToElements(tree) {
 	var menuBox = document.getElementById('menuBox');
 	menuBox.innerHTML = '';
@@ -58,6 +122,7 @@ function treeToElements(tree) {
 	for (var bloc of tree.children) {
 		var blocContainer = createBlocContainer(bloc);
 
+		console.log(bloc)
 		// iterate over nodes of level 1 : elements
 		for (var element of bloc.children) {
 			switch (element.type) {
@@ -84,6 +149,15 @@ function treeToElements(tree) {
 					blocContainer.appendChild(createCustomElement(element, 'style-description', 'row-left'));
 					break;
 				case '5':
+					// allergènes : optionnel, masqué par défaut
+					var allergenRow = createAllergenRow(element);
+					if (allergenRow) {
+						allergenRow.classList.add('allergen-row');
+						if (!showAllergens) allergenRow.classList.add('allergen-hidden');
+						blocContainer.appendChild(allergenRow);
+					}
+					break;
+				case '6':
 					blocContainer.appendChild(createCustomElement(element, 'style-comment', 'row-center'));
 					break;
 				default:

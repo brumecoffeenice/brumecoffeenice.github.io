@@ -3,6 +3,7 @@ const SupabasePublicAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJz
 const _supabase = supabase.createClient(SupabaseUrl, SupabasePublicAnonKey)
 
 var actualLanguage = 0; //0=fr, 1=en
+var showAllergens = false;
 var tree = [];
 
 function showLanguageMenu() {
@@ -19,6 +20,30 @@ function showLanguageMenu() {
 		languageBox1.classList.add('selectedLinkStyle');
 		languageBox0.classList.remove('selectedLinkStyle');
 	}
+}
+
+function showAllergenButton() {
+	var btn = document.getElementById('allergenToggle');
+	btn.textContent = actualLanguage === 0 ? 'Allergènes' : 'Allergens';
+
+	if (showAllergens) {
+		btn.classList.add('selectedLinkStyle');
+	} else {
+		btn.classList.remove('selectedLinkStyle');
+	}
+}
+
+function toggleAllergens() {
+	showAllergens = !showAllergens;
+	// Toggle visibility directly without a full re-render
+	document.querySelectorAll('.allergen-row').forEach(function (row) {
+		if (showAllergens) {
+			row.classList.remove('allergen-hidden');
+		} else {
+			row.classList.add('allergen-hidden');
+		}
+	});
+	showAllergenButton();
 }
 
 function detectLanguage() {
@@ -56,11 +81,13 @@ async function main() {
 	tree = await fetchToTree(menulocal);
 	treeToElements(tree);
 	showLanguageMenu();
+	showAllergenButton();
 }
 
 function refresh() {
 	treeToElements(tree);
 	showLanguageMenu();
+	showAllergenButton();
 }
 
 detectLanguage();
@@ -69,3 +96,4 @@ main();
 
 languageBox0.addEventListener("click", function () { actualLanguage = 0; refresh(); });
 languageBox1.addEventListener("click", function () { actualLanguage = 1; refresh(); });
+document.getElementById('allergenToggle').addEventListener("click", toggleAllergens);
