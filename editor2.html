@@ -29,7 +29,8 @@
 			--c2: #2a5a7a;
 			--c3: #8b3a00;
 			--c4: #1e6b50;
-			--c5: #6a3a10;
+			--c5: #469aee;
+			--c6: #a94f8b;
 			--cc: #8a8078;
 			--cat:#5a6a4a;
 			--red:#b82020;
@@ -280,6 +281,7 @@
 		.s3 { color: var(--c3) }
 		.s4 { color: var(--c4) }
 		.s5 { color: var(--c5) }
+		.s6 { color: var(--c6) }
 		.sc { color: var(--cc); font-style: italic }
 		.su { color: #c0b8b0 }
 		.sa { color: var(--cat); font-style: italic }
@@ -436,17 +438,17 @@
 			const leadingU=raw.slice(0,lvl), body=raw.slice(lvl), segs=body.split('_');
 			let html='';
 			if(leadingU){
-				const okU=leadingU.slice(0,5), errU=leadingU.slice(5);
+				const okU=leadingU.slice(0,6), errU=leadingU.slice(6);
 				if(okU)  html+=`<span class="su">${esc(okU)}</span>`;
 				if(errU) html+=`<span class="serr">${esc(errU)}</span>`;
 			}
 			segs.forEach((seg,i)=>{
 				const rl=lvl+i;
-				if(i>0){ const sc=rl>5?'serr':'su'; html+=`<span class="${sc}">_</span>`; }
-				const cls=rl>5?'serr':`s${Math.min(rl,5)}`;
+				if(i>0){ const sc=rl>6?'serr':'su'; html+=`<span class="${sc}">_</span>`; }
+				const cls=rl>6?'serr':`s${Math.min(rl,6)}`;
 				const ap=seg.split('@');
 				html+=`<span class="${cls}">${esc(ap[0])}</span>`;
-				for(let j=1;j<ap.length;j++) html+=`<span class="${rl>5?'serr':'sa'}">@${esc(ap[j])}</span>`;
+				for(let j=1;j<ap.length;j++) html+=`<span class="${rl>6?'serr':'sa'}">@${esc(ap[j])}</span>`;
 			});
 			return html;
 		}
@@ -454,7 +456,7 @@
 		function lineInfo(raw){
 			if(!raw||raw.trim()==='') return {color:'transparent',label:'',size:'0.88em'};
 			if(raw.trim().startsWith('#')) return {color:'var(--cc)',label:'#',size:'0.80em'};
-			let lvl=0; while(raw[lvl]==='_') lvl++; lvl=Math.min(lvl,5);
+			let lvl=0; while(raw[lvl]==='_') lvl++; lvl=Math.min(lvl,6);
 			return {color:COLORS[lvl],label:LABELS[lvl],size:SIZES[lvl]};
 		}
 
