@@ -766,11 +766,95 @@
 		}
 
 		.item-note {
-			font-size: .92rem;
+			font-size: 1.05rem;
 			color: var(--text-dim);
 			margin-top: .05rem;
 			font-style: italic;
 			font-weight: 500;
+		}
+
+		/* ── Option temperature colors ── */
+		.item-note--chaud {
+			color: #c0281e !important;
+			font-weight: 700 !important;
+			font-style: normal !important;
+		}
+
+		.item-note--glace {
+			color: #1a5fa8 !important;
+			font-weight: 700 !important;
+			font-style: normal !important;
+		}
+
+		/* ── Filter bar ── */
+		.filter-bar {
+			display: flex;
+			align-items: center;
+			gap: .5rem;
+			padding: .4rem .8rem;
+			background: var(--surface);
+			border-bottom: 1px solid var(--border);
+			flex-wrap: wrap;
+		}
+
+		.filter-label {
+			font-size: .6rem;
+			letter-spacing: .15em;
+			text-transform: uppercase;
+			color: var(--text-dim);
+			white-space: nowrap;
+			flex-shrink: 0;
+		}
+
+		.filter-btn {
+			background: transparent;
+			border: 1.5px solid var(--border-mid);
+			color: var(--text-dim);
+			padding: .2rem .55rem;
+			border-radius: 4px;
+			cursor: pointer;
+			font-family: 'DM Mono', monospace;
+			font-size: .65rem;
+			letter-spacing: .1em;
+			text-transform: uppercase;
+			transition: all .18s;
+			white-space: nowrap;
+		}
+
+		.filter-btn:hover {
+			border-color: var(--accent);
+			color: var(--accent);
+		}
+
+		.filter-btn.active {
+			background: var(--accent);
+			border-color: var(--accent);
+			color: white;
+			box-shadow: 0 1px 6px rgba(192, 94, 8, .25);
+		}
+
+		.filter-btn.active--done-filter {
+			background: var(--done);
+			border-color: var(--done);
+			color: white;
+			box-shadow: 0 1px 6px rgba(30, 122, 30, .25);
+		}
+
+		.filter-sep {
+			width: 1px;
+			height: 18px;
+			background: var(--border-mid);
+			flex-shrink: 0;
+		}
+
+		/* ── All-done background celebration ── */
+		body.all-done-celebration {
+			background-color: #d4edda !important;
+			transition: background-color 1s ease;
+		}
+
+		body.all-done-celebration #appScreen {
+			background-color: #d4edda;
 		}
 
 		.item-status-btn {
@@ -1044,7 +1128,7 @@
 			}
 
 			.item-note {
-				font-size: .62rem;
+				font-size: .82rem;
 			}
 
 			.item-cat-icon {
@@ -1307,6 +1391,26 @@
 					€</span></div>
 		</div>
 
+		<!-- ── FILTER BAR ── -->
+		<div class="filter-bar" id="filterBar">
+			<span class="filter-label">Catégorie :</span>
+			<button class="filter-btn active" id="filterAll" onclick="toggleCategoryFilter(null)">Toutes</button>
+			<button class="filter-btn" data-cat="Barista" onclick="toggleCategoryFilter('Barista')">☕ Barista</button>
+			<button class="filter-btn" data-cat="Boissons fraiches"
+				onclick="toggleCategoryFilter('Boissons fraiches')">🥤 Boissons</button>
+			<button class="filter-btn" data-cat="Plats" onclick="toggleCategoryFilter('Plats')">🍽️ Plats</button>
+			<button class="filter-btn" data-cat="Desserts" onclick="toggleCategoryFilter('Desserts')">🍮
+				Desserts</button>
+			<button class="filter-btn" data-cat="Patisseries" onclick="toggleCategoryFilter('Patisseries')">🍪
+				Patisseries</button>
+			<button class="filter-btn" data-cat="Tasses" onclick="toggleCategoryFilter('Tasses')">🫖 Tasses</button>
+			<button class="filter-btn" data-cat="Vente epicerie" onclick="toggleCategoryFilter('Vente epicerie')">🛒
+				Épicerie</button>
+			<div class="filter-sep"></div>
+			<span class="filter-label">Statut :</span>
+			<button class="filter-btn" id="filterNotDone" onclick="toggleDoneFilter()">⏳ Non terminés seulement</button>
+		</div>
+
 		<div class="board" id="board">
 			<div class="empty-state">
 				<div class="empty-icon">☕</div>
@@ -1347,6 +1451,11 @@
 		let itemStatusMap = {};
 		let refreshTimer = null;
 		let knownOrderIds = null; // null = first load (no sound), Set after that
+
+		// ── Filter state ─────────────────────────────────────────────────────
+		let activeCategoryFilter = new Set(); // empty = all categories shown
+		let filterNotDoneOnly = false;   // true = hide done items
+		let allDoneSoundPlayed = false;  // prevent repeating the celebration sound
 
 		// ── Debug panel ──────────────────────────────────────────────────────
 		let debugOpen = false;
@@ -1498,13 +1607,20 @@
 				dlog(saleIds.length ? 'ok' : 'warn', `saleMap total : ${saleIds.length} vente(s)`, null, saleIds);
 				if (!saleIds.length) { orders = []; render(); setStatus('online'); spinRefresh(false); hideLoader(); isFetching = false; return; }
 
-				// Only fetch detail for sales that are new or whose total changed (item added/removed)
-				// This reduces N calls per refresh to only the delta — usually 0-2 instead of 15-30
+				// Smart fetch strategy:
+				// - Always re-fetch sales that have at least one non-done item (data may have changed server-side)
+				// - Skip fetch only for sales where ALL items are locally marked done (operator has finished them)
+				// - Always fetch new sales not yet in cache
 				const toFetch = saleIds.filter(sid => {
 					const cached = saleDetailCache[sid];
 					if (!cached) return true; // new sale, must fetch
-					const freshTotal = saleMap[sid]?.total;
-					return freshTotal !== cached.total; // total changed = items changed
+					// Check if all items in this sale are locally marked done
+					const cachedOrder = orders.find(o => String(o.saleId) === sid);
+					if (cachedOrder) {
+						const allDoneLocally = cachedOrder.items.length > 0 && cachedOrder.items.every(i => i.status === 2);
+						if (allDoneLocally) return false; // all done locally — skip to save bandwidth
+					}
+					return true; // has pending items — always refresh to catch server-side modifications
 				});
 				console.log(`[fetch] ${toFetch.length} new/changed out of ${saleIds.length} sales`);
 				await Promise.all(toFetch.map(async sid => {
@@ -1727,8 +1843,17 @@
 				const timeLabel = ageMins < 1 ? "À l'instant" : `${ageMins} min`;
 				const sid = String(order.saleId);
 
+				// ── Compute how many items survive the current filters ──
+				let visibleItems = order.items;
+				if (activeCategoryFilter.size > 0) visibleItems = visibleItems.filter(i => activeCategoryFilter.has(i.category));
+				if (filterNotDoneOnly) visibleItems = visibleItems.filter(i => i.status !== 2);
+				const isCardVisible = visibleItems.length > 0;
+
 				if (existingCards[sid]) {
 					const card = existingCards[sid];
+					// Hide/show card based on whether any items survive the filters
+					card.style.display = isCardVisible ? '' : 'none';
+					if (!isCardVisible) return; // skip DOM updates for hidden cards
 					card.className = 'order-card' + (isAllDone ? ' done-card' : '');
 					<!-- const te = card.querySelector('.order-time'); if (te) { te.textContent = timeLabel; te.className = 'order-time ' + timeClass; } -->
 					const il = card.querySelector('.items-list'); if (il) il.innerHTML = renderItemsHtml(order);
@@ -1751,6 +1876,7 @@
 					const card = document.createElement('div');
 					card.className = 'order-card' + (isAllDone ? ' done-card' : '');
 					card.dataset.saleId = sid; card.style.animationDelay = (oi * .05) + 's';
+					if (!isCardVisible) card.style.display = 'none';
 					card.innerHTML = renderCardInner(order, isAllDone, done, pct, timeLabel, timeClass);
 					const allCards = board.querySelectorAll('.order-card');
 					if (oi < allCards.length) board.insertBefore(card, allCards[oi]); else board.appendChild(card);
@@ -1763,6 +1889,19 @@
 			const barista = countCat('Barista'), boissons = countCat('Boissons fraiches'), tasses = countCat('Tasses'), patisseries = countCat('Patisseries');
 			const autre = productsTotal - barista - boissons - tasses - patisseries;
 			updateStats(orders.length, barista, boissons, tasses, patisseries, autre, productsTotal, revenueTotal);
+
+			// ── All-done celebration ──────────────────────────────────────────
+			// Check if every item across all orders is done
+			const allPageDone = totalItems > 0 && doneItems === totalItems;
+			if (allPageDone && !allDoneSoundPlayed) {
+				allDoneSoundPlayed = true;
+				document.body.classList.add('all-done-celebration');
+				playAllDoneSound();
+				showToast('🎉 Toutes les commandes sont prêtes !');
+			} else if (!allPageDone) {
+				allDoneSoundPlayed = false;
+				document.body.classList.remove('all-done-celebration');
+			}
 		}
 
 		function getCategoryIcon(category) {
@@ -1771,18 +1910,37 @@
 				'Boissons fraiches': '🥤',
 				'Tasses': '🫖',
 				'Patisseries': '🍪',
+				'Plats': '🍽️',
+				'Desserts': '🍮',
+				'Vente epicerie': '🛒',
 			};
 			return map[category] || '';
 		}
 
 		function renderItemsHtml(order) {
-			return order.items.map(it => {
+			// Apply category filter and done filter to items
+			let items = order.items;
+			if (activeCategoryFilter.size > 0) {
+				items = items.filter(i => activeCategoryFilter.has(i.category));
+			}
+			if (filterNotDoneOnly) {
+				items = items.filter(i => i.status !== 2);
+			}
+			// ── Expand each item by its quantity into individual rows ──
+			const expanded = items.flatMap(it => Array(it.qty).fill(it));
+			return expanded.map(it => {
 				const st = it.status, stClass = st === 2 ? 'item-done' : st === 1 ? 'item-in-progress' : 'item-pending';
+				// ── Determine note CSS class based on temperature keyword ──
+				let noteClass = 'item-note';
+				if (it.note) {
+					const noteLower = it.note.toLowerCase();
+					if (noteLower.includes('chaud')) noteClass += ' item-note--chaud';
+					else if (noteLower.includes('glac')) noteClass += ' item-note--glace';
+				}
 				return `<div class="item-row ${stClass}" onclick="cycleStatus('${order.saleId}','${it.id}')" title="Cliquer pour changer le statut">
-      <span class="item-qty">${it.qty}</span>
       <div class="item-info">
         <div class="item-name">${getCategoryIcon(it.category) ? `<span class="item-cat-icon">${getCategoryIcon(it.category)}</span>` : ''}${escHtml(it.name)}</div>
-        ${it.note ? `<div class="item-note">${escHtml(it.note)}</div>` : ''}
+        ${it.note ? `<div class="${noteClass}">${escHtml(it.note)}</div>` : ''}
         ${it.comment ? `<div class="item-comment">💬 ${escHtml(it.comment)}</div>` : ''}
       </div>
       <button class="item-status-btn" onclick="cycleStatus('${order.saleId}','${it.id}');event.stopPropagation()">
@@ -1876,6 +2034,56 @@
 					osc.start(t); osc.stop(t + 0.35);
 				});
 			} catch (e) { console.warn('sound:', e); }
+		}
+
+		// ── All-done celebration sound (triumphant ascending arpeggio) ────────
+		function playAllDoneSound() {
+			try {
+				const ctx = new (window.AudioContext || window.webkitAudioContext)();
+				const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1046.50, 1318.51, 1567.98]; // C5→E5→G5→C6→E6→C6→E6→G6
+				notes.forEach((freq, i) => {
+					const osc = ctx.createOscillator();
+					const gain = ctx.createGain();
+					osc.connect(gain); gain.connect(ctx.destination);
+					osc.type = 'sine';
+					osc.frequency.setValueAtTime(freq, ctx.currentTime);
+					const t = ctx.currentTime + i * 0.11;
+					gain.gain.setValueAtTime(0, t);
+					gain.gain.linearRampToValueAtTime(0.28, t + 0.02);
+					gain.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
+					osc.start(t); osc.stop(t + 0.45);
+				});
+			} catch (e) { console.warn('all-done sound:', e); }
+		}
+
+		// ── Filter functions ──────────────────────────────────────────────────
+		function toggleCategoryFilter(category) {
+			if (category === null) {
+				// "Toutes" — clear all selections
+				activeCategoryFilter.clear();
+			} else {
+				// Toggle this category in/out of the active set
+				if (activeCategoryFilter.has(category)) {
+					activeCategoryFilter.delete(category);
+				} else {
+					activeCategoryFilter.add(category);
+				}
+			}
+			// Update button active states
+			const allBtn = document.getElementById('filterAll');
+			allBtn.classList.toggle('active', activeCategoryFilter.size === 0);
+			document.querySelectorAll('.filter-btn[data-cat]').forEach(btn => {
+				btn.classList.toggle('active', activeCategoryFilter.has(btn.dataset.cat));
+			});
+			render();
+		}
+
+		function toggleDoneFilter() {
+			filterNotDoneOnly = !filterNotDoneOnly;
+			const btn = document.getElementById('filterNotDone');
+			btn.classList.toggle('active', filterNotDoneOnly);
+			btn.classList.toggle('active--done-filter', filterNotDoneOnly);
+			render();
 		}
 
 		function escHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
