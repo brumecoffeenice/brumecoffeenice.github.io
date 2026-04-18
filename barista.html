@@ -713,13 +713,7 @@
 		}
 
 		.item-qty {
-			font-family: 'Playfair Display', serif;
-			font-size: 1.4rem;
-			font-weight: 700;
-			color: var(--accent);
-			min-width: 1.3rem;
-			text-align: center;
-			line-height: 1;
+			display: none;
 		}
 
 		.item-info {
@@ -833,11 +827,17 @@
 			box-shadow: 0 1px 6px rgba(192, 94, 8, .25);
 		}
 
-		.filter-btn.active--done-filter {
+		.filter-btn.filter-btn--alldone {
 			background: var(--done);
 			border-color: var(--done);
 			color: white;
 			box-shadow: 0 1px 6px rgba(30, 122, 30, .25);
+		}
+
+		.filter-btn.filter-btn--alldone:hover {
+			background: #186018;
+			border-color: #186018;
+			color: white;
 		}
 
 		.filter-sep {
@@ -1336,6 +1336,23 @@
 
 		<div class="toast" id="toast"></div>
 
+		<!-- ── CONFIRMATION POPUP ── -->
+		<div id="confirmOverlay"
+			style="display:none;position:fixed;inset:0;background:rgba(30,14,4,0.55);z-index:800;align-items:center;justify-content:center;backdrop-filter:blur(3px)">
+			<div
+				style="background:var(--card-bg);border:1px solid var(--border-mid);border-radius:10px;padding:1.8rem 2rem;max-width:340px;width:90%;box-shadow:0 8px 32px rgba(30,14,4,.22);text-align:center">
+				<div style="font-size:1.6rem;margin-bottom:.6rem">⚠️</div>
+				<div id="confirmMessage"
+					style="font-size:.95rem;color:var(--cream);margin-bottom:1.4rem;line-height:1.5"></div>
+				<div style="display:flex;gap:.7rem;justify-content:center">
+					<button id="confirmCancel"
+						style="background:transparent;border:1.5px solid var(--border-mid);color:var(--text-dim);padding:.5rem 1.2rem;border-radius:5px;cursor:pointer;font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;transition:all .15s">Annuler</button>
+					<button id="confirmOk"
+						style="background:var(--done);border:none;color:white;padding:.5rem 1.2rem;border-radius:5px;cursor:pointer;font-family:'DM Mono',monospace;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;transition:all .15s;box-shadow:0 2px 8px rgba(30,122,30,.25)">Confirmer</button>
+				</div>
+			</div>
+		</div>
+
 		<header>
 			<div class="logo-block">
 				<span class="logo-title">Brume</span>
@@ -1373,18 +1390,8 @@
 		</header>
 
 		<div class="stats-bar">
-			<div class="stat-item"><span class="stat-num" id="statTotal">0</span><span
-					class="stat-label">Commandes</span></div>
-			<div class="stat-item"><span class="stat-num" id="statBarista">0</span><span
-					class="stat-label">Barista</span></div>
-			<div class="stat-item"><span class="stat-num" id="statBoissons">0</span><span
-					class="stat-label">Boissons</span></div>
-			<div class="stat-item"><span class="stat-num" id="statTasses">0</span><span class="stat-label">Tasses</span>
-			</div>
-			<div class="stat-item"><span class="stat-num" id="statPatisseries">0</span><span
-					class="stat-label">Patisseries</span></div>
-			<div class="stat-item"><span class="stat-num" id="statAutre">0</span><span class="stat-label">Autre</span>
-			</div>
+			<div class="stat-item"><span class="stat-num" id="statDisplayed">0</span><span
+					class="stat-label">Affichés</span></div>
 			<div class="stat-item"><span class="stat-num" id="statProductsTotal">0</span><span
 					class="stat-label">Total</span></div>
 			<div class="stat-item stat-item--revenue"><span class="stat-num stat-num--revenue" id="statRevenue">0,00
@@ -1406,6 +1413,8 @@
 			<button class="filter-btn" data-cat="Tasses" onclick="toggleCategoryFilter('Tasses')">🫖 Tasses</button>
 			<button class="filter-btn" data-cat="Vente epicerie" onclick="toggleCategoryFilter('Vente epicerie')">🛒
 				Épicerie</button>
+			<div class="filter-sep"></div>
+			<button class="filter-btn filter-btn--alldone" onclick="markAllVisible()">✓ Tout terminer</button>
 			<div class="filter-sep"></div>
 			<span class="filter-label">Statut :</span>
 			<button class="filter-btn" id="filterNotDone" onclick="toggleDoneFilter()">⏳ Non terminés seulement</button>
@@ -1608,9 +1617,12 @@
 				if (!saleIds.length) { orders = []; render(); setStatus('online'); spinRefresh(false); hideLoader(); isFetching = false; return; }
 
 				// Smart fetch strategy:
-				// - Always re-fetch sales that have at least one non-done item (data may have changed server-side)
-				// - Skip fetch only for sales where ALL items are locally marked done (operator has finished them)
-				// - Always fetch new sales not yet in cache
+				// - New sales (not in cache): always fetch
+				// - All-done locally: skip (operator finished them, no server changes expected)
+				// - Pending items BUT sale is >10 min old: skip full re-fetch (items are unlikely to change
+				//   after 10 min and the operator would have noticed; use cached data)
+				// - Pending items AND sale is ≤10 min old: always re-fetch to catch server-side modifications
+				const TEN_MINUTES_MS = 10 * 60 * 1000;
 				const toFetch = saleIds.filter(sid => {
 					const cached = saleDetailCache[sid];
 					if (!cached) return true; // new sale, must fetch
@@ -1618,9 +1630,12 @@
 					const cachedOrder = orders.find(o => String(o.saleId) === sid);
 					if (cachedOrder) {
 						const allDoneLocally = cachedOrder.items.length > 0 && cachedOrder.items.every(i => i.status === 2);
-						if (allDoneLocally) return false; // all done locally — skip to save bandwidth
+						if (allDoneLocally) return false; // all done locally — skip
+						// Has pending items — only re-fetch if the sale is recent (≤10 min)
+						const ageMs = Date.now() - cachedOrder.fetchedAt;
+						if (ageMs > TEN_MINUTES_MS) return false; // old sale, stop hammering the API
 					}
-					return true; // has pending items — always refresh to catch server-side modifications
+					return true; // recent sale with pending items — refresh to catch server-side modifications
 				});
 				console.log(`[fetch] ${toFetch.length} new/changed out of ${saleIds.length} sales`);
 				await Promise.all(toFetch.map(async sid => {
@@ -1825,7 +1840,7 @@
 			const board = document.getElementById('board');
 			if (!orders.length) {
 				board.innerHTML = `<div class="empty-state"><div class="empty-icon">☕</div><div class="empty-title">Aucune commande en cours</div><div class="empty-sub">Tout est servi — belle journée !</div></div>`;
-				updateStats(0, 0, 0, 0, 0, 0, 0, 0); return;
+				updateStats(0, 0, 0); return;
 			}
 			let totalItems = 0, doneItems = 0;
 			const existingCards = {};
@@ -1856,6 +1871,7 @@
 					if (!isCardVisible) return; // skip DOM updates for hidden cards
 					card.className = 'order-card' + (isAllDone ? ' done-card' : '');
 					<!-- const te = card.querySelector('.order-time'); if (te) { te.textContent = timeLabel; te.className = 'order-time ' + timeClass; } -->
+					const te = card.querySelector('.order-time'); if (te) { te.textContent = timeLabel; te.className = 'order-time ' + timeClass; }
 					const il = card.querySelector('.items-list'); if (il) il.innerHTML = renderItemsHtml(order);
 					const hdr = card.querySelector('.card-header');
 					if (hdr) {
@@ -1884,11 +1900,15 @@
 			});
 			const es = board.querySelector('.empty-state'); if (es) es.remove();
 			const revenueTotal = orders.reduce((s, o) => s + o.saleTotal, 0);
-			const countCat = cat => orders.reduce((s, o) => s + o.items.filter(i => i.category === cat).reduce((a, i) => a + i.qty, 0), 0);
 			const productsTotal = orders.reduce((s, o) => s + o.items.reduce((a, i) => a + i.qty, 0), 0);
-			const barista = countCat('Barista'), boissons = countCat('Boissons fraiches'), tasses = countCat('Tasses'), patisseries = countCat('Patisseries');
-			const autre = productsTotal - barista - boissons - tasses - patisseries;
-			updateStats(orders.length, barista, boissons, tasses, patisseries, autre, productsTotal, revenueTotal);
+			// Affichés = sum of qty for items that pass both filters, across visible cards
+			const displayedTotal = orders.reduce((s, o) => {
+				let items = o.items;
+				if (activeCategoryFilter.size > 0) items = items.filter(i => activeCategoryFilter.has(i.category));
+				if (filterNotDoneOnly) items = items.filter(i => i.status !== 2);
+				return s + items.reduce((a, i) => a + i.qty, 0);
+			}, 0);
+			updateStats(displayedTotal, productsTotal, revenueTotal);
 
 			// ── All-done celebration ──────────────────────────────────────────
 			// Check if every item across all orders is done
@@ -1971,6 +1991,7 @@
       <div class="card-header-right">
         ${badge}
         <!-- <div class="order-time ${timeClass}">${timeLabel}</div> -->
+        <div class="order-time ${timeClass}" data-created="${order.fetchedAt}">${timeLabel}</div>
         ${actionHtml}
       </div>
     </div>
@@ -1978,15 +1999,48 @@
     <div class="items-list">${renderItemsHtml(order)}</div>`;
 		}
 
-		function updateStats(total, barista, boissons, tasses, patisseries, autre, productsTotal, revenue) {
-			document.getElementById('statTotal').textContent = total;
-			document.getElementById('statBarista').textContent = barista;
-			document.getElementById('statBoissons').textContent = boissons;
-			document.getElementById('statTasses').textContent = tasses;
-			document.getElementById('statPatisseries').textContent = patisseries;
-			document.getElementById('statAutre').textContent = autre;
+		function updateStats(displayed, productsTotal, revenue) {
+			document.getElementById('statDisplayed').textContent = displayed;
 			document.getElementById('statProductsTotal').textContent = productsTotal;
 			document.getElementById('statRevenue').textContent = (revenue || 0).toFixed(2).replace('.', ',') + ' €';
+		}
+
+		// ── Mark all currently visible (non-filtered) items as done ───────────
+		function markAllVisible() {
+			// Count how many items will be affected for the confirmation message
+			let count = 0;
+			orders.forEach(order => {
+				let items = order.items;
+				if (activeCategoryFilter.size > 0) items = items.filter(i => activeCategoryFilter.has(i.category));
+				items = items.filter(i => i.status !== 2); // only non-done ones will change
+				count += items.reduce((s, i) => s + i.qty, 0);
+			});
+			if (count === 0) { showToast('Aucun article à terminer.'); return; }
+			showConfirm(
+				`Marquer ${count} article${count > 1 ? 's' : ''} comme terminé${count > 1 ? 's' : ''} ?`,
+				() => {
+					orders.forEach(order => {
+						let items = order.items;
+						if (activeCategoryFilter.size > 0) items = items.filter(i => activeCategoryFilter.has(i.category));
+						if (filterNotDoneOnly) items = items.filter(i => i.status !== 2);
+						items.forEach(item => { item.status = 2; itemStatusMap[item.id] = 2; });
+					});
+					saveCache(); render();
+				}
+			);
+		}
+
+		// ── Confirmation dialog ───────────────────────────────────────────────
+		function showConfirm(message, onConfirm) {
+			document.getElementById('confirmMessage').textContent = message;
+			document.getElementById('confirmOverlay').style.display = 'flex';
+			document.getElementById('confirmOk').onclick = () => {
+				document.getElementById('confirmOverlay').style.display = 'none';
+				onConfirm();
+			};
+			document.getElementById('confirmCancel').onclick = () => {
+				document.getElementById('confirmOverlay').style.display = 'none';
+			};
 		}
 
 		function cycleStatus(saleId, itemId) {
