@@ -25,43 +25,54 @@
 #J'ai créé ce site web pour Brume
 #Si tu veux un menu dans le même style pour ton resto, n'hésite pas à me contacter ! : contact@brumecoffeenice.fr
 
+
+#LE MENUFILE
 #Ceci est un menuFile. Il a été spécialement conçu pour simplifier le stockage des menus de restaurants en vue d'une mise en page automatique.
-#Ce fichier contient les éléments à mettre en forme dans le menu de Brume
-#La mise en forme des éléments est basée sur le niveau de chaque élément
-#Le niveau d'un élément est déduit du nombre de délimiteurs "_" avant lui. (appelé 'delimiter0')
-#Chaque élément est séparé de sa traduction facultative et d'un hyperlien par des délimiteurs "@" facultatif lui aussi. (appelé 'delimiter1')
+#Essayons de comprendre : 
+#Un menu, c'est un menu boissons, qui contient des boissons, des descriptions, des prix... L'objectif du menuFile est de stocker un menu de manière efficace et intelligible pour un humain.
+#Chaque élément du menu est appelé "item"
+#Chaque item doit être éventuellement traduit, contenir un hyperlien... Donc chaque item contient des "détails"
+#Le menuFile utilise des charactères spéciaux pour spécifier les items et les détails: "\n", "#", "@", "_"
+#Il contient des "lignes" (séparées par des "\n").
+#Chaque ligne contient des "items" (séparés par des "_").
+#Chaque item contient des "détails" (séparés par des "@").
+#Le nombre de "_" qui précède un item jusqu'au début de sa ligne spécifie le "niveau de l'item"
+#Le nombre de "@" qui précède un détail jusqu'au début de l'item spécifie le "niveau du détail"
+#L'ordre d'apparition des items est important. Il définit l'ordre d'affichage des items dans le menu, et la hyérarchie des items
 #Les espaces directement avant et après un délimiteur sont éliminés. Donc : "bonjour monde @ hello world" est équivalent à "bonjour monde@hello world"
-#La première ligne spécifie le niveau en fonction du nombre de delimiter0. Elle est appelée 'header0' (spécifie les niveaux)
-#La deuxième ligne spécifie le niveau en fonction du nombre de delimiter1. Elle est appelée 'header1' (spécifie les langues)
 #Les lignes vides ou commençant par "#" sont ignorées
+#Les ligne permettent de séparer les items, mais deux items de niveau différents peuvent être spécifiés dans une seule ligne.
+#Par exemple : 
+# item1 _ item2
+#Est équivalent à :
+# item1
+# _ item2
+
+#L'UTILISATION DU MENUFILE PAR BRUME COFFEESHOP
+#Ce fichier contient les "items" à mettre en forme dans le menu de Brume
+#La mise en forme des items est basée sur le niveau de chaque item
+#Le niveau d'un item permet de spécifier si l'item est respectivement un "bloc _ categorie _ produit _ prix _ description _ allergenes _ commentaire"
+#Le niveau d'un détail permet de spécifier si l'item est respectivement le "texte @ traduction @ hyperlien". "traduction" et "hyperlien" sont facultatifs pour un item. Texte est obligatoire
 #Les allergènes doivent être exactement ceux de la liste suivante : "céréales, crustacés, oeufs, poissons, arachides, soja, lait, fruits à coques, céleri, moutarde, sésame, sulfites, lupin, mollusques"
 #Les allergènes n'ont pas besoin de traduction, elle est automatiquement appliquée
 #Un allergène inconnu sera quand même affiché, mais il sera surligné en rouge
 #Vous pouvez créer des blocs spéciaux dont les noms commencent par "!" ou >
 #"!" crée un bloc dont le nom ne sera pas affiché
-#">" spécifie l'ID HTML de l'élément dans lequel ajouter le contenu mis en forme
-#Note : Le prix possède lui aussi une traduction facultative. Si elle est spécifiée, le prix diffèrera selon la langue...
+#">" spécifie l'ID du div HTML dans lequel ajouter le contenu mis en forme
+#Le prix ne doit jamais posséder de traduction ou d'hyperlien
 
-#This is a menuFile. It has been specially designed to simplify the storage of restaurant menus for automatic layout.
-#This file contains the elements to be formatted in Brume's menu.
-#The formatting of the elements is based on the level of each element.
-#The level of an element is determined by the number of "_" delimiters before it. (called 'delimiter0')
-#Each element is separated from its optional translation by an "@" delimiter, optional as well. (called 'delimiter1')
-#Spaces directly before and after a delimiter are removed. Therefore, "bonjour monde @ hello world" is equivalent to "bonjour monde@hello world"
-#The first line specifies the level based on the number of delimiter0. It is called 'header0' (specifies the levels)
-#The second line specifies the level based on the number of delimiter1. It is called 'header1' (specifies the languages)
-#Blank lines or lines starting with "#" are ignored.
-#Note: The price also has an optional translation. If specified, the price will differ depending on the language...
-
-#Recommandations :
-#menuFr @ menuEn
+#UTILISATION
+#Il est fortement recommandé de n'utiliser que 4 types de lignes
+#Les lignes qui spécifient le bloc (exemple : "menu boissons")
+#blocFr @ blocEn
+#2 : ligne qui scpécifie la cétigorie (exemple : "boissons fraiches")
 #_ catégorieFr @ catégorieEn
+#3 : ligne qui spécifie un produit (exemple "Jus d'orange")
 #__ produitFr @ produitEn _ prix _ descriptionFr @ descriptionEn _ allergènes
+#4 : ligne qui ciécifie un commentaire (exemple : "Rafraichissant !")
 #______ commentaireFr @ commentaireEn
 
-########## Exemple ##########
-#menu _ categorie _ produit _ prix _ description _ allergenes _ commentaire
-#français @ english
+########## Exemple complet ##########
 #Boissons @ Drinks
 #_ Jus @ Juice
 #______ Rafraichissant ! @ Refreshing !
@@ -74,11 +85,6 @@
 #______ made with <3
 ########## Fin de l'exemple ##########
 
-########## header0 ##########
-#bloc _ categorie _ produit _ prix _ description _ allergenes _ commentaire
-
-########## header1 ##########
-#français @ english @ hyperlien
 
 #bloc spécial à destination d'un div. Le nom n'est pas affiché
 >introBox
