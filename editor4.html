@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="robots" content="noindex, nofollow">
+	<title>Brume — Menu Editor 3</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&display=swap"
+		rel="stylesheet">
+	<style>
+		:root {
+			--bg: #faf9f7;
+			--bg-bar: rgba(250, 249, 247, 0.94);
+			--surface: #ffffff;
+			--border: #ddd8d2;
+			--border-md: #bbb4ac;
+			--border-str: #7a6e66;
+			--ink: #180f08;
+			--ink2: #3a2e28;
+			--muted: #9a9088;
+			--accent: #b84c2a;
+			--accent-light: rgba(184, 76, 42, 0.08);
+			--c0: #b84c2a;
+			--c1: #4e7020;
+			--c2: #2a5a7a;
+			--c3: #8b3a00;
+			--c4: #1e6b50;
+			--c5: #469aee;
+			--c6: #cb6aab;
+			--cc: #9a9088;
+			--red: #c02020;
+			--green: #1e6b50;
+		}
+
+		*,
+		*::before,
+		*::after {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0
+		}
+
+		html {
+			font-size: 15px
+		}
+
+		body {
+			font-family: 'Courier Prime', monospace;
+			background: var(--bg);
+			color: var(--ink);
+			min-height: 100vh;
+			overflow-x: hidden;
+			-webkit-text-size-adjust: 100%
+		}
+
+		/* ══ TOPBAR ══════════════════════════════════════════════════ */
+		#topbar {
+			position: sticky;
+			top: 0;
+			z-index: 200;
+			background: var(--bg-bar);
+			backdrop-filter: blur(20px) saturate(160%);
+			-webkit-backdrop-filter: blur(20px) saturate(160%);
+			border-bottom: 2px solid var(--border-str);
+			display: flex;
+			align-items: center;
+			gap: .35em;
+			flex-wrap: nowrap;
+			padding: 0 .8em;
+			height: 44px;
+		}
+
+		.logo {
+			font-family: 'Playfair Display', serif;
+			font-weight: 600;
+			font-size: 1.08em;
+			white-space: nowrap;
+			flex-shrink: 0
+		}
+
+		.logo sub {
+			font-family: 'Bebas Neue', sans-serif;
+			font-size: .42em;
+			color: var(--muted);
+			letter-spacing: .18em;
+			vertical-align: middle;
+			margin-left: .35em
+		}
+
+		.tb-sep {
+			flex-shrink: 0;
+			width: 1px;
+			height: 22px;
+			background: var(--border-md);
+			margin: 0 .1em
+		}
+
+		.tb-space {
+			flex: 1
+		}
+
+		.pill {
+			font-family: 'Courier Prime', monospace;
+			font-size: .60em;
+			font-weight: 700;
+			letter-spacing: .08em;
+			text-transform: uppercase;
+			padding: .28em .85em;
+			height: 28px;
+			line-height: 1;
+			border: 1.5px solid var(--border-md);
+			background: transparent;
+			color: var(--muted);
+			cursor: pointer;
+			transition: all .14s;
+			white-space: nowrap;
+			flex-shrink: 0;
+		}
+
+		.pill:hover {
+			border-color: var(--border-str);
+			color: var(--ink2)
+		}
+
+		.pill.a-assist {
+			border-color: var(--c0);
+			background: rgba(184, 76, 42, .09);
+			color: var(--c0)
+		}
+
+		.pill.a-manual {
+			border-color: var(--c2);
+			background: rgba(42, 90, 122, .09);
+			color: var(--c2)
+		}
+
+		.pill.a-diff {
+			border-color: var(--c1);
+			background: rgba(78, 112, 32, .09);
+			color: var(--c1)
+		}
+
+		.btn {
+			font-family: 'Courier Prime', monospace;
+			font-size: .60em;
+			font-weight: 700;
+			letter-spacing: .06em;
+			text-transform: uppercase;
+			padding: .28em .75em;
+			height: 28px;
+			line-height: 1;
+			border: 1.5px solid var(--border-md);
+			background: transparent;
+			color: var(--ink2);
+			cursor: pointer;
+			transition: all .12s;
+			white-space: nowrap;
+			flex-shrink: 0;
+		}
+
+		.btn:hover {
+			border-color: var(--accent);
+			color: var(--accent);
+			background: var(--accent-light)
+		}
+
+		.btn.primary {
+			border-color: var(--accent);
+			background: var(--accent);
+			color: #fff
+		}
+
+		.btn.primary:hover {
+			background: #9e3e20;
+			border-color: #9e3e20
+		}
+
+		.btn.on {
+			border-color: var(--accent);
+			background: var(--accent-light);
+			color: var(--accent)
+		}
+
+		.btn.danger:hover {
+			border-color: var(--red);
+			color: var(--red);
+			background: rgba(192, 32, 32, .06)
+		}
+
+		#topbar input {
+			font-family: 'Courier Prime', monospace;
+			font-size: max(.60em, 13px);
+			padding: 0 .65em;
+			border: 1.5px solid var(--border-md);
+			background: transparent;
+			color: var(--ink);
+			width: 8.5em;
+			outline: none;
+			height: 28px;
+			flex-shrink: 0;
+			transition: border-color .12s;
+		}
+
+		#topbar input::placeholder {
+			color: var(--muted)
+		}
+
+		#topbar input:focus {
+			border-color: var(--accent)
+		}
+
+		#status {
+			font-size: .57em;
+			color: var(--muted);
+			letter-spacing: .04em;
+			white-space: nowrap;
+			flex-shrink: 0
+		}
+
+		#status.ok {
+			color: var(--green)
+		}
+
+		#status.err {
+			color: var(--red)
+		}
+
+		/* ══ LEGEND ══════════════════════════════════════════════════ */
+		#legend {
+			position: sticky;
+			top: 44px;
+			z-index: 190;
+			background: rgba(250, 249, 247, .96);
+			backdrop-filter: blur(10px);
+			-webkit-backdrop-filter: blur(10px);
+			border-bottom: 1px solid var(--border);
+			display: flex;
+			gap: .28em;
+			flex-wrap: wrap;
+			align-items: center;
+			padding: .26em .8em;
+			font-size: .52em;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: .06em;
+		}
+
+		.leg {
+			padding: .11em .45em;
+			border: 1.5px solid;
+			white-space: nowrap
+		}
+
+		#leg-hint {
+			margin-left: auto;
+			color: var(--muted);
+			font-weight: 400;
+			text-transform: none;
+			letter-spacing: 0;
+			font-size: .95em;
+			white-space: nowrap
+		}
+
+		/* ══ PANELS ══════════════════════════════════════════════════ */
+		.panel {
+			display: none
+		}
+
+		.panel.active {
+			display: block
+		}
+
+		/* ══ ASSIST PANEL ════════════════════════════════════════════ */
+		#panel-assist {
+			padding: .3em 0 6em
+		}
+
+		.line {
+			display: flex;
+			align-items: stretch;
+			min-height: 1.9em;
+			border-bottom: 1px solid transparent;
+			transition: background .09s;
+		}
+
+		.line:hover {
+			background: #f4f1ed
+		}
+
+		.drag-handle {
+			flex-shrink: 0;
+			width: 1.65em;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: transparent;
+			font-size: .72em;
+			user-select: none;
+			cursor: grab;
+			touch-action: none;
+			transition: color .11s;
+		}
+
+		.line:hover .drag-handle {
+			color: var(--border-str)
+		}
+
+		.line-accent {
+			flex-shrink: 0;
+			width: 3px;
+			margin-right: .5em;
+			transition: background .18s
+		}
+
+		/* main clickable area */
+		.line-main {
+			flex: 1;
+			min-width: 0;
+			display: flex;
+			align-items: center;
+			padding: .3em .4em .3em 0;
+			cursor: pointer;
+			gap: .5em;
+		}
+
+		.line-colored {
+			flex: 1;
+			min-width: 0;
+			pointer-events: none;
+			user-select: none;
+			white-space: nowrap;
+			overflow: hidden;
+			font-size: .9em;
+			position: relative;
+		}
+
+		.line-colored::after {
+			content: '';
+			position: absolute;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			width: 3em;
+			background: linear-gradient(to right, transparent, var(--bg) 90%);
+			pointer-events: none;
+		}
+
+		.line:hover .line-colored::after {
+			background: linear-gradient(to right, transparent, #f4f1ed 90%)
+		}
+
+		.line-type {
+			flex-shrink: 0;
+			font-size: 8px;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: .10em;
+			opacity: .8;
+			white-space: nowrap;
+		}
+
+		/* inline action buttons, shown on hover */
+		.line-actions {
+			flex-shrink: 0;
+			display: flex;
+			align-items: center;
+			gap: .2em;
+			padding-right: .4em;
+			opacity: 0;
+			transition: opacity .12s;
+		}
+
+		.line:hover .line-actions {
+			opacity: 1
+		}
+
+		.la-btn {
+			background: transparent;
+			border: 1.5px solid var(--border);
+			font-size: 11px;
+			cursor: pointer;
+			padding: .22em .42em;
+			transition: all .12s;
+			line-height: 1;
+			display: flex;
+			align-items: center;
+			color: var(--muted);
+			white-space: nowrap;
+			font-family: 'Courier Prime', monospace;
+		}
+
+		.la-btn:hover {
+			border-color: var(--accent);
+			color: var(--accent);
+			background: var(--accent-light)
+		}
+
+		.la-btn.del:hover {
+			border-color: var(--red);
+			color: var(--red);
+			background: rgba(192, 32, 32, .06)
+		}
+
+		/* drag states */
+		.line.dragging {
+			opacity: .1
+		}
+
+		.line.drag-over {
+			outline: 2px dashed var(--accent);
+			outline-offset: -2px
+		}
+
+		/* add bar */
+		#add-bar {
+			display: flex;
+			gap: .4em;
+			flex-wrap: wrap;
+			justify-content: center;
+			margin-top: 1.5em;
+			padding: 0 .8em
+		}
+
+		/* ══ LINE EDITOR OVERLAY ════════════════════════════════════ */
+		#line-overlay {
+			display: none;
+			position: fixed;
+			inset: 0;
+			z-index: 500;
+			background: var(--bg);
+			flex-direction: column;
+			animation: ovIn .14s ease;
+		}
+
+		#line-overlay.open {
+			display: flex
+		}
+
+		@keyframes ovIn {
+			from {
+				opacity: 0;
+				transform: translateY(6px)
+			}
+
+			to {
+				opacity: 1;
+				transform: none
+			}
+		}
+
+		#ov-topbar {
+			flex-shrink: 0;
+			display: flex;
+			align-items: center;
+			gap: .4em;
+			padding: 0 .9em;
+			height: 48px;
+			border-bottom: 2px solid var(--border-str);
+			background: var(--bg-bar);
+			backdrop-filter: blur(20px);
+			-webkit-backdrop-filter: blur(20px);
+		}
+
+		#ov-back {
+			font-size: 1.15em;
+			background: transparent;
+			border: none;
+			cursor: pointer;
+			color: var(--muted);
+			padding: .28em .4em;
+			line-height: 1;
+			transition: color .12s;
+			font-family: 'Courier Prime', monospace
+		}
+
+		#ov-back:hover {
+			color: var(--accent)
+		}
+
+		#ov-linenr {
+			font-size: .57em;
+			color: var(--muted);
+			letter-spacing: .07em;
+			font-weight: 700;
+			text-transform: uppercase
+		}
+
+		#ov-spacer {
+			flex: 1
+		}
+
+		/* live preview bar */
+		#ov-preview-wrap {
+			flex-shrink: 0;
+			padding: .55em .9em;
+			border-bottom: 2px solid var(--border);
+			background: var(--surface);
+			display: flex;
+			align-items: flex-start;
+			gap: .55em;
+		}
+
+		#ov-preview-accent {
+			width: 4px;
+			align-self: stretch;
+			flex-shrink: 0;
+			border-radius: 1px;
+			transition: background .18s
+		}
+
+		#ov-preview {
+			font-family: 'Courier Prime', monospace;
+			font-size: 1em;
+			flex: 1;
+			min-width: 0;
+			white-space: pre-wrap;
+			word-break: break-word;
+			line-height: 1.55
+		}
+
+		/* scrollable body */
+		#ov-body {
+			flex: 1;
+			overflow-y: auto;
+			padding: 1em .9em 4em
+		}
+
+		/* comment toggle */
+		#ov-comment-row {
+			display: flex;
+			align-items: center;
+			gap: .6em;
+			margin-bottom: 1em
+		}
+
+		#ov-comment-btn {
+			font-family: 'Courier Prime', monospace;
+			font-size: 11px;
+			font-weight: 700;
+			padding: .24em .65em;
+			border: 1.5px solid var(--border-md);
+			background: transparent;
+			cursor: pointer;
+			transition: all .13s;
+			letter-spacing: .05em;
+			text-transform: uppercase;
+			color: var(--muted);
+		}
+
+		#ov-comment-btn.on {
+			border-color: var(--cc);
+			background: rgba(154, 144, 136, .1);
+			color: var(--cc)
+		}
+
+		#ov-comment-note {
+			font-size: .60em;
+			color: var(--muted)
+		}
+
+		/* field grid */
+		.fgrid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: .38em .65em
+		}
+
+		@media(max-width:560px) {
+			.fgrid {
+				grid-template-columns: 1fr
+			}
+		}
+
+		.ffield {
+			display: flex;
+			flex-direction: column;
+			gap: .13em
+		}
+
+		.ffield.full {
+			grid-column: 1/-1
+		}
+
+		.ffield.narrow {
+			max-width: 9em
+		}
+
+		.flabel {
+			font-size: 8px;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: .14em;
+			color: var(--muted);
+			display: flex;
+			align-items: center;
+			gap: .35em
+		}
+
+		.fdot {
+			display: inline-block;
+			width: 6px;
+			height: 6px;
+			border-radius: 50%;
+			flex-shrink: 0
+		}
+
+		.ftag {
+			font-size: 7.5px;
+			background: var(--border);
+			color: var(--muted);
+			padding: .03em .28em;
+			letter-spacing: .07em
+		}
+
+		.finput {
+			font-family: 'Courier Prime', monospace;
+			font-size: 13.5px;
+			line-height: 1.5;
+			padding: .32em .55em;
+			border: 1.5px solid var(--border-md);
+			background: var(--surface);
+			outline: none;
+			width: 100%;
+			color: var(--ink);
+			transition: border-color .12s, box-shadow .12s;
+			resize: none;
+		}
+
+		.finput:focus {
+			border-color: var(--accent);
+			box-shadow: 0 0 0 2.5px var(--accent-light)
+		}
+
+		/* hide number spinner */
+		.finput[type=number] {
+			-moz-appearance: textfield
+		}
+
+		.finput[type=number]::-webkit-outer-spin-button,
+		.finput[type=number]::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0
+		}
+
+		.fsep {
+			font-size: 8.5px;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: .13em;
+			color: var(--border-str);
+			border-bottom: 1px solid var(--border);
+			padding-bottom: .13em;
+			margin: .5em 0 .05em;
+			grid-column: 1/-1
+		}
+
+		/* allergen chips */
+		.al-wrap {
+			display: flex;
+			flex-wrap: wrap;
+			gap: .22em;
+			padding: .18em 0
+		}
+
+		.al-chip {
+			font-family: 'Courier Prime', monospace;
+			font-size: 10.5px;
+			padding: .14em .48em;
+			border: 1.5px solid var(--border-md);
+			background: transparent;
+			color: var(--muted);
+			cursor: pointer;
+			transition: all .12s;
+			user-select: none;
+		}
+
+		.al-chip.on {
+			border-color: var(--c5);
+			color: var(--c5);
+			background: rgba(70, 154, 238, .07)
+		}
+
+		/* ══ MANUAL PANEL ════════════════════════════════════════════ */
+		#panel-manual {
+			display: none;
+			flex-direction: column;
+			height: calc(100vh - 44px)
+		}
+
+		#panel-manual.active {
+			display: flex
+		}
+
+		#manual-editor {
+			flex: 1;
+			overflow-y: auto;
+			overflow-x: auto;
+			padding: .55em .9em 6em;
+			font-family: 'Courier Prime', monospace;
+			font-size: .9em;
+			line-height: 1.72;
+			outline: none;
+			white-space: pre;
+			cursor: text;
+			caret-color: var(--ink);
+		}
+
+		#manual-editor .ml {
+			display: block;
+			min-height: 1.72em;
+			padding: 0;
+			white-space: pre;
+			outline: none
+		}
+
+		#manual-editor .ml.cur {
+			background: rgba(184, 76, 42, .045)
+		}
+
+		#manual-bar {
+			flex-shrink: 0;
+			padding: .28em .9em;
+			border-top: 1px solid var(--border);
+			font-size: .55em;
+			color: var(--muted);
+			display: flex;
+			align-items: center;
+			gap: 1em;
+			background: rgba(250, 249, 247, .97);
+		}
+
+		#manual-pos {
+			font-weight: 700;
+			color: var(--ink2)
+		}
+
+		/* ══ DIFF PANEL ══════════════════════════════════════════════ */
+		#panel-diff {
+			padding: .7em .9em 5em
+		}
+
+		.diff-hdr {
+			font-size: .63em;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: .10em;
+			color: var(--muted);
+			margin-bottom: .5em
+		}
+
+		.diff-stats {
+			font-size: .60em;
+			color: var(--muted);
+			margin-bottom: .6em;
+			display: flex;
+			gap: 1em
+		}
+
+		.dsa {
+			color: var(--green)
+		}
+
+		.dsd {
+			color: var(--red)
+		}
+
+		#diff-body {
+			font-family: 'Courier Prime', monospace;
+			font-size: .83em;
+			line-height: 1.68
+		}
+
+		.dl {
+			display: block;
+			padding: .04em .5em;
+			white-space: pre-wrap;
+			word-break: break-all
+		}
+
+		.dl-add {
+			background: rgba(30, 107, 80, .09);
+			color: #1e6b50
+		}
+
+		.dl-del {
+			background: rgba(192, 32, 32, .07);
+			color: #aa2020;
+			text-decoration: line-through
+		}
+
+		.dl-same {
+			color: var(--muted)
+		}
+
+		/* ══ COLORS ══════════════════════════════════════════════════ */
+		.s0 {
+			color: var(--c0);
+			font-style: italic
+		}
+
+		.s1 {
+			color: var(--c1);
+			font-style: italic
+		}
+
+		.s2 {
+			color: var(--c2);
+			font-weight: 700
+		}
+
+		.s3 {
+			color: var(--c3)
+		}
+
+		.s4 {
+			color: var(--c4)
+		}
+
+		.s5 {
+			color: var(--c5)
+		}
+
+		.s6 {
+			color: var(--c6)
+		}
+
+		.sc {
+			color: var(--cc);
+			font-style: italic
+		}
+
+		.su {
+			color: #c8c0b8
+		}
+
+		.sa {
+			color: #5a6a4a;
+			font-style: italic
+		}
+
+		.serr {
+			color: var(--red);
+			font-weight: 700
+		}
+
+		::-webkit-scrollbar {
+			width: 5px;
+			height: 5px
+		}
+
+		::-webkit-scrollbar-track {
+			background: var(--bg)
+		}
+
+		::-webkit-scrollbar-thumb {
+			background: var(--border-md)
+		}
+
+		::-webkit-scrollbar-thumb:hover {
+			background: var(--border-str)
+		}
+	</style>
+</head>
+
+<body>
+
+	<!-- ════ TOPBAR ════════════════════════════════════════════════ -->
+	<div id="topbar">
+		<div class="logo">Brume <sub>editor 3</sub></div>
+		<div class="tb-sep"></div>
+		<button class="pill a-assist" id="pill-assist" onclick="switchMode('assist')">✦ Assisté</button>
+		<button class="pill" id="pill-manual" onclick="switchMode('manual')">⌨ Manuel</button>
+		<button class="pill" id="pill-diff" onclick="switchMode('diff')">⟳ Diff</button>
+		<div class="tb-sep"></div>
+		<button class="btn" onclick="copyMenu()">⧉ Copier</button>
+		<button class="btn" onclick="window.open('menu.html','_blank')">↗ Menu</button>
+		<button class="btn" id="btn-fs" onclick="toggleFS()" title="Plein écran">⛶</button>
+		<div class="tb-space"></div>
+		<input type="email" id="emailBox" placeholder="email" autocomplete="on">
+		<input type="password" id="pwBox" placeholder="mot de passe" autocomplete="on">
+		<button class="btn primary" onclick="pushToSupabase()">↑ Publier</button>
+		<div class="tb-sep"></div>
+		<span id="status"></span>
+	</div>
+
+	<!-- ════ LEGEND ════════════════════════════════════════════════ -->
+	<div id="legend">
+		<span class="leg" style="border-color:var(--c0);color:var(--c0)">bloc</span>
+		<span class="leg" style="border-color:var(--c1);color:var(--c1)">_ catégorie</span>
+		<span class="leg" style="border-color:var(--c2);color:var(--c2)">__ produit</span>
+		<span class="leg" style="border-color:var(--c3);color:var(--c3)">___ prix</span>
+		<span class="leg" style="border-color:var(--c4);color:var(--c4)">____ description</span>
+		<span class="leg" style="border-color:var(--c5);color:var(--c5)">_____ allergènes</span>
+		<span class="leg" style="border-color:var(--c6);color:var(--c6)">______ commentaire</span>
+		<span class="leg" style="border-color:var(--cc);color:var(--cc)"># ignoré</span>
+		<span id="leg-hint">clic = éditer · ⠿ glisser · ＋ insérer · ✕ supprimer</span>
+	</div>
+
+	<!-- ════ PANELS ════════════════════════════════════════════════ -->
+
+	<!-- ASSISTED -->
+	<div id="panel-assist" class="panel active">
+		<div id="lines-container"></div>
+		<div id="add-bar">
+			<button class="btn" onclick="insertAndEdit(null,'')">＋ Vide</button>
+			<button class="btn" onclick="insertAndEdit(null,'Nouveau bloc')">＋ Bloc</button>
+			<button class="btn" onclick="insertAndEdit(null,'_ ')">＋ Catégorie</button>
+			<button class="btn" onclick="insertAndEdit(null,'__ ')">＋ Produit</button>
+			<button class="btn" onclick="insertAndEdit(null,'______ ')">＋ Note</button>
+			<button class="btn" onclick="insertAndEdit(null,'# ')">＋ Ignorée</button>
+		</div>
+	</div>
+
+	<!-- MANUAL -->
+	<div id="panel-manual" class="panel">
+		<div id="manual-editor" contenteditable="true" spellcheck="false"></div>
+		<div id="manual-bar">
+			<span id="manual-pos">Ln 1, Col 1</span>
+			<span>Ctrl+S = publier · Entrée = nouvelle ligne</span>
+		</div>
+	</div>
+
+	<!-- DIFF -->
+	<div id="panel-diff" class="panel">
+		<div class="diff-hdr">Différences avec la version publiée</div>
+		<div class="diff-stats" id="diff-stats"></div>
+		<div id="diff-body"></div>
+	</div>
+
+	<!-- ════ LINE EDITOR OVERLAY ═══════════════════════════════════ -->
+	<div id="line-overlay">
+		<div id="ov-topbar">
+			<button id="ov-back" onclick="closeOverlay(false)" title="Annuler (Échap)">← Annuler</button>
+			<span id="ov-linenr"></span>
+			<div id="ov-spacer"></div>
+			<button class="btn danger" id="ov-del" onclick="deleteLine()">✕ Supprimer</button>
+			<button class="btn primary" onclick="closeOverlay(true)">✓ Valider</button>
+		</div>
+
+		<div id="ov-preview-wrap">
+			<div id="ov-preview-accent"></div>
+			<div id="ov-preview"></div>
+		</div>
+
+		<div id="ov-body">
+			<!-- comment toggle -->
+			<div id="ov-comment-row">
+				<button id="ov-comment-btn" onclick="toggleComment()"># Ignorer cette ligne</button>
+				<span id="ov-comment-note">Ajoute # en début de ligne — le contenu est conservé</span>
+			</div>
+			<!-- fields injected here; hidden when commented -->
+			<div class="fgrid" id="ov-fields"></div>
+		</div>
+	</div>
+
+	<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+	<script>
+		// ── SUPABASE ──────────────────────────────────────────────────
+		const SB_URL = "https://cpvxjedlgjhcdqjyecmf.supabase.co";
+		const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwdnhqZWRsZ2poY2RxanllY21mIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkyNjMzMzYsImV4cCI6MjAxNDgzOTMzNn0.Rs-bqvUb0Eq7NEKX3tFc8WHJOjzk1Rc4fgRRU6OtVNs";
+		let _sb; try { _sb = supabase.createClient(SB_URL, SB_KEY); } catch (e) { }
+
+		// ── STATE ─────────────────────────────────────────────────────
+		let rawLines = [], savedText = '', currentMode = 'assist';
+
+		// ── CONSTANTS ─────────────────────────────────────────────────
+		const COLORS = ['var(--c0)', 'var(--c1)', 'var(--c2)', 'var(--c3)', 'var(--c4)', 'var(--c5)', 'var(--c6)'];
+		const LABELS = ['bloc', 'catégorie', 'produit', 'prix', 'description', 'allergènes', 'commentaire'];
+		const SIZES = ['1.10em', '0.97em', '0.91em', '0.85em', '0.82em', '0.79em', '0.77em'];
+		const ALLERGENS = ['céréales', 'crustacés', 'oeufs', 'poissons', 'arachides', 'soja', 'lait',
+			'fruits à coques', 'céleri', 'moutarde', 'sésame', 'sulfites', 'lupin', 'mollusques'];
+
+		// ── UTILS ─────────────────────────────────────────────────────
+		const esc = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+		const getText = () => rawLines.join('\n');
+
+		function lineInfo(raw) {
+			if (!raw || raw.trim() === '') return { color: 'transparent', label: '', size: '0.9em' };
+			if (raw.trim().startsWith('#')) return { color: 'var(--cc)', label: 'ignoré', size: '0.82em' };
+			let lv = 0; while (raw[lv] === '_') lv++; lv = Math.min(lv, 6);
+			return { color: COLORS[lv], label: LABELS[lv], size: SIZES[lv] };
+		}
+
+		function colorize(raw) {
+			if (!raw || raw.trim() === '') return '\u200b';
+			if (raw.trim().startsWith('#')) return `<span class="sc">${esc(raw)}</span>`;
+			let lv = 0; while (raw[lv] === '_') lv++;
+			const lead = raw.slice(0, lv), body = raw.slice(lv);
+			let h = '';
+			if (lead) {
+				const ok = lead.slice(0, 6), err = lead.slice(6);
+				if (ok) h += `<span class="su">${esc(ok)}</span>`;
+				if (err) h += `<span class="serr">${esc(err)}</span>`;
+			}
+			body.split('_').forEach((seg, i) => {
+				const rl = lv + i;
+				if (i > 0) { const sc = rl > 6 ? 'serr' : 'su'; h += `<span class="${sc}">_</span>`; }
+				const cls = rl > 6 ? 'serr' : `s${Math.min(rl, 6)}`;
+				const parts = seg.split('@');
+				h += `<span class="${cls}">${esc(parts[0])}</span>`;
+				for (let j = 1; j < parts.length; j++) h += `<span class="${rl > 6 ? 'serr' : 'sa'}">@${esc(parts[j])}</span>`;
+			});
+			return h;
+		}
+
+		// ── PARSE / REBUILD ───────────────────────────────────────────
+		// A raw line is NEVER restructured by the overlay.
+		// We only read/write individual @-detail values within each _-segment.
+		// Segments: split by ' _ ' (with spaces), details by ' @ ' within each segment.
+
+		function parseRaw(raw) {
+			// returns {commented, prefix, segments}
+			// prefix = leading underscores (0..6+)
+			// segments = array of {details: [string, string?, string?]}  (text, translation, url)
+			const commented = raw.trimStart().startsWith('#');
+			const content = commented ? raw.replace(/^(\s*#\s*)/, '') : raw;
+			let lv = 0; while (content[lv] === '_') lv++;
+			const prefix = content.slice(0, lv);
+			const body = content.slice(lv);
+			// split on ' _ ' to get segments (preserve single _ separators)
+			const rawSegs = body.split(/(?<= )_(?= )|(?<=\S)_(?=\S)| _ /);
+			// simpler: split on ' _ ' first, then on '_' for edge cases
+			const segParts = body.split(' _ ');
+			const segments = segParts.map(seg => {
+				const det = seg.split(' @ ');
+				return { details: det.map(d => d.trim()) };
+			});
+			return { commented, prefix, segments };
+		}
+
+		function rebuildRaw(commented, prefix, segments) {
+			const segs = segments.map(seg => {
+				const det = seg.details.map(d => (d || '').trim()).filter((_, i, arr) => {
+					// drop trailing empties but keep first
+					if (i === 0) return true;
+					return arr.slice(i).some(x => x !== '');
+				});
+				return det.join(' @ ');
+			});
+			// drop trailing empty segments (but keep at least one)
+			while (segs.length > 1 && segs[segs.length - 1].trim() === '') segs.pop();
+			const body = prefix + segs.join(' _ ');
+			return commented ? '# ' + body : body;
+		}
+
+		// level of a raw line (ignoring # prefix)
+		function rawLevel(raw) {
+			const content = raw.trimStart().startsWith('#') ? raw.replace(/^(\s*#\s*)/, '') : raw;
+			let lv = 0; while (content[lv] === '_') lv++;
+			return Math.min(lv, 6);
+		}
+
+		// ── RENDER ASSIST LIST ────────────────────────────────────────
+		function renderAll() {
+			const c = document.getElementById('lines-container'); c.innerHTML = '';
+			rawLines.forEach((t, i) => c.appendChild(buildLineEl(t, i)));
+		}
+
+		function buildLineEl(text, idx) {
+			const info = lineInfo(text);
+			const line = document.createElement('div');
+			line.className = 'line'; line.dataset.idx = idx;
+
+			const handle = document.createElement('span');
+			handle.className = 'drag-handle'; handle.textContent = '⠿';
+
+			const accent = document.createElement('div');
+			accent.className = 'line-accent'; accent.style.background = info.color;
+
+			// main clickable area
+			const main = document.createElement('div'); main.className = 'line-main';
+			const colored = document.createElement('div'); colored.className = 'line-colored';
+			colored.innerHTML = colorize(text);
+			const typeLbl = document.createElement('span'); typeLbl.className = 'line-type';
+			typeLbl.style.color = info.color; typeLbl.textContent = info.label;
+			main.appendChild(colored); main.appendChild(typeLbl);
+
+			// inline action buttons
+			const actions = document.createElement('div'); actions.className = 'line-actions';
+
+			const insBtn = document.createElement('button'); insBtn.className = 'la-btn';
+			insBtn.textContent = '＋'; insBtn.title = 'Insérer une ligne en dessous';
+			insBtn.addEventListener('click', e => {
+				e.stopPropagation();
+				// inherit same level prefix as current line
+				const lv = rawLevel(rawLines[idx]);
+				insertAndEdit(idx, '_'.repeat(lv));
+			});
+
+			const delBtn = document.createElement('button'); delBtn.className = 'la-btn del';
+			delBtn.textContent = '✕'; delBtn.title = 'Supprimer cette ligne';
+			delBtn.addEventListener('click', e => {
+				e.stopPropagation();
+				rawLines.splice(idx, 1); renderAll();
+			});
+
+			actions.appendChild(insBtn); actions.appendChild(delBtn);
+
+			line.appendChild(handle); line.appendChild(accent); line.appendChild(main); line.appendChild(actions);
+
+			// click main area → open overlay
+			let pdY = 0, pdT = 0;
+			main.addEventListener('pointerdown', e => { pdY = e.clientY; pdT = Date.now(); }, { passive: true });
+			main.addEventListener('pointerup', e => {
+				if (Math.abs(e.clientY - pdY) < 8 && (Date.now() - pdT) < 500) openOverlay(idx);
+			});
+
+			setupDrag(handle, line, idx);
+			return line;
+		}
+
+		// ── OVERLAY ───────────────────────────────────────────────────
+		let ovIdx = -1;
+		let ovCommented = false;
+		let ovPrefix = '';
+		let ovSegments = []; // [{details:[str,str?,str?]}]
+
+		function openOverlay(idx) {
+			ovIdx = idx;
+			const parsed = parseRaw(rawLines[idx] || '');
+			ovCommented = parsed.commented;
+			ovPrefix = parsed.prefix;
+			ovSegments = parsed.segments.map(s => ({ details: [...s.details] }));
+
+			document.getElementById('ov-linenr').textContent = `Ligne ${idx + 1} / ${rawLines.length}`;
+
+			const cb = document.getElementById('ov-comment-btn');
+			cb.classList.toggle('on', ovCommented);
+
+			buildFields();
+			updatePreview();
+
+			document.getElementById('line-overlay').classList.add('open');
+			setTimeout(() => {
+				const f = document.getElementById('ov-fields').querySelector('.finput');
+				if (f) f.focus();
+			}, 80);
+		}
+
+		function closeOverlay(save) {
+			if (save) {
+				syncFromDOM();
+				const raw = rebuildRaw(ovCommented, ovPrefix, ovSegments);
+				rawLines[ovIdx] = raw;
+				updateListLine(ovIdx, raw);
+			}
+			document.getElementById('line-overlay').classList.remove('open');
+			ovIdx = -1;
+		}
+
+		function deleteLine() {
+			if (ovIdx < 0) return;
+			rawLines.splice(ovIdx, 1);
+			document.getElementById('line-overlay').classList.remove('open');
+			ovIdx = -1;
+			renderAll();
+		}
+
+		function toggleComment() {
+			syncFromDOM();
+			ovCommented = !ovCommented;
+			document.getElementById('ov-comment-btn').classList.toggle('on', ovCommented);
+			// fields hidden/shown based on commented state
+			document.getElementById('ov-fields').style.opacity = ovCommented ? '0.3' : '1';
+			document.getElementById('ov-fields').style.pointerEvents = ovCommented ? 'none' : '';
+			updatePreview();
+		}
+
+		function updateListLine(idx, raw) {
+			const lineEl = document.querySelector(`.line[data-idx="${idx}"]`);
+			if (!lineEl) return;
+			const info = lineInfo(raw);
+			lineEl.querySelector('.line-colored').innerHTML = colorize(raw);
+			lineEl.querySelector('.line-accent').style.background = info.color;
+			lineEl.querySelector('.line-type').textContent = info.label;
+			lineEl.querySelector('.line-type').style.color = info.color;
+		}
+
+		// sync DOM inputs → ovSegments
+		function syncFromDOM() {
+			document.querySelectorAll('#ov-fields .finput[data-seg][data-det]').forEach(inp => {
+				const s = parseInt(inp.dataset.seg), d = parseInt(inp.dataset.det);
+				if (!ovSegments[s]) ovSegments[s] = { details: [''] };
+				while (ovSegments[s].details.length <= d) ovSegments[s].details.push('');
+				ovSegments[s].details[d] = inp.value;
+			});
+			// allergens (always seg 3, det 0 for products)
+			const aw = document.querySelector('#ov-fields .al-wrap');
+			if (aw) {
+				if (!ovSegments[3]) ovSegments[3] = { details: [''] };
+				ovSegments[3].details[0] = [...aw.querySelectorAll('.al-chip.on')].map(c => c.dataset.al).join(', ');
+			}
+		}
+
+		function updatePreview() {
+			syncFromDOM();
+			const raw = rebuildRaw(ovCommented, ovPrefix, ovSegments);
+			const info = lineInfo(raw);
+			document.getElementById('ov-preview').innerHTML = colorize(raw);
+			document.getElementById('ov-preview-accent').style.background = info.color;
+		}
+
+		// ── FIELD BUILDERS ────────────────────────────────────────────
+		// seg = segment index (0 = first _-separated part)
+		// det = detail index within segment (0=text, 1=translation, 2=url)
+
+		function detVal(seg, det) {
+			return ovSegments[seg]?.details?.[det] || '';
+		}
+
+		function mkInput(seg, det, multiline, type) {
+			const el = multiline ? document.createElement('textarea') : document.createElement('input');
+			el.className = 'finput';
+			if (type) el.type = type; else if (!multiline) el.type = 'text';
+			if (multiline) el.rows = 2;
+			el.dataset.seg = seg; el.dataset.det = det;
+			el.value = detVal(seg, det);
+			el.addEventListener('input', updatePreview);
+			return el;
+		}
+
+		function mkSep(label) {
+			const s = document.createElement('div'); s.className = 'fsep'; s.textContent = label; return s;
+		}
+
+		function mkField(label, dotColor, seg, det, opts = {}) {
+			const w = document.createElement('div');
+			w.className = 'ffield' + (opts.full ? ' full' : '') + (opts.narrow ? ' narrow' : '');
+			const lbl = document.createElement('div'); lbl.className = 'flabel';
+			if (dotColor) { const d = document.createElement('span'); d.className = 'fdot'; d.style.background = dotColor; lbl.appendChild(d); }
+			lbl.appendChild(document.createTextNode(' ' + label));
+			w.appendChild(lbl);
+			w.appendChild(mkInput(seg, det, opts.multiline, opts.type));
+			return w;
+		}
+
+		// A bilingual+url field group: text (FR), translation (EN), url — all for the same segment
+		function mkTriField(label, dotColor, seg, opts = {}) {
+			const outer = document.createElement('div'); outer.className = 'ffield full';
+			const lbl = document.createElement('div'); lbl.className = 'flabel';
+			if (dotColor) { const d = document.createElement('span'); d.className = 'fdot'; d.style.background = dotColor; outer.appendChild(d); }
+			lbl.appendChild(document.createTextNode(' ' + label)); outer.appendChild(lbl);
+
+			const grid = document.createElement('div');
+			grid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:.3em .5em;margin-top:.1em';
+
+			function row(tag, seg, det, multiline) {
+				const w = document.createElement('div'); w.style.cssText = 'display:flex;flex-direction:column;gap:.08em';
+				const t = document.createElement('span'); t.className = 'ftag'; t.textContent = tag;
+				w.appendChild(t); w.appendChild(mkInput(seg, det, multiline)); return w;
+			}
+
+			const frW = row('FR', seg, 0, opts.multiline);
+			frW.style.gridColumn = '1';
+			const enW = row('EN', seg, 1, opts.multiline);
+			enW.style.gridColumn = '2';
+			const urlW = row('URL', seg, 2, false);
+			urlW.style.gridColumn = '1/-1';
+			// url input — full width, smaller
+			const urlInp = urlW.querySelector('.finput');
+			urlInp.style.fontSize = '11.5px';
+			urlInp.placeholder = 'https://…';
+
+			grid.appendChild(frW); grid.appendChild(enW); grid.appendChild(urlW);
+			outer.appendChild(grid);
+			return outer;
+		}
+
+		function mkAllergens() {
+			const w = document.createElement('div'); w.className = 'ffield full';
+			const lbl = document.createElement('div'); lbl.className = 'flabel';
+			const d = document.createElement('span'); d.className = 'fdot'; d.style.background = COLORS[5]; lbl.appendChild(d);
+			lbl.appendChild(document.createTextNode(' Allergènes')); w.appendChild(lbl);
+			const aw = document.createElement('div'); aw.className = 'al-wrap';
+			const cur = (detVal(3, 0)).split(',').map(a => a.trim()).filter(Boolean);
+			ALLERGENS.forEach(al => {
+				const chip = document.createElement('button'); chip.className = 'al-chip' + (cur.includes(al) ? ' on' : '');
+				chip.dataset.al = al; chip.textContent = al;
+				chip.addEventListener('click', e => {
+					e.preventDefault(); chip.classList.toggle('on');
+					if (!ovSegments[3]) ovSegments[3] = { details: [''] };
+					ovSegments[3].details[0] = [...aw.querySelectorAll('.al-chip.on')].map(c => c.dataset.al).join(', ');
+					updatePreview();
+				});
+				aw.appendChild(chip);
+			});
+			w.appendChild(aw); return w;
+		}
+
+		// Build fields based on the actual level of the current line
+		function buildFields() {
+			const g = document.getElementById('ov-fields'); g.innerHTML = '';
+			// when commented: show fields but dimmed (can still edit underlying content)
+			g.style.opacity = ovCommented ? '0.3' : '1';
+			g.style.pointerEvents = ovCommented ? 'none' : '';
+
+			const lv = ovPrefix.length; // number of leading underscores = level
+
+			if (lv === 0) {
+				// Bloc
+				g.appendChild(mkSep('Bloc'));
+				g.appendChild(mkTriField('Nom du bloc', COLORS[0], 0, { full: true }));
+			} else if (lv === 1) {
+				// Catégorie
+				g.appendChild(mkSep('Catégorie'));
+				g.appendChild(mkTriField('Nom de la catégorie', COLORS[1], 0, { full: true }));
+			} else if (lv === 2) {
+				// Produit: seg0=name, seg1=price, seg2=description, seg3=allergens
+				g.appendChild(mkSep('Produit'));
+				g.appendChild(mkTriField('Nom', COLORS[2], 0));
+				// price: seg1 det0 only — number input
+				const priceFld = mkField('Prix (€)', COLORS[3], 1, 0, { narrow: true, type: 'number' });
+				const priceInp = priceFld.querySelector('.finput');
+				priceInp.step = '0.50'; priceInp.min = '0';
+				g.appendChild(priceFld);
+				g.appendChild(mkSep('Description'));
+				g.appendChild(mkTriField('Description', COLORS[4], 2, { multiline: true, full: true }));
+				g.appendChild(mkSep('Allergènes'));
+				g.appendChild(mkAllergens());
+			} else if (lv === 3) {
+				// Prix
+				g.appendChild(mkSep('Prix'));
+				g.appendChild(mkField('Valeur', COLORS[3], 0, 0, { narrow: true, type: 'number' }));
+				const inp = g.querySelector('.finput');
+				if (inp) { inp.step = '0.50'; inp.min = '0'; }
+			} else if (lv === 4) {
+				// Description
+				g.appendChild(mkSep('Description'));
+				g.appendChild(mkTriField('Texte', COLORS[4], 0, { multiline: true, full: true }));
+			} else if (lv === 5) {
+				// Allergènes
+				g.appendChild(mkSep('Allergènes'));
+				// reuse allergen chip builder but pointing at seg0
+				const w = document.createElement('div'); w.className = 'ffield full';
+				const lbl2 = document.createElement('div'); lbl2.className = 'flabel';
+				const dd = document.createElement('span'); dd.className = 'fdot'; dd.style.background = COLORS[5]; lbl2.appendChild(dd);
+				lbl2.appendChild(document.createTextNode(' Allergènes')); w.appendChild(lbl2);
+				const aw = document.createElement('div'); aw.className = 'al-wrap';
+				const cur = (detVal(0, 0)).split(',').map(a => a.trim()).filter(Boolean);
+				ALLERGENS.forEach(al => {
+					const chip = document.createElement('button'); chip.className = 'al-chip' + (cur.includes(al) ? ' on' : '');
+					chip.dataset.al = al; chip.textContent = al;
+					chip.addEventListener('click', e => {
+						e.preventDefault(); chip.classList.toggle('on');
+						if (!ovSegments[0]) ovSegments[0] = { details: [''] };
+						ovSegments[0].details[0] = [...aw.querySelectorAll('.al-chip.on')].map(c => c.dataset.al).join(', ');
+						updatePreview();
+					});
+					aw.appendChild(chip);
+				});
+				w.appendChild(aw); g.appendChild(w);
+			} else {
+				// Commentaire (level 6+)
+				g.appendChild(mkSep('Commentaire affiché'));
+				g.appendChild(mkTriField('Texte', COLORS[6], 0, { multiline: true, full: true }));
+			}
+		}
+
+		// keyboard shortcuts
+		document.addEventListener('keydown', e => {
+			if (!document.getElementById('line-overlay').classList.contains('open')) return;
+			if (e.key === 'Escape') { e.preventDefault(); closeOverlay(false); }
+			if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); closeOverlay(true); }
+		});
+
+		// ── INSERT & EDIT ─────────────────────────────────────────────
+		function insertAndEdit(afterIdx, text = '') {
+			if (afterIdx === null) rawLines.push(text);
+			else rawLines.splice(afterIdx + 1, 0, text);
+			renderAll();
+			const newIdx = afterIdx === null ? rawLines.length - 1 : afterIdx + 1;
+			setTimeout(() => openOverlay(newIdx), 30);
+		}
+
+		// ── DRAG & DROP ───────────────────────────────────────────────
+		let drag = null;
+		function setupDrag(handle, lineEl, idx) {
+			handle.addEventListener('mousedown', e => startDrag(e.clientY, lineEl, idx, 'mouse'));
+			handle.addEventListener('touchstart', e => startDrag(e.touches[0].clientY, lineEl, idx, 'touch'), { passive: true });
+		}
+		function startDrag(cy, lineEl, idx, type) {
+			const r = lineEl.getBoundingClientRect();
+			const ghost = lineEl.cloneNode(true);
+			ghost.style.cssText = `position:fixed;left:${r.left}px;top:${r.top}px;width:${r.width}px;opacity:.9;z-index:999;pointer-events:none;background:#fff;border:2px solid var(--accent);box-shadow:0 4px 20px rgba(0,0,0,.12)`;
+			document.body.appendChild(ghost);
+			lineEl.classList.add('dragging');
+			drag = { srcIdx: idx, ghost, lineEl, oy: cy - r.top };
+			if (type === 'touch') { document.addEventListener('touchmove', onTM, { passive: false }); document.addEventListener('touchend', onTE, { once: true }); }
+		}
+		function moveDrag(cy) {
+			if (!drag) return;
+			drag.ghost.style.top = (cy - drag.oy) + 'px';
+			document.querySelectorAll('.line.drag-over').forEach(l => l.classList.remove('drag-over'));
+			const t = lineAtY(cy); if (t && t !== drag.lineEl) t.classList.add('drag-over');
+		}
+		function endDrag(cy) {
+			if (!drag) return;
+			drag.ghost.remove(); drag.lineEl.classList.remove('dragging');
+			document.querySelectorAll('.line.drag-over').forEach(l => l.classList.remove('drag-over'));
+			const t = lineAtY(cy);
+			if (t && t !== drag.lineEl) {
+				const di = parseInt(t.dataset.idx);
+				if (!isNaN(di) && di !== drag.srcIdx) {
+					const before = cy < t.getBoundingClientRect().top + t.getBoundingClientRect().height / 2;
+					const moved = rawLines.splice(drag.srcIdx, 1)[0];
+					let dest = drag.srcIdx < di ? di - 1 : di; if (!before) dest++;
+					rawLines.splice(dest, 0, moved); renderAll();
+				}
+			}
+			drag = null;
+		}
+		document.addEventListener('mousemove', e => moveDrag(e.clientY));
+		document.addEventListener('mouseup', e => endDrag(e.clientY));
+		function onTM(e) { e.preventDefault(); moveDrag(e.touches[0].clientY); }
+		function onTE(e) { endDrag(e.changedTouches[0].clientY); document.removeEventListener('touchmove', onTM); }
+		function lineAtY(y) { for (const el of document.querySelectorAll('.line')) { const r = el.getBoundingClientRect(); if (y >= r.top && y <= r.bottom) return el; } return null; }
+
+		// ══ MANUAL MODE ═══════════════════════════════════════════════
+		let manualNoInput = false;
+
+		function buildManualDOM() {
+			const ed = document.getElementById('manual-editor'); ed.innerHTML = '';
+			rawLines.forEach(t => {
+				const div = document.createElement('div'); div.className = 'ml';
+				div.innerHTML = colorize(t); ed.appendChild(div);
+			});
+			if (ed.children.length === 0) { const div = document.createElement('div'); div.className = 'ml'; div.innerHTML = '\u200b'; ed.appendChild(div); }
+		}
+
+		function syncManualToRaw() {
+			rawLines = [...document.querySelectorAll('#manual-editor .ml')].map(d => d.innerText.replace(/\n/g, ''));
+		}
+
+		function recolorLine(div) {
+			const text = div.innerText.replace(/\n/g, '');
+			const sel = window.getSelection(); let off = 0;
+			if (sel && sel.rangeCount && div.contains(sel.anchorNode)) {
+				const r = sel.getRangeAt(0), pre = r.cloneRange();
+				pre.selectNodeContents(div); pre.setEnd(r.startContainer, r.startOffset);
+				off = pre.toString().length;
+			}
+			manualNoInput = true; div.innerHTML = colorize(text); restoreCaret(div, off); manualNoInput = false;
+		}
+
+		function restoreCaret(div, off) {
+			const sel = window.getSelection(), range = document.createRange();
+			function walk(n) {
+				if (off <= 0) return true;
+				if (n.nodeType === 3) { if (n.length >= off) { range.setStart(n, off); range.setEnd(n, off); off = 0; return true; } off -= n.length; return false; }
+				for (const c of n.childNodes) { if (walk(c)) return true; } return false;
+			}
+			walk(div);
+			if (off > 0) { range.selectNodeContents(div); range.collapse(false); }
+			try { sel.removeAllRanges(); sel.addRange(range); } catch (e) { }
+		}
+
+		function getCurDiv() {
+			const sel = window.getSelection(); if (!sel || !sel.rangeCount) return null;
+			let node = sel.anchorNode;
+			while (node) { if (node.classList && node.classList.contains('ml')) return node; node = node.parentElement; }
+			return null;
+		}
+
+		function updateManualPos() {
+			const divs = [...document.querySelectorAll('#manual-editor .ml')];
+			const cur = getCurDiv(); const ln = divs.indexOf(cur) + 1 || 1;
+			let col = 1;
+			if (cur) {
+				const sel = window.getSelection();
+				if (sel && sel.rangeCount) { const r = sel.getRangeAt(0), pre = r.cloneRange(); pre.selectNodeContents(cur); pre.setEnd(r.startContainer, r.startOffset); col = pre.toString().length + 1; }
+			}
+			document.getElementById('manual-pos').textContent = `Ln ${ln}, Col ${col}`;
+			divs.forEach(d => d.classList.toggle('cur', d === cur));
+		}
+
+		document.getElementById('manual-editor').addEventListener('input', e => {
+			if (manualNoInput) return;
+			const div = getCurDiv(); if (div) recolorLine(div);
+			syncManualToRaw(); updateManualPos();
+		});
+
+		document.getElementById('manual-editor').addEventListener('keydown', e => {
+			if (e.key === 'Enter') {
+				e.preventDefault();
+				const div = getCurDiv(), ed = document.getElementById('manual-editor');
+				const newDiv = document.createElement('div'); newDiv.className = 'ml'; newDiv.innerHTML = '\u200b';
+				if (div && div.nextSibling) ed.insertBefore(newDiv, div.nextSibling); else ed.appendChild(newDiv);
+				const sel = window.getSelection(), range = document.createRange();
+				range.selectNodeContents(newDiv); range.collapse(true); sel.removeAllRanges(); sel.addRange(range);
+				syncManualToRaw(); updateManualPos(); return;
+			}
+			if (e.key === 'Backspace') {
+				const div = getCurDiv();
+				if (div) {
+					const sel = window.getSelection();
+					if (sel && sel.rangeCount) {
+						const r = sel.getRangeAt(0), pre = r.cloneRange();
+						pre.selectNodeContents(div); pre.setEnd(r.startContainer, r.startOffset);
+						if (pre.toString().length === 0) {
+							const prev = div.previousElementSibling;
+							if (prev) {
+								e.preventDefault();
+								const pt = prev.innerText.replace(/\n/g, ''), ct = div.innerText.replace(/\n/g, '');
+								const jo = pt.length;
+								manualNoInput = true; prev.innerHTML = colorize(pt + ct); manualNoInput = false;
+								div.remove(); restoreCaret(prev, jo); syncManualToRaw(); updateManualPos();
+							}
+						}
+					}
+				}
+				setTimeout(updateManualPos, 0); return;
+			}
+			setTimeout(updateManualPos, 0);
+		});
+		document.getElementById('manual-editor').addEventListener('click', updateManualPos);
+		document.getElementById('manual-editor').addEventListener('keyup', updateManualPos);
+
+		// ══ MODE SWITCHING ════════════════════════════════════════════
+		function switchMode(mode) {
+			if (currentMode === 'manual') syncManualToRaw();
+			currentMode = mode;
+			['assist', 'manual', 'diff'].forEach(m => {
+				document.getElementById(`panel-${m}`).classList.toggle('active', m === mode);
+				document.getElementById(`pill-${m}`).className = 'pill' + (m === mode ? ` a-${m}` : '');
+			});
+			document.getElementById('legend').style.display = mode === 'manual' ? 'none' : 'flex';
+			if (mode === 'assist') renderAll();
+			if (mode === 'manual') { buildManualDOM(); setTimeout(() => { document.getElementById('manual-editor').focus(); updateManualPos(); }, 30); }
+			if (mode === 'diff') renderDiff();
+		}
+
+		// ══ DIFF ══════════════════════════════════════════════════════
+		function renderDiff() {
+			const orig = savedText.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+			const cur = rawLines;
+			const db = document.getElementById('diff-body'), ds = document.getElementById('diff-stats');
+			if (orig.join('\n') === cur.join('\n')) {
+				db.innerHTML = '<span class="dl dl-same">Aucune modification.</span>'; ds.innerHTML = ''; return;
+			}
+			const diff = lcs(orig.slice(0, 600), cur.slice(0, 600));
+			let adds = 0, dels = 0;
+			db.innerHTML = diff.map(d => {
+				if (d.type === 'add') adds++; if (d.type === 'del') dels++;
+				return `<span class="dl dl-${d.type}">${d.type === 'add' ? '＋' : d.type === 'del' ? '－' : '　'} ${esc(d.text)}</span>`;
+			}).join('\n');
+			ds.innerHTML = `<span class="dsa">＋${adds} ajoutée${adds > 1 ? 's' : ''}</span><span class="dsd">－${dels} supprimée${dels > 1 ? 's' : ''}</span>`;
+		}
+		function lcs(a, b) {
+			const m = a.length, n = b.length;
+			const dp = Array.from({ length: m + 1 }, () => new Uint16Array(n + 1));
+			for (let i = m - 1; i >= 0; i--)for (let j = n - 1; j >= 0; j--)
+				dp[i][j] = a[i] === b[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+			const r = []; let i = 0, j = 0;
+			while (i < m || j < n) {
+				if (i < m && j < n && a[i] === b[j]) { r.push({ type: 'same', text: a[i] }); i++; j++; }
+				else if (j < n && (i >= m || dp[i][j + 1] >= dp[i + 1][j])) { r.push({ type: 'add', text: b[j] }); j++; }
+				else { r.push({ type: 'del', text: a[i] }); i++; }
+			}
+			return r;
+		}
+
+		// ══ MISC ══════════════════════════════════════════════════════
+		function setStatus(msg, cls) {
+			const el = document.getElementById('status');
+			el.textContent = msg; el.className = cls || '';
+			if (cls === 'ok') setTimeout(() => { el.textContent = ''; el.className = ''; }, 3000);
+		}
+		function copyMenu() { navigator.clipboard.writeText(getText()).then(() => setStatus('Copié !', 'ok')); }
+		function toggleFS() {
+			const btn = document.getElementById('btn-fs');
+			if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+				const el = document.documentElement;
+				if (el.requestFullscreen) el.requestFullscreen(); else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+				btn.classList.add('on');
+			} else {
+				if (document.exitFullscreen) document.exitFullscreen(); else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+				btn.classList.remove('on');
+			}
+		}
+		document.addEventListener('fullscreenchange', () => document.getElementById('btn-fs').classList.toggle('on', !!document.fullscreenElement));
+
+		async function pushToSupabase() {
+			if (currentMode === 'manual') syncManualToRaw();
+			const email = document.getElementById('emailBox').value.trim();
+			const pw = document.getElementById('pwBox').value;
+			if (!email || !pw) { setStatus('Email et mot de passe requis.', 'err'); return; }
+			setStatus('Connexion…', '');
+			try {
+				const { error: e1 } = await _sb.auth.signInWithPassword({ email, password: pw }); if (e1) throw e1;
+				const content = getText();
+				const { error: e2 } = await _sb.from('menu.menu').insert([{ content }]); if (e2) throw e2;
+				savedText = content; setStatus('✓ Publié !', 'ok');
+			} catch (err) { setStatus('Erreur : ' + (err.message || err), 'err'); }
+		}
+		document.addEventListener('keydown', e => {
+			if (document.getElementById('line-overlay').classList.contains('open')) return;
+			if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); pushToSupabase(); }
+		});
+
+		// ══ INIT ══════════════════════════════════════════════════════
+		async function init() {
+			setStatus('Chargement…', '');
+			let text = '';
+			try {
+				if (_sb) {
+					const { data, error } = await _sb.from('menu.menu').select('content').limit(1).order('id', { ascending: false });
+					if (!error && data?.[0]?.content) { text = data[0].content; setStatus('Chargé depuis Supabase', 'ok'); }
+					else throw 0;
+				} else throw 0;
+			} catch {
+				try { text = await (await fetch('menu.menu', { cache: 'no-cache' })).text(); setStatus('Fichier local chargé', 'ok'); }
+				catch { setStatus('Impossible de charger le menu.', 'err'); }
+			}
+			savedText = text;
+			rawLines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+			renderAll();
+		}
+		init();
+	</script>
+</body>
+
+</html>
