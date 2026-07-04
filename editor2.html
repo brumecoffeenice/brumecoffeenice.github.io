@@ -601,6 +601,94 @@
 			color: var(--muted)
 		}
 
+		/* ══ CLAUDE PANEL ═════════════════════════════════════════════ */
+		#claude-wrap {
+			max-width: 860px;
+			margin: 0 auto;
+			padding: 1.4em 1.2em 5em;
+			display: flex;
+			flex-direction: column;
+			gap: .5em;
+		}
+
+		.claude-label {
+			font-size: .68em;
+			font-weight: 700;
+			text-transform: uppercase;
+			letter-spacing: .08em;
+			color: var(--ink2);
+			margin-top: .6em;
+		}
+
+		#claude-request {
+			width: 100%;
+			min-height: 5em;
+			font-family: 'Courier Prime', monospace;
+			font-size: .92em;
+			line-height: 1.55;
+			padding: .6em .7em;
+			border: 1.5px solid var(--border-md);
+			background: #fff;
+			color: var(--ink);
+			outline: none;
+			resize: vertical;
+			transition: border-color .12s;
+		}
+
+		#claude-request:focus {
+			border-color: var(--accent-border)
+		}
+
+		#claude-prompt-preview {
+			width: 100%;
+			min-height: 12em;
+			max-height: 30em;
+			font-family: 'Courier Prime', monospace;
+			font-size: .78em;
+			line-height: 1.55;
+			padding: .6em .7em;
+			border: 1.5px solid var(--border);
+			background: #f8f6f3;
+			color: var(--ink2);
+			outline: none;
+			resize: vertical;
+		}
+
+		.claude-actions-row {
+			display: flex;
+			gap: .5em;
+			flex-wrap: wrap;
+			margin: .2em 0;
+		}
+
+		.claude-hint {
+			font-size: .68em;
+			color: var(--muted);
+			min-height: 1.4em;
+		}
+
+		.claude-hint.ok {
+			color: var(--c4)
+		}
+
+		.claude-hint.err {
+			color: var(--red)
+		}
+
+		.claude-steps {
+			margin-top: .8em;
+			padding: .9em 1em .9em 2.1em;
+			border: 1.5px solid var(--border);
+			background: #fbfaf8;
+			font-size: .8em;
+			line-height: 1.75;
+			color: var(--ink2);
+		}
+
+		.claude-steps li {
+			margin-bottom: .15em
+		}
+
 		::-webkit-scrollbar {
 			width: 5px
 		}
@@ -627,6 +715,7 @@
 		<button class="btn on" id="btn-visual" onclick="switchPanel('visual')">✦ Visuel</button>
 		<button class="btn" id="btn-raw" onclick="switchPanel('raw')">⌨ Brut</button>
 		<button class="btn" id="btn-diff" onclick="switchPanel('diff')">⟳ Diff</button>
+		<button class="btn" id="btn-claude" onclick="switchPanel('claude')">🤖 Claude</button>
 		<div class="topbar-sep"></div>
 		<button class="btn" onclick="copyMenu()">⧉ Copier</button>
 		<button class="btn" onclick="window.open('menu.html','_blank')">↗ Menu</button>
@@ -670,6 +759,46 @@
 	</div>
 	<div id="panel-diff" class="panel">
 		<div id="diff-wrap"></div>
+	</div>
+
+	<div id="panel-claude" class="panel">
+		<div id="claude-wrap">
+			<div class="claude-label">Demande de la cheffe</div>
+			<textarea id="claude-request" spellcheck="false"
+				placeholder="Ex : Remplace la burrata des Pouilles par de la burratina fumée dans la tartine abricotée, et remplace la crème grecque aux tomates rôties par un Borani banjan à 16,50€ : aubergines à l'afghane marinée aux tomates confites aux graines de cumin, yaourt grecque, fêta, coriandre, menthe et aneth, toast au zaatar."></textarea>
+
+			<div class="claude-actions-row">
+				<button class="btn" onclick="refreshClaudePrompt()">↻ Générer / actualiser le prompt</button>
+			</div>
+
+			<div class="claude-label">Prompt complet (généré automatiquement, envoyé tel quel à Claude)</div>
+			<textarea id="claude-prompt-preview" spellcheck="false" readonly></textarea>
+
+			<div class="claude-actions-row">
+				<button class="btn" onclick="copyClaudePrompt()">📋 Copier le prompt</button>
+				<button class="btn primary" onclick="sendToClaudeWeb()">↗ Envoyer à Claude (web)</button>
+				<button class="btn" onclick="sendToClaudeApp()">🖥 Ouvrir dans l'app Claude</button>
+			</div>
+
+			<div id="claude-status" class="claude-hint"></div>
+
+			<ol class="claude-steps">
+				<li>Écris ta demande ci-dessus, puis clique sur <b>Générer le prompt</b> pour vérifier ce qui sera
+					envoyé (il inclut automatiquement le fichier menu actuel).</li>
+				<li>Clique sur <b>Envoyer à Claude (web)</b> : le prompt est copié dans le presse-papier et
+					claude.ai s'ouvre dans un nouvel onglet. Connecte-toi si besoin.</li>
+				<li>Colle le prompt (Ctrl+V ou Cmd+V) dans la zone de discussion de Claude, puis envoie le
+					message.</li>
+				<li>Si tout est clair, Claude te renvoie le fichier <b>complet</b> régénéré : copie-le entièrement
+					(le bloc de code en entier).</li>
+				<li>Reviens ici, ouvre l'onglet <b>Brut</b>, remplace tout le contenu par celui de Claude, puis
+					reviens sur <b>Visuel</b> ou <b>Diff</b> pour vérifier avant de cliquer sur <b>Push</b>.</li>
+			</ol>
+			<div class="claude-hint">
+				ℹ️ Sur mobile ou navigateur, le bouton "app Claude" ne fonctionne que si l'application de bureau
+				Claude est installée sur cet ordinateur ; sinon utilise "Envoyer à Claude (web)".
+			</div>
+		</div>
 	</div>
 
 	<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
@@ -965,12 +1094,13 @@
 		}
 
 		function switchPanel(name) {
-			['visual', 'raw', 'diff'].forEach(p => {
+			['visual', 'raw', 'diff', 'claude'].forEach(p => {
 				document.getElementById(`panel-${p}`).classList.toggle('active', p === name);
 				document.getElementById(`btn-${p}`).classList.toggle('on', p === name);
 			});
 			if (name === 'raw') document.getElementById('raw-textarea').value = getText();
 			if (name === 'diff') renderDiff();
+			if (name === 'claude') refreshClaudePrompt();
 		}
 		document.getElementById('raw-textarea').addEventListener('input', () => {
 			rawLines = document.getElementById('raw-textarea').value.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
@@ -1038,6 +1168,80 @@
 			const el = document.getElementById('status');
 			el.textContent = msg; el.className = cls || '';
 			if (cls === 'ok') setTimeout(() => { el.textContent = ''; el.className = ''; }, 3500);
+		}
+
+		/* ══ CLAUDE TAB ═══════════════════════════════════════════════ */
+
+		// Gabarit du prompt envoyé à Claude. {{MENU}} et {{DEMANDE}} sont
+		// remplacés au moment de la génération. On utilise une fonction de
+		// remplacement (plutôt qu'une simple chaîne) pour éviter que des
+		// séquences type "$1", "$&" présentes dans le menu ou la demande
+		// ne soient interprétées par String.replace.
+		const CLAUDE_PROMPT_TEMPLATE = `Analyse le fichier de description de menu fourni ci-dessous. Tu verras qu'au début de ce fichier il y a une description des règles pour l'utilisation de ce fichier ("menuFile").
+
+Applique ensuite la ou les modification(s) demandée(s) par la cheffe cuisinière, en respectant strictement ces consignes :
+
+1. N'applique QUE la ou les modifications demandées par la cheffe (voir plus bas). N'improvise pas d'autres changements de plats.
+2. Si une modification de plat ou un remplacement est demandé : ne supprime jamais l'ancien plat. Commente-le (ajoute un "#" en tout début de ligne) et ajoute une nouvelle ligne juste en dessous avec le plat modifié ou le plat de remplacement. N'oublie jamais les traductions français/anglais, dans le même style que le reste du fichier.
+3. Vérifie les allergènes des plats concernés par tes modifications. Corrige ou complète les allergènes manquants ou erronés à partir des ingrédients décrits, en utilisant uniquement les allergènes de la liste officielle donnée dans l'en-tête du fichier. Si tu repères d'autres erreurs évidentes dans le fichier (allergène manquant, faute de format, etc.) au passage, corrige-les aussi et signale-le dans ton résumé.
+4. Tu ne peux prendre aucune grosse initiative métier (par exemple : inventer un prix manquant, deviner quel plat exact est visé par une demande ambiguë, changer un ingrédient non mentionné). Si tu manques d'une information nécessaire, NE GÉNÈRE PAS le fichier : liste précisément les informations qu'il te manque et pose les questions nécessaires à la cheffe, puis arrête-toi là.
+5. Si tout est clair, fournis en réponse :
+   a) le fichier menu.menu COMPLET régénéré dans un bloc de code (pas seulement les lignes modifiées, pas de résumé partiel : je dois pouvoir cliquer dessus et tout copier d'un coup) ;
+   b) une courte description du travail effectué (modifications faites, corrections d'allergènes, hypothèses prises si besoin).
+
+--- CONTENU ACTUEL DU FICHIER menu.menu ---
+{{MENU}}
+--- FIN DU FICHIER ---
+
+--- DEMANDE DE LA CHEFFE ---
+{{DEMANDE}}
+--- FIN DE LA DEMANDE ---`;
+
+		function buildClaudePrompt() {
+			const menuContent = getText();
+			const demande = document.getElementById('claude-request').value.trim() || '(aucune demande saisie pour le moment)';
+			return CLAUDE_PROMPT_TEMPLATE
+				.replace('{{MENU}}', () => menuContent)
+				.replace('{{DEMANDE}}', () => demande);
+		}
+
+		function refreshClaudePrompt() {
+			document.getElementById('claude-prompt-preview').value = buildClaudePrompt();
+		}
+
+		function copyClaudePrompt() {
+			refreshClaudePrompt();
+			const text = document.getElementById('claude-prompt-preview').value;
+			navigator.clipboard.writeText(text)
+				.then(() => setClaudeStatus('Prompt copié dans le presse-papier !', 'ok'))
+				.catch(() => setClaudeStatus("Impossible de copier automatiquement : sélectionne le texte ci-dessus et copie-le à la main (Ctrl+C).", 'err'));
+		}
+
+		function sendToClaudeWeb() {
+			refreshClaudePrompt();
+			const text = document.getElementById('claude-prompt-preview').value;
+			navigator.clipboard.writeText(text)
+				.then(() => setClaudeStatus('Prompt copié. Colle-le (Ctrl+V) dans Claude puis envoie le message.', 'ok'))
+				.catch(() => setClaudeStatus("La copie automatique a échoué : sélectionne le texte ci-dessus et copie-le à la main (Ctrl+C) avant de le coller dans Claude.", 'err'));
+			window.open('https://claude.ai/new', '_blank');
+		}
+
+		function sendToClaudeApp() {
+			refreshClaudePrompt();
+			const text = document.getElementById('claude-prompt-preview').value;
+			navigator.clipboard.writeText(text).catch(() => { });
+			setClaudeStatus("Ouverture de l'app Claude (si installée sur cet ordinateur)… Le prompt a aussi été copié au cas où.", 'ok');
+			// Lien profond documenté par Anthropic pour l'app de bureau Claude :
+			// claude://claude.ai/new?q=... pré-remplit la zone de saisie.
+			// Ne fonctionne que si l'app de bureau est installée ; sinon, rien
+			// ne se passe et la cheffe garde le prompt copié en secours.
+			window.location.href = 'claude://claude.ai/new?q=' + encodeURIComponent(text);
+		}
+
+		function setClaudeStatus(msg, cls) {
+			const el = document.getElementById('claude-status');
+			el.textContent = msg;
+			el.className = 'claude-hint ' + (cls || '');
 		}
 
 		async function init() {
