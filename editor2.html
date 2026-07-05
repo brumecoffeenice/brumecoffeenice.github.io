@@ -601,6 +601,22 @@
 			color: var(--muted)
 		}
 
+		.diff-mod {
+			color: var(--ink2)
+		}
+
+		.wd-add {
+			background: rgba(30, 107, 80, 0.16);
+			color: #1e6b50;
+			font-weight: 700;
+		}
+
+		.wd-del {
+			background: rgba(184, 32, 32, 0.10);
+			color: #aa2020;
+			text-decoration: line-through;
+		}
+
 		/* ══ CLAUDE PANEL ═════════════════════════════════════════════ */
 		#claude-wrap {
 			max-width: 860px;
@@ -667,6 +683,16 @@
 			min-height: 1.4em;
 		}
 
+		.btn.big {
+			height: 40px;
+			font-size: .78em;
+			padding: .5em 1.3em;
+		}
+
+		#claude-paste-fallback {
+			margin-top: .3em;
+		}
+
 		.claude-hint.ok {
 			color: var(--c4)
 		}
@@ -715,7 +741,7 @@
 		<button class="btn on" id="btn-visual" onclick="switchPanel('visual')">✦ Visuel</button>
 		<button class="btn" id="btn-raw" onclick="switchPanel('raw')">⌨ Brut</button>
 		<button class="btn" id="btn-diff" onclick="switchPanel('diff')">⟳ Diff</button>
-		<button class="btn" id="btn-claude" onclick="switchPanel('claude')">🤖 Claude</button>
+		<button class="btn" id="btn-claude" onclick="switchPanel('claude')">🤖 IA</button>
 		<div class="topbar-sep"></div>
 		<button class="btn" onclick="copyMenu()">⧉ Copier</button>
 		<button class="btn" onclick="window.open('menu.html','_blank')">↗ Menu</button>
@@ -771,32 +797,49 @@
 				<button class="btn" onclick="refreshClaudePrompt()">↻ Générer / actualiser le prompt</button>
 			</div>
 
-			<div class="claude-label">Prompt complet (généré automatiquement, envoyé tel quel à Claude)</div>
+			<div class="claude-label">Prompt complet (généré automatiquement, envoyé tel quel à l'IA)</div>
 			<textarea id="claude-prompt-preview" spellcheck="false" readonly></textarea>
 
 			<div class="claude-actions-row">
 				<button class="btn" onclick="copyClaudePrompt()">📋 Copier le prompt</button>
-				<button class="btn primary" onclick="sendToClaudeWeb()">↗ Envoyer à Claude (web)</button>
+				<button class="btn primary" onclick="sendToChatGPT()">↗ Envoyer à ChatGPT</button>
 				<button class="btn" onclick="sendToClaudeApp()">🖥 Ouvrir dans l'app Claude</button>
 			</div>
 
 			<div id="claude-status" class="claude-hint"></div>
 
+			<div class="claude-label" style="margin-top:1.6em;">Une fois que l'IA a répondu</div>
+			<div class="claude-actions-row">
+				<button class="btn primary big" onclick="pasteNewMenuAndDiff()">📥 Coller le nouveau menu → voir le
+					diff</button>
+			</div>
+			<div id="claude-paste-fallback" style="display:none;">
+				<div class="claude-label">Colle ici manuellement (si le bouton ci-dessus n'a pas fonctionné)</div>
+				<textarea id="claude-paste-area" spellcheck="false"
+					placeholder="Colle ici (Ctrl+V) le fichier menu.menu complet renvoyé par l'IA..."></textarea>
+				<div class="claude-actions-row">
+					<button class="btn primary" onclick="pasteFromTextareaAndDiff()">→ Voir le diff</button>
+				</div>
+			</div>
+
 			<ol class="claude-steps">
 				<li>Écris ta demande ci-dessus, puis clique sur <b>Générer le prompt</b> pour vérifier ce qui sera
 					envoyé (il inclut automatiquement le fichier menu actuel).</li>
-				<li>Clique sur <b>Envoyer à Claude (web)</b> : le prompt est copié dans le presse-papier et
-					claude.ai s'ouvre dans un nouvel onglet. Connecte-toi si besoin.</li>
-				<li>Colle le prompt (Ctrl+V ou Cmd+V) dans la zone de discussion de Claude, puis envoie le
-					message.</li>
-				<li>Si tout est clair, Claude te renvoie le fichier <b>complet</b> régénéré : copie-le entièrement
-					(le bloc de code en entier).</li>
-				<li>Reviens ici, ouvre l'onglet <b>Brut</b>, remplace tout le contenu par celui de Claude, puis
-					reviens sur <b>Visuel</b> ou <b>Diff</b> pour vérifier avant de cliquer sur <b>Push</b>.</li>
+				<li>Clique sur <b>Envoyer à ChatGPT</b> (ou <b>Ouvrir dans l'app Claude</b> si tu l'as installée) :
+					le prompt est copié dans le presse-papier au cas où, et l'IA s'ouvre dans un nouvel onglet.
+					Connecte-toi si besoin, colle le prompt s'il n'est pas déjà rempli, puis envoie le message.</li>
+				<li>Si tout est clair, l'IA te renvoie le fichier <b>complet</b> régénéré : copie-le entièrement
+					(le bloc de code en entier, avec Ctrl+C).</li>
+				<li>Reviens ici et clique directement sur <b>📥 Coller le nouveau menu → voir le diff</b> : tu
+					atterris tout de suite sur l'onglet <b>Diff</b> pour vérifier les changements avant de les
+					appliquer.</li>
+				<li>Si ça te convient, va dans l'onglet <b>Brut</b> pour confirmer, ou directement sur <b>Push</b>
+					pour publier.</li>
 			</ol>
 			<div class="claude-hint">
-				ℹ️ Sur mobile ou navigateur, le bouton "app Claude" ne fonctionne que si l'application de bureau
-				Claude est installée sur cet ordinateur ; sinon utilise "Envoyer à Claude (web)".
+				ℹ️ Le bouton "app Claude" ne fonctionne que si l'application de bureau Claude est installée sur cet
+				ordinateur. Le bouton "Coller le nouveau menu" utilise le presse-papier automatiquement ; si le
+				navigateur refuse la permission, une zone de collage manuel apparaît en secours.
 			</div>
 		</div>
 	</div>
@@ -1110,10 +1153,66 @@
 			const orig = savedText.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
 			const wrap = document.getElementById('diff-wrap');
 			if (orig.join('\n') === rawLines.join('\n')) { wrap.innerHTML = '<span style="color:var(--muted)">Aucune modification.</span>'; return; }
-			wrap.innerHTML = lcs(orig.slice(0, 400), rawLines.slice(0, 400)).map(d =>
-				`<span class="diff-line diff-${d.type}">${d.type === 'add' ? '＋' : d.type === 'del' ? '－' : '　'} ${esc(d.text)}</span>`
-			).join('\n');
+			const lineDiff = lcs(orig.slice(0, 400), rawLines.slice(0, 400));
+			wrap.innerHTML = groupDiff(lineDiff).map(renderDiffEntry).join('\n');
 		}
+
+		// Regroupe les diffs ligne à ligne : quand une ligne supprimée est
+		// immédiatement suivie d'une ligne ajoutée (une "modification" plutôt
+		// qu'un vrai ajout/suppression), on les fusionne en une seule entrée
+		// "mod" pour pouvoir afficher un diff mot à mot au lieu de deux lignes
+		// entières.
+		function groupDiff(entries) {
+			const out = [];
+			let i = 0;
+			while (i < entries.length) {
+				if (entries[i].type === 'same') { out.push(entries[i]); i++; continue; }
+				const block = [];
+				while (i < entries.length && entries[i].type !== 'same') { block.push(entries[i]); i++; }
+				const dels = block.filter(e => e.type === 'del').map(e => e.text);
+				const adds = block.filter(e => e.type === 'add').map(e => e.text);
+				const n = Math.min(dels.length, adds.length);
+				for (let k = 0; k < n; k++) out.push({ type: 'mod', oldText: dels[k], newText: adds[k] });
+				for (let k = n; k < dels.length; k++) out.push({ type: 'del', text: dels[k] });
+				for (let k = n; k < adds.length; k++) out.push({ type: 'add', text: adds[k] });
+			}
+			return out;
+		}
+
+		function renderDiffEntry(d) {
+			if (d.type === 'same') return `<span class="diff-line diff-same">　 ${esc(d.text)}</span>`;
+			if (d.type === 'del') return `<span class="diff-line diff-del">－ ${esc(d.text)}</span>`;
+			if (d.type === 'add') return `<span class="diff-line diff-add">＋ ${esc(d.text)}</span>`;
+			return `<span class="diff-line diff-mod">± ${wordDiffHtml(d.oldText, d.newText)}</span>`;
+		}
+
+		// Découpe une chaîne en mots ET espaces (les espaces sont gardés comme
+		// tokens à part entière pour préserver la mise en forme d'origine).
+		function tokenizeWords(s) { return s.split(/(\s+)/).filter(t => t !== ''); }
+
+		function wordDiff(a, b) {
+			const ta = tokenizeWords(a), tb = tokenizeWords(b);
+			const m = ta.length, n = tb.length;
+			const dp = Array.from({ length: m + 1 }, () => new Uint16Array(n + 1));
+			for (let i = m - 1; i >= 0; i--) for (let j = n - 1; j >= 0; j--)
+				dp[i][j] = ta[i] === tb[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+			const r = []; let i = 0, j = 0;
+			while (i < m || j < n) {
+				if (i < m && j < n && ta[i] === tb[j]) { r.push({ type: 'same', text: ta[i] }); i++; j++; }
+				else if (j < n && (i >= m || dp[i][j + 1] >= dp[i + 1][j])) { r.push({ type: 'add', text: tb[j] }); j++; }
+				else { r.push({ type: 'del', text: ta[i] }); i++; }
+			}
+			return r;
+		}
+
+		function wordDiffHtml(oldText, newText) {
+			return wordDiff(oldText, newText).map(p => {
+				if (p.type === 'same') return esc(p.text);
+				if (p.type === 'add') return `<span class="wd-add">${esc(p.text)}</span>`;
+				return `<span class="wd-del">${esc(p.text)}</span>`;
+			}).join('');
+		}
+
 		function lcs(a, b) {
 			const m = a.length, n = b.length;
 			const dp = Array.from({ length: m + 1 }, () => new Uint16Array(n + 1));
@@ -1217,13 +1316,48 @@ Applique ensuite la ou les modification(s) demandée(s) par la cheffe cuisinièr
 				.catch(() => setClaudeStatus("Impossible de copier automatiquement : sélectionne le texte ci-dessus et copie-le à la main (Ctrl+C).", 'err'));
 		}
 
-		function sendToClaudeWeb() {
+		function sendToChatGPT() {
 			refreshClaudePrompt();
 			const text = document.getElementById('claude-prompt-preview').value;
-			navigator.clipboard.writeText(text)
-				.then(() => setClaudeStatus('Prompt copié. Colle-le (Ctrl+V) dans Claude puis envoie le message.', 'ok'))
-				.catch(() => setClaudeStatus("La copie automatique a échoué : sélectionne le texte ci-dessus et copie-le à la main (Ctrl+C) avant de le coller dans Claude.", 'err'));
-			window.open('https://claude.ai/new', '_blank');
+			navigator.clipboard.writeText(text).catch(() => { });
+			setClaudeStatus("Ouverture de ChatGPT… si le prompt n'est pas déjà rempli, colle-le (Ctrl+V), il a été copié au cas où.", 'ok');
+			// chatgpt.com accepte un paramètre ?q= pour préremplir le message.
+			// Selon le navigateur / la session, il peut préremplir sans envoyer,
+			// ou ne rien faire : le presse-papier sert de filet de sécurité.
+			window.open('https://chatgpt.com/?q=' + encodeURIComponent(text), '_blank');
+		}
+
+		// Lit directement le presse-papier (ce que la cheffe vient de copier
+		// depuis la réponse de l'IA) et bascule tout de suite sur l'onglet
+		// Diff pour comparer avec le menu actuel. Si le navigateur refuse la
+		// permission de lecture du presse-papier, on affiche une zone de
+		// collage manuel en secours.
+		async function pasteNewMenuAndDiff() {
+			try {
+				const text = await navigator.clipboard.readText();
+				if (!text || !text.trim()) {
+					setClaudeStatus('Le presse-papier est vide : copie bien le menu complet renvoyé par l\'IA avant de cliquer.', 'err');
+					return;
+				}
+				applyPastedMenu(text);
+			} catch (err) {
+				setClaudeStatus("Impossible de lire le presse-papier automatiquement (permission refusée par le navigateur). Colle le menu manuellement ci-dessous.", 'err');
+				document.getElementById('claude-paste-fallback').style.display = 'block';
+				document.getElementById('claude-paste-area').focus();
+			}
+		}
+
+		function pasteFromTextareaAndDiff() {
+			const text = document.getElementById('claude-paste-area').value;
+			if (!text.trim()) { setClaudeStatus('Colle d\'abord le nouveau menu dans la zone ci-dessus.', 'err'); return; }
+			applyPastedMenu(text);
+		}
+
+		function applyPastedMenu(text) {
+			rawLines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+			const fb = document.getElementById('claude-paste-fallback');
+			if (fb) { fb.style.display = 'none'; document.getElementById('claude-paste-area').value = ''; }
+			switchPanel('diff');
 		}
 
 		function sendToClaudeApp() {
