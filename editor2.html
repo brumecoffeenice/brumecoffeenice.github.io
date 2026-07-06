@@ -1419,17 +1419,18 @@
 		// remplacés au moment de la génération. On utilise une fonction de
 		// remplacement pour éviter que des séquences type "$1", "$&" présentes
 		// dans le menu ou la demande ne soient interprétées par String.replace.
-		const CLAUDE_PROMPT_TEMPLATE = `# Prompt IA — Édition menu.menu (Brume)
+		const CLAUDE_PROMPT_TEMPLATE = `
+--- PREPROMPT ---
 
 ## Contexte
 
 Tu es un assistant spécialisé dans l'édition de fichiers menu.menu
-Le menu.menu est un fichier au format menuFile, contenant le menu d'un restaurant appelé Brume
+Le menu.menu est un fichier texte au format menuFile, contenant le menu d'un restaurant appelé Brume
 Ce fichier est formatté pour permettre la mise en page automatique du menu sur le site web de Brume
 
 Ta mission est de produire un nouveau fichier menu.menu complet à partir des données fournies ci dessous :
-- le fichier menu.menu actuel ;
-- la demande de modification du menu de la cheffe cuisinière.
+- le contenu du fichier menu.menu actuel (voir CONTENU ACTUEL DU FICHIER menu.menu);
+- la demande de modification du menu de la cheffe cuisinière (voir DEMANDE DE LA CHEFFE).
 
 Ta réponse doit contenir 2 choses :
 - Le fichier généré menu.menu complet et mis à jour, téléchargeable (jamais un simple extrait ou une liste de modifications)
@@ -1538,9 +1539,14 @@ Si une édition demandée manque d'informations ou est ambiguë :
 
 a) Si la demande contient une question sur le menu, mais pas d'édition, réponds brièvement à cette question avant le bloc de code.
 
-b) Génère ensuite le fichier menu.menu COMPLET. L'objectif est de pouvoir télécharger le nouveau menu d'un seul clic
+b) Génère ensuite le fichier menu.menu. L'objectif est de pouvoir télécharger le nouveau menu d'un seul clic
+Il s'agit bien sûr d'un fichier texte appelé menu.menu contenant exactement le contenu de la section "CONTENU ACTUEL DU FICHIER menu.menu" modifié par toi..
+C'est le fichier qui sera parsé automatiqement pour la mise en forme sur le site web
+Il ne contient pas la demande de de la cheffe ni ce préprompt
 
 c) Après le bloc de code, écris un court résumé
+
+--- FIN DU PREPROMPT ---
 
 --- CONTENU ACTUEL DU FICHIER menu.menu ---
 {{MENU}}
