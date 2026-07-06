@@ -1400,10 +1400,10 @@ Le fichier commence par sa propre documentation ("LE MENUFILE"). Analise la et a
 
 ## Propreté du fichier [MAINTENANCE] — sur tout le fichier, à chaque génération
 
-- Un espace après un "#" de commentaire de plat ou de ligne commentée, sauf dans l'ASCII art et la documentation. Pas d'espace avant.
-- Un espace avant ET après chaque séparateur "_" et "@".
+- Un espace après un "#" de commentaire, même dans la documentation. Pas d'espace avant.
+- Un espace avant ET après chaque séparateur "_" et "@" ou groupe de séparateurs "___"
+- Aucun espace en début et fin de ligne, cette règle est plus forte que les deux précédentes
 - Aucun double espace, sauf dans l'ASCII art.
-- Une seule espace entre les mots.
 
 ## Portée d'une demande d'édition [CATÉGORIE 2]
 
@@ -1478,16 +1478,6 @@ céréales, crustacés, oeufs, poissons, arachides, soja, lait, fruits à coques
 Pour chaque plat modifié, ajouté ou remplacé en catégorie 2, mets les allergènes à jour uniquement à partir des ingrédients explicitement cités.
 
 Corrige également tout allergène invalide ou manifestement manquant.
-
-## Syntaxe [MAINTENANCE] — sur tout le fichier, à chaque génération
-
-Chaque ligne commentée commence par # puis un espace (même dans la documentation)
-
-Jamais de double espace (sauf dans le ASCII art)
-
-Un espace avant et après chaque "@" et chaque groupe de "_"
-
-Pas d'espace ni de "_" ni de "@" à la fin de chaque ligne
 
 ## Autres corrections [MAINTENANCE] — sur tout le fichier, à chaque génération
 
