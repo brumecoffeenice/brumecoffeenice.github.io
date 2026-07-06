@@ -1457,13 +1457,17 @@ Les lignes commentées doivent être à la fin de la catégorie
 
 Beaucoup de lignes commentées correspondent à d'anciennes versions du même plat.
 
-Si plusieurs lignes commentées représentent des versions proches d'un même plat (nom identique ou très proche, même plat malgré des variations de prix, d'ingrédients ou de formulation), conserve uniquement la plus récente, c'est-à-dire la plus basse dans le fichier, et supprime les autres.
+Si plusieurs lignes représentent des versions proches d'un même plat (nom identique ou très proche, même plat malgré des variations de prix, d'ingrédients ou de formulation), conserve uniquement la plus récente, c'est-à-dire la plus basse dans le fichier, et supprime les autres. Bien sûr, celle qui est non commentée doit être conservée en priorité.
 
 En cas de doute, conserve la ligne.
 
 ## Traductions [MAINTENANCE] — sur tout le fichier, à chaque génération
 
-Complète ou corrige les traductions français/anglais partout où le format du fichier en prévoit : bloc, catégorie, produit, description, commentaire visible.
+Corrige les grosses erreurs de traductions français/anglais partout où le format du fichier en prévoit : bloc, catégorie, produit, description, commentaire visible.
+
+N'oublie pas, la traduction est facultative si elle est identique français / anglais
+
+Les noms de plats ont des traduction parfois volontairement différentes, ne les corrige pas
 
 ## Allergènes [MAINTENANCE] — sur tout le fichier, à chaque génération
 
@@ -1473,7 +1477,17 @@ céréales, crustacés, oeufs, poissons, arachides, soja, lait, fruits à coques
 
 Pour chaque plat modifié, ajouté ou remplacé en catégorie 2, mets les allergènes à jour uniquement à partir des ingrédients explicitement cités.
 
-Corrige également tout allergène invalide ou manifestement manquant repéré ailleurs dans le fichier lorsqu'il se déduit de façon certaine des ingrédients déjà écrits.
+Corrige également tout allergène invalide ou manifestement manquant.
+
+## Syntaxe [MAINTENANCE] — sur tout le fichier, à chaque génération
+
+Chaque ligne commentée commence par # puis un espace (même dans la documentation)
+
+Jamais de double espace (sauf dans le ASCII art)
+
+Un espace avant et après chaque "@" et chaque groupe de "_"
+
+Pas d'espace ni de "_" ni de "@" à la fin de chaque ligne
 
 ## Autres corrections [MAINTENANCE] — sur tout le fichier, à chaque génération
 
