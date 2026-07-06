@@ -78,7 +78,7 @@
 			overflow: hidden;
 		}
 
-		/* On smaller screens let it wrap but keep height auto */
+		/* On smaller écrans let it wrap but keep height auto */
 		@media (max-width: 800px) {
 			#topbar {
 				flex-wrap: wrap;
@@ -806,6 +806,7 @@
 		<button class="btn" id="btn-diff" onclick="switchPanel('diff')">⟳ Diff</button>
 		<button class="btn" id="btn-claude" onclick="switchPanel('claude')">🤖 IA</button>
 		<div class="topbar-sep"></div>
+		<button class="btn" onclick="formatMenu()">✨ Formater</button>
 		<button class="btn" onclick="copyMenu()">⧉ Copier</button>
 		<button class="btn" onclick="window.open('menu.html','_blank')">↗ Menu</button>
 		<button class="btn" id="btn-fullscreen" onclick="toggleFullscreen()" title="Plein écran">⛶</button>
@@ -1333,6 +1334,62 @@
 			if (!document.fullscreenElement) btn.classList.remove('on'); else btn.classList.add('on');
 		});
 
+		/* ── FORMATAGE ──
+		Applique les règles de propreté du menu.menu (mêmes règles que celles
+		suivies par l'IA dans l'onglet "IA") :
+		- Un espace après un "#" de commentaire, même dans la documentation. Pas d'espace avant.
+		- Un espace avant ET après chaque séparateur "_" (ou groupe "___") et "@".
+		- Aucun espace en début/fin de ligne (prioritaire sur les 2 règles ci-dessus).
+		- Aucun double espace, sauf dans l'ASCII art (une ligne qui commence ET finit par "#").
+		- Tout whitespace autre que espace/saut de ligne est normalisé en simple espace.
+		Les lignes d'ASCII art sont volontairement laissées 100% intactes : leur
+		appliquer l'espacement autour des "_"/"@" détruirait le dessin. */
+		function isAsciiArtLine(trimmedLine) {
+			return trimmedLine.length > 1 && trimmedLine.startsWith('#') && trimmedLine.endsWith('#');
+		}
+		function formatLine(line) {
+			// 1) normalise tout whitespace (tab, nbsp, etc.) en espace simple
+			let s = line.replace(/\s/g, ' ');
+			const trimmedCheck = s.trim();
+
+			// 2) ASCII art : on laisse la ligne telle quelle, intégralement
+			if (isAsciiArtLine(trimmedCheck)) return line;
+
+			// 3) trim (prioritaire)
+			s = s.trim();
+			if (s === '') return '';
+
+			// 4) commentaire : exactement un espace après le "#" de tête
+			const isComment = s.startsWith('#');
+			if (isComment) {
+				let rest = s.slice(1).replace(/^ +/, '');
+				s = rest === '' ? '#' : '# ' + rest;
+			}
+
+			// 5) un espace avant/après chaque groupe de "_" et chaque "@"
+			s = s.replace(/ *_+ */g, m => ' ' + m.trim() + ' ');
+			s = s.replace(/ *@ */g, ' @ ');
+
+			// 6) aucun double espace
+			s = s.replace(/ {2,}/g, ' ');
+
+			// 7) re-trim (les étapes 5/6 peuvent réintroduire un espace en bord de ligne)
+			s = s.trim();
+
+			// 8) re-garantit l'espace après "#" si le trim l'a mangé
+			if (isComment && s !== '#' && s.startsWith('#') && !s.startsWith('# ')) {
+				s = '# ' + s.slice(1).replace(/^ +/, '');
+			}
+
+			return s;
+		}
+		function formatMenu() {
+			rawLines = rawLines.map(formatLine);
+			renderAll();
+			switchPanel('diff');
+			setStatus('Formaté — vérifie le diff avant de publier', 'ok');
+		}
+
 		function getText() { return rawLines.join('\n') }
 		function copyMenu() {
 			navigator.clipboard.writeText(getText()).then(() => setStatus('Copié !', 'ok'));
@@ -1356,13 +1413,13 @@
 			el.textContent = msg; el.className = cls || '';
 			if (cls === 'ok') setTimeout(() => { el.textContent = ''; el.className = ''; }, 3500);
 		}
-	/* ══ CLAUDE TAB ═══════════════════════════════════════════════ */
+		/* ══ CLAUDE TAB ═══════════════════════════════════════════════ */
 
-	// Gabarit du prompt envoyé à Claude. {{MENU}} et {{DEMANDE}} sont
-	// remplacés au moment de la génération. On utilise une fonction de
-	// remplacement pour éviter que des séquences type "$1", "$&" présentes
-	// dans le menu ou la demande ne soient interprétées par String.replace.
-	const CLAUDE_PROMPT_TEMPLATE = `# Prompt IA — Édition menu.menu (Brume)
+		// Gabarit du prompt envoyé à Claude. {{MENU}} et {{DEMANDE}} sont
+		// remplacés au moment de la génération. On utilise une fonction de
+		// remplacement pour éviter que des séquences type "$1", "$&" présentes
+		// dans le menu ou la demande ne soient interprétées par String.replace.
+		const CLAUDE_PROMPT_TEMPLATE = `# Prompt IA — Édition menu.menu (Brume)
 
 ## Contexte
 
@@ -1370,60 +1427,44 @@ Tu es un assistant spécialisé dans l'édition de fichiers menu.menu utilisés 
 
 Ta mission est de produire un nouveau fichier menu.menu complet à partir :
 - du fichier menu.menu actuel ;
-- de la demande de la cheffe cuisinière.
+- de la demande de modification du menu de la cheffe cuisinière.
 
 Le résultat attendu est toujours le fichier menu.menu complet mis à jour, jamais un simple extrait ou une liste de modifications.
 
 Ce fichier EST le menu affiché en direct sur le site. Sois rigoureux : dans le doute sur le FOND d'une demande d'édition, pose la question plutôt que de deviner.
 
-En plus des opérations d'édition demandées par la cheffe, tu dois appliquer les opérations de maintenance décrites plus bas avant de régénérer le fichier complet.
+TES MODIFICATIONS doivent SI POSSIBLE valider plusieurs règles.
 
-## Deux catégories d'opérations — NE PAS LES CONFONDRE
+## Format (le plus important)
 
-1. Opérations de MAINTENANCE : sections "Propreté du fichier", "Nettoyage des doublons commentés", "Traductions", "Allergènes", "Autres corrections".
+Le fichier commence par sa propre documentation. Analyse la pour comprendre comment modifier le menufile sans le casser.
 
-Ces opérations sont à appliquer SYSTÉMATIQUEMENT à CHAQUE génération, sur tout le fichier, quelle que soit la demande de la cheffe
-
-Si une correction de maintenance n'est pas certaine, laisse simplement l'élément inchangé et poursuis la génération.
-
-2. Opérations D'ÉDITION : ajout, suppression, remplacement ou modification d'un ou plusieurs plats, lignes ou textes précis.
-
-Elles sont à appliquer uniquement si la demande de la cheffe en contient une, selon les règles des sections "Portée d'une demande d'édition" et "Les actions possibles".
-
-La demande de la cheffe peut ne contenir aucune opération d'édition : absence de demande, "rien de particulier", ou simple question sur le menu.
-
-L'absence d'édition n'est jamais une ambiguïté et ne doit jamais bloquer la génération.
-
-## Format
-
-Le fichier commence par sa propre documentation ("LE MENUFILE"). Analise la et applique-la strictement : niveaux "_", niveaux "@", liste officielle des allergènes, blocs spéciaux "!" et ">".
-
-## Propreté du fichier [MAINTENANCE] — sur tout le fichier, à chaque génération
+## Propreté du fichier (si possible)
 
 - Un espace après un "#" de commentaire, même dans la documentation. Pas d'espace avant.
 - Un espace avant ET après chaque séparateur "_" et "@" ou groupe de séparateurs "___"
 - Aucun espace en début et fin de ligne, cette règle est plus forte que les deux précédentes
 - Aucun double espace, sauf dans l'ASCII art.
 
-## Portée d'une demande d'édition [CATÉGORIE 2]
+## Portée d'une demande d'édition
 
-Une édition peut viser :
+Une édition demandée par la cheffe peut viser :
 - un plat ;
 - une ligne précise ;
 - un texte précis ;
 - ou un ensemble de plats : catégorie entière, bloc entier, "toutes les boissons chaudes", etc.
 
-Détermine d'abord le périmètre exact.
-
 Si ce périmètre est ambigu, demande une précision plutôt que de deviner.
 
-## Les actions possibles [CATÉGORIE 2]
+## Les actions possibles
 
-### Modification légère
+Tu vas déduire des actions de la demande de la cheffe parmis : 
 
-Modifie directement la ligne existante lorsqu'il s'agit manifestement du même plat, malgré des changements limités : prix, allergène, traduction, formulation, description, nom ou quelques ingrédients.
+### Modification
 
-Si le concept du plat change réellement, traite la demande comme un remplacement.
+Modifie directement la ligne existante la demande concerne manifestement un plat existant avec des changements limités : prix, allergène, traduction, formulation, description, nom ou quelques ingrédients.
+
+Si le concept du plat change réellement, traite la demande comme un remplacement (Spoiler : on duplique et on commante l'ancienne version du plat pour garder un historique)
 
 ### Ajout
 
@@ -1431,7 +1472,7 @@ Ajoute le plat dans la catégorie spécifiée ou bien devine la.
 
 ### Suppression
 
-Ne supprime jamais réellement un plat actif.
+Ne supprime jamais réellement un plat actif, même si la cheffe dit "supprime la tartine xxx et met la tartine xxx à la place"
 
 Ajoute simplement "#" au début de sa ligne.
 
@@ -1443,7 +1484,7 @@ Commente l'ancien plat.
 
 Ajoute le nouveau plat.
 
-Choisis toi-même entre une modification légère et un remplacement selon les règles ci-dessus. Ne demande jamais de confirmation uniquement pour ce choix.
+Choisis toi-même entre une modification légère et un remplacement selon les règles ci-dessus. Ne demande jamais de confirmation pour ça, c'est pas si grave.
 
 ### Tri des prix
 
@@ -1451,50 +1492,35 @@ Après tout ajout, remplacement ou modification de prix, vérifie que les plats 
 
 ### Position des lignes commentées
 
-Les lignes commentées doivent être à la fin de la catégorie
+Les lignes commentées doivent être à la fin de la catégorie (pas besoin de trier les lignes commentées)
 
-## Nettoyage des doublons commentés [MAINTENANCE] — sur tout le fichier, à chaque génération
+## Traductions
 
-Beaucoup de lignes commentées correspondent à d'anciennes versions du même plat.
+N'oublie pas les traduction lors de tes modifications / ajouts / remplacements !
 
-Si plusieurs lignes représentent des versions proches d'un même plat (nom identique ou très proche, même plat malgré des variations de prix, d'ingrédients ou de formulation), conserve uniquement la plus récente, c'est-à-dire la plus basse dans le fichier, et supprime les autres. Bien sûr, celle qui est non commentée doit être conservée en priorité.
+La traduction est facultative si elle est identique français / anglais
 
-En cas de doute, conserve la ligne.
+Les traductions des noms de plats sont parfois volontairement différentes, ne les corrige pas, c'est parfoir un choix délibéré
 
-## Traductions [MAINTENANCE] — sur tout le fichier, à chaque génération
+## Allergènes
 
-Corrige les grosses erreurs de traductions français/anglais partout où le format du fichier en prévoit : bloc, catégorie, produit, description, commentaire visible.
+Pour chaque plat modifié, ajouté ou remplacé, mets les allergènes à jour uniquement à partir des ingrédients explicitement cités.
 
-N'oublie pas, la traduction est facultative si elle est identique français / anglais
+Utilise uniquement la liste officielle fournie dans la documentation du menu.menu
 
-Les noms de plats ont des traduction parfois volontairement différentes, ne les corrige pas
+## Autres corrections
 
-## Allergènes [MAINTENANCE] — sur tout le fichier, à chaque génération
+La, on parle de modification qui ne sont pas demandées par la cheffe
 
-Utilise uniquement cette liste officielle :
+Attention à ne pas en abuser !
 
-céréales, crustacés, oeufs, poissons, arachides, soja, lait, fruits à coques, céleri, moutarde, sésame, sulfites, lupin, mollusques.
-
-Pour chaque plat modifié, ajouté ou remplacé en catégorie 2, mets les allergènes à jour uniquement à partir des ingrédients explicitement cités.
-
-Corrige également tout allergène invalide ou manifestement manquant.
-
-## Autres corrections [MAINTENANCE] — sur tout le fichier, à chaque génération
-
-Corrige au passage :
+Corrige au passage les fautes évidentes:
 - les fautes de syntaxe menuFile ;
 - un prix comportant à tort une traduction ou un lien ;
-- une répétition évidente dans une description ;
-- un plat actif strictement dupliqué ;
+- une répétition évidente de mot ;
+- un plat actif dupliqué ;
 - une faute évidente de frappe, d'orthographe ou de grammaire en français ou en anglais.
-
-## Principe général
-
-Les opérations de maintenance ne doivent jamais empêcher la génération du fichier.
-
-Si une correction de maintenance n'est pas certaine, laisse simplement l'élément inchangé et poursuis la génération.
-
-Seules les opérations d'édition peuvent justifier une demande de précision.
+- d'autres erreurs évidentes et certaines si tu trouves (traduction manquante, alergène manquant)
 
 ## Si information manquante ou demande d'édition ambiguë
 
@@ -1506,20 +1532,13 @@ Si une édition demandée manque d'informations ou est ambiguë :
 - pose les questions nécessaires ;
 - arrête-toi là.
 
-Les opérations de maintenance et les réponses à de simples questions ne doivent jamais être bloquées par cette règle.
-
 ## Format de la réponse
 
 a) Si la demande contient une question sur le menu, mais pas d'édition, réponds brièvement à cette question avant le bloc de code.
 
-b) Génère ensuite le fichier menu.menu COMPLET dans un unique bloc de code, sans aucun texte à l'intérieur du bloc autre que le contenu du fichier.
+b) Génère ensuite le fichier menu.menu COMPLET dans un unique bloc de code, sans aucun texte à l'intérieur du bloc autre que le contenu du fichier. L'objectif est de pouvoir copier le nouveau menu d'un seul clic
 
-c) Après le bloc de code, écris un court résumé indiquant :
-- les éditions effectuées, ou "aucune" ;
-- les allergènes corrigés ;
-- les doublons supprimés ;
-- les éventuels réordonnancements par prix ;
-- les hypothèses prises.
+c) Après le bloc de code, écris un court résumé
 
 --- CONTENU ACTUEL DU FICHIER menu.menu ---
 {{MENU}}
