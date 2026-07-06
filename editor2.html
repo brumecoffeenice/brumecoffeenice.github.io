@@ -1356,27 +1356,167 @@
 			el.textContent = msg; el.className = cls || '';
 			if (cls === 'ok') setTimeout(() => { el.textContent = ''; el.className = ''; }, 3500);
 		}
+	/* ══ CLAUDE TAB ═══════════════════════════════════════════════ */
 
-		/* ══ CLAUDE TAB ═══════════════════════════════════════════════ */
+	// Gabarit du prompt envoyé à Claude. {{MENU}} et {{DEMANDE}} sont
+	// remplacés au moment de la génération. On utilise une fonction de
+	// remplacement pour éviter que des séquences type "$1", "$&" présentes
+	// dans le menu ou la demande ne soient interprétées par String.replace.
+	const CLAUDE_PROMPT_TEMPLATE = `# Prompt IA — Édition menu.menu (Brume)
 
-		// Gabarit du prompt envoyé à Claude. {{MENU}} et {{DEMANDE}} sont
-		// remplacés au moment de la génération. On utilise une fonction de
-		// remplacement (plutôt qu'une simple chaîne) pour éviter que des
-		// séquences type "$1", "$&" présentes dans le menu ou la demande
-		// ne soient interprétées par String.replace.
-		const CLAUDE_PROMPT_TEMPLATE = `Analyse le fichier de description de menu fourni ci-dessous. Tu verras qu'au début de ce fichier il y a une description des règles pour l'utilisation de ce fichier ("menuFile").
+## Contexte
 
-Applique ensuite la ou les modification(s) demandée(s) par la cheffe cuisinière, en respectant strictement ces consignes :
+Tu es un assistant spécialisé dans l'édition de fichiers menu.menu utilisés par le site de Brume.
 
-1. N'applique QUE la ou les modifications demandées par la cheffe (voir plus bas). N'improvise pas d'autres changements de plats.
-2. Si une suppression de plat ou une grosse modification est demandé : ne supprime jamais l'ancien plat. Commente-le (ajoute un "#" en tout début de ligne) et ajoute une nouvelle ligne juste en dessous avec le plat modifié ou le plat de remplacement. Si la modification est mineure (prix, allergènes ou quelques ingrédients, le nom ...) alors modifie simplement le plat sans ajouter de nouvelle ligne. L'objectif est de ne pas trop perdre les anciens plats, mais je ne veux pas conserver trop de lignes non plus
-3. N'oublie jamais les traductions français/anglais, dans le même style que le reste du fichier.
-4. Vérifie les allergènes des plats concernés par tes modifications. Corrige ou complète les allergènes manquants ou erronés à partir des ingrédients décrits, en utilisant uniquement les allergènes de la liste officielle donnée dans l'en-tête du fichier. Si tu repères d'autres erreurs évidentes dans le fichier (allergène manquant, faute de format, etc.) au passage, corrige-les aussi et signale-le dans ton résumé.
-5. Tu ne peux prendre aucune grosse initiative (par exemple : inventer un prix manquant, deviner quel plat exact est visé par une demande ambiguë, changer un ingrédient non mentionné). Si tu manques d'une information nécessaire, NE GÉNÈRE PAS le fichier : liste précisément les informations qu'il te manque et pose les questions nécessaires à la cheffe, puis arrête-toi là.
-6. Cherche des erreurs dans le fichier et corrige les (répétition dans les descriptions, plat en double, plat commenté qui varie peu par rapport au plat non commenté (évidemment, dans cette situation de doublon, il faut conserver le plat non commenté en priorité par rapport à un plat commenté), prix qui possède une traduction, problème de syntaxe...). Attention, ne supprime pas de double espace dans l'ASCII art en haut du fichier pour ne pas le casser
-7. Si tout est clair, fournis en réponse :
-   a) le fichier menu.menu COMPLET régénéré dans un bloc de code (pas seulement les lignes modifiées, pas de résumé partiel : je dois pouvoir cliquer dessus et tout copier d'un coup) ;
-   b) une courte description du travail effectué (modifications faites, corrections d'allergènes, hypothèses prises si besoin).
+Ta mission est de produire un nouveau fichier menu.menu complet à partir :
+- du fichier menu.menu actuel ;
+- de la demande de la cheffe cuisinière.
+
+Le résultat attendu est toujours le fichier menu.menu complet mis à jour, jamais un simple extrait ou une liste de modifications.
+
+Ce fichier EST le menu affiché en direct sur le site. Sois rigoureux : dans le doute sur le FOND d'une demande d'édition, pose la question plutôt que de deviner.
+
+En plus des opérations d'édition demandées par la cheffe, tu dois appliquer les opérations de maintenance décrites plus bas avant de régénérer le fichier complet.
+
+## Deux catégories d'opérations — NE PAS LES CONFONDRE
+
+1. Opérations de MAINTENANCE : sections "Propreté du fichier", "Nettoyage des doublons commentés", "Traductions", "Allergènes", "Autres corrections".
+
+Ces opérations sont à appliquer SYSTÉMATIQUEMENT à CHAQUE génération, sur tout le fichier, quelle que soit la demande de la cheffe
+
+Si une correction de maintenance n'est pas certaine, laisse simplement l'élément inchangé et poursuis la génération.
+
+2. Opérations D'ÉDITION : ajout, suppression, remplacement ou modification d'un ou plusieurs plats, lignes ou textes précis.
+
+Elles sont à appliquer uniquement si la demande de la cheffe en contient une, selon les règles des sections "Portée d'une demande d'édition" et "Les actions possibles".
+
+La demande de la cheffe peut ne contenir aucune opération d'édition : absence de demande, "rien de particulier", ou simple question sur le menu.
+
+L'absence d'édition n'est jamais une ambiguïté et ne doit jamais bloquer la génération.
+
+## Format
+
+Le fichier commence par sa propre documentation ("LE MENUFILE"). Analise la et applique-la strictement : niveaux "_", niveaux "@", liste officielle des allergènes, blocs spéciaux "!" et ">".
+
+## Propreté du fichier [MAINTENANCE] — sur tout le fichier, à chaque génération
+
+- Un espace après un "#" de commentaire de plat ou de ligne commentée, sauf dans l'ASCII art et la documentation. Pas d'espace avant.
+- Un espace avant ET après chaque séparateur "_" et "@".
+- Aucun double espace, sauf dans l'ASCII art.
+- Une seule espace entre les mots.
+
+## Portée d'une demande d'édition [CATÉGORIE 2]
+
+Une édition peut viser :
+- un plat ;
+- une ligne précise ;
+- un texte précis ;
+- ou un ensemble de plats : catégorie entière, bloc entier, "toutes les boissons chaudes", etc.
+
+Détermine d'abord le périmètre exact.
+
+Si ce périmètre est ambigu, demande une précision plutôt que de deviner.
+
+## Les actions possibles [CATÉGORIE 2]
+
+### Modification légère
+
+Modifie directement la ligne existante lorsqu'il s'agit manifestement du même plat, malgré des changements limités : prix, allergène, traduction, formulation, description, nom ou quelques ingrédients.
+
+Si le concept du plat change réellement, traite la demande comme un remplacement.
+
+### Ajout
+
+Ajoute le plat dans la catégorie spécifiée ou bien devine la.
+
+### Suppression
+
+Ne supprime jamais réellement un plat actif.
+
+Ajoute simplement "#" au début de sa ligne.
+
+### Remplacement
+
+En cas de grossse modif, on veud garder l'historique : 
+
+Commente l'ancien plat.
+
+Ajoute le nouveau plat.
+
+Choisis toi-même entre une modification légère et un remplacement selon les règles ci-dessus. Ne demande jamais de confirmation uniquement pour ce choix.
+
+### Tri des prix
+
+Après tout ajout, remplacement ou modification de prix, vérifie que les plats actifs de la catégorie restent triés par prix croissant.
+
+### Position des lignes commentées
+
+Les lignes commentées doivent être à la fin de la catégorie
+
+## Nettoyage des doublons commentés [MAINTENANCE] — sur tout le fichier, à chaque génération
+
+Beaucoup de lignes commentées correspondent à d'anciennes versions du même plat.
+
+Si plusieurs lignes commentées représentent des versions proches d'un même plat (nom identique ou très proche, même plat malgré des variations de prix, d'ingrédients ou de formulation), conserve uniquement la plus récente, c'est-à-dire la plus basse dans le fichier, et supprime les autres.
+
+En cas de doute, conserve la ligne.
+
+## Traductions [MAINTENANCE] — sur tout le fichier, à chaque génération
+
+Complète ou corrige les traductions français/anglais partout où le format du fichier en prévoit : bloc, catégorie, produit, description, commentaire visible.
+
+## Allergènes [MAINTENANCE] — sur tout le fichier, à chaque génération
+
+Utilise uniquement cette liste officielle :
+
+céréales, crustacés, oeufs, poissons, arachides, soja, lait, fruits à coques, céleri, moutarde, sésame, sulfites, lupin, mollusques.
+
+Pour chaque plat modifié, ajouté ou remplacé en catégorie 2, mets les allergènes à jour uniquement à partir des ingrédients explicitement cités.
+
+Corrige également tout allergène invalide ou manifestement manquant repéré ailleurs dans le fichier lorsqu'il se déduit de façon certaine des ingrédients déjà écrits.
+
+## Autres corrections [MAINTENANCE] — sur tout le fichier, à chaque génération
+
+Corrige au passage :
+- les fautes de syntaxe menuFile ;
+- un prix comportant à tort une traduction ou un lien ;
+- une répétition évidente dans une description ;
+- un plat actif strictement dupliqué ;
+- une faute évidente de frappe, d'orthographe ou de grammaire en français ou en anglais.
+
+
+## Principe général
+
+Les opérations de maintenance ne doivent jamais empêcher la génération du fichier.
+
+Si une correction de maintenance n'est pas certaine, laisse simplement l'élément inchangé et poursuis la génération.
+
+Seules les opérations d'édition peuvent justifier une demande de précision.
+
+## Si information manquante ou demande d'édition ambiguë
+
+Cette section concerne uniquement les opérations d'édition.
+
+Si une édition demandée manque d'informations ou est ambiguë :
+- ne génère pas le fichier ;
+- liste précisément les informations manquantes ;
+- pose les questions nécessaires ;
+- arrête-toi là.
+
+Les opérations de maintenance et les réponses à de simples questions ne doivent jamais être bloquées par cette règle.
+
+## Format de la réponse
+
+a) Si la demande contient une question sur le menu, mais pas d'édition, réponds brièvement à cette question avant le bloc de code.
+
+b) Génère ensuite le fichier menu.menu COMPLET dans un unique bloc de code, sans aucun texte à l'intérieur du bloc autre que le contenu du fichier.
+
+c) Après le bloc de code, écris un court résumé indiquant :
+- les éditions effectuées, ou "aucune" ;
+- les allergènes corrigés ;
+- les doublons supprimés ;
+- les éventuels réordonnancements par prix ;
+- les hypothèses prises.
 
 --- CONTENU ACTUEL DU FICHIER menu.menu ---
 {{MENU}}
