@@ -1154,7 +1154,9 @@
 			const wrap = document.getElementById('diff-wrap');
 			if (orig.join('\n') === rawLines.join('\n')) { wrap.innerHTML = '<span style="color:var(--muted)">Aucune modification.</span>'; return; }
 			const lineDiff = lcs(orig.slice(0, 400), rawLines.slice(0, 400));
-			wrap.innerHTML = groupDiff(lineDiff).map(renderDiffEntry).join('\n');
+			const grouped = groupDiff(lineDiff).filter(d => d.type !== 'same');
+			if (grouped.length === 0) { wrap.innerHTML = '<span style="color:var(--muted)">Aucune modification.</span>'; return; }
+			wrap.innerHTML = grouped.map(renderDiffEntry).join('\n');
 		}
 
 		// Regroupe les diffs ligne à ligne : quand une ligne supprimée est
