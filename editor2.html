@@ -289,6 +289,21 @@
 			opacity: .15
 		}
 
+		.line-num {
+			flex-shrink: 0;
+			width: 2.3em;
+			align-self: stretch;
+			display: flex;
+			align-items: flex-start;
+			justify-content: flex-end;
+			padding-top: .42em;
+			padding-right: .4em;
+			font-size: .66em;
+			color: var(--muted);
+			user-select: none;
+			font-variant-numeric: tabular-nums;
+		}
+
 		.handle {
 			flex-shrink: 0;
 			width: 1.6em;
@@ -553,11 +568,30 @@
 
 		/* ══ RAW PANEL ════════════════════════════════════════════════ */
 		#raw-wrap {
-			height: calc(100vh - 88px)
+			height: calc(100vh - 88px);
+			display: flex;
+			align-items: stretch;
+		}
+
+		#raw-linenumbers {
+			flex-shrink: 0;
+			width: 3.4em;
+			overflow: hidden;
+			text-align: right;
+			padding: 1em .6em 1em 0;
+			font-family: 'Courier Prime', monospace;
+			font-size: .88em;
+			line-height: 1.65;
+			color: var(--muted);
+			background: var(--bg);
+			border-right: 1.5px solid var(--border);
+			white-space: pre;
+			user-select: none;
 		}
 
 		#raw-textarea {
-			width: 100%;
+			flex: 1;
+			min-width: 0;
 			height: 100%;
 			background: var(--bg);
 			color: var(--ink);
@@ -569,6 +603,8 @@
 			resize: none;
 			line-height: 1.65;
 			tab-size: 2;
+			white-space: pre;
+			overflow-x: auto;
 		}
 
 		/* ══ DIFF PANEL ═══════════════════════════════════════════════ */
@@ -580,10 +616,37 @@
 		}
 
 		.diff-line {
-			display: block;
+			display: flex;
+			align-items: flex-start;
 			padding: .05em .4em;
+		}
+
+		.diff-num {
+			flex-shrink: 0;
+			display: inline-block;
+			width: 2.6em;
+			color: var(--muted);
+			font-weight: 400;
+			text-decoration: none !important;
+			user-select: none;
+			text-align: right;
+			padding-right: .5em;
+			font-variant-numeric: tabular-nums;
+		}
+
+		.diff-marker {
+			flex-shrink: 0;
+			width: 1.3em;
+			text-align: center;
+			user-select: none;
+		}
+
+		.diff-text {
+			flex: 1;
+			min-width: 0;
 			white-space: pre-wrap;
-			word-break: break-all;
+			word-break: break-word;
+			overflow-wrap: anywhere;
 		}
 
 		.diff-add {
@@ -781,7 +844,10 @@
 	</div>
 
 	<div id="panel-raw" class="panel">
-		<div id="raw-wrap"><textarea id="raw-textarea" spellcheck="false"></textarea></div>
+		<div id="raw-wrap">
+			<div id="raw-linenumbers"></div>
+			<textarea id="raw-textarea" spellcheck="false" wrap="off"></textarea>
+		</div>
 	</div>
 	<div id="panel-diff" class="panel">
 		<div id="diff-wrap"></div>
@@ -919,6 +985,9 @@
 			const { color, label, size } = lineInfo(text);
 			const line = document.createElement('div');
 			line.className = 'line'; line.dataset.idx = idx;
+
+			const numEl = document.createElement('span');
+			numEl.className = 'line-num'; numEl.textContent = (idx + 1); line.appendChild(numEl);
 
 			const handle = document.createElement('span');
 			handle.className = 'handle'; handle.textContent = '⠿'; line.appendChild(handle);
@@ -1141,12 +1210,23 @@
 				document.getElementById(`panel-${p}`).classList.toggle('active', p === name);
 				document.getElementById(`btn-${p}`).classList.toggle('on', p === name);
 			});
-			if (name === 'raw') document.getElementById('raw-textarea').value = getText();
+			if (name === 'raw') { document.getElementById('raw-textarea').value = getText(); updateRawLineNumbers(); }
 			if (name === 'diff') renderDiff();
 			if (name === 'claude') refreshClaudePrompt();
 		}
+		function updateRawLineNumbers() {
+			const ta = document.getElementById('raw-textarea');
+			const n = ta.value === '' ? 1 : ta.value.split('\n').length;
+			let out = '';
+			for (let i = 1; i <= n; i++) out += i + '\n';
+			document.getElementById('raw-linenumbers').textContent = out;
+		}
 		document.getElementById('raw-textarea').addEventListener('input', () => {
 			rawLines = document.getElementById('raw-textarea').value.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+			updateRawLineNumbers();
+		});
+		document.getElementById('raw-textarea').addEventListener('scroll', () => {
+			document.getElementById('raw-linenumbers').scrollTop = document.getElementById('raw-textarea').scrollTop;
 		});
 
 		function renderDiff() {
@@ -1171,21 +1251,27 @@
 				if (entries[i].type === 'same') { out.push(entries[i]); i++; continue; }
 				const block = [];
 				while (i < entries.length && entries[i].type !== 'same') { block.push(entries[i]); i++; }
-				const dels = block.filter(e => e.type === 'del').map(e => e.text);
-				const adds = block.filter(e => e.type === 'add').map(e => e.text);
+				const dels = block.filter(e => e.type === 'del');
+				const adds = block.filter(e => e.type === 'add');
 				const n = Math.min(dels.length, adds.length);
-				for (let k = 0; k < n; k++) out.push({ type: 'mod', oldText: dels[k], newText: adds[k] });
-				for (let k = n; k < dels.length; k++) out.push({ type: 'del', text: dels[k] });
-				for (let k = n; k < adds.length; k++) out.push({ type: 'add', text: adds[k] });
+				for (let k = 0; k < n; k++) out.push({ type: 'mod', oldText: dels[k].text, newText: adds[k].text, oldIdx: dels[k].oldIdx, newIdx: adds[k].newIdx });
+				for (let k = n; k < dels.length; k++) out.push(dels[k]);
+				for (let k = n; k < adds.length; k++) out.push(adds[k]);
 			}
 			return out;
 		}
 
+		function numCols(oldIdx, newIdx) {
+			const o = (oldIdx === undefined || oldIdx === null) ? '' : (oldIdx + 1);
+			const n = (newIdx === undefined || newIdx === null) ? '' : (newIdx + 1);
+			return `<span class="diff-num">${o}</span><span class="diff-num">${n}</span>`;
+		}
+
 		function renderDiffEntry(d) {
-			if (d.type === 'same') return `<span class="diff-line diff-same">　 ${esc(d.text)}</span>`;
-			if (d.type === 'del') return `<span class="diff-line diff-del">－ ${esc(d.text)}</span>`;
-			if (d.type === 'add') return `<span class="diff-line diff-add">＋ ${esc(d.text)}</span>`;
-			return `<span class="diff-line diff-mod">± ${wordDiffHtml(d.oldText, d.newText)}</span>`;
+			if (d.type === 'same') return `<span class="diff-line diff-same">${numCols(d.oldIdx, d.newIdx)}<span class="diff-marker">　</span><span class="diff-text">${esc(d.text)}</span></span>`;
+			if (d.type === 'del') return `<span class="diff-line diff-del">${numCols(d.oldIdx, null)}<span class="diff-marker">－</span><span class="diff-text">${esc(d.text)}</span></span>`;
+			if (d.type === 'add') return `<span class="diff-line diff-add">${numCols(null, d.newIdx)}<span class="diff-marker">＋</span><span class="diff-text">${esc(d.text)}</span></span>`;
+			return `<span class="diff-line diff-mod">${numCols(d.oldIdx, d.newIdx)}<span class="diff-marker">±</span><span class="diff-text">${wordDiffHtml(d.oldText, d.newText)}</span></span>`;
 		}
 
 		// Découpe une chaîne en mots ET espaces (les espaces sont gardés comme
@@ -1222,9 +1308,9 @@
 				dp[i][j] = a[i] === b[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
 			const r = []; let i = 0, j = 0;
 			while (i < m || j < n) {
-				if (i < m && j < n && a[i] === b[j]) { r.push({ type: 'same', text: a[i] }); i++; j++; }
-				else if (j < n && (i >= m || dp[i][j + 1] >= dp[i + 1][j])) { r.push({ type: 'add', text: b[j] }); j++; }
-				else { r.push({ type: 'del', text: a[i] }); i++; }
+				if (i < m && j < n && a[i] === b[j]) { r.push({ type: 'same', text: a[i], oldIdx: i, newIdx: j }); i++; j++; }
+				else if (j < n && (i >= m || dp[i][j + 1] >= dp[i + 1][j])) { r.push({ type: 'add', text: b[j], newIdx: j }); j++; }
+				else { r.push({ type: 'del', text: a[i], oldIdx: i }); i++; }
 			}
 			return r;
 		}
