@@ -883,7 +883,7 @@
 			<div id="claude-paste-fallback" style="display:none;">
 				<div class="claude-label">Colle ici manuellement (si le bouton ci-dessus n'a pas fonctionné)</div>
 				<textarea id="claude-paste-area" spellcheck="false"
-					placeholder="Colle ici (Ctrl+V) le fichier menu.menu complet renvoyé par l'IA..."></textarea>
+					placeholder="Colle ici (Ctrl+V) le fichier menu.txt complet renvoyé par l'IA..."></textarea>
 				<div class="claude-actions-row">
 					<button class="btn primary" onclick="pasteFromTextareaAndDiff()">→ Voir le diff</button>
 				</div>
@@ -1335,7 +1335,7 @@
 		});
 
 		/* ── FORMATAGE ──
-		Applique les règles de propreté du menu.menu (mêmes règles que celles
+		Applique les règles de propreté du menu.txt (mêmes règles que celles
 		suivies par l'IA dans l'onglet "IA") :
 		- Un espace après un "#" de commentaire, même dans la documentation. Pas d'espace avant.
 		- Un espace avant ET après chaque séparateur "_" (ou groupe "___") et "@".
@@ -1403,7 +1403,7 @@
 				const { error: e1 } = await _sb.auth.signInWithPassword({ email, password: pw });
 				if (e1) throw e1;
 				const content = getText();
-				const { error: e2 } = await _sb.from('menu.menu').insert([{ content }]);
+				const { error: e2 } = await _sb.from('menu.txt').insert([{ content }]);
 				if (e2) throw e2;
 				savedText = content; setStatus('✓ Publié !', 'ok');
 			} catch (err) { setStatus('Erreur : ' + (err.message || err), 'err'); }
@@ -1424,18 +1424,18 @@
 
 ## Contexte
 
-Tu es un assistant spécialisé dans l'édition de fichiers menu.menu
-Le menu.menu est un fichier texte au format menuFile, contenant le menu d'un restaurant appelé Brume
+Tu es un assistant spécialisé dans l'édition de fichiers menu.txt
+Le menu.txt est un fichier texte au format menuFile, contenant le menu d'un restaurant appelé Brume
 Ce fichier est formatté pour permettre la mise en page automatique du menu sur le site web de Brume
 
-Ta mission est de produire un nouveau fichier menu.menu complet à partir des données fournies ci dessous :
-- le contenu du fichier menu.menu actuel (voir "CONTENU ACTUEL DU FICHIER menu.menu");
+Ta mission est de produire un nouveau fichier menu.txt complet à partir des données fournies ci dessous :
+- le contenu du fichier menu.txt actuel (voir "CONTENU ACTUEL DU FICHIER menu.txt");
 - la demande de modification du menu de la cheffe cuisinière (voir DEMANDE DE LA CHEFFE).
 
-La section "CONTENU ACTUEL DU FICHIER menu.menu" est la seule qui constitue le fichier d'entrée. Tout ce qui précède (préprompt, titres, séparateurs ---) est uniquement une documentation pour l'IA et ne doit jamais être recopié dans le fichier généré.
+La section "CONTENU ACTUEL DU FICHIER menu.txt" est la seule qui constitue le fichier d'entrée. Tout ce qui précède (préprompt, titres, séparateurs ---) est uniquement une documentation pour l'IA et ne doit jamais être recopié dans le fichier généré.
 
 Ta réponse doit contenir 2 choses :
-- Le fichier généré menu.menu complet et mis à jour, téléchargeable (jamais un simple extrait ou une liste de modifications)
+- Le fichier généré menu.txt complet et mis à jour, téléchargeable (jamais un simple extrait ou une liste de modifications)
 - Une description des modifications apportées, d'éventuelles questions pour la cheffe...
 
 Ce fichier EST le menu affiché en direct sur le site. Sois rigoureux : dans le doute sur le FOND d'une demande d'édition, pose la question plutôt que de deviner.
@@ -1509,7 +1509,7 @@ La traduction est facultative si elle est identique français / anglais
 
 Pour chaque plat modifié, ajouté ou remplacé, mets les allergènes à jour uniquement à partir des ingrédients explicitement cités.
 
-Utilise uniquement la liste officielle fournie dans la documentation du menu.menu
+Utilise uniquement la liste officielle fournie dans la documentation du menu.txt
 
 ## Autres corrections
 
@@ -1541,17 +1541,17 @@ Si une édition demandée manque d'informations ou est ambiguë :
 
 a) Si la demande contient une question sur le menu, mais pas d'édition, réponds brièvement à cette question avant le bloc de code.
 
-b) Génère ensuite le fichier menu.menu. L'objectif est de pouvoir télécharger le nouveau menu d'un seul clic
-Il s'agit bien sûr d'un fichier texte appelé menu.menu contenant exactement le contenu de la section "CONTENU ACTUEL DU FICHIER menu.menu" modifié par toi..
+b) Génère ensuite le fichier menu.txt. L'objectif est de pouvoir télécharger le nouveau menu d'un seul clic
+Il s'agit bien sûr d'un fichier texte appelé menu.txt contenant exactement le contenu de la section "CONTENU ACTUEL DU FICHIER menu.txt" modifié par toi..
 C'est le fichier qui sera parsé automatiqement pour la mise en forme sur le site web
 Il ne contient pas la demande de de la cheffe ni ce préprompt
-Le fichier téléchargeable doit être un fichier menu.menu valide
+Le fichier téléchargeable doit être un fichier menu.txt valide
 
 c) Après le bloc de code, écris un court résumé
 
 --- FIN DU PREPROMPT ---
 
---- CONTENU ACTUEL DU FICHIER menu.menu ---
+--- CONTENU ACTUEL DU FICHIER menu.txt ---
 {{MENU}}
 --- FIN DU FICHIER ---
 
@@ -1646,13 +1646,13 @@ c) Après le bloc de code, écris un court résumé
 			let text = '';
 			try {
 				if (_sb) {
-					const { data, error } = await _sb.from('menu.menu').select('content').limit(1).order('id', { ascending: false });
+					const { data, error } = await _sb.from('menu.txt').select('content').limit(1).order('id', { ascending: false });
 					if (!error && data?.[0]?.content) { text = data[0].content; setStatus('Chargé depuis Supabase', 'ok'); }
 					else throw 0;
 				} else throw 0;
 			} catch {
 				try {
-					text = await (await fetch('menu.menu', { cache: 'no-cache' })).text();
+					text = await (await fetch('menu.txt', { cache: 'no-cache' })).text();
 					setStatus('Fichier local chargé', 'ok');
 				} catch { setStatus('Impossible de charger le menu.', 'err'); }
 			}
