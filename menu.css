@@ -187,7 +187,7 @@ row-allergens.allergen-hidden {
  * color so it's visually distinct from allergens.
  */
 
-row-allergens.row-pregnancy {
+/* row-allergens.row-pregnancy {
 	--pregnancy-color: #a83279;
 }
 
@@ -203,4 +203,4 @@ row-allergens.row-pregnancy style-allergen-pill {
 row-allergens.row-pregnancy style-allergen-pill.allergen-unknown {
 	border-color: var(--red, #b82020);
 	color: var(--red, #b82020);
-}
+} */
