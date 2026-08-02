@@ -178,3 +178,29 @@ row-allergens.allergen-hidden {
 	opacity: 0;
 	pointer-events: none;
 }
+
+/* ── Pregnancy row ─────────────────────────────────── */
+/*
+ * row-pregnancy reuses the row-allergens layout/hiding
+ * mechanism above (same tag, same .allergen-row /
+ * .allergen-hidden classes), but gets its own accent
+ * color so it's visually distinct from allergens.
+ */
+
+row-allergens.row-pregnancy {
+	--pregnancy-color: #a83279;
+}
+
+row-allergens.row-pregnancy style-allergen-label {
+	color: var(--pregnancy-color);
+}
+
+row-allergens.row-pregnancy style-allergen-pill {
+	border-color: var(--pregnancy-color);
+	color: var(--pregnancy-color);
+}
+
+row-allergens.row-pregnancy style-allergen-pill.allergen-unknown {
+	border-color: var(--red, #b82020);
+	color: var(--red, #b82020);
+}

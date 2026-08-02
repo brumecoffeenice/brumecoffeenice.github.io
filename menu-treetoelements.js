@@ -39,6 +39,33 @@ function parseAllergens(rawText) {
 	});
 }
 
+// Pregnancy warnings dictionary : canonical French key -> { fr, en }
+// Keys must match what is written in the .menu file (after normalisation)
+const PREGNANCY_WARNINGS = {
+	"lait cru": { texts: ["Lait cru / fromage au lait cru", "Unpasteurised milk / cheese"] },
+	"oeuf cru": { texts: ["Œuf cru ou peu cuit", "Raw or undercooked egg"] },
+	"poisson cru": { texts: ["Poisson cru", "Raw fish"] },
+	"poisson fume": { texts: ["Poisson fumé", "Smoked fish"] },
+	"viande crue": { texts: ["Viande crue ou peu cuite", "Raw or undercooked meat"] },
+	"charcuterie": { texts: ["Charcuterie non cuite", "Uncooked cured meat"] },
+	"alcool": { texts: ["Alcool", "Alcohol"] },
+	"graines germees": { texts: ["Graines germées crues", "Raw sprouted seeds"] },
+	"cafeine": { texts: ["Caféine", "Cafeine"] },
+};
+
+// Parse a raw comma-separated pregnancy-warning string from the .menu file.
+// Same logic as parseAllergens : unknown entries are passed through as-is
+// and flagged, so typos are still visible (in red) on the site.
+function parsePregnancyWarnings(rawText) {
+	return rawText.split(',').map(s => s.trim()).filter(Boolean).map(raw => {
+		const norm = normaliseAllergen(raw); // reuse same normalisation logic
+		if (PREGNANCY_WARNINGS[norm]) {
+			return { texts: PREGNANCY_WARNINGS[norm].texts, known: true };
+		}
+		return { texts: [raw, raw], known: false }; // unknown : display as-is
+	});
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 
 function createCustomElement(element, type, containerType) {
@@ -114,6 +141,29 @@ function createAllergenRow(element) {
 	return row;
 }
 
+// Build the pregnancy-warning row for a product element.
+// Finds the type-7 child (optional), returns null if absent.
+function createPregnancyRow(element) {
+	var warnings = parsePregnancyWarnings(element.texts[0]);
+	if (warnings.length === 0) return null;
+
+	var row = document.createElement('row-allergens');
+	row.classList.add('row-pregnancy');
+	var label = document.createElement('style-allergen-label');
+	label.textContent = actualLanguage === 0 ? 'Grossesse :' : 'Pregnancy:';
+	row.appendChild(label);
+
+	for (var w of warnings) {
+		var pill = document.createElement('style-allergen-pill');
+		pill.classList.add('pregnancy-pill');
+		if (!w.known) pill.classList.add('allergen-unknown');
+		pill.textContent = w.texts[actualLanguage];
+		row.appendChild(pill);
+	}
+
+	return row;
+}
+
 function treeToElements(tree) {
 	var menuBox = document.getElementById('menuBox');
 	menuBox.innerHTML = '';
@@ -158,6 +208,15 @@ function treeToElements(tree) {
 					}
 					break;
 				case '6':
+					// grossesse : optionnel, masqué par défaut
+					var pregnancyRow = createPregnancyRow(element);
+					if (pregnancyRow) {
+						pregnancyRow.classList.add('allergen-row');
+						if (!showPregnancy) pregnancyRow.classList.add('allergen-hidden');
+						blocContainer.appendChild(pregnancyRow);
+					}
+					break;
+				case '7':
 					blocContainer.appendChild(createCustomElement(element, 'style-comment', 'row-center'));
 					break;
 				default:

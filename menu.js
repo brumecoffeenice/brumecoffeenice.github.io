@@ -4,6 +4,7 @@ const _supabase = supabase.createClient(SupabaseUrl, SupabasePublicAnonKey)
 
 var actualLanguage = 0; //0=fr, 1=en
 var showAllergens = false;
+var showPregnancy = false;
 var tree = [];
 
 function showLanguageMenu() {
@@ -36,7 +37,7 @@ function showAllergenButton() {
 function toggleAllergens() {
 	showAllergens = !showAllergens;
 	// Toggle visibility directly without a full re-render
-	document.querySelectorAll('.allergen-row').forEach(function (row) {
+	document.querySelectorAll('.allergen-row:not(.row-pregnancy)').forEach(function (row) {
 		if (showAllergens) {
 			row.classList.remove('allergen-hidden');
 		} else {
@@ -44,6 +45,30 @@ function toggleAllergens() {
 		}
 	});
 	showAllergenButton();
+}
+
+function showPregnancyButton() {
+	var btn = document.getElementById('pregnancyToggle');
+	btn.textContent = actualLanguage === 0 ? 'Grossesse' : 'Pregnancy';
+
+	if (showPregnancy) {
+		btn.classList.add('selectedLinkStyle');
+	} else {
+		btn.classList.remove('selectedLinkStyle');
+	}
+}
+
+function togglePregnancy() {
+	showPregnancy = !showPregnancy;
+	// Toggle visibility directly without a full re-render
+	document.querySelectorAll('.row-pregnancy').forEach(function (row) {
+		if (showPregnancy) {
+			row.classList.remove('allergen-hidden');
+		} else {
+			row.classList.add('allergen-hidden');
+		}
+	});
+	showPregnancyButton();
 }
 
 function detectLanguage() {
@@ -82,12 +107,14 @@ async function main() {
 	treeToElements(tree);
 	showLanguageMenu();
 	showAllergenButton();
+	showPregnancyButton();
 }
 
 function refresh() {
 	treeToElements(tree);
 	showLanguageMenu();
 	showAllergenButton();
+	showPregnancyButton();
 }
 
 detectLanguage();
@@ -97,3 +124,4 @@ main();
 languageBox0.addEventListener("click", function () { actualLanguage = 0; refresh(); });
 languageBox1.addEventListener("click", function () { actualLanguage = 1; refresh(); });
 document.getElementById('allergenToggle').addEventListener("click", toggleAllergens);
+document.getElementById('pregnancyToggle').addEventListener("click", togglePregnancy);

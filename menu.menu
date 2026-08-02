@@ -19,116 +19,128 @@
 # {======| |"""""| |"""""| |"""""| |"""""| |"""""| {======| |"""""| |"""""| |"""""| |"""""| {======| |"""""| |"""""| |"""""| |"""""| |"""""| |"""""|#
 # /o--000'-`-0-0-'-`-0-0-'-`-0-0-'-`-0-0-'-`-0-0-'./o--000'-`-0-0-'-`-0-0-'-`-0-0-'-`-0-0-'./o--000'-`-0-0-'-`-0-0-'-`-0-0-'-`-0-0-'-`-0-0-'-`-0-0-'#
 
-#Website and editor made with <3 by Simon for Roxane
+# Website and editor made with <3 by Simon for Roxane
 
-#SALUT À TOI JEUNE ENTREPRENEUR
-#J'ai créé ce site web pour Brume
-#Si tu veux un menu dans le même style pour ton resto, n'hésite pas à me contacter ! : contact@brumecoffeenice.fr
+# SALUT À TOI JEUNE ENTREPRENEUR
+# J'ai créé ce site web pour Brume
+# Si tu veux un menu dans le même style pour ton resto, n'hésite pas à me contacter ! : contact @ brumecoffeenice.fr
 
-#LE MENUFILE : COMPRENDRE LE FORMAT
-#Ce fichier ".menu" est un format texte brut, conçu pour stocker le menu de façon lisible par un humain ET directement exploitable par le site pour générer automatiquement la page du menu.
-#Ce fichier EST le menu affiché sur le site : toute modification faite ici est répercutée sur le site après mise en forme automatique.
+# LE MENUFILE : COMPRENDRE LE FORMAT
+# Ce fichier ".menu" est un format texte brut, conçu pour stocker le menu de façon lisible par un humain ET directement exploitable par le site pour générer automatiquement la page du menu.
+# Ce fichier EST le menu affiché sur le site : toute modification faite ici est répercutée sur le site après mise en forme automatique.
 #
-#--- LES 4 CARACTÈRES SPÉCIAUX ---
-#Le format repose sur 4 caractères, chacun avec un rôle précis :
-#  \n (retour à la ligne) -> sépare les "lignes"
-#  #  (dièse)              -> en tout début de ligne, transforme la ligne entière en commentaire (ignorée à l'affichage)
-#  _  (underscore)         -> sépare les "items" et définit leur "niveau"
-#  @  (arobase)            -> sépare les "détails" d'un item et définit leur "niveau"
+# --- LES 4 CARACTÈRES SPÉCIAUX ---
+# Le format repose sur 4 caractères, chacun avec un rôle précis :
+# \n (retour à la ligne) -> sépare les "lignes"
+# # (dièse) -> en tout début de ligne, transforme la ligne entière en commentaire (ignorée à l'affichage)
+# _ (underscore) -> sépare les "items" et définit leur "niveau"
+# @ (arobase) -> sépare les "détails" d'un item et définit leur "niveau"
 #
-#--- STRUCTURE : LIGNES > ITEMS > DÉTAILS ---
-#Une ligne contient un ou plusieurs "items", séparés par des "_".
-#Un item contient un ou plusieurs "détails", séparés par des "@".
-#L'ordre d'apparition des items dans le fichier définit à la fois l'ordre d'affichage ET la hiérarchie du menu (un produit appartient à la catégorie qui le précède, elle-même au bloc qui la précède...).
+# --- STRUCTURE : LIGNES > ITEMS > DÉTAILS ---
+# Une ligne contient un ou plusieurs "items", séparés par des " _ ".
+# Un item contient un ou plusieurs "détails", séparés par des " @ ".
+# L'ordre d'apparition des items dans le fichier définit à la fois l'ordre d'affichage ET la hiérarchie du menu (un produit appartient à la catégorie qui le précède, elle-même au bloc qui la précède...).
 #
-#--- NIVEAU D'UN ITEM (compté en nombre de "_") ---
-#Le niveau d'un item est le nombre total de "_" rencontrés depuis le tout début de sa ligne. Chaque niveau a un rôle fixe et unique :
-#  Niveau 0 (aucun "_")   -> BLOC          (ex : "Boissons", "La boutique")
-#  Niveau 1 ("_")         -> CATÉGORIE     (ex : "Barista", "Jus")
-#  Niveau 2 ("__")        -> PRODUIT       (ex : "Cappuccino")
-#  Niveau 3 ("___")       -> PRIX          (ex : "4.5")
-#  Niveau 4 ("____")      -> DESCRIPTION
-#  Niveau 5 ("_____")     -> ALLERGÈNE
-#  Niveau 6 ("______")    -> COMMENTAIRE / NOTE
-#Tout niveau 7 ou plus (7 "_" ou plus) est traité comme une ERREUR, pas comme un commentaire : évitez d'empiler trop de "_" sur une même ligne.
+# --- NIVEAU D'UN ITEM (compté en nombre de " _ ") ---
+# Le niveau d'un item est le nombre total de " _ " rencontrés depuis le tout début de sa ligne. Chaque niveau a un rôle fixe et unique :
+# Niveau 0 (aucun " _ ") -> BLOC (ex : "Boissons", "La boutique")
+# Niveau 1 (" _ ") -> CATÉGORIE (ex : "Barista")
+# Niveau 2 (" __ ") -> PRODUIT (ex : "Cappuccino")
+# Niveau 3 (" ___ ") -> PRIX (ex : "4.5")
+# Niveau 4 (" ____ ") -> DESCRIPTION
+# Niveau 5 (" _____ ") -> ALLERGÈNE
+# Niveau 6 (" ______ ") -> GROSSESSE (incompatibilité avec une grossesse)
+# Niveau 7 (" _______ ") -> COMMENTAIRE / NOTE
+# Tout niveau 8 ou plus (8 " _ " ou plus) est traité comme une ERREUR, pas comme un commentaire : évitez d'empiler trop de " _ " sur une même ligne.
 #
-#Deux items de niveaux différents peuvent être écrits sur une seule ligne : le niveau progresse au fil des "_" rencontrés (peu importe qu'ils soient collés ou séparés par des espaces).
-#Exemple, une seule ligne :
-#  __ Cappuccino _ 4.5 _ 1 shot, tasse de 200 ml _ lait
-#est strictement équivalente à :
-#  __ Cappuccino           (produit,     niveau 2 : 2 underscores cumulés)
-#  ___ 4.5                 (prix,        niveau 3 : 3 underscores cumulés)
-#  ____ 1 shot, tasse de 200 ml   (description, niveau 4 : 4 underscores cumulés)
-#  _____ lait               (allergène,   niveau 5 : 5 underscores cumulés)
-#ATTENTION : un "_" supplémentaire fait toujours progresser au niveau suivant. Donc pour lister PLUSIEURS allergènes sur un même produit, ne les séparez surtout pas par des "_" (le suivant serait alors interprété comme un COMMENTAIRE, niveau 6) : écrivez-les comme un seul item, séparés par des virgules.
-#Exemple réel : "__ Tartine d'été @ Summer tartine _ 16.5 _ ... @ ... _ céréales, lait, fruits à coques" -> un seul item de niveau 5 ("céréales, lait, fruits à coques") qui liste 3 allergènes.
+# Deux items de niveaux différents peuvent être écrits sur une seule ligne : le niveau progresse au fil des " _ " rencontrés (peu importe qu'ils soient collés ou séparés par des espaces).
+# Exemple, une seule ligne :
+# __ Cappuccino _ 4.5 _ 1 shot, tasse de 200 ml _ lait
+# est strictement équivalente à :
+# __ Cappuccino (produit, niveau 2 : 2 underscores cumulés)
+# ___ 4.5 (prix, niveau 3 : 3 underscores cumulés)
+# ____ 1 shot, tasse de 200 ml (description, niveau 4 : 4 underscores cumulés)
+# _____ lait (allergène, niveau 5 : 5 underscores cumulés)
+# ATTENTION : un " _ " supplémentaire fait toujours progresser au niveau suivant. Donc pour lister PLUSIEURS allergènes (ou PLUSIEURS éléments grossesse) sur un même produit, ne les séparez surtout pas par des " _ " (le suivant serait alors interprété comme le niveau suivant, GROSSESSE ou COMMENTAIRE) : écrivez-les comme un seul item, séparés par des virgules.
+# Exemple réel : " __ Tartine d'été @ Summer tartine _ 16.5 _ ... @ ... _ céréales, lait, fruits à coques" -> un seul item de niveau 5 ("céréales, lait, fruits à coques") qui liste 3 allergènes.
 #
-#--- NIVEAU D'UN DÉTAIL (compté en nombre de "@") ---
-#Au sein d'un même item, le "@" ajoute des détails, toujours dans cet ordre :
-#  Niveau 0 -> Texte original, en français (OBLIGATOIRE)
-#  Niveau 1 -> Traduction, en anglais (facultative)
-#  Niveau 2 -> Hyperlien (facultatif)
-#Exemple : "Jus d'orange @ Orange juice" -> texte = "Jus d'orange", traduction = "Orange juice"
-#Le PRIX (niveau 3) ne doit JAMAIS avoir de traduction ni de hyperlien : un simple nombre suffit.
+# --- NIVEAU D'UN DÉTAIL (compté en nombre de " @ ") ---
+# Au sein d'un même item, le " @ " ajoute des détails, toujours dans cet ordre :
+# Niveau 0 -> Texte original, en français (OBLIGATOIRE)
+# Niveau 1 -> Traduction, en anglais (facultative)
+# Niveau 2 -> Hyperlien (facultatif)
+# Exemple : "Jus d'orange @ Orange juice" -> texte = "Jus d'orange", traduction = "Orange juice"
+# Le PRIX (niveau 3) ne doit JAMAIS avoir de traduction ni de hyperlien : un simple nombre suffit.
 #
-#--- RÈGLES DE FORMATAGE ---
-#- Les espaces juste avant/après un "_" ou un "@" sont ignorés : "bonjour monde @ hello world" est équivalent à "bonjour monde@hello world"
-#- Une ligne vide, ou une ligne commençant par "#", est entièrement ignorée à l'affichage (c'est un commentaire, comme cette ligne-ci).
-#- Pour retirer un plat sans le perdre définitivement, ajoutez un "#" en tout début de sa ligne plutôt que de la supprimer : le plat reste dans le fichier mais disparaît du site.
+# --- RÈGLES DE FORMATAGE ---
+# - Les espaces juste avant/après un " _ " ou un " @ " sont ignorés : "bonjour monde @ hello world" est équivalent à "bonjour monde @ hello world"
+# - Une ligne vide, ou une ligne commençant par "#", est entièrement ignorée à l'affichage (c'est un commentaire, comme cette ligne-ci).
+# - Pour retirer un plat sans le perdre définitivement, ajoutez un "#" en tout début de sa ligne plutôt que de la supprimer : le plat reste dans le fichier mais disparaît du site.
 #
-#--- ALLERGÈNES ---
-#L'item allergène (niveau 5) contient un ou plusieurs allergènes séparés par des virgules (pas des "_"). Chacun doit être écrit exactement comme dans la liste officielle suivante : céréales, crustacés, oeufs, poissons, arachides, soja, lait, fruits à coques, céleri, moutarde, sésame, sulfites, lupin, mollusques
-#Ces allergènes connus sont automatiquement traduits en anglais à l'affichage : inutile de fournir une traduction pour un allergène.
-#Un allergène qui ne fait PAS partie de cette liste est quand même affiché sur le site, mais surligné en rouge pour signaler l'erreur : à corriger dès que possible (faute de frappe, allergène non reconnu...).
+# --- ALLERGÈNES ---
+# L'item allergène (niveau 5) contient un ou plusieurs allergènes séparés par des virgules (pas des " _ "). Chacun doit être écrit exactement comme dans la liste officielle suivante : céréales, crustacés, oeufs, poissons, arachides, soja, lait, fruits à coques, céleri, moutarde, sésame, sulfites, lupin, mollusques
+# Ces allergènes connus sont automatiquement traduits en anglais à l'affichage : inutile de fournir une traduction pour un allergène.
+# Un allergène qui ne fait PAS partie de cette liste est quand même affiché sur le site, mais surligné en rouge pour signaler l'erreur : à corriger dès que possible (faute de frappe, allergène non reconnu...).
 #
-#--- BLOCS SPÉCIAUX ---
-#Un bloc (niveau 0) dont le nom commence par "!" fonctionne normalement, mais son titre n'est pas affiché sur la page (utile pour regrouper des items sans titre visible).
-#Un bloc (niveau 0) dont le nom commence par ">" n'apparaît PAS dans le menu comme les autres blocs : son contenu est injecté directement dans l'élément HTML du site dont l'id correspond exactement au nom qui suit le ">" (ex : ">introBox" remplit l'élément d'id "introBox"). C'est utilisé un peu plus bas dans ce fichier pour le texte d'introduction et l'encart d'avis Google.
+# --- GROSSESSE ---
+# L'item grossesse (niveau 6, juste après l'allergène) contient un ou plusieurs éléments incompatibles avec une grossesse, séparés par des virgules (pas des " _ "), écrits exactement comme dans la liste officielle suivante :
+# lait cru, oeuf cru, poisson cru, poisson fumé, viande crue, charcuterie, alcool, graines germées, caféine
 #
-#--- LES 4 TYPES DE LIGNES À UTILISER ---
-#Pour garder un fichier cohérent et facile à modifier, n'utilisez que ces 4 structures de ligne :
-#1. Bloc :         blocFr @ blocEn
-#2. Catégorie :    _ catégorieFr @ catégorieEn
-#3. Produit :      __ produitFr @ produitEn _ prix _ descriptionFr @ descriptionEn _ allergène
-#4. Commentaire :  ______ commentaireFr @ commentaireEn
+# Ces éléments connus sont automatiquement traduits en anglais à l'affichage : inutile de fournir une traduction.
+# Un élément qui ne fait PAS partie de cette liste est quand même affiché sur le site, mais surligné en rouge (comme pour les allergènes non reconnus).
 #
-#--- EXEMPLE COMPLET ---
-#Boissons @ Drinks
-#_ Jus @ Juice
-#______ Rafraichissant ! @ Refreshing !
-#__ Jus d'orange @ Orange juice _ 3.5 _ Avec deux oranges @ With two oranges
-#__ Jus de tomate @ Tomato juice _ 2
+# Rappel utile (voir plus bas dans ce fichier pour l'application concrète) :
+# - Par défaut, un fromage n'est PAS considéré au lait cru, SAUF : burrata / burratina, stracciatella, gorgonzola, saint marcellin.
+# - Un œuf à la coque ou mollet est considéré comme "oeuf cru" (cuisson incomplète).
 #
-#Café @ Coffee
-#__ Expresso _ 1.5
-#__ Latté @ Latte _ 4 _ _ lait
-#______ made with <3
-#--- FIN DE L'EXEMPLE ---
+# --- BLOCS SPÉCIAUX ---
+# Un bloc (niveau 0) dont le nom commence par "!" fonctionne normalement, mais son titre n'est pas affiché sur la page (utile pour regrouper des items sans titre visible).
+# Un bloc (niveau 0) dont le nom commence par ">" n'apparaît PAS dans le menu comme les autres blocs : son contenu est injecté directement dans l'élément HTML du site dont l'id correspond exactement au nom qui suit le ">" (ex : ">introBox" remplit l'élément d'id "introBox"). C'est utilisé un peu plus bas dans ce fichier pour le texte d'introduction et l'encart d'avis Google.
+#
+# --- LES 4 TYPES DE LIGNES À UTILISER ---
+# Pour garder un fichier cohérent et facile à modifier, n'utilisez que ces 4 structures de ligne :
+# 1. Bloc : blocFr @ blocEn
+# 2. Catégorie : _ catégorieFr @ catégorieEn
+# 3. Produit : __ produitFr @ produitEn _ prix _ descriptionFr @ descriptionEn _ allergène _ grossesse
+# 4. Commentaire : _______ commentaireFr @ commentaireEn
+#
+# --- EXEMPLE COMPLET ---
+# Boissons @ Drinks
+# _ Jus @ Juice
+# _______ Rafraichissant ! @ Refreshing !
+# __ Jus d'orange @ Orange juice _ 3.5 _ Avec deux oranges @ With two oranges
+# __ Jus de tomate @ Tomato juice _ 2
+#
+# Café @ Coffee
+# __ Expresso _ 1.5 _ _ _ caféine
+# __ Latté @ Latte _ 4 _ _ lait
+# _______ made with <3
+# --- FIN DE L'EXEMPLE ---
 
 ########## header0 ##########
-#bloc _ categorie _ produit _ prix _ description _ allergenes _ commentaire
+# bloc _ categorie _ produit _ prix _ description _ allergenes _ grossesse _ commentaire
 
 ########## header1 ##########
-#français @ english @ hyperlien
+# français @ english @ hyperlien
 
-#bloc spécial à destination d'un div. Le nom n'est pas affiché
+# bloc spécial à destination d'un div. Le nom n'est pas affiché
 >introBox
-______ Merci de faire votre commande au comptoir. @ Please place order at the counter.
-______ 🧡
-______ Toutes nos recettes sont faites maison sur place, nos produits sont de saison et nos fruits et légumes sont locaux. @ All our recipes are homemade, our products are seasonal and our fruits and vegetables are local.
+_______ Merci de faire votre commande au comptoir. @ Please place order at the counter.
+_______ 🧡
+_______ Toutes nos recettes sont faites maison sur place, nos produits sont de saison et nos fruits et légumes sont locaux. @ All our recipes are homemade, our products are seasonal and our fruits and vegetables are local.
 
 >reviewBox
-______ Cher(e) client(e) @ Dear customer
-______ Si tu aime notre petit café, pourrais tu nous laisser un avis Google ? @ If you like our little café, could you leave us a Google review ?
-______ Cela nous aide beaucoup !@ It helps us a lot !
-______ Roxane
-______ 🧡
-______ Laisser un avis Google @ Leave a Google review @ https://g.page/r/CWCRh8LAA1GOEAE/review
+_______ Cher(e) client(e) @ Dear customer
+_______ Si tu aimes notre petit café, pourrais tu nous laisser un avis Google ? @ If you like our little café, could you leave us a Google review ?
+_______ Cela nous aide beaucoup ! @ It helps us a lot !
+_______ Roxane
+_______ 🧡
+_______ Laisser un avis Google @ Leave a Google review @ https://g.page/r/CWCRh8LAA1GOEAE/review
 
 Boissons @ Drinks
 _ Barista
-______ Servis chauds ou glacés @ Served hot or iced
-__ Espresso _ 2
+_______ Servis chauds ou glacés @ Served hot or iced
+__ Espresso _ 2 _ caféine
 __ Cortado _ 3 _ 1 shot, tasse de 90 ml @ 1 shot, 90 ml cup _ lait
 __ Double Espresso _ 3
 __ Americano _ 3.5 _ 2 shots, tasse de 200 ml @ 2 shots, 200 ml cup
@@ -137,96 +149,92 @@ __ Cappuccino _ 4.5 _ 1 shot, tasse de 200 ml @ 1 shot, 200 ml cup _ lait
 __ Flat white _ 4.5 _ 2 shots, tasse de 150 ml @ 2 shots, 150 ml cup _ lait
 __ Latte _ 5 _ 2 shots, tasse de 300 ml @ 2 shots, 300 ml cup _ lait
 __ Hojicha latte _ 5 _ _ lait
-__ Ube latte _ 5 _ Igname violet originaire des Philippines, lait, tasse de 300 ml @ Purple yam from Philippines, milk, 300 ml cup _ lait
+__ Ube latte _ 5 _ Igname violet originaire des Philippines, lait, tasse de 300 ml @ Purple yam from the Philippines, milk, 300 ml cup _ lait
 __ Moka _ 5.5 _ 1 shot, chocolat, tasse de 300 ml @ 1 shot, chocolate, 300 ml cup _ lait
-__ Supplément lait d'avoine & lait d'amande @ Almond or oat milk extra _ 0.5 _ _ fruits à coques
+__ Supplément lait d'avoine, lait d'amande ou lait de coco @ Almond, coconut or oat milk extra _ 0.5 _ _ fruits à coques
 # __ Espresso tonic glacé @ Iced espresso tonic _ 5.50 _ 2 shots, tonic, rondelle d'orange @ 2 shots, tonic, orange slice
 
 _ Nos tasses @ Our cups
-______ Servis chaudes ou glacées @ Served hot or iced
+_______ Servis chauds ou glacés @ Served hot or iced
 __ Thé vert ou noir @ Green or black tea _ 4.5 _ De chez « l'autre thé », bio @ From « l'autre thé », organic
-__ Infusion bio @ Organic Infusion _ 4.5
+__ Infusion bio @ Organic infusion _ 4.5
 __ Golden latte _ 5 _ _ lait
 __ Chocolat chaud maison @ Homemade hot chocolate _ 5 _ _ lait
 __ Chaï latte maison @ Homemade chaï latte _ 5 _ _ lait
 __ Dirty chaï latte _ 5.5 _ Chaï latte avec un shot de café @ Chaï latte with coffee shot _ lait
 __ Matcha latte _ 5.5 _ _ lait
-__ Supplément lait d'avoine, lait d'amande ou lait de coco @ Almond, coco or oat milk extra _ 0.5 _ _ fruits à coques
+__ Supplément lait d'avoine, lait d'amande ou lait de coco @ Almond, coconut or oat milk extra _ 0.5 _ _ fruits à coques
 # __ Blue latte _ 5 _ Infusion de fleurs, gingembre, sucre de coco @ Flower infusion, ginger, coconut sugar
 
 _ Boissons fraîches @ Fresh drinks
 __ Citronnade @ Lemonade _ 5 _ Pressé minute @ Freshly squeezed
 __ Orange pressée @ Orange juice _ 5.5 _ Pressé minute @ Freshly squeezed
-__ Jus pomme-carotte-gingembre @ Juice apple-carrot-ginger _ 5.5 _ Pressé minute @ Freshly squeezed
-__ Matcha-mangue @ Matcha-mango _ 7 _ Matcha uji, coulis de mangue, lait entier @ Uji matcha, mango coulis, whole milk _ lait
+__ Jus pomme-carotte-gingembre @ Apple-carrot-ginger juice _ 5.5 _ Pressé minute @ Freshly squeezed
+__ Iced matcha mango _ 7 _ Matcha uji, coulis de mangue, lait entier @ Uji matcha, mango coulis, whole milk _ lait
+__ Iced matcha fraise @ Iced matcha strawberry _ 7 _ Matcha uji, coulis de fraise, lait entier @ Uji matcha, strawberry coulis, whole milk _ lait
+__ Supplément lait d'avoine, lait d'amande ou lait de coco @ Almond, coconut or oat milk extra _ 0.5 _ _ fruits à coques
 # __ Matcha tonic _ 5.50
 
 Plats et desserts @ Dishes and desserts
 _ Toute la journée @ All day
-______ Non servis sur notre terrasse @ Not available on our terrace
+_______ Non servis sur notre terrasse @ Not available on our terrace
 __ Les scones sucrés @ Sweet scones _ 6 _ Deux scones, servis avec de la crème épaisse d'Isigny et de la confiture @ Two scones, served with Isigny heavy cream and jam _ céréales, oeufs, lait
-__ Les œufs à la coque @ Soft boiled eggs _ 7.5 _ Deux oeufs plein air, beurre demi-sel mouillettes de pain de campagne de chez Mama Baker @ Two eggs, butter, country bread from Mama Baker _ céréales, oeufs, lait
-__ Granola de saison @ Seasonal Granola _ 9.5 _ Yaourt grec, granola maison, fruits de saison, sirop d'érable @ Greek yogurt, homemade granola, seasonal fruits, maple syrup _ céréales, lait, fruits à coques
-__ Les scones salés @ Salty scones _ 9.5 _ Deux scones, chèvre frais, ciboulette, bouquet de mâche @ Two scones, fresh goat cheese, chive, lamb's lettuce _ céréales, oeufs, lait
+__ Les œufs à la coque @ Soft boiled eggs _ 7.5 _ Deux oeufs plein air, beurre demi-sel mouillettes de pain de campagne de chez Mama Baker @ Two free-range eggs, semi-salted butter, country bread soldiers from Mama Baker _ céréales, oeufs, lait _ oeuf cru
+__ Granola de saison @ Seasonal granola _ 9.5 _ Yaourt grec, granola maison, fruits de saison, sirop d'érable @ Greek yogurt, homemade granola, seasonal fruits, maple syrup _ céréales, lait, fruits à coques
+__ Sandwich Pompe à huile @ Pompe à huile sandwich _ 9.5 _ Pompe à huile, chèvre frais, ciboulette, olives taggiasche, concombre, bouquet de mâche @ Pompe à huile, fresh goat cheese, chives, Taggiasca olives, cucumber, lamb's lettuce _ céréales, lait
 __ Brioche toastée @ Toasted brioche _ 13 _ Brioche by Pompon toastée, crème de châtaigne, abricots rôtis, quenelle de crème d'Isigny, fraises, éclats de pistache, sirop d'érable @ Toasted Pompon brioche, chestnut cream, roasted apricots, quenelle of Isigny cream, strawberries, crushed pistachios, maple syrup _ céréales, oeufs, lait, fruits à coques
-# __ Brioche pur beurre breton grillée @ Toasted pure Breton butter brioche _ 6 _ Crème d'Isigny et confiture @ Isigny cream and jam _ céréales, oeufs, lait
-# __ Specialty coffee tiramisu _ 9 _ Tiramisu de Juliette fait avec amour, café de spécialité et gousses de vanille @ Juliette's Tiramisu, made with love, specialty coffee, and vanilla beans
-# __ sandwich au concombre @ cucomber sandwich _ 9.5 _ Pain de mie toasté de ches Pompon, chèvre frais, ciboulette, aneth, bouquet de mâche, huile d'olive, fleur de sel, poivre de kampot @ Toasted sliced bread from Pompon, fresh goat cheese, chives, dill, a bunch of mâche, olive oil, fleur de sel, Kampot pepper.
-# __ Sandwich Pompe à huile @ Oil pump sandwich _ 9.5 _ Pompe à huile, chèvre frais, ciboulette, olives taggiasche concombre, bouquet de mache @ Oil pump, fresh goat cheese, chives, Taggiasca olives, cucumber, lamb's lettuce
-# __ Mini sandwich brioche @ Mini brioche sandwiche _ 9.5 _ Toasts de brioche, burrata fumée toastée, salade de mâche ciboulette, huile d'olive et fleur de sel. @ Brioche toast, smoked burrata, lamb's lettuce salad with chives, olive oil, and fleur de sel.
+# __ Specialty coffee tiramisu _ 9 _ Tiramisu de Juliette fait avec amour, café de spécialité et gousses de vanille @ Juliette's tiramisu, made with love, specialty coffee, and vanilla beans
+# __ sandwich au concombre @ cucumber sandwich _ 9.5 _ Pain de mie toasté de chez Pompon, chèvre frais, ciboulette, aneth, bouquet de mâche, huile d'olive, fleur de sel, poivre de kampot @ Toasted sliced bread from Pompon, fresh goat cheese, chives, dill, a bunch of mâche, olive oil, fleur de sel, Kampot pepper.
+# __ Mini sandwich brioche @ Mini brioche sandwich _ 9.5 _ Toasts de brioche, burrata fumée toastée, salade de mâche ciboulette, huile d'olive et fleur de sel. @ Brioche toast, smoked burrata, lamb's lettuce salad with chives, olive oil, and fleur de sel.
 # __ Minis sandwichs de pain de mie toastés @ Toasted mini sandwiches _ 9.5 _ Au chèvre frais, ciboulette, aneth, petit bouquet de mâche, huile d'olive citronnée @ With fresh goat cheese, chive, dill, lamb's lettuce, lemon olive oil _ céréales, oeufs, lait
-# __ Brioche toastée @ Toasted brioche _ 10.5 _ Brioche Nanterre toastée, crème de châtaigne, poires rôties à la vanille, quenelle de crème d'isigny, oranges, éclats de pistaches, sirop d'érable @ Toasted Nanterre brioche, chestnut cream, roasted pears with vanilla, isigny cream quenelle, oranges, pistachio slivers, maple syrup
-# __ Brioche toastée @ Toasted brioche _ 11.5 _ Brioche toastée, crème de châtaigne, rhubarbe, fraises, quenelle de crème d'isigny, éclats de pistache, sirop d'érable @ Toasted brioche, chestnut cream, rhubarb, strawberries, isigny cream quenelle, pistachio slivers, maple syrup
 # __ Hot and cold porridge _ 12.5 _ Porridge à la banane et aux graines de courges et tournesol froid, point de fleur d'oranger, cannelle mousse de lait d'avoine chaud, crème de châtaigne, pamplemousse et pistache @ Cold banana porridge with pumpkin and sunflower seeds, orange blossom water, cinnamon, hot oat milk foam, chestnut cream, grapefruit, and pistachios
-# __ Brioche toastée _ 12.5 _ Brioche Nanterre toastée, crème de châtaigne, quenelle de crème d'isigny, abricots rôtis, fraises, éclats de pistache, pousses de basilic, sirop d'érable @ Brioche Nanterre toastée, chestnut cream, isigny cream quenelle, roasted apricots, strawberries, pistachio slivers, basil shoots, maple syrup
-# __ Brioche toastée @ Toasted brioche _ 12.5 _ Brioche Nanterre toastée, crème de châtaigne, prunes rôties, figues, quenelle de crème d'isigny, éclats de pistaches sirop d'érable @ Toasted Nanterre brioche, chestnut cream, roasted plums, figs, Isigny cream quenelle, maple syrup, pistachio slivers
-# __ Brioche toastée @ Toasted brioche _ 13 _ Brioche Nanterre by Mama Baker toastée, crème d'Isigny, compotée de rhubarbe et fraises gariguettes, crème de châtaigne, éclats de pistache @ Toasted Nanterre brioche by Mama Baker, Isigny vream, rhubarb and Gariguette strawberry compote, chestnut cream, pistachio slivers _ céréales, oeufs, lait, fruits à coques
 # __ Brioche toastée @ Toasted brioche _ 13 _ Brioche pur beurre by Pompom, poires pochées, kiwi, kaki, crème de châtaigne, quenelle de crème d'isigny thé matcha, sirop d'érable, éclats de pistache @ Pure butter brioche by Pompom, poached pears, kiwi, persimmon, chestnut cream, quenelle of Isigny cream with matcha tea, maple syrup, pistachio slivers
+# __ Les scones salés @ Salty scones _ 9.5 _ Deux scones, chèvre frais, ciboulette, bouquet de mâche @ Two scones, fresh goat cheese, chive, lamb's lettuce _ céréales, oeufs, lait
 
 _ Déjeuner @ Lunch
-______ À partir de 12H00 jusqu'à 14H30; non servis sur notre terrasse @ From 12H00 to 14H30; not available on our terrace
-__ Tartine abricotée @ Apricot toast _ 16.5 _ Toast de pain au levain au zaatar, abricots rôtis, basilic frais, burratina fumée, éclats de pistache, huile d'olive, poivre 5 baies et fleur de sel @ Sourdough toast with za'atar, roasted apricots, fresh basil, smoked burratina, pistachio slivers, olive oil, five-peppercorn blend, and fleur de sel _ céréales, lait, fruits à coques
+_______ À partir de 12H00 jusqu'à 14H30; non servis sur notre terrasse @ From 12H00 to 14H30; not available on our terrace
+__ Tartine abricotée @ Apricot toast _ 16.5 _ Toast de pain au levain au zaatar, abricots rôtis, basilic frais, burratina des Pouilles, éclats de pistache, huile d'olive, poivre 5 baies et fleur de sel @ Sourdough toast with za'atar, roasted apricots, fresh basil, burratina from Puglia, pistachio slivers, olive oil, five-peppercorn blend, and fleur de sel _ céréales, lait, fruits à coques _ lait cru
 __ Borani banjan @ Borani banjan _ 16.5 _ Aubergines à l'afghane marinée aux tomates confites aux graines de cumin, yaourt grecque, fêta, coriandre, menthe et aneth, toast au zaatar @ Afghan-style marinated eggplant with confit tomatoes and cumin seeds, Greek yogurt, feta, coriander, mint and dill, zaatar toast _ céréales, lait
-__ Tartine d'été @ Summer tartine _ 16.5 _ Toast de pain de mie shokupan by Pompon, stracciatella, basilic, melon de Cavaillon, Nectarines jaunes, éclats de pistaches, olives taggiasche, bouquet de mâche, huile d'olive et fleur de sel @ Shokupan toast by Pompon, stracciatella, basil, Cavaillon melon, yellow nectarines, crushed pistachios, Taggiasca olives, bouquet of mâche, olive oil, and fleur de sel. _ céréales, lait, fruits à coques
+__ Tartine d'été @ Summer tartine _ 16.5 _ Toast de pain de mie shokupan by Pompon, stracciatella, basilic, melon de Cavaillon, Nectarines jaunes, éclats de pistaches, olives taggiasche, bouquet de mâche, huile d'olive et fleur de sel @ Shokupan toast by Pompon, stracciatella, basil, Cavaillon melon, yellow nectarines, crushed pistachios, Taggiasca olives, bouquet of mâche, olive oil, and fleur de sel. _ céréales, lait, fruits à coques _ lait cru
 # __ Brume's soup _ 12 _ Crème de champignon, émulsion de lait, toast de chèvre chaud @ Mushroom cream soup, milk emulsion, warm goat cheese toast
 # __ La tartine melon d'automne @ Autumn melon tartine _ 15.5 _ Toast de pain au levain by mama Baker, brousse de brebis, basilic et verveine fraîche, melon, raisin rôtis, olives taggiasche, bouquet de mâche, sirop de prunes, sésame, huile d'olive, poivre et fleur de sel @ Toast of sourdough bread by mama Baker, ewe's milk cheese, basil and fresh verbena, melon, roasted grapes, taggiasche olives, bouquet of lamb's lettuce, plum syrup, sesame, olive oil, pepper and fleur de sel
 # __ Brume d'hiver _ 15.5 _ Yaourt grecque à l'aneth, potimarron rôtis à l'orange, fines tranches de betteraves, pistaches concassées, olives taggiasche, gorgonzola, huile d'olive, tranche de pain norvégien @ Greek yoghurt with dill, roasted pumpkin with orange, thin slices of beetroot, crushed pistachios, taggiasche olives, gorgonzola, olive oil, slice of Norwegian bread
-# __ Tartine de juillet @ July's tartine _ 16 _ Toast de pain au levain by Mama Baker, abricots rôtis au thym, burrata des Pouilles, éclats de pistache, bouquet de mache, basilic, huile d'olive d'Italie, fleur de sel et poivre 5 baies @ sourdough bread toast by Mama Baker, roasted apricots with thyme, Apulian burrata, pistachio slivers, bouquet of mache, basil, Italian olive oil, fleur de sel and 5-berry pepper
+# __ Tartine de juillet @ July's tartine _ 16 _ Toast de pain au levain by Mama Baker, abricots rôtis au thym, burrata des Pouilles, éclats de pistache, bouquet de mâche, basilic, huile d'olive d'Italie, fleur de sel et poivre 5 baies @ Sourdough bread toast by Mama Baker, roasted apricots with thyme, Apulian burrata, pistachio slivers, bouquet of mâche, basil, Italian olive oil, fleur de sel and five-peppercorn blend
 # __ Tartine d'août _ 16 _ Toast de pain au levain, burrata des Pouilles, prunes et figues rôties, basilic frais, pistaches @ Toast of sourdough bread, Pugliese burrata, roasted plums and figs, fresh basil, pistachios
-# __ Pumpkin tartine _ 16 _ Toast de pain au levain de chez mama Baker, potimarrons rôtis, burratina fumée, raisins rôtis, olives taggiasche, bouquet de mâche, huile d'olive, sirop d'érable, basilic et fleur de sel @ Toast of sourdough bread from mama Baker's, roasted pumpkin, smoked burratina, roasted grapes, taggiasche olives, lamb's lettuce, olive oil, maple syrup, basil and fleur de sel.
+# __ Pumpkin tartine _ 16 _ Toast de pain au levain de chez mama Baker, potimarrons rôtis, burratina fumée, raisins rôtis, olives taggiasche, bouquet de mâche, huile d'olive, sirop d'érable, basilic et fleur de sel @ Toast of sourdough bread from Mama Baker, roasted pumpkin, smoked burratina, roasted grapes, taggiasche olives, lamb's lettuce, olive oil, maple syrup, basil and fleur de sel.
 # __ Jacket sweet potatoe _ 16 _ Patate douce rôtie dans sa peau, yaourt grecque aux herbes, coriandre, menthe fraîche et aneth, fêta, bouquet de mâche, olives taggiasche, zaatar, huile d'olive citronnée @ Sweet potato roasted in its skin, Greek yogurt with herbs, coriander, fresh mint and dill, feta, lamb's lettuce, taggiasche olives, zaatar, lemon olive oil
 # __ Pumpkin stracciatella tartine _ 16 _ Toast de pain au levain by Mama Baker, potimarrons rôtis, stracciatella, oranges, éclats de pistache, olives taggiasche, basilic @ Toast of sourdough bread by Mama Baker, roasted pumpkin, stracciatella, oranges, pistachio slivers, taggiasche olives, basil
-# __ Brume's pot _ 16 _ Ragoût tomaté lié au parmesan, pâtes fregola, mogettes de Vendée, butternut, stracciatella, éclats de pistache, olives taggiasche, toast de pain norvégien by Mama Baker @ Tomato ragout with parmesan, fregola pasta, Vendée mogettes, butternut, stracciatella, pistachio slivers, taggiasche olives, Norwegian bread toast by Mama Baker
-# __ Tartine chèvre-poires @ Goat cheese-pear tartine _ 16 _ Toast de pain au levain by Mama Baker, chèvre frais, poires pochées à la vanille, bouquet de mâche, oranges, ciboulette, sirop d'érable, huile d'olive, poivre 5 baies et fleur de sel @ Toast of sourdough bread by Mama Baker, fresh goat cheese, vanilla poached pears, bouquet of lamb's lettuce, oranges, chives, maple syrup, olive oil, 5-berry pepper and fleur de sel
-# __ Tartine chèvre-tomates @ Goat's cheese and tomato toast _ 16 _ Toast de pain au levain by Mama Baker, chèvre frais, tomates rôties aux graines de cumin et à l'huile d'olive, ciboulette, bouquet de mache, fleur de sel et poivre 5 baies @ Toast of sourdough bread by Mama Baker, fresh goat's cheese, roasted tomatoes with cumin seeds and olive oil, chives, bouquet of mache, fleur de sel and 5-berry pepper
-# __ Brume de tomates @ Brume's tomato stew _ 16 _ Tomates cocktails rôties et mijotées au cumin, haricots blancs, yaourt grecque, fêta, aneth, toast de pain Norvègien de chez mama Baker @ Roasted and stewed cocktail tomatoes with cumin, white beans, Greek yogurt, feta, dill, and a slice of Norwegian bread from Mama Baker
+# __ Brume's pot _ 16 _ Ragoût tomaté lié au parmesan, pâtes fregola, mogettes de Vendée, butternut, stracciatella, éclats de pistache, olives taggiasche, toast de pain norvégien by Mama Baker @ Tomato ragout with parmesan, fregola pasta, Vendée mogettes, butternut, stracciatella, pistachio slivers, Taggiasca olives, Norwegian bread toast by Mama Baker
+# __ Tartine chèvre-poires @ Goat cheese-pear tartine _ 16 _ Toast de pain au levain by Mama Baker, chèvre frais, poires pochées à la vanille, bouquet de mâche, oranges, ciboulette, sirop d'érable, huile d'olive, poivre 5 baies et fleur de sel @ Toast of sourdough bread by Mama Baker, fresh goat cheese, vanilla poached pears, bouquet of lamb's lettuce, oranges, chives, maple syrup, olive oil, five-peppercorn blend and fleur de sel
+# __ Tartine chèvre-tomates @ Goat cheese and tomato toast _ 16 _ Toast de pain au levain by Mama Baker, chèvre frais, tomates rôties aux graines de cumin et à l'huile d'olive, ciboulette, bouquet de mâche, fleur de sel et poivre 5 baies @ Toast of sourdough bread by Mama Baker, fresh goat cheese, roasted tomatoes with cumin seeds and olive oil, chives, bouquet of mâche, fleur de sel and five-peppercorn blend
+# __ Brume de tomates @ Brume's tomato stew _ 16 _ Tomates cocktails rôties et mijotées au cumin, haricots blancs, yaourt grecque, fêta, aneth, toast de pain Norvégien de chez mama Baker @ Roasted and stewed cocktail tomatoes with cumin, white beans, Greek yogurt, feta, dill, and a slice of Norwegian bread from Mama Baker
 # __ Borani banjan _ 16 _ Aubergines et tomates rôties mijotées au cumin, poivre citron, yaourt grecque, fêta, toast de pain au levain, coriandre et aneth @ Roasted eggplant and tomatoes simmered with cumin, lemon pepper, Greek yogurt, feta cheese, sourdough toast, cilantro, and dill
 # __ Tartine betterave truffée @ Truffled beetroot tartine _ 16.5 _ Toast de pain de mie by Mama Baker, betteraves rôties au sirop d'érable, burrata truffée, basilic, aneth, bouquet de mâche, graines de sésame, huile d'olive citronnée, fleur de sel et poivre 5 baies @ Mama Baker white bread toast, roasted beets with maple syrup, truffled burrata, basil, dill, lamb's lettuce, sesame seeds, lemon-infused olive oil, fleur de sel, and five-peppercorn blend _ céréales, lait, sésame
 # __ Crème grecques aux tomates rôties @ Greek yogurt with roasted tomatoes _ 16.5 _ Yaourt grecque au saint Marcellin, tomates rôties aux graines de cumin, aneth et toast de pain norvégien @ Greek yogurt with Saint Marcellin cheese, roasted tomatoes with cumin seeds and dill, served on Norwegian bread toast _ céréales, lait
-# __ Tartine de printemps @ Spring Toast _ 16.5 _ Toast de pain au levain by Mama Baker, rhubarbe, fraises gariguettes, burratina fumée, bouquet de mâche, basilic, olives taggiasche, éclats de pistache, sirop d'érable, huile d'olive et fleur de sel @ Sourdough toast by Mama Baker, rhubarb, Gariguette strawberries, smoked burratina, lamb's lettuce, basil, Taggiasca olives, pistachio slivers, maple syrup, olive oil, and fleur de sel _ céréales, lait, fruits à coques
-# __ Tartine d'hiver @ Winter tartine _ 16.5 _ Toaste de pain au levain by Mama baker, poêlée de champignons, ciboulette, burrata des Pouilles, bouquet de mâche huile d'olive, fleur de sel et poivre 5 baies @ Toasted sourdough bread by Mama Baker, pan-fried mushrooms, chives, burrata from Puglia, lamb's lettuce, olive oil, fleur de sel, and five-peppercorn blend
-# __ Pumpkin Turkish eggs _ 16.5 _ yaourt grecque à l'aneth, huile pimentée au paprika, oeufs mollets, potimarrons rôtis, fêta coriandre, toast de pain au levain by Mama Baker @ Greek yogurt with dill, paprika chili oil, soft-boiled eggs, roasted pumpkin, feta cheese with cilantro, sourdough toast by Mama Baker
-# __ Sweet jacket potato _ 16.5 _ Patate douce entier rôtie dans sa peau, crème d'isigny, scarmoza, oeuf mollet, ciboulette, poivre 5 baies, bouquet de mâche huile d'olive citronnée @ Whole sweet potato roasted in its skin, Isigny cream, scarmoza cheese, soft-boiled egg, chives, five-peppercorn blend, bouquet of lamb's lettuce, lemon olive oil
+# __ Tartine de printemps @ Spring toast _ 16.5 _ Toast de pain au levain by Mama Baker, rhubarbe, fraises gariguettes, burratina fumée, bouquet de mâche, basilic, olives taggiasche, éclats de pistache, sirop d'érable, huile d'olive et fleur de sel @ Sourdough toast by Mama Baker, rhubarb, Gariguette strawberries, smoked burratina, lamb's lettuce, basil, Taggiasca olives, pistachio slivers, maple syrup, olive oil, and fleur de sel _ céréales, lait, fruits à coques
+# __ Tartine d'hiver @ Winter tartine _ 16.5 _ Toast de pain au levain by Mama baker, poêlée de champignons, ciboulette, burrata des Pouilles, bouquet de mâche huile d'olive, fleur de sel et poivre 5 baies @ Toasted sourdough bread by Mama Baker, pan-fried mushrooms, chives, burrata from Puglia, lamb's lettuce, olive oil, fleur de sel, and five-peppercorn blend
+# __ Pumpkin Turkish eggs _ 16.5 _ Yaourt grecque à l'aneth, huile pimentée au paprika, oeufs mollets, potimarrons rôtis, fêta coriandre, toast de pain au levain by Mama Baker @ Greek yogurt with dill, paprika chili oil, soft-boiled eggs, roasted pumpkin, feta cheese with cilantro, sourdough toast by Mama Baker
+# __ Sweet jacket potato _ 16.5 _ Patate douce entière rôtie dans sa peau, crème d'Isigny, scamorza, oeuf mollet, ciboulette, poivre 5 baies, bouquet de mâche huile d'olive citronnée @ Whole sweet potato roasted in its skin, Isigny cream, scamorza cheese, soft-boiled egg, chives, five-peppercorn blend, bouquet of lamb's lettuce, lemon olive oil
 # __ Tartine smokin' burrata _ 16.5 _ Toast de pain au levain by Mama Baker, tomates rôties au cumin, basilic frais, olives taggiasche, burratina fumée, bouquet de mâche, ciboulette @ Toast of sourdough bread by Mama Baker, roasted tomatoes with cumin, fresh basil, taggiasche olives, smoked burratina, bouquet of lamb's lettuce, chives
-# __ La tartine abricotée @ The Apricot Toast _ 16.5 _ Toast de pain au levain by Mama Baker, abricots rôtis, burrata des Pouilles 125g, basilic frais, bouquet de mâche, pistaches concassées, basilic, huile d'olive, poivre, fleur de sel @ Sourdough toast by Mama Baker, roasted apricots, 125g burrata from Puglia, fresh basil, lamb's lettuce bouquet, crushed pistachios, basil, olive oil, pepper, fleur de sel.
+# __ La tartine abricotée @ The apricot toast _ 16.5 _ Toast de pain au levain by Mama Baker, abricots rôtis, burrata des Pouilles 125g, basilic frais, bouquet de mâche, pistaches concassées, basilic, huile d'olive, poivre, fleur de sel @ Sourdough toast by Mama Baker, roasted apricots, 125g burrata from Puglia, fresh basil, lamb's lettuce bouquet, crushed pistachios, basil, olive oil, pepper, fleur de sel.
 # __ Tartine smokin' melon @ Smokin' melon tartine _ 16.5 _ Belle tranche de pain de mie toastée, burrata fumée, tranches de melon frais, bouquet de mâche, figues fraîches, coulis de fruits rouges, basilic, olives taggiasche, huile d'olive, poivre et fleur de sel @ Beautiful slice of toasted bread, smoked burrata, slices of fresh melon, bouquet of lamb's lettuce, fresh figs, red fruit coulis, basil, Taggiasca olives, olive oil, pepper, and fleur de sel
 # __ Tartine burrata de septembre @ September burrata tartine _ 16.5 _ Toast de pain au levain, prunes rôties, basilic frais, burrata des Pouilles bouquet de mâche, huile d'olive, fleur de sel, poivre 5 baies, figues fraîches @ Sourdough toast, roasted plums, fresh basil, burrata from Puglia, lamb's lettuce, olive oil, fleur de sel, five-peppercorn blend, fresh figs
 # __ Tartine d'octobre @ October tartine _ 16.5 _ Toast de pain au levain by Mama baker, prunes rouges rôties, bouquet de mâche, burrata des Pouilles, figues fraîches, basilic, pistaches, basilic frais, huile d'olive, fleur de sel, poivre 5 baies @ Sourdough toast by Mama Baker, roasted red plums, lamb's lettuce bouquet, burrata from Puglia, fresh figs, basil, pistachios, fresh basil, olive oil, fleur de sel, five-peppercorn blend
 # __ Tartine Smokin'pear @ Smokin'pear tartine _ 16.5 _ Toast de brioche, burratina fumée fondante, poires pochées à la vanille et aux épices, bouquet de mâche, raisins, ciboulette, huile d'olive, sirop d'érable et fleur de sel @ Brioche toast, melted smoked burratina, poached pears with vanilla and spices, lamb's lettuce, grapes, chives, olive oil, maple syrup, and fleur de sel
-# __ Pumpkin Brume @ Pumpkin Brume _ 16.5 _ Potimarrons et raisins noirs rôtis à la fleur d'oranger, yaourt grecque, feta, huile d'olive, zaatar, coriandre et aneth, toast de pain au levain au zattar @ Roasted pumpkin and black grapes with orange blossom, Greek yogurt, feta cheese, olive oil, zaatar, cilantro, and dill, served on zaatar sourdough toast
+# __ Pumpkin Brume @ Pumpkin Brume _ 16.5 _ Potimarrons et raisins noirs rôtis à la fleur d'oranger, yaourt grecque, feta, huile d'olive, zaatar, coriandre et aneth, toast de pain au levain au zaatar @ Roasted pumpkin and black grapes with orange blossom, Greek yogurt, feta cheese, olive oil, zaatar, cilantro, and dill, served on zaatar sourdough toast
 
 _ Pâtisseries @ Pastries
-______ Les pâtisseries sont présentées dans la vitrine au bout du comptoir @ The pastries are presented at the counter
+_______ Les pâtisseries sont présentées dans la vitrine au bout du comptoir @ The pastries are presented at the counter
 
 # Special event
 # _ Special event night
-# ______ Special event for our fans !
+# _______ Special event for our fans !
 # __ Brume's feat Nika friends night 13/04/26 _ 35 _ 3 tapas directly from Nika's specialty food, one wine from our selection with La Cave
-# ______ Order before 13th of May at Brume's counter, so we set your name on the private list
+# _______ Order before 13th of May at Brume's counter, so we set your name on the private list
 
 La boutique
 _ Sachets de café @ Coffee bags
-______ A découvrir sur l'étagère @ To discover on the shelf
+_______ À découvrir sur l'étagère @ To discover on the shelf
 _ La Boutique
 __ Carte postale @ Postcard _ 3
 __ Casquette Brume @ Brume's cap _ 35

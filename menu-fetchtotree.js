@@ -159,18 +159,22 @@ function setTreeLevels(tokens) {
 		if (token.type == 5)
 			token.treeLevel = 1; // allergènes : enfant du produit (optionnel)
 		if (token.type == 6)
+			token.treeLevel = 1; // grossesse : enfant du produit (optionnel)
+		if (token.type == 7)
 			token.treeLevel = 1; // commentaire
 	}
 	return tokens;
 }
 
-// #bloc _ categorie _ produit _ prix _ description _ allergenes _ commentaire
+// #bloc _ categorie _ produit _ prix _ description _ allergenes _ grossesse _ commentaire
 // tree format :
 // first type (blocs) : 0
-// second type (categories, produit, description, commentaire) : 1, 2, 4, 6
-// third type (prices, allergenes) : 3, 5
+// second type (categories, produit, description, commentaire) : 1, 2, 4, 7
+// third type (prices, allergenes, grossesse) : 3, 5, 6
 // WARNING a produit MUST have a child prix
 // allergenes (type 5) is optional, it is a child of produit
+// grossesse (type 6) is optional, it is a child of produit, and comes
+// directly after allergenes on a line, e.g. : "... _ allergenes _ grossesse"
 
 function getTree(tokens) {
 	tree = {

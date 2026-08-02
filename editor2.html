@@ -33,7 +33,8 @@
 			--c3: #8b3a00;
 			--c4: #1e6b50;
 			--c5: #469aee;
-			--c6: #cb6aab;
+			--c6: #a83279;
+			--c7: #cb6aab;
 			--cc: #8a8078;
 			--cat: #5a6a4a;
 			--red: #b82020;
@@ -460,6 +461,10 @@
 			color: var(--c6)
 		}
 
+		.s7 {
+			color: var(--c7)
+		}
+
 		.sc {
 			color: var(--cc);
 			font-style: italic
@@ -825,7 +830,8 @@
 		<span class="leg" style="border-color:var(--c3);color:var(--c3)">___ prix</span>
 		<span class="leg" style="border-color:var(--c4);color:var(--c4)">____ description</span>
 		<span class="leg" style="border-color:var(--c5);color:var(--c5)">_____ allergène</span>
-		<span class="leg" style="border-color:var(--c6);color:var(--c6)">______ commentaire</span>
+		<span class="leg" style="border-color:var(--c6);color:var(--c6)">______ grossesse</span>
+		<span class="leg" style="border-color:var(--c7);color:var(--c7)">_______ commentaire</span>
 		<span class="leg" style="border-color:var(--cc);color:var(--cc)"># commenté</span>
 		<span id="legend-hint">tap = voir · ✎ = modifier · ⠿ = déplacer</span>
 	</div>
@@ -839,7 +845,8 @@
 				<button class="btn" onclick="insertLine(null,'_')">＋ Catégorie</button>
 				<button class="btn" onclick="insertLine(null,'__')">＋ Produit</button>
 				<button class="btn" onclick="insertLine(null,'_____')">＋ Allergène</button>
-				<button class="btn" onclick="insertLine(null,'______')">＋ Commentaire</button>
+				<button class="btn" onclick="insertLine(null,'______')">＋ Grossesse</button>
+				<button class="btn" onclick="insertLine(null,'_______')">＋ Commentaire</button>
 			</div>
 		</div>
 	</div>
@@ -920,9 +927,9 @@
 
 		let rawLines = [], savedText = '';
 
-		const SIZES = ['1.12em', '0.97em', '0.90em', '0.82em', '0.82em', '0.78em'];
-		const LABELS = ['bloc', 'catégorie', 'produit', 'prix', 'description', 'allergène', 'commentaire'];
-		const COLORS = ['var(--c0)', 'var(--c1)', 'var(--c2)', 'var(--c3)', 'var(--c4)', 'var(--c5)', 'var(--c6)'];
+		const SIZES = ['1.12em', '0.97em', '0.90em', '0.82em', '0.82em', '0.78em', '0.78em', '0.78em'];
+		const LABELS = ['bloc', 'catégorie', 'produit', 'prix', 'description', 'allergène', 'grossesse', 'commentaire'];
+		const COLORS = ['var(--c0)', 'var(--c1)', 'var(--c2)', 'var(--c3)', 'var(--c4)', 'var(--c5)', 'var(--c6)', 'var(--c7)'];
 
 		function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') }
 
@@ -933,17 +940,17 @@
 			const leadingU = raw.slice(0, lvl), body = raw.slice(lvl), segs = body.split('_');
 			let html = '';
 			if (leadingU) {
-				const okU = leadingU.slice(0, 6), errU = leadingU.slice(6);
+				const okU = leadingU.slice(0, 7), errU = leadingU.slice(7);
 				if (okU) html += `<span class="su">${esc(okU)}</span>`;
 				if (errU) html += `<span class="serr">${esc(errU)}</span>`;
 			}
 			segs.forEach((seg, i) => {
 				const rl = lvl + i;
-				if (i > 0) { const sc = rl > 6 ? 'serr' : 'su'; html += `<span class="${sc}">_</span>`; }
-				const cls = rl > 6 ? 'serr' : `s${Math.min(rl, 6)}`;
+				if (i > 0) { const sc = rl > 7 ? 'serr' : 'su'; html += `<span class="${sc}">_</span>`; }
+				const cls = rl > 7 ? 'serr' : `s${Math.min(rl, 7)}`;
 				const ap = seg.split('@');
 				html += `<span class="${cls}">${esc(ap[0])}</span>`;
-				for (let j = 1; j < ap.length; j++) html += `<span class="${rl > 6 ? 'serr' : 'sa'}">@${esc(ap[j])}</span>`;
+				for (let j = 1; j < ap.length; j++) html += `<span class="${rl > 7 ? 'serr' : 'sa'}">@${esc(ap[j])}</span>`;
 			});
 			return html;
 		}
@@ -951,7 +958,7 @@
 		function lineInfo(raw) {
 			if (!raw || raw.trim() === '') return { color: 'transparent', label: '', size: '0.88em' };
 			if (raw.trim().startsWith('#')) return { color: 'var(--cc)', label: '#', size: '0.80em' };
-			let lvl = 0; while (raw[lvl] === '_') lvl++; lvl = Math.min(lvl, 6);
+			let lvl = 0; while (raw[lvl] === '_') lvl++; lvl = Math.min(lvl, 7);
 			return { color: COLORS[lvl], label: LABELS[lvl], size: SIZES[lvl] };
 		}
 
@@ -1511,6 +1518,22 @@ Pour chaque plat modifié, ajouté ou remplacé, mets les allergènes à jour un
 
 Utilise uniquement la liste officielle fournie dans la documentation du menu.txt
 
+## Grossesse
+
+Pour chaque plat modifié, ajouté ou remplacé, mets aussi à jour l'item "grossesse" (niveau 6, juste après l'allergène, voir documentation du menu.txt) à partir des ingrédients explicitement cités. Utilise uniquement la liste officielle fournie dans la documentation du menu.txt (lait cru, oeuf cru, poisson cru, poisson fumé, viande crue, charcuterie, alcool, graines germées, caféine).
+
+Attention, il ne s'agit PAS d'une simple redite des allergènes : un ingrédient peut être un allergène sans poser de problème en grossesse (ex : lait pasteurisé, oeuf dur), et inversement. Base-toi sur l'état de cuisson / pasteurisation réel du produit, pas seulement sur sa présence.
+
+Règles précises à appliquer (sauf mention contraire explicite dans la description du plat) :
+- Un fromage n'est PAS considéré au lait cru par défaut, SAUF s'il s'agit d'un de ceux-ci : burrata / burratina, stracciatella, gorgonzola, saint marcellin. Pour ceux-là, ajoute "lait cru". Tous les autres fromages (chèvre frais, feta, scamorza, parmesan, etc.) ne sont PAS taggés "lait cru" sauf mention contraire dans la description (ex : "au lait cru" écrit explicitement).
+- Un oeuf est considéré "oeuf cru" dès que sa cuisson n'est pas complète : oeuf à la coque, oeuf mollet, oeuf poché, mayonnaise maison, oeuf au plat baveux, etc. Un oeuf dur, un oeuf en pâtisserie/brioche cuite au four, ou un oeuf dans un appareil entièrement cuit N'EST PAS taggé.
+- Un poisson ou une viande explicitement fumé(e), mariné(e) sans cuisson, tartare, carpaccio ou similaire est taggé "poisson cru"/"poisson fumé"/"viande crue" selon le cas. Un poisson ou une viande grillé(e), rôti(e), poêlé(e) etc. n'est pas taggé.
+- Une charcuterie non cuite (jambon cru, saucisson, etc.) est taggée "charcuterie" ; une charcuterie cuite (jambon blanc, etc.) ne l'est pas.
+- Toute boisson alcoolisée est taggée "alcool".
+- Des graines germées crues (pousses, germes de soja crus, etc.) sont taggées "graines germées".
+
+Si tu as un doute réel sur la cuisson ou la nature d'un ingrédient (information non donnée par la description du plat), ne tague pas au hasard : pose la question à la cheffe plutôt que de deviner, comme pour toute ambiguïté de fond.
+
 ## Autres corrections
 
 La, on parle de modification qui ne sont pas demandées par la cheffe
@@ -1525,6 +1548,7 @@ Corrige au passage les fautes évidentes dans le reste du fichier:
 - une faute évidente de frappe, d'orthographe ou de grammaire en français ou en anglais.
 - les grosses erreurs de traduction. Attention, les traductions des noms de plats sont parfois volontairement différentes, ne les corrige pas, c'est parfoir un choix délibéré
 - les alergènes manifestement manquants
+- une info grossesse manifestement manquante ou erronée sur un plat existant (en appliquant les mêmes règles que ci-dessus)
 - d'autres erreurs évidentes et certaines si tu trouves (traduction manquante, alergène manquant)
 
 ## Si information manquante ou demande d'édition ambiguë
