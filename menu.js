@@ -10,32 +10,37 @@ var tree = [];
 function showLanguageMenu() {
 	languageBox0 = document.getElementById('languageBox0');
 	languageBox1 = document.getElementById('languageBox1');
+	languageSwitch = document.getElementById('languageSwitch');
 	languageBox0.textContent = 'français';
 	languageBox1.textContent = 'english';
 
+	languageSwitch.checked = (actualLanguage == 1);
+
 	if (actualLanguage == 0) {
-		languageBox0.classList.add('selectedLinkStyle');
-		languageBox1.classList.remove('selectedLinkStyle');
+		languageBox0.classList.add('switch-label-active');
+		languageBox1.classList.remove('switch-label-active');
 	}
 	else {
-		languageBox1.classList.add('selectedLinkStyle');
-		languageBox0.classList.remove('selectedLinkStyle');
+		languageBox1.classList.add('switch-label-active');
+		languageBox0.classList.remove('switch-label-active');
 	}
 }
 
 function showAllergenButton() {
-	var btn = document.getElementById('allergenToggle');
-	btn.textContent = actualLanguage === 0 ? 'Allergènes' : 'Allergens';
+	var label = document.getElementById('allergenLabel');
+	var sw = document.getElementById('allergenSwitch');
+	label.textContent = actualLanguage === 0 ? 'Allergènes' : 'Allergens';
+	sw.checked = showAllergens;
 
 	if (showAllergens) {
-		btn.classList.add('selectedLinkStyle');
+		label.classList.add('switch-label-active');
 	} else {
-		btn.classList.remove('selectedLinkStyle');
+		label.classList.remove('switch-label-active');
 	}
 }
 
-function toggleAllergens() {
-	showAllergens = !showAllergens;
+function toggleAllergens(forceValue) {
+	showAllergens = (typeof forceValue === 'boolean') ? forceValue : !showAllergens;
 	// Toggle visibility directly without a full re-render
 	document.querySelectorAll('.allergen-row:not(.row-pregnancy)').forEach(function (row) {
 		if (showAllergens) {
@@ -48,18 +53,20 @@ function toggleAllergens() {
 }
 
 function showPregnancyButton() {
-	var btn = document.getElementById('pregnancyToggle');
-	btn.textContent = actualLanguage === 0 ? 'Grossesse' : 'Pregnancy';
+	var label = document.getElementById('pregnancyLabel');
+	var sw = document.getElementById('pregnancySwitch');
+	label.textContent = actualLanguage === 0 ? 'Grossesse' : 'Pregnancy';
+	sw.checked = showPregnancy;
 
 	if (showPregnancy) {
-		btn.classList.add('selectedLinkStyle');
+		label.classList.add('switch-label-active');
 	} else {
-		btn.classList.remove('selectedLinkStyle');
+		label.classList.remove('switch-label-active');
 	}
 }
 
-function togglePregnancy() {
-	showPregnancy = !showPregnancy;
+function togglePregnancy(forceValue) {
+	showPregnancy = (typeof forceValue === 'boolean') ? forceValue : !showPregnancy;
 	// Toggle visibility directly without a full re-render
 	document.querySelectorAll('.row-pregnancy').forEach(function (row) {
 		if (showPregnancy) {
@@ -121,7 +128,28 @@ detectLanguage();
 displayReviewBox();
 main();
 
+// Clicking "français"/"english" selects that language directly.
+// Clicking the switch pill itself flips it independently
+// (they're siblings, not nested in a <label>, so the two never
+// fight over the same click).
 languageBox0.addEventListener("click", function () { actualLanguage = 0; refresh(); });
 languageBox1.addEventListener("click", function () { actualLanguage = 1; refresh(); });
-document.getElementById('allergenToggle').addEventListener("click", toggleAllergens);
-document.getElementById('pregnancyToggle').addEventListener("click", togglePregnancy);
+document.getElementById('languageSwitch').addEventListener("change", function () {
+	actualLanguage = this.checked ? 1 : 0;
+	refresh();
+});
+
+document.getElementById('allergenSwitch').addEventListener("change", function () {
+	toggleAllergens(this.checked);
+});
+document.getElementById('pregnancySwitch').addEventListener("change", function () {
+	togglePregnancy(this.checked);
+});
+
+// Clicking "Allergènes"/"Grossesse" toggles them directly, same as the switch.
+document.getElementById('allergenLabel').addEventListener("click", function () {
+	toggleAllergens(!showAllergens);
+});
+document.getElementById('pregnancyLabel').addEventListener("click", function () {
+	togglePregnancy(!showPregnancy);
+});

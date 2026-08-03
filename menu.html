@@ -82,15 +82,35 @@
 			</row-social>
 			-->
 			<row-buttons>
-				<style-button id="languageBox0"></style-button>
-				<style-button id="languageBox1"></style-button>
+				<span class="switch-wrap">
+					<style-button id="languageBox0"></style-button>
+					<span class="switch-track">
+						<input type="checkbox" id="languageSwitch" class="switch-input" aria-label="français / english">
+						<span class="switch-thumb"></span>
+					</span>
+					<style-button id="languageBox1"></style-button>
+				</span>
 			</row-buttons>
 			<row-center>
 				<div id="introBox" class="introBox"></div>
 			</row-center>
 			<row-buttons>
-				<style-button id="allergenToggle"></style-button>
-				<style-button id="pregnancyToggle"></style-button>
+				<span class="switch-wrap">
+					<style-button id="allergenLabel"></style-button>
+					<span class="switch-track">
+						<input type="checkbox" id="allergenSwitch" class="switch-input"
+							aria-label="Allergènes / Allergens">
+						<span class="switch-thumb"></span>
+					</span>
+				</span>
+				<span class="switch-wrap">
+					<style-button id="pregnancyLabel"></style-button>
+					<span class="switch-track">
+						<input type="checkbox" id="pregnancySwitch" class="switch-input"
+							aria-label="Grossesse / Pregnancy">
+						<span class="switch-thumb"></span>
+					</span>
+				</span>
 			</row-buttons>
 			<div id="menuBox" class="menuBox"></div>
 		</div>

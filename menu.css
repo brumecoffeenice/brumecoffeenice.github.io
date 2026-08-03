@@ -110,6 +110,97 @@ col-card-right {
 	margin-top: 0;
 }
 
+/* ── Toggle switches (language / allergens / pregnancy) ─────────────
+   Reuses card colours (--border-card, --bg-surface) so it matches the
+   rest of the site's look instead of a generic system switch.
+   Structure:
+     label.switch-wrap
+       [style-button]        optional side label (e.g. "français")
+       span.switch-track
+         input.switch-input  (real checkbox, kept for a11y/semantics)
+         span.switch-thumb
+       [style-button]        optional side label (e.g. "english")
+   ─────────────────────────────────────────────────────────────── */
+
+.switch-wrap {
+	display: inline-flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 0.6em;
+	user-select: none;
+	margin: 0.3em 0.6em;
+}
+
+.switch-track {
+	position: relative;
+	display: inline-block;
+	flex: 0 0 auto;
+	width: 3em;
+	height: 1.7em;
+	border-radius: 999px;
+	border: 3px solid var(--border-nav);
+	background-color: var(--bg-control);
+	transition: border-color 0.25s ease;
+	cursor: pointer;
+}
+
+.switch-input {
+	/* covers the whole track so the entire pill is clickable,
+	   but stays invisible: the custom thumb below does the drawing.
+	   Not wrapped in a <label>, on purpose, so it never intercepts
+	   clicks meant for the separate text labels beside it. */
+	position: absolute;
+	inset: 0;
+	margin: 0;
+	opacity: 0;
+	cursor: pointer;
+	z-index: 2;
+}
+
+.switch-thumb {
+	position: absolute;
+	top: 50%;
+	left: 0.15em;
+	transform: translateY(-50%);
+	width: 1.1em;
+	height: 1.1em;
+	border-radius: 50%;
+	background-color: var(--border-nav);
+	transition: left 0.25s ease, background-color 0.25s ease;
+	pointer-events: none;
+	/* clicks always fall through to .switch-input beneath */
+}
+
+.switch-track:has(.switch-input:checked) {
+	border-color: var(--bg-stripe-dark);
+}
+
+.switch-track:has(.switch-input:checked) .switch-thumb {
+	left: calc(100% - 1.25em);
+	background-color: var(--bg-stripe-dark);
+}
+
+.switch-track:has(.switch-input:focus-visible) {
+	outline: 2px solid var(--bg-stripe-dark);
+	outline-offset: 2px;
+}
+
+.switch-wrap [id]:not(.switch-input) {
+	/* the text labels inside a switch shouldn't look clickable-as-a-button
+	   on their own anymore, opacity signals current state instead.
+	   text-decoration is forced off so they never pick up the
+	   site-wide .selectedLinkStyle underline. */
+	cursor: pointer;
+	opacity: 0.55;
+	text-decoration: none !important;
+	transition: opacity 0.2s ease;
+}
+
+.switch-wrap [id].switch-label-active {
+	opacity: 1;
+	background-color: var(--bg-surface);
+}
+
 /* ── Review dialog ─────────────────────────────────── */
 
 dialog {
