@@ -68,7 +68,6 @@
 			line-height: 1.25;
 			white-space: pre-wrap;
 			overflow-wrap: anywhere;
-			border-bottom: 1px dashed grey;
 		}
 
 		.msg:last-child {
@@ -164,6 +163,7 @@
 			denied: "Votre connexion n'est pas reconnue : connectez-vous au wifi public de Brume pour écrire un message.",
 			unknown: "Impossible de vérifier votre connexion pour le moment.",
 			netErr: "Erreur réseau.",
+			slow: "Trop rapide, réessayez dans quelques secondes.",
 			err: "Erreur.",
 			placeholder: "écrire un message…",
 		} : {
@@ -171,6 +171,7 @@
 			denied: "Your connection isn't recognised: connect to Brume's public wifi to write a message.",
 			unknown: "Unable to check your connection right now.",
 			netErr: "Network error.",
+			slow: "Too fast, try again in a few seconds.",
 			err: "Error.",
 			placeholder: "write a message…",
 		};
@@ -235,6 +236,7 @@
 				});
 				if (!r.ok) {
 					if (r.status === 403) { checkWrite(); }
+					else if (r.status === 429) { err.textContent = T.slow; }
 					else err.textContent = T.err;
 					return;
 				}
