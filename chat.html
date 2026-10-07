@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+	<meta charset="utf-8">
+	<title>Brume chat</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		:root {
+			--fg: #111;
+			--muted: #8a8a8a;
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		html,
+		body {
+			margin: 0;
+			height: 100%;
+			background: #fff;
+			color: var(--fg);
+		}
+
+		body {
+			font-family: ui-monospace, "SF Mono", "JetBrains Mono", "IBM Plex Mono", Menlo, Consolas, monospace;
+			display: flex;
+			flex-direction: column;
+			height: 100dvh;
+			padding: clamp(1rem, 3vw, 2.5rem);
+		}
+
+		header {
+			display: flex;
+			justify-content: space-between;
+			align-items: baseline;
+			gap: 1rem;
+			flex-wrap: wrap;
+			font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+			letter-spacing: 0.08em;
+			text-transform: uppercase;
+		}
+
+		header .hint {
+			color: var(--muted);
+			text-transform: none;
+			letter-spacing: 0;
+		}
+
+		#messages {
+			flex: 1;
+			min-height: 0;
+			overflow-y: auto;
+			display: flex;
+			flex-direction: column;
+			gap: clamp(0.8rem, 2.5vh, 1.8rem);
+			padding: 1.5rem 0;
+		}
+
+		/* pushes messages to the bottom while keeping the top reachable when scrolling */
+		#messages> :first-child {
+			margin-top: auto;
+		}
+
+		.msg {
+			font-size: clamp(1.1rem, 3.2vw, 2.4rem);
+			line-height: 1.25;
+			white-space: pre-wrap;
+			overflow-wrap: anywhere;
+			border-bottom: 1px dashed grey;
+		}
+
+		.msg:last-child {
+			font-weight: 700;
+		}
+
+		.msg:not(:last-child) {
+			color: #444;
+		}
+
+		.empty {
+			color: var(--muted);
+			font-size: clamp(1.1rem, 3vw, 2rem);
+		}
+
+		footer {
+			font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+		}
+
+		form {
+			display: none;
+			align-items: baseline;
+			gap: 0.6rem;
+			border-top: 2px solid var(--fg);
+			padding-top: 0.8rem;
+		}
+
+		form.on {
+			display: flex;
+		}
+
+		form span {
+			font-size: 1.4em;
+		}
+
+		input {
+			flex: 1;
+			min-width: 0;
+			border: 0;
+			background: transparent;
+			color: var(--fg);
+			font: inherit;
+			font-size: 1.4em;
+			outline: none;
+			padding: 0;
+		}
+
+		#notice {
+			display: none;
+			border-top: 2px solid var(--fg);
+			padding-top: 0.8rem;
+			color: var(--muted);
+		}
+
+		#notice.on {
+			display: block;
+		}
+
+		#err {
+			color: var(--muted);
+			min-height: 1.3em;
+			margin-top: 0.4rem;
+		}
+	</style>
+</head>
+
+<body>
+	<header>
+		<span>Brume chat</span>
+		<span class="hint" id="hint"></span>
+	</header>
+
+	<div id="messages"></div>
+
+	<footer>
+		<form id="form" autocomplete="off">
+			<span>&gt;</span>
+			<input id="input" maxlength="150" aria-label="Message">
+		</form>
+		<div id="notice"></div>
+		<div id="err"></div>
+	</footer>
+
+	<script>
+		const URL_BASE = "https://cpvxjedlgjhcdqjyecmf.supabase.co";
+		const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwdnhqZWRsZ2poY2RxanllY21mIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkyNjMzMzYsImV4cCI6MjAxNDgzOTMzNn0.Rs-bqvUb0Eq7NEKX3tFc8WHJOjzk1Rc4fgRRU6OtVNs";
+		const FN = URL_BASE + "/functions/v1/chat";
+		const HEADERS = { apikey: ANON_KEY, Authorization: "Bearer " + ANON_KEY };
+
+		const fr = navigator.language.startsWith("fr");
+		const T = fr ? {
+			hint: "écriture possible uniquement depuis le wifi public de Brume",
+			denied: "Votre connexion n'est pas reconnue : connectez-vous au wifi public de Brume pour écrire un message.",
+			unknown: "Impossible de vérifier votre connexion pour le moment.",
+			netErr: "Erreur réseau.",
+			err: "Erreur.",
+			placeholder: "écrire un message…",
+		} : {
+			hint: "you can only add a message from Brume's public wifi",
+			denied: "Your connection isn't recognised: connect to Brume's public wifi to write a message.",
+			unknown: "Unable to check your connection right now.",
+			netErr: "Network error.",
+			err: "Error.",
+			placeholder: "write a message…",
+		};
+
+		const box = document.getElementById("messages");
+		const form = document.getElementById("form");
+		const input = document.getElementById("input");
+		const notice = document.getElementById("notice");
+		const err = document.getElementById("err");
+
+		document.documentElement.lang = fr ? "fr" : "en";
+		document.getElementById("hint").textContent = T.hint;
+		input.placeholder = T.placeholder;
+
+		async function load() {
+			try {
+				const r = await fetch(URL_BASE + "/rest/v1/messages?select=id,content&order=id.asc", { headers: HEADERS });
+				if (!r.ok) return;
+				const rows = await r.json();
+				const nodes = rows.map(m => {
+					const d = document.createElement("div");
+					d.className = "msg";
+					d.textContent = m.content;
+					return d;
+				});
+				if (!nodes.length) {
+					const d = document.createElement("div");
+					d.className = "empty";
+					d.textContent = "—";
+					nodes.push(d);
+				}
+				box.replaceChildren(...nodes);
+				box.scrollTop = box.scrollHeight;
+			} catch { }
+		}
+
+		async function checkWrite() {
+			try {
+				const r = await fetch(FN, { headers: HEADERS });
+				if (!r.ok) throw 0;
+				const j = await r.json();
+				console.log("IP:", j.ip, "| canWrite:", j.canWrite);
+				form.classList.toggle("on", !!j.canWrite);
+				notice.classList.toggle("on", !j.canWrite);
+				notice.textContent = j.canWrite ? "" : T.denied;
+			} catch {
+				notice.classList.add("on");
+				notice.textContent = T.unknown;
+			}
+		}
+
+		form.addEventListener("submit", async e => {
+			e.preventDefault();
+			const content = input.value.trim();
+			if (!content) return;
+			err.textContent = "";
+			try {
+				const r = await fetch(FN, {
+					method: "POST",
+					headers: { ...HEADERS, "Content-Type": "application/json" },
+					body: JSON.stringify({ content })
+				});
+				if (!r.ok) {
+					if (r.status === 403) { checkWrite(); }
+					else err.textContent = T.err;
+					return;
+				}
+				input.value = "";
+				load();
+			} catch { err.textContent = T.netErr; }
+		});
+
+		load();
+		checkWrite();
+		setInterval(load, 5000);
+	</script>
+</body>
+
+</html>
