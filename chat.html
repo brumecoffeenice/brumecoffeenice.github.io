@@ -78,6 +78,14 @@
 			color: #444;
 		}
 
+		.meta {
+			display: block;
+			font-size: clamp(0.75rem, 1.4vw, 1rem);
+			font-weight: 400;
+			color: var(--muted);
+			margin-bottom: 0.2rem;
+		}
+
 		.empty {
 			color: var(--muted);
 			font-size: clamp(1.1rem, 3vw, 2rem);
@@ -166,6 +174,7 @@
 			slow: "Trop rapide, réessayez dans quelques secondes.",
 			err: "Erreur.",
 			placeholder: "écrire un message…",
+			pseudoPlaceholder: "choisir un pseudo…",
 		} : {
 			hint: "you can only add a message from Brume's public wifi",
 			denied: "Your connection isn't recognised: connect to Brume's public wifi to write a message.",
@@ -174,6 +183,7 @@
 			slow: "Too fast, try again in a few seconds.",
 			err: "Error.",
 			placeholder: "write a message…",
+			pseudoPlaceholder: "choose a nickname…",
 		};
 
 		const box = document.getElementById("messages");
@@ -184,17 +194,46 @@
 
 		document.documentElement.lang = fr ? "fr" : "en";
 		document.getElementById("hint").textContent = T.hint;
-		input.placeholder = T.placeholder;
+
+		// Pseudo stocké en localStorage (pas de cookie)
+		const PSEUDO_KEY = "brume_pseudo";
+		const MAX_PSEUDO = 30;
+		function getPseudo() {
+			try { return localStorage.getItem(PSEUDO_KEY) || ""; } catch { return ""; }
+		}
+		function setPseudo(p) {
+			try { localStorage.setItem(PSEUDO_KEY, p); } catch { }
+		}
+		let pseudo = getPseudo();
+		// Si localStorage est indisponible, on garde le pseudo en mémoire pour la session
+		function updateMode() {
+			input.maxLength = pseudo ? 150 : MAX_PSEUDO;
+			input.placeholder = pseudo ? T.placeholder : T.pseudoPlaceholder;
+		}
+		updateMode();
+
+		function fmtDate(iso) {
+			const d = new Date(iso);
+			if (isNaN(d)) return "";
+			return d.toLocaleString(navigator.language, {
+				day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit"
+			});
+		}
 
 		async function load() {
 			try {
-				const r = await fetch(URL_BASE + "/rest/v1/messages?select=id,content&order=id.asc", { headers: HEADERS });
+				const r = await fetch(URL_BASE + "/rest/v1/messages?select=id,content,pseudo,created_at&order=id.asc", { headers: HEADERS });
 				if (!r.ok) return;
 				const rows = await r.json();
 				const nodes = rows.map(m => {
 					const d = document.createElement("div");
 					d.className = "msg";
-					d.textContent = m.content;
+					const meta = document.createElement("span");
+					meta.className = "meta";
+					meta.textContent = [m.pseudo, fmtDate(m.created_at)].filter(Boolean).join(" · ");
+					const text = document.createElement("span");
+					text.textContent = m.content;
+					d.append(meta, text);
 					return d;
 				});
 				if (!nodes.length) {
@@ -228,11 +267,19 @@
 			const content = input.value.trim();
 			if (!content) return;
 			err.textContent = "";
+			// Première visite : le premier envoi enregistre le pseudo
+			if (!pseudo) {
+				pseudo = content.slice(0, MAX_PSEUDO);
+				setPseudo(pseudo);
+				input.value = "";
+				updateMode();
+				return;
+			}
 			try {
 				const r = await fetch(FN, {
 					method: "POST",
 					headers: { ...HEADERS, "Content-Type": "application/json" },
-					body: JSON.stringify({ content })
+					body: JSON.stringify({ content, pseudo })
 				});
 				if (!r.ok) {
 					if (r.status === 403) { checkWrite(); }
