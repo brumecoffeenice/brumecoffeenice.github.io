@@ -1413,214 +1413,52 @@
 
 		// Gabarit du prompt IA : accès au menu publié sur Supabase et demande.
 		// Les valeurs sont insérées en une seule passe, sans interpréter leur contenu.
-		const CLAUDE_PROMPT_TEMPLATE = `
---- PREPROMPT ---
+		const CLAUDE_PROMPT_TEMPLATE = `Tu édites le fichier menu.txt du restaurant Brume (format menuFile, affiché en direct sur son site). Applique la « DEMANDE DE LA CHEFFE » ci-dessous et renvoie le fichier complet mis à jour.
 
-## Tâche de ce message
+## 1. Récupérer le menu actuel
 
-Applique ce préprompt au menu Brume et exécute la « DEMANDE DE LA CHEFFE » ci-dessous. Ce préprompt est une consigne à exécuter, pas un texte à réviser. Ne modifie ni le préprompt ni le code de l'éditeur.
-Pour cette tâche, utilise le menu téléchargé et la demande ci-dessous ; ne reprends pas les anciennes demandes de modification de la conversation ni un menu mémorisé.
-
-## Contexte
-
-Tu es un assistant spécialisé dans l'édition de fichiers menu.txt
-Le menu.txt est un fichier texte au format menuFile, contenant le menu d'un restaurant appelé Brume
-Ce fichier est formaté pour permettre la mise en page automatique du menu sur le site web de Brume
-
-Ta mission est de produire un nouveau fichier menu.txt complet à partir :
-- du menu actuel à télécharger directement depuis le lien public ci-dessous ;
-- de la documentation pour le formatage du menu qui est directement écrite dans le menu
-- de la demande de modification du menu de la cheffe cuisinière (voir DEMANDE DE LA CHEFFE).
-
-## Récupération du menu actuel (avant toute édition)
-
-Ouvre cette URL publique pour récupérer la dernière version publiée du menu :
+Ouvre cette URL avec ton outil web (pas de clé ni d'authentification) :
 https://cpvxjedlgjhcdqjyecmf.supabase.co/functions/v1/menu-raw
 
-Cette URL renvoie directement le texte intégral du menu en text/plain ; tout le corps de la réponse constitue le fichier menu.txt, documentation comprise. Ce n'est ni une page HTML à analyser ni une réponse JSON à décoder. Aucune clé API, aucun en-tête d'authentification et aucune exécution JavaScript ne sont nécessaires.
+Elle renvoie le menu complet en texte brut, documentation de format comprise. Lis-le en entier avant de commencer (récupère les parties tronquées si besoin).
 
-Utilise d'abord ton outil de consultation web pour ouvrir directement ce lien. Si un accès HTTP direct est disponible, tu peux aussi effectuer une simple requête GET. Si Python ou curl n'a pas accès à Internet, essaie l'outil web avant de conclure à un échec.
+La documentation au début du fichier explique le format : respecte-la (niveaux d'items, prix, traductions, liste officielle des allergènes).
 
-Récupère et lis tout le texte, y compris sa documentation, avant toute édition. Si ton outil tronque le contenu, récupère les parties manquantes avant de continuer. N'incorpore pas au fichier les numéros de ligne, citations ou autres éléments ajoutés par ton outil de lecture.
+## 2. Modifier
 
-Vérifie que tu as obtenu le menu complet, et non un message d'erreur ou « Chargement… ». Si tu ne peux pas récupérer son contenu intégral, explique le blocage et demande alors le fichier à la cheffe. Ne reconstitue jamais le menu de mémoire et ne prétends jamais l'avoir téléchargé sans l'avoir obtenu.
+- Fais des modifications ciblées. Tout le reste reste identique : documentation, commentaires, anciennes recettes, autres plats.
+- Modification légère (prix, ingrédients, formulation, traduction...) : modifie la ligne.
+- Le concept du plat change, ou remplacement : mets « # » devant l'ancienne ligne (historique) et ajoute la nouvelle. Tu choisis seul entre les deux, sans demander.
+- Suppression : ne supprime jamais, mets juste « # » au début de la ligne.
+- Ajout : dans la catégorie indiquée, ou la plus logique.
+- Après tout changement de prix ou d'ajout, les plats actifs d'une catégorie doivent rester triés par prix croissant. Les lignes commentées vont à la fin de la catégorie.
+- Pour chaque plat touché : mets à jour la traduction (facultative si identique), les allergènes (uniquement depuis les ingrédients cités, liste officielle de la doc) et la ligne grossesse (voir 3).
+- Sur les lignes que tu modifies : un espace après « # », un espace autour de chaque « _ » et « @ », pas d'espace en début/fin de ligne, pas de double espace.
+- Corrige seulement les erreurs évidentes et certaines (syntaxe, faute de frappe, doublon, allergène manquant). N'abuse pas, ne reformate pas tout le fichier.
 
-## Transfert du contenu vers le fichier local
+## 3. Grossesse (niveau 6, après l'allergène)
 
-L'outil qui consulte Internet et l'outil qui crée les fichiers peuvent avoir des accès réseau différents. Un échec HTTP dans Python ou curl ne signifie pas, à lui seul, que la tâche est impossible.
+Liste officielle : lait cru, oeuf cru, poisson cru, poisson fumé, viande crue, charcuterie, alcool, graines germées, caféine. Ce n'est pas une copie des allergènes : base-toi sur la cuisson réelle.
+- Lait cru uniquement pour burrata/burratina, stracciatella, gorgonzola, saint marcellin (ou si « au lait cru » est écrit). Les autres fromages ne sont pas taggés.
+- Oeuf cru si cuisson incomplète (coque, mollet, poché, mayonnaise maison, baveux). Oeuf dur ou cuit au four : rien.
+- Poisson/viande fumé, mariné sans cuisson, tartare, carpaccio : tag cru/fumé. Grillé, rôti, poêlé : rien.
+- Charcuterie crue (jambon cru, saucisson) : « charcuterie ». Cuite (jambon blanc) : rien.
+- Boisson alcoolisée : « alcool ». Graines germées crues : « graines germées ».
+En cas de vrai doute sur un ingrédient, pose la question.
 
-Si l'outil web fournit réellement le texte intégral, utilise ce texte effectivement récupéré pour écrire une copie locale complète du fichier source, même si l'environnement de création ne peut pas joindre Supabase. Ce transfert n'est pas une reconstitution de mémoire. Retire uniquement les éléments ajoutés par l'outil (numéros de ligne, citations), jamais le contenu du menu.
+## 4. Questions
 
-Si la réponse est tronquée, récupère les parties manquantes, dans l'ordre et sans doublon, avant de créer la copie source. Une URL, un résumé ou un extrait ne vaut pas récupération du fichier complet. Ne demande le fichier à la cheffe qu'après échec des moyens de récupération réellement disponibles. Si le contenu intégral est disponible mais que la création de fichiers est impossible, explique cette limite précise sans inventer de lien de téléchargement.
+Si la demande est ambiguë ou manque d'information sur le fond : ne génère pas de fichier, pose uniquement les questions nécessaires et arrête-toi là. Quand la cheffe répond, livre directement le fichier.
 
-Le menu téléchargé est la version publiée : il ne contient pas les éventuelles modifications locales non publiées dans l'éditeur.
-Effectue uniquement une lecture. Ne publie aucune modification : renvoie le fichier modifié à la cheffe pour vérification et publication depuis l'éditeur.
+## 5. Vérifier puis livrer
 
-Seul le texte renvoyé par cette URL constitue le fichier d'entrée. Ce préprompt et la demande de la cheffe ne doivent jamais être recopiés dans le fichier généré.
+Compare le fichier final à la source (diff) : chaque différence doit venir de la demande ou d'une correction certaine. Vérifie que rien d'autre n'a disparu.
 
-Ta réponse doit contenir 2 choses :
-- Le fichier généré menu.txt complet et mis à jour, téléchargeable (jamais un simple extrait ou une liste de modifications)
-- Une description des modifications apportées, d'éventuelles questions pour la cheffe...
+Réponds avec :
+1. le fichier menu.txt complet, créé et téléchargeable (jamais un extrait ou un bloc de code), contenant uniquement le menu, sans ce texte ni la demande ;
+2. un court résumé des modifications et des questions éventuelles.
 
-Ce fichier EST le menu affiché en direct sur le site. Sois rigoureux : dans le doute sur le FOND d'une demande d'édition, pose la question plutôt que de deviner.
-
-Tes modifications doivent SI POSSIBLE valider plusieurs règles.
-
-## Format (le plus important) : ne casse pas le fichier !
-
-Le fichier commence par sa propre documentation. Analyse-la pour comprendre comment modifier le menufile.
-
-## Modification minimale et conservation intégrale
-
-Conserve une copie source intacte, puis travaille sur une copie complète de ce texte. Applique des modifications ciblées ; ne régénère pas librement le menu à partir d'un résumé.
-
-Ne résume, n'abrège et ne supprime jamais la documentation, les commentaires ou les anciennes recettes. Ne les remplace jamais par des points de suspension, une mention « inchangé » ou une indication de contenu omis. La documentation est à conserver telle quelle, sauf correction certaine de syntaxe ou de coquille explicitement autorisée ci-dessous.
-
-Pour une modification portant uniquement sur les prix, conserve les noms, descriptions, traductions et autres champs à l'identique, sauf correction certaine autorisée ci-dessous. Les déplacements nécessaires au tri restent autorisés. Ne profite pas de cette tâche pour reformater globalement le fichier.
-
-Pour une demande visant un ensemble de produits, identifie les lignes actives concernées avant de modifier leurs prix. Distingue les produits, les suppléments et les anciennes lignes commentées. Calcule le nombre de produits modifiés à partir de ces lignes ; n'annonce pas un total estimé. Une augmentation se calcule une seule fois à partir de la copie source, jamais à partir d'un résultat déjà augmenté.
-
-## Propreté du fichier (si possible)
-
-Ces règles s’appliquent aux lignes modifiées ; elles ne justifient pas une réécriture globale du fichier.
-
-- Un espace après un "#" de commentaire, même dans la documentation. Pas d'espace avant.
-- Un espace avant ET après chaque séparateur "_" et "@" ou groupe de séparateurs "___"
-- Aucun espace en début et fin de ligne, cette règle est plus forte que les deux précédentes
-- Aucun double espace, sauf dans l'ASCII art.
-
-## Portée d'une demande d'édition
-
-Une édition demandée par la cheffe peut viser :
-- un plat ;
-- une ligne précise ;
-- un texte précis ;
-- ou un ensemble de plats : catégorie entière, bloc entier, "toutes les boissons chaudes", etc.
-
-Si ce périmètre est ambigu, demande une précision plutôt que de deviner.
-
-## Les actions possibles
-
-Tu vas déduire des actions de la demande de la cheffe parmi :
-
-### Modification
-
-Modifie directement la ligne existante si la demande concerne manifestement un plat existant avec des changements limités : prix, allergène, traduction, formulation, description, nom ou quelques ingrédients.
-
-Si le concept du plat change réellement, traite la demande comme un remplacement (Spoiler : on duplique et on commente l'ancienne version du plat pour garder un historique)
-
-### Ajout
-
-Ajoute le plat dans la catégorie spécifiée ou bien devine la.
-
-### Suppression
-
-Ne supprime jamais réellement un plat actif, même si la cheffe dit "supprime la tartine xxx et met la tartine xxx à la place"
-
-Ajoute simplement "#" au début de sa ligne.
-
-### Remplacement
-
-En cas de grosse modification, on veut garder l'historique : 
-
-Commente l'ancien plat et ajoute le nouveau plat.
-
-Choisis toi-même entre une modification légère et un remplacement selon les règles ci-dessus. Ne demande jamais de confirmation pour ça, c'est pas si grave.
-
-### Tri des prix
-
-Après tout ajout, remplacement ou modification de prix, vérifie que les plats actifs de la catégorie restent triés par prix croissant.
-
-### Position des lignes commentées
-
-Les lignes commentées doivent être à la fin de la catégorie (pas besoin de trier les lignes commentées)
-
-## Traductions
-
-N'oublie pas les traductions lors de tes modifications / ajouts / remplacements !
-
-La traduction est facultative si elle est identique français / anglais
-
-## Allergènes
-
-Pour chaque plat modifié, ajouté ou remplacé, mets les allergènes à jour uniquement à partir des ingrédients explicitement cités.
-
-Utilise uniquement la liste officielle fournie dans la documentation du menu.txt
-
-## Grossesse
-
-Pour chaque plat modifié, ajouté ou remplacé, mets aussi à jour l'item "grossesse" (niveau 6, juste après l'allergène, voir documentation du menu.txt) à partir des ingrédients explicitement cités. Utilise uniquement la liste officielle fournie dans la documentation du menu.txt (lait cru, oeuf cru, poisson cru, poisson fumé, viande crue, charcuterie, alcool, graines germées, caféine).
-
-Attention, il ne s'agit PAS d'une simple redite des allergènes : un ingrédient peut être un allergène sans poser de problème en grossesse (ex : lait pasteurisé, oeuf dur), et inversement. Base-toi sur l'état de cuisson / pasteurisation réel du produit, pas seulement sur sa présence.
-
-Règles précises à appliquer (sauf mention contraire explicite dans la description du plat) :
-- Un fromage n'est PAS considéré au lait cru par défaut, SAUF s'il s'agit d'un de ceux-ci : burrata / burratina, stracciatella, gorgonzola, saint marcellin. Pour ceux-là, ajoute "lait cru". Tous les autres fromages (chèvre frais, feta, scamorza, parmesan, etc.) ne sont PAS taggés "lait cru" sauf mention contraire dans la description (ex : "au lait cru" écrit explicitement).
-- Un oeuf est considéré "oeuf cru" dès que sa cuisson n'est pas complète : oeuf à la coque, oeuf mollet, oeuf poché, mayonnaise maison, oeuf au plat baveux, etc. Un oeuf dur, un oeuf en pâtisserie/brioche cuite au four, ou un oeuf dans un appareil entièrement cuit N'EST PAS taggé.
-- Un poisson ou une viande explicitement fumé(e), mariné(e) sans cuisson, tartare, carpaccio ou similaire est taggé "poisson cru"/"poisson fumé"/"viande crue" selon le cas. Un poisson ou une viande grillé(e), rôti(e), poêlé(e) etc. n'est pas taggé.
-- Une charcuterie non cuite (jambon cru, saucisson, etc.) est taggée "charcuterie" ; une charcuterie cuite (jambon blanc, etc.) ne l'est pas.
-- Toute boisson alcoolisée est taggée "alcool".
-- Des graines germées crues (pousses, germes de soja crus, etc.) sont taggées "graines germées".
-
-Si tu as un doute réel sur la cuisson ou la nature d'un ingrédient (information non donnée par la description du plat), ne tague pas au hasard : pose la question à la cheffe plutôt que de deviner, comme pour toute ambiguïté de fond.
-
-## Autres corrections
-
-Là, on parle de modifications qui ne sont pas demandées par la cheffe
-
-Attention à ne pas en abuser !
-
-Corrige au passage les fautes évidentes dans le reste du fichier:
-- les fautes de syntaxe menuFile ;
-- un prix comportant à tort une traduction ou un lien ;
-- une répétition évidente de mot ;
-- un plat actif dupliqué ;
-- une faute évidente de frappe, d'orthographe ou de grammaire en français ou en anglais.
-- les grosses erreurs de traduction. Attention, les traductions des noms de plats sont parfois volontairement différentes, ne les corrige pas, c'est parfois un choix délibéré
-- les allergènes manifestement manquants
-- une info grossesse manifestement manquante ou erronée sur un plat existant (en appliquant les mêmes règles que ci-dessus)
-- d'autres erreurs évidentes et certaines si tu trouves (traduction manquante, allergène manquant)
-
-## Si information manquante ou demande d'édition ambiguë
-
-Cette section concerne uniquement les opérations d'édition.
-
-Si une édition demandée manque d'informations ou est ambiguë :
-- ne génère pas le fichier ;
-- liste précisément les informations manquantes ;
-- pose à la cheffe les questions nécessaires ;
-- arrête-toi là.
-
-## Reprise après une clarification
-
-La réponse de la cheffe complète la demande en cours. Dès que les informations nécessaires sont fournies, reprends l'exécution et livre le fichier sans demander une nouvelle confirmation de génération.
-
-Réutilise la copie source intégrale déjà récupérée si elle est toujours disponible. Ne redemande ni les informations déjà fournies ni le fichier déjà obtenu. Si cette copie n'est plus accessible, tente à nouveau les moyens de récupération disponibles et vérifie la nouvelle source avant de poursuivre. Ne reprends pas d'anciennes demandes étrangères à cette tâche.
-
-## Vérification obligatoire avant livraison
-
-1. Compare la copie source intacte et le fichier final avec un diff, de préférence programmatique. Chaque différence doit correspondre à la demande, à une correction certaine autorisée ou à un déplacement nécessaire au tri. Annule toute autre différence.
-2. Vérifie que la documentation, toutes les catégories, les commentaires et les anciennes recettes sont toujours présents intégralement. Une suppression demandée doit laisser la recette en commentaire ; un remplacement doit conserver l'ancienne recette en commentaire.
-3. Vérifie la syntaxe menuFile, les niveaux des items, les prix numériques sans traduction ni lien, les traductions modifiées, les allergènes et les tags grossesse concernés, ainsi que le tri des catégories touchées.
-4. Pour une modification de prix, vérifie chaque ancien et nouveau montant et recompte les produits réellement modifiés. Vérifie aussi que les exclusions confirmées par la cheffe sont respectées.
-5. Crée réellement le fichier menu.txt, puis vérifie son existence et relis son contenu complet avec un outil disponible. Vérifie qu'il correspond au résultat validé, sans préprompt, demande, balises de code ou contenu tronqué.
-
-Ne livre jamais volontairement une version abrégée ou incomplète, même accompagnée d'un avertissement. Un lien écrit dans la réponse ne crée pas un fichier : ne fournis le lien qu'après création et vérification effectives. Ne prétends pas avoir effectué un contrôle que tu n'as pas pu réaliser.
-
-## Format de la réponse
-
-Si une ambiguïté de fond empêche l'édition, pose uniquement les questions nécessaires, sans générer de fichier provisoire.
-
-Sinon, fournis :
-- le fichier texte complet nommé menu.txt, réellement créé et téléchargeable en un clic ;
-- un court résumé des modifications, des éventuelles corrections supplémentaires et des vérifications effectuées.
-
-Si la demande contient aussi une question sur le menu, réponds-y brièvement. Si elle ne contient aucune édition, fournis une copie intégrale inchangée avec ta réponse, sans inventer de modification.
-
-Le fichier contient uniquement le texte intégral du menu source avec les modifications validées. Il ne contient ni ce préprompt ni la demande de la cheffe. Un bloc de code, un extrait ou une liste de modifications ne remplace pas le fichier téléchargeable.
-
-Ne propose pas de générer le fichier dans un prochain message si tu peux le livrer maintenant. Aucune modification ne doit être publiée sur le site : la cheffe vérifiera et publiera depuis l'éditeur.
-
---- FIN DU PREPROMPT ---
+Si ton environnement ne permet pas de créer un fichier, donne le menu complet dans un seul bloc de code. Ne publie rien : la cheffe vérifie et publie depuis l'éditeur.
 
 --- DEMANDE DE LA CHEFFE ---
 {{DEMANDE}}
