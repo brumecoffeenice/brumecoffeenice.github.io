@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="fr">
+<meta charset="utf-8">
+<title>Menu Brume — texte brut</title>
+<pre id="menu">Chargement…</pre>
+<script>
+	(async () => {
+		const menu = document.getElementById('menu');
+		const key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNwdnhqZWRsZ2poY2RxanllY21mIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTkyNjMzMzYsImV4cCI6MjAxNDgzOTMzNn0.Rs-bqvUb0Eq7NEKX3tFc8WHJOjzk1Rc4fgRRU6OtVNs";
+		try {
+			const response = await fetch("https://cpvxjedlgjhcdqjyecmf.supabase.co/rest/v1/menu.menu?select=content&order=id.desc&limit=1", {
+				headers: { apikey: key, Authorization: 'Bearer ' + key },
+				cache: 'no-store'
+			});
+			if (!response.ok) throw new Error('HTTP ' + response.status);
+			const data = await response.json();
+			if (typeof data?.[0]?.content !== 'string' || !data[0].content.trim()) {
+				throw new Error('Menu vide ou introuvable');
+			}
+			menu.textContent = data[0].content;
+		} catch (error) {
+			menu.textContent = 'Impossible de charger le menu : ' + error.message;
+		}
+	})();
+</script>
+
+</html>
