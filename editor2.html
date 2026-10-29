@@ -873,8 +873,8 @@
 
 			<div class="claude-actions-row">
 				<button class="btn" onclick="copyClaudePrompt()">📋 Copier le prompt</button>
-				<button class="btn primary" onclick="sendToChatGPT()">↗ Envoyer à ChatGPT</button>
-				<button class="btn" onclick="sendToClaudeApp()">🖥 Ouvrir dans l'app Claude</button>
+				<button class="btn primary" onclick="sendToChatGPT()">↗ ChatGPT + télécharger menu.txt</button>
+				<button class="btn" onclick="sendToClaudeApp()">🖥 App Claude + télécharger menu.txt</button>
 			</div>
 
 			<div id="claude-status" class="claude-hint"></div>
@@ -887,22 +887,23 @@
 			</div>
 			<ol class="claude-steps">
 				<li>Écris ta demande ci-dessus, puis clique sur <b>Générer le prompt</b> pour vérifier ce qui sera
-					envoyé (il fournit à l'IA le lien public vers le texte du menu publié).
-					Les modifications locales ne seront prises en compte qu'après publication avec <b>Push</b>.</li>
-				<li>Clique sur <b>Envoyer à ChatGPT</b> (ou <b>Ouvrir dans l'app Claude</b> si tu l'as installée) :
-					le prompt est copié dans le presse-papier au cas où, et l'IA s'ouvre dans un nouvel onglet.
-					Connecte-toi si besoin, colle le prompt s'il n'est pas déjà rempli, puis envoie le message.</li>
-				<li>Télécharge le fichier <b>menu.txt</b> complet fourni par l'IA.</li>
-				<li>Reviens ici, clique sur <b>📂 Importer menu.txt → voir le diff</b>, puis sélectionne le fichier
-					dans tes téléchargements. L'onglet <b>Diff</b> s'ouvre automatiquement pour vérifier les
-					changements.</li>
-				<li>Si ça te convient, va dans l'onglet <b>Brut</b> pour confirmer, ou directement sur <b>Push</b>
-					pour publier.</li>
+					envoyé.</li>
+				<li>Clique sur <b>ChatGPT + télécharger menu.txt</b> (ou <b>App Claude</b>) : le menu actuel de
+					l'éditeur, avec tes modifications non publiées, est téléchargé sous le nom <b>menu.txt</b>, le
+					prompt est copié dans le presse-papier et l'IA s'ouvre dans un nouvel onglet.</li>
+				<li>Dans l'IA : <b>joins le fichier menu.txt</b> téléchargé au message (trombone ou glisser-déposer),
+					colle le prompt s'il n'est pas déjà rempli, puis envoie.</li>
+				<li>Télécharge le fichier <b>menu.txt</b> complet fourni par l'IA (il peut s'appeler
+					<i>menu (1).txt</i> si l'ancien est encore dans tes téléchargements).
+				</li>
+				<li>Reviens ici, clique sur <b>📂 Importer menu.txt → voir le diff</b> et sélectionne ce fichier.
+					L'onglet <b>Diff</b> s'ouvre automatiquement pour vérifier les changements.</li>
+				<li>Si ça te convient, clique sur <b>Push</b> pour publier.</li>
 			</ol>
 			<div class="claude-hint">
 				ℹ️ Le bouton "app Claude" ne fonctionne que si l'application de bureau Claude est installée sur cet
-				ordinateur. Pour importer le menu, sélectionne simplement le fichier téléchargé : inutile de l’ouvrir ou
-				de copier son texte.
+				ordinateur. Si le prompt ne se remplit pas tout seul, colle-le à la main. Pour importer le menu,
+				sélectionne simplement le fichier téléchargé : inutile de l’ouvrir ou de copier son texte.
 			</div>
 		</div>
 	</div>
@@ -1415,12 +1416,9 @@
 		// Les valeurs sont insérées en une seule passe, sans interpréter leur contenu.
 		const CLAUDE_PROMPT_TEMPLATE = `Tu édites le fichier menu.txt du restaurant Brume (format menuFile, affiché en direct sur son site). Applique la « DEMANDE DE LA CHEFFE » ci-dessous et renvoie le fichier complet mis à jour.
 
-## 1. Récupérer le menu actuel
+## 1. Menu actuel
 
-Ouvre cette URL avec ton outil web (pas de clé ni d'authentification) :
-https://cpvxjedlgjhcdqjyecmf.supabase.co/functions/v1/menu-raw
-
-Elle renvoie le menu complet en texte brut, documentation de format comprise. Lis-le en entier avant de commencer (récupère les parties tronquées si besoin).
+Le menu actuel est le fichier menu.txt joint à ce message. Lis-le en entier avant de commencer, documentation de format comprise : c'est la base de travail (il peut contenir des modifications pas encore publiées). Ne reconstitue jamais le menu de mémoire. Si aucun fichier n'est joint ou si tu ne peux pas le lire, dis-le et demande à la cheffe de le joindre ; n'invente rien.
 
 La documentation au début du fichier explique le format : respecte-la (niveaux d'items, prix, traductions, liste officielle des allergènes).
 
@@ -1481,11 +1479,23 @@ Si ton environnement ne permet pas de créer un fichier, donne le menu complet d
 				.catch(() => setClaudeStatus("Impossible de copier automatiquement : sélectionne le texte ci-dessus et copie-le à la main (Ctrl+C).", 'err'));
 		}
 
+		// Télécharge le menu affiché dans l'éditeur (modifications locales
+		// comprises) sous le nom menu.txt, à joindre au message de l'IA.
+		function downloadMenuTxt() {
+			const blob = new Blob([getText()], { type: 'text/plain;charset=utf-8' });
+			const url = URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url; a.download = 'menu.txt';
+			document.body.appendChild(a); a.click(); a.remove();
+			setTimeout(() => URL.revokeObjectURL(url), 2000);
+		}
+
 		function sendToChatGPT() {
 			refreshClaudePrompt();
 			const text = document.getElementById('claude-prompt-preview').value;
 			navigator.clipboard.writeText(text).catch(() => { });
-			setClaudeStatus("Ouverture de ChatGPT… si le prompt n'est pas déjà rempli, colle-le (Ctrl+V), il a été copié au cas où.", 'ok');
+			downloadMenuTxt();
+			setClaudeStatus("menu.txt téléchargé. Dans ChatGPT : joins ce fichier au message (trombone ou glisser-déposer), colle le prompt s'il n'est pas déjà rempli (il a été copié), puis envoie.", 'ok');
 			// chatgpt.com accepte un paramètre ?q= pour préremplir le message.
 			// Selon le navigateur / la session, il peut préremplir sans envoyer,
 			// ou ne rien faire : le presse-papier sert de filet de sécurité.
@@ -1519,7 +1529,8 @@ Si ton environnement ne permet pas de créer un fichier, donne le menu complet d
 			refreshClaudePrompt();
 			const text = document.getElementById('claude-prompt-preview').value;
 			navigator.clipboard.writeText(text).catch(() => { });
-			setClaudeStatus("Ouverture de l'app Claude (si installée sur cet ordinateur)… Le prompt a aussi été copié au cas où.", 'ok');
+			downloadMenuTxt();
+			setClaudeStatus("menu.txt téléchargé. Dans l'app Claude : joins ce fichier au message, colle le prompt s'il n'est pas déjà rempli (il a été copié), puis envoie.", 'ok');
 			// Lien profond documenté par Anthropic pour l'app de bureau Claude :
 			// claude://claude.ai/new?q=... pré-remplit la zone de saisie.
 			// Ne fonctionne que si l'app de bureau est installée ; sinon, rien
