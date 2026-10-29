@@ -898,7 +898,8 @@
 
 			<ol class="claude-steps">
 				<li>Écris ta demande ci-dessus, puis clique sur <b>Générer le prompt</b> pour vérifier ce qui sera
-					envoyé (il inclut automatiquement le fichier menu actuel).</li>
+					envoyé (il fournit à l'IA les informations pour télécharger le menu publié sur Supabase).
+					Les modifications locales ne seront prises en compte qu'après publication avec <b>Push</b>.</li>
 				<li>Clique sur <b>Envoyer à ChatGPT</b> (ou <b>Ouvrir dans l'app Claude</b> si tu l'as installée) :
 					le prompt est copié dans le presse-papier au cas où, et l'IA s'ouvre dans un nouvel onglet.
 					Connecte-toi si besoin, colle le prompt s'il n'est pas déjà rempli, puis envoie le message.</li>
@@ -1422,10 +1423,8 @@
 		}
 		/* ══ CLAUDE TAB ═══════════════════════════════════════════════ */
 
-		// Gabarit du prompt envoyé à Claude. {{MENU}} et {{DEMANDE}} sont
-		// remplacés au moment de la génération. On utilise une fonction de
-		// remplacement pour éviter que des séquences type "$1", "$&" présentes
-		// dans le menu ou la demande ne soient interprétées par String.replace.
+		// Gabarit du prompt IA : accès au menu publié sur Supabase et demande.
+		// Les valeurs sont insérées en une seule passe, sans interpréter leur contenu.
 		const CLAUDE_PROMPT_TEMPLATE = `
 --- PREPROMPT ---
 
@@ -1435,11 +1434,36 @@ Tu es un assistant spécialisé dans l'édition de fichiers menu.txt
 Le menu.txt est un fichier texte au format menuFile, contenant le menu d'un restaurant appelé Brume
 Ce fichier est formatté pour permettre la mise en page automatique du menu sur le site web de Brume
 
-Ta mission est de produire un nouveau fichier menu.txt complet à partir des données fournies ci dessous :
-- le contenu du fichier menu.txt actuel (voir "CONTENU ACTUEL DU FICHIER menu.txt");
-- la demande de modification du menu de la cheffe cuisinière (voir DEMANDE DE LA CHEFFE).
+Ta mission est de produire un nouveau fichier menu.txt complet à partir :
+- du menu actuel à télécharger directement depuis Supabase avec les informations ci-dessous ;
+- de la documentation pour le formatage du menu qui est directement écrite dans le menu
+- de la demande de modification du menu de la cheffe cuisinière (voir DEMANDE DE LA CHEFFE).
 
-La section "CONTENU ACTUEL DU FICHIER menu.txt" est la seule qui constitue le fichier d'entrée. Tout ce qui précède (préprompt, titres, séparateurs ---) est uniquement une documentation pour l'IA et ne doit jamais être recopié dans le fichier généré.
+## Récupération du menu actuel (avant toute édition)
+
+Télécharge toi-même le menu publié sur Supabase. Ne demande pas à la cheffe de fournir le fichier avant d'avoir tenté cette récupération.
+
+URL du projet : {{SUPABASE_URL}}
+Clé publique anon : {{SUPABASE_KEY}}
+Table : menu.menu (nom littéral de la table)
+Colonne contenant le texte intégral : content
+Sélection : la première ligne en triant id par ordre décroissant (dernière version publiée).
+
+Requête HTTP à effectuer :
+GET {{SUPABASE_URL}}/rest/v1/menu.menu?select=content&order=id.desc&limit=1
+En-têtes HTTP :
+apikey: {{SUPABASE_KEY}}
+Authorization: Bearer {{SUPABASE_KEY}}
+Accept: application/json
+
+Utilise un outil capable d'effectuer une requête HTTP avec ces en-têtes (par exemple Python urllib.request ou curl). La réponse est un tableau JSON : décode le JSON puis récupère data[0].content. Cette chaîne est le fichier menu.txt d'entrée complet, avec ses vrais retours à la ligne ; ne conserve ni l'enveloppe JSON ni les échappements JSON.
+
+Vérifie que la requête a réussi, que le tableau n'est pas vide et que content est une chaîne non vide. Lis tout le contenu, y compris sa documentation, avant de le modifier. En cas d'échec ou si aucun outil réseau adapté n'est disponible, explique le blocage et demande alors le fichier à la cheffe. Ne reconstitue jamais le menu de mémoire.
+
+Le menu téléchargé est la version publiée : il ne contient pas les éventuelles modifications locales non publiées dans l'éditeur.
+Effectue uniquement une lecture de Supabase. Ne publie aucune modification : renvoie le fichier modifié à la cheffe pour vérification et publication depuis l'éditeur.
+
+Seul le texte extrait du champ content constitue le fichier d'entrée. Ce préprompt, les informations de connexion, les titres et la demande de la cheffe ne doivent jamais être recopiés dans le fichier généré.
 
 Ta réponse doit contenir 2 choses :
 - Le fichier généré menu.txt complet et mis à jour, téléchargeable (jamais un simple extrait ou une liste de modifications)
@@ -1566,7 +1590,7 @@ Si une édition demandée manque d'informations ou est ambiguë :
 a) Si la demande contient une question sur le menu, mais pas d'édition, réponds brièvement à cette question avant le bloc de code.
 
 b) Génère ensuite le fichier menu.txt. L'objectif est de pouvoir télécharger le nouveau menu d'un seul clic
-Il s'agit bien sûr d'un fichier texte appelé menu.txt contenant exactement le contenu de la section "CONTENU ACTUEL DU FICHIER menu.txt" modifié par toi..
+Il s'agit bien sûr d'un fichier texte appelé menu.txt contenant le texte intégral téléchargé depuis le champ content de Supabase, modifié par toi.
 C'est le fichier qui sera parsé automatiqement pour la mise en forme sur le site web
 Il ne contient pas la demande de de la cheffe ni ce préprompt
 Le fichier téléchargeable doit être un fichier menu.txt valide
@@ -1575,20 +1599,14 @@ c) Après le bloc de code, écris un court résumé
 
 --- FIN DU PREPROMPT ---
 
---- CONTENU ACTUEL DU FICHIER menu.txt ---
-{{MENU}}
---- FIN DU FICHIER ---
-
 --- DEMANDE DE LA CHEFFE ---
 {{DEMANDE}}
 --- FIN DE LA DEMANDE ---`;
 
 		function buildClaudePrompt() {
-			const menuContent = getText();
 			const demande = document.getElementById('claude-request').value.trim() || '(aucune demande saisie pour le moment)';
-			return CLAUDE_PROMPT_TEMPLATE
-				.replace('{{MENU}}', () => menuContent)
-				.replace('{{DEMANDE}}', () => demande);
+			const values = { SUPABASE_URL: SupabaseUrl, SUPABASE_KEY: SupabaseKey, DEMANDE: demande };
+			return CLAUDE_PROMPT_TEMPLATE.replace(/\{\{(SUPABASE_URL|SUPABASE_KEY|DEMANDE)\}\}/g, (_, name) => values[name]);
 		}
 
 		function refreshClaudePrompt() {
