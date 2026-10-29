@@ -898,7 +898,7 @@
 
 			<ol class="claude-steps">
 				<li>Écris ta demande ci-dessus, puis clique sur <b>Générer le prompt</b> pour vérifier ce qui sera
-					envoyé (il fournit à l'IA les informations pour télécharger le menu publié sur Supabase).
+					envoyé (il fournit à l'IA le lien public vers le texte du menu publié).
 					Les modifications locales ne seront prises en compte qu'après publication avec <b>Push</b>.</li>
 				<li>Clique sur <b>Envoyer à ChatGPT</b> (ou <b>Ouvrir dans l'app Claude</b> si tu l'as installée) :
 					le prompt est copié dans le presse-papier au cas où, et l'IA s'ouvre dans un nouvel onglet.
@@ -1428,6 +1428,11 @@
 		const CLAUDE_PROMPT_TEMPLATE = `
 --- PREPROMPT ---
 
+## Tâche de ce message
+
+Applique ce préprompt au menu Brume et exécute la « DEMANDE DE LA CHEFFE » ci-dessous. Ce préprompt est une consigne à exécuter, pas un texte à réviser. Ne modifie ni le préprompt ni le code de l'éditeur.
+Pour cette tâche, utilise le menu téléchargé et la demande ci-dessous ; ne reprends pas les anciennes demandes de modification de la conversation ni un menu mémorisé.
+
 ## Contexte
 
 Tu es un assistant spécialisé dans l'édition de fichiers menu.txt
@@ -1435,35 +1440,27 @@ Le menu.txt est un fichier texte au format menuFile, contenant le menu d'un rest
 Ce fichier est formatté pour permettre la mise en page automatique du menu sur le site web de Brume
 
 Ta mission est de produire un nouveau fichier menu.txt complet à partir :
-- du menu actuel à télécharger directement depuis Supabase avec les informations ci-dessous ;
+- du menu actuel à télécharger directement depuis le lien public ci-dessous ;
 - de la documentation pour le formatage du menu qui est directement écrite dans le menu
 - de la demande de modification du menu de la cheffe cuisinière (voir DEMANDE DE LA CHEFFE).
 
 ## Récupération du menu actuel (avant toute édition)
 
-Télécharge toi-même le menu publié sur Supabase. Ne demande pas à la cheffe de fournir le fichier avant d'avoir tenté cette récupération.
+Ouvre cette URL publique pour récupérer la dernière version publiée du menu :
+https://cpvxjedlgjhcdqjyecmf.supabase.co/functions/v1/menu-raw
 
-URL du projet : {{SUPABASE_URL}}
-Clé publique anon : {{SUPABASE_KEY}}
-Table : menu.menu (nom littéral de la table)
-Colonne contenant le texte intégral : content
-Sélection : la première ligne en triant id par ordre décroissant (dernière version publiée).
+Cette URL renvoie directement le texte intégral du menu en text/plain ; tout le corps de la réponse constitue le fichier menu.txt, documentation comprise. Ce n'est ni une page HTML à analyser ni une réponse JSON à décoder. Aucune clé API, aucun en-tête d'authentification et aucune exécution JavaScript ne sont nécessaires.
 
-Requête HTTP à effectuer :
-GET {{SUPABASE_URL}}/rest/v1/menu.menu?select=content&order=id.desc&limit=1
-En-têtes HTTP :
-apikey: {{SUPABASE_KEY}}
-Authorization: Bearer {{SUPABASE_KEY}}
-Accept: application/json
+Utilise d'abord ton outil de consultation web pour ouvrir directement ce lien. Si un accès HTTP direct est disponible, tu peux aussi effectuer une simple requête GET. Si Python ou curl n'a pas accès à Internet, essaie l'outil web avant de conclure à un échec.
 
-Utilise un outil capable d'effectuer une requête HTTP avec ces en-têtes (par exemple Python urllib.request ou curl). La réponse est un tableau JSON : décode le JSON puis récupère data[0].content. Cette chaîne est le fichier menu.txt d'entrée complet, avec ses vrais retours à la ligne ; ne conserve ni l'enveloppe JSON ni les échappements JSON.
+Récupère et lis tout le texte, y compris sa documentation, avant toute édition. Si ton outil tronque le contenu, récupère les parties manquantes avant de continuer. N'incorpore pas au fichier les numéros de ligne, citations ou autres éléments ajoutés par ton outil de lecture.
 
-Vérifie que la requête a réussi, que le tableau n'est pas vide et que content est une chaîne non vide. Lis tout le contenu, y compris sa documentation, avant de le modifier. En cas d'échec ou si aucun outil réseau adapté n'est disponible, explique le blocage et demande alors le fichier à la cheffe. Ne reconstitue jamais le menu de mémoire.
+Vérifie que tu as obtenu le menu complet, et non un message d'erreur ou « Chargement… ». Si tu ne peux pas récupérer son contenu intégral, explique le blocage et demande alors le fichier à la cheffe. Ne reconstitue jamais le menu de mémoire et ne prétends jamais l'avoir téléchargé sans l'avoir obtenu.
 
 Le menu téléchargé est la version publiée : il ne contient pas les éventuelles modifications locales non publiées dans l'éditeur.
-Effectue uniquement une lecture de Supabase. Ne publie aucune modification : renvoie le fichier modifié à la cheffe pour vérification et publication depuis l'éditeur.
+Effectue uniquement une lecture. Ne publie aucune modification : renvoie le fichier modifié à la cheffe pour vérification et publication depuis l'éditeur.
 
-Seul le texte extrait du champ content constitue le fichier d'entrée. Ce préprompt, les informations de connexion, les titres et la demande de la cheffe ne doivent jamais être recopiés dans le fichier généré.
+Seul le texte renvoyé par cette URL constitue le fichier d'entrée. Ce préprompt et la demande de la cheffe ne doivent jamais être recopiés dans le fichier généré.
 
 Ta réponse doit contenir 2 choses :
 - Le fichier généré menu.txt complet et mis à jour, téléchargeable (jamais un simple extrait ou une liste de modifications)
@@ -1590,7 +1587,7 @@ Si une édition demandée manque d'informations ou est ambiguë :
 a) Si la demande contient une question sur le menu, mais pas d'édition, réponds brièvement à cette question avant le bloc de code.
 
 b) Génère ensuite le fichier menu.txt. L'objectif est de pouvoir télécharger le nouveau menu d'un seul clic
-Il s'agit bien sûr d'un fichier texte appelé menu.txt contenant le texte intégral téléchargé depuis le champ content de Supabase, modifié par toi.
+Il s'agit bien sûr d'un fichier texte appelé menu.txt contenant le texte intégral téléchargé depuis le lien public menu-raw, modifié par toi.
 C'est le fichier qui sera parsé automatiqement pour la mise en forme sur le site web
 Il ne contient pas la demande de de la cheffe ni ce préprompt
 Le fichier téléchargeable doit être un fichier menu.txt valide
@@ -1605,8 +1602,7 @@ c) Après le bloc de code, écris un court résumé
 
 		function buildClaudePrompt() {
 			const demande = document.getElementById('claude-request').value.trim() || '(aucune demande saisie pour le moment)';
-			const values = { SUPABASE_URL: SupabaseUrl, SUPABASE_KEY: SupabaseKey, DEMANDE: demande };
-			return CLAUDE_PROMPT_TEMPLATE.replace(/\{\{(SUPABASE_URL|SUPABASE_KEY|DEMANDE)\}\}/g, (_, name) => values[name]);
+			return CLAUDE_PROMPT_TEMPLATE.replace('{{DEMANDE}}', () => demande);
 		}
 
 		function refreshClaudePrompt() {
