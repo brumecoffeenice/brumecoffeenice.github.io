@@ -757,9 +757,6 @@
 			padding: .5em 1.3em;
 		}
 
-		#claude-paste-fallback {
-			margin-top: .3em;
-		}
 
 		.claude-hint.ok {
 			color: var(--c4)
@@ -884,18 +881,10 @@
 
 			<div class="claude-label" style="margin-top:1.6em;">Une fois que l'IA a répondu</div>
 			<div class="claude-actions-row">
-				<button class="btn primary big" onclick="pasteNewMenuAndDiff()">📥 Coller le nouveau menu → voir le
-					diff</button>
+				<button class="btn primary big" onclick="document.getElementById('menu-file-input').click()">📂 Importer
+					menu.txt → voir le diff</button>
+				<input id="menu-file-input" type="file" accept=".txt,text/plain" hidden onchange="importMenuFile(this)">
 			</div>
-			<div id="claude-paste-fallback" style="display:none;">
-				<div class="claude-label">Colle ici manuellement (si le bouton ci-dessus n'a pas fonctionné)</div>
-				<textarea id="claude-paste-area" spellcheck="false"
-					placeholder="Colle ici (Ctrl+V) le fichier menu.menu complet renvoyé par l'IA..."></textarea>
-				<div class="claude-actions-row">
-					<button class="btn primary" onclick="pasteFromTextareaAndDiff()">→ Voir le diff</button>
-				</div>
-			</div>
-
 			<ol class="claude-steps">
 				<li>Écris ta demande ci-dessus, puis clique sur <b>Générer le prompt</b> pour vérifier ce qui sera
 					envoyé (il fournit à l'IA le lien public vers le texte du menu publié).
@@ -903,18 +892,17 @@
 				<li>Clique sur <b>Envoyer à ChatGPT</b> (ou <b>Ouvrir dans l'app Claude</b> si tu l'as installée) :
 					le prompt est copié dans le presse-papier au cas où, et l'IA s'ouvre dans un nouvel onglet.
 					Connecte-toi si besoin, colle le prompt s'il n'est pas déjà rempli, puis envoie le message.</li>
-				<li>Si tout est clair, l'IA te renvoie le fichier <b>complet</b> régénéré : copie-le entièrement
-					(le bloc de code en entier, avec Ctrl+C).</li>
-				<li>Reviens ici et clique directement sur <b>📥 Coller le nouveau menu → voir le diff</b> : tu
-					atterris tout de suite sur l'onglet <b>Diff</b> pour vérifier les changements avant de les
-					appliquer.</li>
+				<li>Télécharge le fichier <b>menu.txt</b> complet fourni par l'IA.</li>
+				<li>Reviens ici, clique sur <b>📂 Importer menu.txt → voir le diff</b>, puis sélectionne le fichier
+					dans tes téléchargements. L'onglet <b>Diff</b> s'ouvre automatiquement pour vérifier les
+					changements.</li>
 				<li>Si ça te convient, va dans l'onglet <b>Brut</b> pour confirmer, ou directement sur <b>Push</b>
 					pour publier.</li>
 			</ol>
 			<div class="claude-hint">
 				ℹ️ Le bouton "app Claude" ne fonctionne que si l'application de bureau Claude est installée sur cet
-				ordinateur. Le bouton "Coller le nouveau menu" utilise le presse-papier automatiquement ; si le
-				navigateur refuse la permission, une zone de collage manuel apparaît en secours.
+				ordinateur. Pour importer le menu, sélectionne simplement le fichier téléchargé : inutile de l’ouvrir ou
+				de copier son texte.
 			</div>
 		</div>
 	</div>
@@ -1628,36 +1616,26 @@ c) Après le bloc de code, écris un court résumé
 			window.open('https://chatgpt.com/?q=' + encodeURIComponent(text), '_blank');
 		}
 
-		// Lit directement le presse-papier (ce que la cheffe vient de copier
-		// depuis la réponse de l'IA) et bascule tout de suite sur l'onglet
-		// Diff pour comparer avec le menu actuel. Si le navigateur refuse la
-		// permission de lecture du presse-papier, on affiche une zone de
-		// collage manuel en secours.
-		async function pasteNewMenuAndDiff() {
+		async function importMenuFile(input) {
+			const file = input.files?.[0];
+			if (!file) return;
 			try {
-				const text = await navigator.clipboard.readText();
-				if (!text || !text.trim()) {
-					setClaudeStatus('Le presse-papier est vide : copie bien le menu complet renvoyé par l\'IA avant de cliquer.', 'err');
+				const text = (await file.text()).replace(/^\uFEFF/, '');
+				if (!text.trim()) {
+					setClaudeStatus('Le fichier est vide : sélectionne le menu complet fourni par l’IA.', 'err');
 					return;
 				}
-				applyPastedMenu(text);
-			} catch (err) {
-				setClaudeStatus("Impossible de lire le presse-papier automatiquement (permission refusée par le navigateur). Colle le menu manuellement ci-dessous.", 'err');
-				document.getElementById('claude-paste-fallback').style.display = 'block';
-				document.getElementById('claude-paste-area').focus();
+				applyImportedMenu(text);
+				setStatus('Importé : ' + file.name + ' — vérifie le diff avant de publier', 'ok');
+			} catch (error) {
+				setClaudeStatus('Impossible de lire le fichier. Télécharge à nouveau menu.txt, puis réessaie de l’importer.', 'err');
+			} finally {
+				input.value = '';
 			}
 		}
 
-		function pasteFromTextareaAndDiff() {
-			const text = document.getElementById('claude-paste-area').value;
-			if (!text.trim()) { setClaudeStatus('Colle d\'abord le nouveau menu dans la zone ci-dessus.', 'err'); return; }
-			applyPastedMenu(text);
-		}
-
-		function applyPastedMenu(text) {
+		function applyImportedMenu(text) {
 			rawLines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
-			const fb = document.getElementById('claude-paste-fallback');
-			if (fb) { fb.style.display = 'none'; document.getElementById('claude-paste-area').value = ''; }
 			switchPanel('diff');
 		}
 
